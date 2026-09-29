@@ -42,6 +42,12 @@
       "sourceType": "github",
       "skillPath": "skills/pick-ui-library/SKILL.md",
       "computedHash": "5d2a77bf0ecafbda85aa95fb49999b6d77945d9066ec83d970b62e5b388cd686"
+    },
+    "speak-human-tw": {
+      "source": "Raymondhou0917/speak-human-tw",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "7abf14f31732fcf3521d2b141609cf175af2dcdae92b7c76bcc3272786c8c972"
     }
   }
 }
