@@ -13,7 +13,7 @@
 3. 認識 Session、Status、Usage、Token 與 Memory
 4. 如何更有效率地使用 Token
 5. Skills 與 MCP 是什麼
-6. 用一個不需要寫程式的專案，讓 AI 協助學習與備課
+6. 用一個不需要寫程式的專案，讓 AI 讀懂並畫出專業筆記
 
 ---
 
@@ -104,30 +104,51 @@ Claude Chat 偏對話；Claude Code 與 CoWork 則更接近「可以協作執行
 
 這堂課主要使用 **Codex CLI**。
 
-先確認電腦已經有 Node.js 與 npm：
+### 先安裝 Node.js
+
+Codex CLI 會透過 Node.js 與 npm 安裝。第一次上課時，請先到官方下載頁安裝 **LTS（長期支援版）**：
+
+[下載 Node.js LTS](https://nodejs.org/en/download/)
+
+安裝時使用預設選項即可。
+安裝完成後，記得重開當前的 Terminal，讓新的指令路徑生效。
+
+接著確認 Node.js 與 npm 已經可以使用
 
 ```bash
-node -v
-npm -v
+# 確認 Node.js 已經安裝
+$ node -v
+
+# 確認 npm 已經可以使用
+$ npm -v
 ```
 
-接著安裝 Codex：
+![在命令提示字元確認 Node.js 與 npm](assets/course-1-ai-basics/node-npm-check.png)
+
+如果兩個指令都有顯示版本號，就可以繼續安裝 Codex。
+若出現「找不到指令」，先重新開啟終端機；仍然無法使用時，再重新執行 Node.js 安裝程式。
+
+### 安裝並啟動 Codex
+
+在命令提示字元輸入：
 
 ```bash
-npm install -g @openai/codex
+# 安裝最新版 Codex CLI
+$ npm install -g @openai/codex@latest
 ```
 
 安裝完成後輸入：
 
 ```bash
-codex
+# 啟動 Codex CLI
+$ codex
 ```
 
 第一次啟動時，依照畫面指示登入 ChatGPT 帳號即可。
 
 可以把流程簡單理解成：
 
-`安裝 Node.js → 安裝 Codex → codex → 登入 → 開始 Session`
+`下載 Node.js LTS → 確認 node/npm → 安裝 Codex → codex → 登入 → 開始 Session`
 
 ![Codex CLI 啟動畫面範例](assets/course-1-ai-basics/codex-cli-start.png)
 
@@ -139,11 +160,26 @@ codex
 
 ### 動手試試看：讓 Codex 看懂專案
 
-進入一個自己的專案資料夾：
+課堂先使用教材附的練習專案，不要一開始就把 Codex 帶進含有重要資料的個人專案。這個專案只有 Markdown 檔案，適合先練習「讓 Agent 讀懂工作區」：
+
+`examples/teacher-learning-lab/`
+
+請先在命令提示字元切換到教材根目錄，再進入練習專案：
 
 ```bash
-cd my-project
-codex
+# 進入課堂練習專案
+$ cd examples/teacher-learning-lab
+
+# 啟動 Codex
+$ codex
+```
+
+如果你目前已經在教材根目錄，也可以直接執行：
+
+```bash
+# 如果目前已經在教材根目錄，直接執行：
+$ cd examples/teacher-learning-lab
+$ codex
 ```
 
 接著輸入：
@@ -162,6 +198,8 @@ codex
 `理解任務 → 查看檔案 → 搜尋程式碼 → 整理結果`
 
 這是最基本的 Agentic 工作方式。ChatGPT 通常需要你先把資料貼進對話；Codex 則可以自己進入工作環境找資訊。
+
+第一次練習的原則是：**先讀取、先說明，不要急著修改檔案。** 等大家看懂 Codex 如何判斷工作目錄、尋找檔案與整理結果後，再進行後面的筆記任務。
 
 ---
 
@@ -191,8 +229,11 @@ Session 可以先理解成「這一次協作的工作桌」：你在同一個 Se
 在課程提供的練習專案中啟動 Codex：
 
 ```bash
-cd examples/teacher-learning-lab
-codex
+# 進入課程提供的練習專案
+$ cd examples/teacher-learning-lab
+
+# 啟動 Codex
+$ codex
 ```
 
 輸入：
@@ -226,18 +267,18 @@ codex
 
 可以把它理解成 Codex 的「系統資訊頁」
 
-![Codex CLI `/status` 輸出範例](assets/course-1-ai-basics/codex-cli-status.png)
+![Codex CLI /status</code> 輸出範例](assets/course-1-ai-basics/codex-cli-status.png)
 
 可以用下面這張表讀 `/status`：
 
-| 欄位 | 可以怎麼理解 |
-| --- | --- |
-| Model | 目前使用哪個模型，以及推理設定 |
-| Directory | Agent 目前工作的資料夾；這會影響它能讀到哪些檔案 |
-| Permissions | Agent 可以做哪些操作，是否需要你核准 |
-| Agents.md | 專案是否有額外的工作規則 |
-| Session | 這次協作的識別資訊 |
-| Usage | 目前可用的時間／額度摘要；不是單一問題的分數 |
+| 欄位        | 可以怎麼理解                                     |
+| ----------- | ------------------------------------------------ |
+| Model       | 目前使用哪個模型，以及推理設定                   |
+| Directory   | Agent 目前工作的資料夾；這會影響它能讀到哪些檔案 |
+| Permissions | Agent 可以做哪些操作，是否需要你核准             |
+| Agents.md   | 專案是否有額外的工作規則                         |
+| Session     | 這次協作的識別資訊                               |
+| Usage       | 目前可用的時間／額度摘要；不是單一問題的分數     |
 
 ### 動手試試看：查看目前環境
 
@@ -315,17 +356,17 @@ Session 越長、讀取的檔案越多
 #### Prompt B
 
 ```markdown
-只根據 notes/example-ai-learning.md
+只根據 notes/cognitive-load-theory.md
 整理成：
-- 3 個核心概念
-- 1 個生活化例子
-- 2 個自我檢查問題
+- 1 個核心概念
+- 1 個學生可能的錯誤理解
+- 2 個檢查理解的問題
 不要新增檔案，也不要加入原筆記沒有提到的事實
 ```
 
 請問大家：哪一個比較容易讓 Agent 少走冤枉路？
 
-通常範圍越清楚，Agent 就越不需要搜尋無關檔案、做額外推理或呼叫多餘工具，也就能減少 Token 與 Tool Calls。對教職人員而言，這就像備課時說清楚「只看這一篇教材、整理成這三種結果」，比「幫我處理一下」更容易得到可用的內容。
+通常範圍越清楚，Agent 就越不需要搜尋無關檔案、做額外推理或呼叫多餘工具，也就能減少 Token 與 Tool Calls。對師培生而言，這就像備課時說清楚「只看這一份草稿、整理成這三種結果」，比「幫我處理一下」更容易得到可用的內容。
 
 ---
 
@@ -359,63 +400,126 @@ Codex 在工作過程中保留的「上下文資訊」
 - **Token**：模型讀取與產生文字的基本單位，不完全等於中文字數或英文單字數。
 - **Memory**：可延續的偏好或背景資訊，讓 AI 不需要每次都從零開始理解你。
 
-## 給教職人員的練習專案：用 AI 學習，而不只是請 AI 給答案
+## 給師培生的練習專案：讓 Agent 讀懂專業筆記
 
-本課提供一個純 Markdown 的練習專案：[teacher-learning-lab](../examples/teacher-learning-lab/)。它不需要寫程式，只有三種東西：
+本課提供一個純 Markdown 的練習專案：[teacher-learning-lab](../examples/teacher-learning-lab/)。它不需要寫程式，適合正在修習教育心理學、教育社會學、教育哲學等師培課程的學生。
 
-- `README.md`：說明這個學習工作區的目的與使用規則
-- `templates/learning-note.md`：固定的學習筆記模板
-- `notes/`：放自己的主題、問題與整理結果
+練習情境是：你手上有六份教育專業知識筆記，想快速掌握不同理論的核心概念、概念之間的關係，以及哪些地方還需要查證。請讓 Agent 先掃描全部筆記，再選一份用 ASCII 整理，最後使用 Skill 畫成知識圖。
 
-### 四個簡單任務
+六份筆記包括：
 
-#### 任務 1：請 Agent 說明工作區
+- 認知負荷理論
+- 近側發展區與鷹架
+- 布魯姆教育目標分類學
+- 杜威的經驗教育
+- 隱性課程
+- 文化資本
 
-```markdown
-先不要修改檔案，請閱讀這個資料夾，告訴我它適合拿來做什麼。
-請列出每個檔案的用途，並建議我第一步可以做什麼。
-```
+這個練習場的輸出分成三處：
 
-#### 任務 2：用模板新增自己的學習筆記
+- `notes/`：六份原始專業筆記
+- `outputs/`：第二個練習產生的 ASCII 知識結構
+- `diagrams/`：第三個練習產生的 HTML、SVG 或 PNG 圖檔
 
-```markdown
-我想學習「<主題>」。
-請先讀 templates/learning-note.md，根據模板提出一份草稿。
-先不要寫入檔案，等我確認後再新增到 notes/。
-```
+### 三個任務
 
-可以選的主題包括：如何設計一堂課、如何閱讀一篇研究、如何規劃一個學習目標、如何向學生解釋抽象概念。
-
-#### 任務 3：把筆記變成教學活動
+#### 任務 1：讓 Codex 看懂專案
 
 ```markdown
-請只根據我確認過的學習筆記，設計一個 15 分鐘的教學活動，包含：
-1. 學習目標
-2. 開場問題
-3. 一個簡單練習
-4. 檢查理解的問題
-不要新增筆記中沒有根據的事實。
+先不要修改任何檔案。
+
+請閱讀這個練習專案，告訴我：
+1. 這個專案是做什麼的？
+2. notes/ 裡有哪六份專業筆記？
+3. 請依照教育心理學、教育哲學、教育社會學或教學設計分類。
+4. 哪兩份筆記最適合放在一起比較？為什麼？
+5. 三個練習的順序與關係是什麼？
 ```
 
-#### 任務 4：請 Agent 反過來考你
+接著輸入：
 
 ```markdown
-請不要直接解釋答案。
-請根據這篇學習筆記問我 3 個問題，一次問一題。
-等我回答後，再指出我理解正確的地方與還需要補強的地方。
+請閱讀 notes/ 裡的六份專業筆記。
+
+請整理成一張表：
+- 筆記名稱
+- 所屬領域
+- 核心問題
+- 3 個專有名詞
+- 一個教育情境
+- 一個常見誤解
+
+先不要修改任何檔案。
 ```
 
-這四個任務的核心，是讓 AI 從「答案機器」變成學習夥伴：**先說明、再提問、再整理、再檢查理解**。
+#### 任務 2：嘗試畫出 ASCII 知識點
 
-### 一個適合教職人員的 AI 學習循環
+```markdown
+請再次閱讀 notes/cognitive-load-theory.md。
 
-`提出目標 → 讓 AI 先問問題 → 用自己的話回答 → 找出理解缺口 → 整理成筆記 → 轉成可以教人的活動`
+請用 ASCII 樹狀結構或箭頭，整理這份筆記的知識點，包含：
+1. 中心問題
+2. 核心概念
+3. 專有名詞
+4. 概念之間的關係
+5. 教育情境
+6. 常見誤解
 
-最後請學生反思三件事：
+不要加入原筆記沒有提到的事實。
+先把 ASCII 草稿顯示給我，等我確認後再寫入：
+outputs/cognitive-load-theory-ascii.md
+```
 
-- 哪些內容是我原本就知道的？
-- 哪些內容是 Agent 幫我整理的？
-- 哪些說法我還需要查資料或請教專業人士？
+確認內容後：
+
+```markdown
+請把剛才確認過的 ASCII 知識結構寫入：
+outputs/cognitive-load-theory-ascii.md
+
+只保存 ASCII 結構與必要的簡短說明，不要改寫原本的專業筆記。
+```
+
+#### 任務 3：使用 Skill 畫出筆記
+
+先安裝 [diagram-design](https://github.com/cathrynlavery/diagram-design) skill：
+
+```bash
+# 加入 diagram-design 的 Plugin Marketplace
+$ codex plugin marketplace add cathrynlavery/diagram-design
+
+# 安裝 diagram-design plugin
+$ codex plugin add diagram-design@diagram-design
+```
+
+重新開啟 Codex Session 後輸入：
+
+```markdown
+請閱讀：
+- notes/cognitive-load-theory.md
+- outputs/cognitive-load-theory-ascii.md
+
+請使用 diagram-design skill，把這份專業知識筆記畫成一張適合初學者理解的知識圖。
+
+要求：
+- 先判斷這份筆記適合使用哪一種圖
+- 保留中心問題、主要概念與概念之間的關係
+- 不要加入筆記中沒有提到的事實
+- 先提出圖的設計，再開始產生圖
+- 將最後的圖檔保存到 diagrams/
+```
+
+這三個任務的核心，是讓 AI 從「答案機器」變成專業知識的理解與視覺化夥伴：**先掃描、再比較、再整理、最後畫出關係**。
+
+### 一個適合師培生的 AI 專業筆記理解循環
+
+`閱讀專業筆記 → 用自己的話理解 → ASCII 整理知識點 → 使用 Skill 產生知識圖 → 回頭檢查是否忠於原文`
+
+最後請師培生反思四件事：
+
+- 我是否真的理解這份專業筆記，而不是只看過一遍？
+- ASCII 結構是否保留了原筆記的重點？
+- 最後的圖是否讓沒有背景知識的人更容易理解？
+- 哪些地方仍然需要回到課本、論文或教師說明確認？
 
 ## 如何更有效率地使用 Token
 
