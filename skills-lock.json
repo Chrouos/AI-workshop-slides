@@ -25,6 +25,12 @@
       "skillPath": "skills/diagram-design/SKILL.md",
       "computedHash": "503dd1e639541c2d5b2f7eba4d757f64c4dbb6626fa5379ab35456d0881c3e90"
     },
+    "eli5": {
+      "source": "dreambigou/eli5",
+      "sourceType": "github",
+      "skillPath": "skills/eli5/SKILL.md",
+      "computedHash": "ebe7a298b60d28ac26da8aa505d28dc97d124882abc7f33eddeb0d01e9852058"
+    },
     "emil-design-eng": {
       "source": "emilkowalski/skills",
       "sourceType": "github",

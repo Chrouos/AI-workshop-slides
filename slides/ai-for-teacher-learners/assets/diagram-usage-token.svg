@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="760" viewBox="0 0 1600 760" role="img" aria-labelledby="usage-vs-token-title usage-vs-token-desc">
+  <title id="usage-vs-token-title">Usage 和 Token：一個看總額度，一個看這次用了多少</title>
+  <desc id="usage-vs-token-desc">用整盒點心與這次拿出的幾口作比喻，說明 Usage 是帳號或方案的總額度，Token 是單次工作處理的文字與檔案量。</desc>
+  <style>
+    .body { font-family: 'Geist', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; }
+    .mono { font-family: Consolas, 'Noto Sans TC', monospace; }
+  </style>
+
+  <rect width="1600" height="760" fill="#ffffff"/>
+  <text x="100" y="84" class="body" fill="#1C1917" font-size="38" font-weight="600">Usage 和 Token：一個看總額度，一個看這次用了多少</text>
+  <text x="100" y="126" class="body" fill="#57534E" font-size="21">先想像一盒點心：整盒還剩多少，和這次拿了幾口，是兩個不同問題。</text>
+
+  <g class="body">
+    <!-- Usage -->
+    <rect x="100" y="190" width="650" height="400" rx="6" fill="#EFE2D4" stroke="#9A6846" stroke-width="1.4"/>
+    <text x="144" y="242" class="mono" fill="#9A6846" font-size="16" letter-spacing="0.12em">像：整盒點心</text>
+    <text x="144" y="290" fill="#1C1917" font-size="32" font-weight="600">Usage：整盒還剩多少？</text>
+    <text x="144" y="332" fill="#57534E" font-size="20">看帳號或方案的總使用額度。</text>
+    <text x="144" y="382" fill="#1C1917" font-size="20">它回答：</text>
+    <text x="248" y="382" fill="#57534E" font-size="20">「我現在還能用多少 Codex？」</text>
+    <rect x="144" y="432" width="550" height="22" rx="4" fill="#E7E5E4"/>
+    <rect x="144" y="432" width="342" height="22" rx="4" fill="#9A6846"/>
+    <text x="144" y="490" class="mono" fill="#9A6846" font-size="16">已使用</text>
+    <text x="606" y="490" class="mono" fill="#A8A29E" font-size="16">還剩下</text>
+    <text x="144" y="548" fill="#57534E" font-size="18">看的範圍：整個帳號／方案</text>
+
+    <!-- Token -->
+    <rect x="850" y="190" width="650" height="400" rx="6" fill="#ffffff" stroke="#D6D3D1"/>
+    <text x="894" y="242" class="mono" fill="#57534E" font-size="16" letter-spacing="0.12em">像：這次拿出的幾口</text>
+    <text x="894" y="290" fill="#1C1917" font-size="32" font-weight="600">Token：這次用了多少？</text>
+    <text x="894" y="332" fill="#57534E" font-size="20">看這一次處理的文字與檔案量。</text>
+    <text x="894" y="382" fill="#1C1917" font-size="20">它回答：</text>
+    <text x="998" y="382" fill="#57534E" font-size="20">「這次讀了多少內容？」</text>
+    <g fill="#57534E">
+      <rect x="894" y="432" width="48" height="22" rx="3"/><rect x="954" y="432" width="48" height="22" rx="3"/><rect x="1014" y="432" width="48" height="22" rx="3"/><rect x="1074" y="432" width="48" height="22" rx="3"/><rect x="1134" y="432" width="48" height="22" rx="3"/><rect x="1194" y="432" width="48" height="22" rx="3"/><rect x="1254" y="432" width="48" height="22" rx="3"/>
+    </g>
+    <text x="894" y="490" class="mono" fill="#A8A29E" font-size="16">一小塊 Token = 文字的一小段</text>
+    <text x="894" y="548" fill="#57534E" font-size="18">看的範圍：這一次工作</text>
+  </g>
+
+  <rect x="270" y="650" width="1060" height="52" rx="6" fill="#F5F5F4" stroke="#E7E5E4"/>
+  <text x="800" y="683" text-anchor="middle" class="body" fill="#1C1917" font-size="21">Usage 是整盒還剩多少；Token 是這次拿了多少。讀的檔案越多，通常 Token 越多。</text>
+</svg>
