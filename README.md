@@ -2,6 +2,11 @@
 
 Slides as React components. Each slide lives under `slides/<id>/index.tsx` and default-exports an array of page components. The `@open-slide/core` runtime handles layout, scaling, navigation, thumbnails, and fullscreen play mode — you just write the pages.
 
+## 線上預覽
+
+- [開啟簡報首頁](https://chrouos.github.io/AI-workshop-slides/)
+- [認識 AI：給師培學生的 Agent 協作課](https://chrouos.github.io/AI-workshop-slides/s/ai-for-teacher-learners)
+
 ## Getting started
 
 ```bash
