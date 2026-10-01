@@ -1,5 +1,5 @@
 import type { DesignSystem, Page, SlideMeta } from '@open-slide/core';
-import { useSlidePageNumber } from '@open-slide/core';
+import { Step, Steps, useIsActivePage, useSlidePageNumber } from '@open-slide/core';
 import toolComparison from './assets/chatgpt-vs-codex.png';
 import wrongAnswer from './assets/llm-hallucination-calculation.png';
 import nodeNpmCheck from './assets/node-npm-check.png';
@@ -29,6 +29,52 @@ if (typeof document !== 'undefined') {
   }
   if (link.href !== FONT_HREF) link.href = FONT_HREF;
 }
+
+// ---------- Motion ----------
+// One small vocabulary for the whole deck. Every reveal is click-driven through the
+// framework's <Steps>/<Step>; the CSS below only adds a short rise to whatever a
+// <Step> reveals, plus a few "build" details keyed off the framework's own
+// data-osd-step attribute. Hostless renders (thumbnails, overview, presenter
+// previews, PDF/HTML/PPTX export) show every step revealed, so nothing here can
+// leave a page half-drawn. The only un-clicked motion is the chapter fill, and it
+// runs only on the page the audience is watching (useIsActivePage).
+const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
+const STEP_MS = 280; // a <Step> fading in (framework fade) + an 8px rise
+const BUILD_MS = 320; // pieces inside a revealed step settling in order
+const BUILD_GAP = 90; // stagger between those pieces
+const BAR_MS = 600; // probability bars growing from zero
+const FILL_MS = 480; // chapter marker filling left to right
+
+const MOTION_CSS = `
+.atl-deck [data-osd-step] > * { transition: transform ${STEP_MS}ms ${EASE_OUT}; }
+.atl-deck [data-osd-step="pending"] > * { transform: translateY(8px); }
+.atl-deck .atl-build { transition-property: opacity, transform; transition-duration: ${BUILD_MS}ms; transition-timing-function: ${EASE_OUT}; }
+.atl-deck [data-osd-step="pending"] .atl-build { opacity: 0; transform: translateY(10px); }
+.atl-deck .atl-bar { transform-origin: left center; transition: transform ${BAR_MS}ms ${EASE_OUT}; }
+.atl-deck [data-osd-step="pending"] .atl-bar { transform: scaleX(0); }
+@keyframes atl-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.atl-deck .atl-fill { transform-origin: left center; animation: atl-fill ${FILL_MS}ms ${EASE_OUT} 160ms both; }
+@media (prefers-reduced-motion: reduce) {
+  .atl-deck [data-osd-step] > *, .atl-deck [data-osd-step="pending"] > * { transform: none; transition: none; }
+  .atl-deck .atl-build { transition: opacity 150ms ease; transition-delay: 0s !important; }
+  .atl-deck [data-osd-step="pending"] .atl-build { transform: none; }
+  .atl-deck .atl-bar, .atl-deck [data-osd-step="pending"] .atl-bar { transform: none; transition: none; }
+  .atl-deck .atl-fill { animation: none; }
+}
+`;
+const MOTION_STYLE_ID = 'osd-motion-ai-for-teacher-learners';
+if (typeof document !== 'undefined') {
+  let style = document.getElementById(MOTION_STYLE_ID) as HTMLStyleElement | null;
+  if (!style) {
+    style = document.createElement('style');
+    style.id = MOTION_STYLE_ID;
+    document.head.appendChild(style);
+  }
+  if (style.textContent !== MOTION_CSS) style.textContent = MOTION_CSS;
+}
+
+// Delay for the i-th piece of a build (0-based), after the step itself has started fading in.
+const buildDelay = (i: number, base = 120) => ({ transitionDelay: `${base + i * BUILD_GAP}ms` });
 
 const muted = '#57534E';
 const faint = '#A8A29E';
@@ -106,23 +152,44 @@ const Eyebrow = ({ children }: { children: React.ReactNode }) => (
 const CHAPTERS = ['認識 AI', '開始用 Codex', '整理教育筆記', '核對與視覺化'];
 type Chapter = 1 | 2 | 3 | 4;
 
-const RouteBar = ({ chapter }: { chapter: Chapter }) => (
-  <div style={{ position: 'absolute', top: 114, right: 144, display: 'flex', alignItems: 'center', gap: 8 }}>
-    <span style={{ width: 34, height: 6, background: chapter === 1 ? amber : faint }} />
-    <span style={{ width: 34, height: 6, background: chapter === 2 ? amber : chapter > 2 ? faint : rule }} />
-    <span style={{ width: 34, height: 6, background: chapter === 3 ? amber : chapter > 3 ? faint : rule }} />
-    <span style={{ width: 34, height: 6, background: chapter === 4 ? amber : rule }} />
-    <span style={{ marginLeft: 12, fontSize: 22, fontWeight: 600, color: amber, letterSpacing: '0.04em' }}>
-      {String(chapter).padStart(2, '0')}｜{CHAPTERS[chapter - 1]}
-    </span>
+// One segment of the route bar. The current chapter's segment is amber; on the first
+// page of a chapter it fills in left to right, once, on the live page only.
+const RouteSeg = ({ color, fill = false }: { color: string; fill?: boolean }) => (
+  <span style={{ width: 34, height: 6, background: fill ? rule : color, display: 'block' }}>
+    {fill ? <span className="atl-fill" style={{ display: 'block', width: '100%', height: '100%', background: color }} /> : null}
+  </span>
+);
+
+const RouteBar = ({ chapter, enter = false }: { chapter: Chapter; enter?: boolean }) => {
+  const live = useIsActivePage();
+  const fill = enter && live;
+  return (
+    <div style={{ position: 'absolute', top: 114, right: 144, display: 'flex', alignItems: 'center', gap: 8 }}>
+      <RouteSeg color={chapter === 1 ? amber : faint} fill={fill && chapter === 1} />
+      <RouteSeg color={chapter === 2 ? amber : chapter > 2 ? faint : rule} fill={fill && chapter === 2} />
+      <RouteSeg color={chapter === 3 ? amber : chapter > 3 ? faint : rule} fill={fill && chapter === 3} />
+      <RouteSeg color={chapter === 4 ? amber : rule} fill={fill && chapter === 4} />
+      <span style={{ marginLeft: 12, fontSize: 22, fontWeight: 600, color: amber, letterSpacing: '0.04em' }}>
+        {String(chapter).padStart(2, '0')}｜{CHAPTERS[chapter - 1]}
+      </span>
+    </div>
+  );
+};
+
+const Shell = ({ children, top = 112, chapter, enterChapter = false }: { children: React.ReactNode; top?: number; chapter?: Chapter; enterChapter?: boolean }) => (
+  <div className="atl-deck" style={{ width: '100%', height: '100%', boxSizing: 'border-box', position: 'relative', background: 'var(--osd-bg)', color: 'var(--osd-text)', fontFamily: 'var(--osd-font-body)', padding: `${top}px 144px 126px` }}>
+    {chapter ? <RouteBar chapter={chapter} enter={enterChapter} /> : null}
+    {children}
+    <Footer />
   </div>
 );
 
-const Shell = ({ children, top = 112, chapter }: { children: React.ReactNode; top?: number; chapter?: Chapter }) => (
-  <div style={{ width: '100%', height: '100%', boxSizing: 'border-box', position: 'relative', background: 'var(--osd-bg)', color: 'var(--osd-text)', fontFamily: 'var(--osd-font-body)', padding: `${top}px 144px 126px` }}>
-    {chapter ? <RouteBar chapter={chapter} /> : null}
+// A grid cell that carries the "→" in the gap to its left, so an arrow and the item it
+// points to can be revealed together by one <Step>.
+const ArrowCell = ({ gap, size = 48, children }: { gap: number; size?: number; children: React.ReactNode }) => (
+  <div style={{ position: 'relative' }}>
+    <div style={{ position: 'absolute', left: -gap, top: 0, bottom: 0, width: gap, display: 'grid', placeItems: 'center' }}><Arrow size={size} /></div>
     {children}
-    <Footer />
   </div>
 );
 
@@ -155,15 +222,15 @@ const StepPanel = ({ number, title, detail, tint = surface }: { number: string; 
 const ConceptMap = ({ compact = false }: { compact?: boolean }) => (
   <div style={{ width: compact ? 446 : 650, height: compact ? 380 : 485, boxSizing: 'border-box', background: '#FFFFFF', border: `1px solid ${rule}`, padding: compact ? 22 : 34, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
     <div style={{ color: 'var(--osd-accent)', fontSize: compact ? 22 : 25, fontWeight: 600, letterSpacing: '0.07em' }}>認知負荷理論 / 關係圖</div>
-    <div style={{ minHeight: compact ? 70 : 96, boxSizing: 'border-box', background: '#1C1917', color: '#FAFAF9', padding: compact ? '9px 18px' : '16px 25px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div className="atl-build" style={{ ...buildDelay(0), minHeight: compact ? 70 : 96, boxSizing: 'border-box', background: '#1C1917', color: '#FAFAF9', padding: compact ? '9px 18px' : '16px 25px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <div style={{ fontSize: compact ? 27 : 36, fontWeight: 600 }}>工作記憶容量有限</div>
     </div>
-    <div style={{ textAlign: 'center', color: amber, fontSize: compact ? 20 : 25, lineHeight: 1 }}>↓ 降低干擾</div>
-    <div style={{ minHeight: compact ? 70 : 96, boxSizing: 'border-box', background: amberSoft, borderLeft: `5px solid ${amber}`, padding: compact ? '9px 18px' : '16px 25px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div className="atl-build" style={{ ...buildDelay(1), textAlign: 'center', color: amber, fontSize: compact ? 20 : 25, lineHeight: 1 }}>↓ 降低干擾</div>
+    <div className="atl-build" style={{ ...buildDelay(2), minHeight: compact ? 70 : 96, boxSizing: 'border-box', background: amberSoft, borderLeft: `5px solid ${amber}`, padding: compact ? '9px 18px' : '16px 25px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <div style={{ fontSize: compact ? 26 : 34, fontWeight: 600 }}>減少不必要的外在負荷</div>
     </div>
-    <div style={{ textAlign: 'center', color: faint, fontSize: compact ? 20 : 25, lineHeight: 1 }}>↓ 教學做法</div>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: compact ? 11 : 16 }}>
+    <div className="atl-build" style={{ ...buildDelay(3), textAlign: 'center', color: faint, fontSize: compact ? 20 : 25, lineHeight: 1 }}>↓ 教學做法</div>
+    <div className="atl-build" style={{ ...buildDelay(4), display: 'grid', gridTemplateColumns: '1fr 1fr', gap: compact ? 11 : 16 }}>
       <div style={{ minHeight: compact ? 60 : 80, background: sage, display: 'grid', placeItems: 'center', fontSize: compact ? 24 : 30, fontWeight: 600 }}>拆開步驟</div>
       <div style={{ minHeight: compact ? 60 : 80, background: surface, display: 'grid', placeItems: 'center', fontSize: compact ? 24 : 30, fontWeight: 600 }}>標出關鍵資訊</div>
     </div>
@@ -255,13 +322,13 @@ const SpeakerIntro: Page = () => (
     <Eyebrow>講者介紹 / ABOUT ME</Eyebrow>
     <Heading>黃懷萱</Heading>
     <p style={{ fontSize: 34, lineHeight: 1.5, color: muted, margin: '22px 0 0', maxWidth: 1500 }}>AI 工程師，工作和日常生活都常找 AI 幫忙</p>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 220px 1fr', gap: 48, alignItems: 'center', marginTop: 64 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 220px 1fr', gap: 48, alignItems: 'start', marginTop: 64 }}>
       <div style={{ textAlign: 'center' }}>
         <SmallLabel>求學</SmallLabel>
         <div style={{ fontFamily: 'var(--osd-font-display)', fontSize: 68, lineHeight: 1.25, marginTop: 25 }}>中央大學碩士</div>
         <div style={{ fontSize: 31, color: muted, marginTop: 18 }}>NLP / LLM / RAG</div>
       </div>
-      <div style={{ fontSize: 88, color: faint, textAlign: 'center', lineHeight: 1 }}>→</div>
+      <div style={{ fontSize: 88, color: faint, textAlign: 'center', lineHeight: 1, marginTop: 60 }}>→</div>
       <div style={{ textAlign: 'center' }}>
         <SmallLabel>工作</SmallLabel>
         <div style={{ fontFamily: 'var(--osd-font-display)', fontSize: 68, lineHeight: 1.25, marginTop: 25 }}>關貿網路</div>
@@ -326,12 +393,16 @@ const StoryStart: Page = () => (
       </div>
       <div style={{ display: 'grid', gap: 26 }}>
         <SmallLabel>小安心裡的問題</SmallLabel>
-        <Wonder>這些名詞之間，是什麼關係？</Wonder>
-        <Wonder>哪些是重點，哪些只是例子？</Wonder>
-        <Wonder>我整理的，到底對不對？</Wonder>
+        <Steps>
+          <Wonder>這些名詞之間，是什麼關係？</Wonder>
+          <Step duration={STEP_MS}><Wonder>哪些是重點，哪些只是例子？</Wonder></Step>
+          <Step duration={STEP_MS}><Wonder>我整理的，到底對不對？</Wonder></Step>
+        </Steps>
       </div>
     </div>
-    <div style={{ marginTop: 64 }}><Lead>今天，我們陪小安用 AI，把這份筆記整理成一張能核對的知識圖。</Lead></div>
+    <Steps>
+      <Step duration={STEP_MS}><div style={{ marginTop: 64 }}><Lead>今天，我們陪小安用 AI，把這份筆記整理成一張能核對的知識圖。</Lead></div></Step>
+    </Steps>
   </Shell>
 );
 
@@ -346,27 +417,43 @@ const ResultFirst: Page = () => (
   <Shell>
     <Eyebrow>先看終點：小安最後會拿到什麼？</Eyebrow>
     <Heading>同一條關係，從筆記變成知識圖</Heading>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 56px 1fr 56px 1fr', alignItems: 'center', marginTop: 52 }}>
-      <StageCard label="1 · 原始筆記" tint="#FFFFFF">
-        <div style={{ fontSize: 28, lineHeight: 1.6, color: muted }}>工作記憶容量有限。<br /><br />教材的呈現方式，<br />可能造成不必要的負擔。<br /><br />可以拆開步驟、標出關鍵資訊。</div>
-      </StageCard>
-      <div style={{ textAlign: 'center' }}><Arrow /></div>
-      <StageCard label="2 · ASCII 草稿" tint={amberSoft} accent={amber}>
-        <div style={{ fontFamily: mono, fontSize: 27, lineHeight: 1.75 }}>工作記憶：容量有限<br /><span style={{ color: amber }}>　↓ 所以</span><br />減少外在負荷<br /><span style={{ color: amber }}>　↓ 例如</span><br />拆開步驟<br />標出關鍵資訊</div>
-      </StageCard>
-      <div style={{ textAlign: 'center' }}><Arrow /></div>
-      <StageCard label="3 · 知識圖" tint={surface}>
-        <ConceptMap compact />
-      </StageCard>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', columnGap: 56, alignItems: 'center', marginTop: 52 }}>
+      <Steps>
+        <StageCard label="1 · 原始筆記" tint="#FFFFFF">
+          <div style={{ fontSize: 28, lineHeight: 1.6, color: muted }}>工作記憶容量有限。<br /><br />教材的呈現方式，<br />可能造成不必要的負擔。<br /><br />可以拆開步驟、標出關鍵資訊。</div>
+        </StageCard>
+        <Step duration={STEP_MS}>
+          <ArrowCell gap={56}>
+            <StageCard label="2 · ASCII 草稿" tint={amberSoft} accent={amber}>
+              <div style={{ fontFamily: mono, fontSize: 27, lineHeight: 1.75 }}>
+                <div className="atl-build" style={buildDelay(0)}>工作記憶：容量有限</div>
+                <div className="atl-build" style={{ ...buildDelay(1), color: amber }}>　↓ 所以</div>
+                <div className="atl-build" style={buildDelay(2)}>減少外在負荷</div>
+                <div className="atl-build" style={{ ...buildDelay(3), color: amber }}>　↓ 例如</div>
+                <div className="atl-build" style={buildDelay(4)}>拆開步驟<br />標出關鍵資訊</div>
+              </div>
+            </StageCard>
+          </ArrowCell>
+        </Step>
+        <Step duration={STEP_MS}>
+          <ArrowCell gap={56}>
+            <StageCard label="3 · 知識圖" tint={surface}>
+              <ConceptMap compact />
+            </StageCard>
+          </ArrowCell>
+        </Step>
+      </Steps>
     </div>
-    <p style={{ fontSize: 32, color: muted, marginTop: 36 }}>今天的主線：讀筆記 → 出草稿 → 回原文核對 → 畫成知識圖。</p>
+    <Steps>
+      <Step duration={STEP_MS}><p style={{ fontSize: 32, color: muted, marginTop: 36 }}>今天的主線：讀筆記 → 出草稿 → 回原文核對 → 畫成知識圖。</p></Step>
+    </Steps>
   </Shell>
 );
 
 // ---------- 01 認識 AI ----------
 
 const ToolComparison: Page = () => (
-  <Shell chapter={1}>
+  <Shell chapter={1} enterChapter>
     <Eyebrow>先選工具</Eyebrow>
     <Heading>討論想法用 ChatGPT，動手做事用 Codex</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '700px 1fr', gap: 56, alignItems: 'center', marginTop: 52 }}>
@@ -391,18 +478,21 @@ const ToolRoles: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>所以今天用 Codex，要做這件事</Eyebrow>
     <Heading>今天的主線，分四步走</Heading>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 56px 1fr 56px 1fr 56px 1fr', alignItems: 'center', marginTop: 88 }}>
-      <StepPanel number="1 · notes/" title="讀筆記" detail="先讀懂原始筆記" tint={surface} />
-      <div style={{ textAlign: 'center' }}><Arrow /></div>
-      <StepPanel number="2 · outputs/" title="出草稿" detail="用文字排出關係" tint={sage} />
-      <div style={{ textAlign: 'center' }}><Arrow /></div>
-      <StepPanel number="3 · notes/" title="回原文核對" detail="每條關係都有根據" tint={amberSoft} />
-      <div style={{ textAlign: 'center' }}><Arrow /></div>
-      <StepPanel number="4 · diagrams/" title="畫成知識圖" detail="存成能打開的檔案" tint={surface} />
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', columnGap: 56, alignItems: 'center', marginTop: 88 }}>
+      <Steps>
+        <StepPanel number="1 · notes/" title="讀筆記" detail="先讀懂原始筆記" tint={surface} />
+        <Step duration={STEP_MS}><ArrowCell gap={56}><StepPanel number="2 · outputs/" title="出草稿" detail="用文字排出關係" tint={sage} /></ArrowCell></Step>
+        <Step duration={STEP_MS}><ArrowCell gap={56}><StepPanel number="3 · notes/" title="回原文核對" detail="每條關係都有根據" tint={amberSoft} /></ArrowCell></Step>
+        <Step duration={STEP_MS}><ArrowCell gap={56}><StepPanel number="4 · diagrams/" title="畫成知識圖" detail="存成能打開的檔案" tint={surface} /></ArrowCell></Step>
+      </Steps>
     </div>
-    <div style={{ marginTop: 22, height: 30, borderLeft: `3px solid ${amber}`, borderRight: `3px solid ${amber}`, borderBottom: `3px solid ${amber}` }} />
-    <div style={{ textAlign: 'center', marginTop: 16, fontSize: 30, color: amber }}><span style={{ fontFamily: mono }}>teacher-learning-lab/</span>　四步都在這個資料夾裡完成</div>
-    <div style={{ marginTop: 64 }}><Lead>不過在動手之前，先看一個問題：AI 說的話，一定對嗎？</Lead></div>
+    <Steps>
+      <Step duration={STEP_MS}>
+        <div style={{ marginTop: 22, height: 30, borderLeft: `3px solid ${amber}`, borderRight: `3px solid ${amber}`, borderBottom: `3px solid ${amber}` }} />
+        <div style={{ textAlign: 'center', marginTop: 16, fontSize: 30, color: amber }}><span style={{ fontFamily: mono }}>teacher-learning-lab/</span>　四步都在這個資料夾裡完成</div>
+        <div style={{ marginTop: 64 }}><Lead>不過在動手之前，先看一個問題：AI 說的話，一定對嗎？</Lead></div>
+      </Step>
+    </Steps>
   </Shell>
 );
 
@@ -424,10 +514,10 @@ const WrongAnswer: Page = () => (
   </Shell>
 );
 
-const NextWord = ({ word, pct, top = false }: { word: string; pct: number; top?: boolean }) => (
+const NextWord = ({ word, pct, top = false, order = 0 }: { word: string; pct: number; top?: boolean; order?: number }) => (
   <div style={{ display: 'grid', gridTemplateColumns: '170px 1fr 90px', alignItems: 'center', gap: 20 }}>
     <span style={{ fontSize: 34, fontWeight: top ? 600 : 400, color: top ? 'var(--osd-text)' : muted }}>{word}</span>
-    <div style={{ height: 30, background: surface }}><div style={{ width: `${pct}%`, height: '100%', background: top ? amber : rule }} /></div>
+    <div style={{ height: 30, background: surface }}><div className="atl-bar" style={{ ...buildDelay(order), width: `${pct}%`, height: '100%', background: top ? amber : rule }} /></div>
     <span style={{ fontSize: 26, color: top ? amber : faint, textAlign: 'right' }}>{pct}%</span>
   </div>
 );
@@ -436,22 +526,31 @@ const TokenPrediction: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>它為什麼能說得這麼肯定？</Eyebrow>
     <Heading>簡單說，模型會根據前後文，預測接下來的文字</Heading>
-    <div style={{ display: 'grid', gridTemplateColumns: '600px 90px 1fr', alignItems: 'center', marginTop: 64 }}>
-      <div style={{ background: surface, borderTop: `3px solid ${rule}`, padding: '34px 40px' }}>
-        <SmallLabel>已經寫出的文字</SmallLabel>
-        <div style={{ fontFamily: display, fontSize: 54, marginTop: 24, lineHeight: 1.3 }}>學生需要更<span style={{ display: 'inline-block', width: 130, borderBottom: `4px solid ${amber}`, marginLeft: 12 }}>&nbsp;</span></div>
-      </div>
-      <div style={{ textAlign: 'center' }}><Arrow size={56} /></div>
-      <div style={{ display: 'grid', gap: 18 }}>
-        <SmallLabel>下一個詞的候選（示意）</SmallLabel>
-        <NextWord word="清楚的" pct={62} top />
-        <NextWord word="及時的" pct={21} />
-        <NextWord word="多的" pct={9} />
-        <NextWord word="有趣的" pct={4} />
-      </div>
+    <div style={{ display: 'grid', gridTemplateColumns: '600px 1fr', columnGap: 90, alignItems: 'center', marginTop: 64 }}>
+      <Steps>
+        <div style={{ background: surface, borderTop: `3px solid ${rule}`, padding: '34px 40px' }}>
+          <SmallLabel>已經寫出的文字</SmallLabel>
+          <div style={{ fontFamily: display, fontSize: 54, marginTop: 24, lineHeight: 1.3 }}>學生需要更<span style={{ display: 'inline-block', width: 130, borderBottom: `4px solid ${amber}`, marginLeft: 12 }}>&nbsp;</span></div>
+        </div>
+        <Step duration={STEP_MS}>
+          <ArrowCell gap={90} size={56}>
+            <div style={{ display: 'grid', gap: 18 }}>
+              <SmallLabel>下一個詞的候選（示意）</SmallLabel>
+              <NextWord word="清楚的" pct={62} top order={0} />
+              <NextWord word="及時的" pct={21} order={1} />
+              <NextWord word="多的" pct={9} order={2} />
+              <NextWord word="有趣的" pct={4} order={3} />
+            </div>
+          </ArrowCell>
+        </Step>
+      </Steps>
     </div>
-    <div style={{ marginTop: 64, fontFamily: display, fontSize: 52 }}>很像正確答案 <span style={{ color: amber }}>≠</span> 真正知道答案</div>
-    <p style={{ fontSize: 30, color: muted, marginTop: 16 }}>它挑最可能的詞，一個接一個寫下去，所以說得很順，卻不一定算過、查過。</p>
+    <Steps>
+      <Step duration={STEP_MS}>
+        <div style={{ marginTop: 64, fontFamily: display, fontSize: 52 }}>很像正確答案 <span style={{ color: amber }}>≠</span> 真正知道答案</div>
+        <p style={{ fontSize: 30, color: muted, marginTop: 16 }}>它挑最可能的詞，一個接一個寫下去，所以說得很順，卻不一定算過、查過。</p>
+      </Step>
+    </Steps>
   </Shell>
 );
 
@@ -474,12 +573,16 @@ const LlmEvolution: Page = () => (
     <Eyebrow>從「接話」到「做事」</Eyebrow>
     <Heading>AI 這幾年，一步一步學會做更多事</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', marginTop: 100 }}>
-      <Era step="01 · 2022 起" title="文字生成" detail="說得很流暢，但可能出現幻覺" />
-      <Era step="02" title="推理" detail="先把問題拆成步驟，再回答" />
-      <Era step="03" title="使用工具" detail="會搜尋、讀檔、計算，不靠猜" />
-      <Era step="04 · 今天的 Codex" title="執行任務" detail="理解目標、動手做、回報結果" now />
+      <Steps>
+        <Era step="01 · 2022 起" title="文字生成" detail="說得很流暢，但可能出現幻覺" />
+        <Step duration={STEP_MS}><Era step="02" title="推理" detail="先把問題拆成步驟，再回答" /></Step>
+        <Step duration={STEP_MS}><Era step="03" title="使用工具" detail="會搜尋、讀檔、計算，不靠猜" /></Step>
+        <Step duration={STEP_MS}><Era step="04 · 今天的 Codex" title="執行任務" detail="理解目標、動手做、回報結果" now /></Step>
+      </Steps>
     </div>
-    <div style={{ marginTop: 84 }}><Lead>能用工具之後，AI 從「回答問題」走到「完成任務」，這就是 Agent。</Lead></div>
+    <Steps>
+      <Step duration={STEP_MS}><div style={{ marginTop: 84 }}><Lead>能用工具之後，AI 從「回答問題」走到「完成任務」，這就是 Agent。</Lead></div></Step>
+    </Steps>
   </Shell>
 );
 
@@ -495,32 +598,38 @@ const AgentFlow: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>Agent 怎麼做事？</Eyebrow>
     <Heading>Agent 做事，像一個會回報的小幫手</Heading>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 40px 1fr 40px 1fr 40px 1fr 40px 1fr', alignItems: 'center', marginTop: 72 }}>
-      <AgentStep n="01" who="你" title="說目標" detail="「整理這份筆記」" you />
-      <div style={{ textAlign: 'center' }}><Arrow size={36} /></div>
-      <AgentStep n="02" who="AI" title="先看資料" detail="讀筆記與工作規則" />
-      <div style={{ textAlign: 'center' }}><Arrow size={36} /></div>
-      <AgentStep n="03" who="AI" title="動手做" detail="用搜尋、整理等工具" />
-      <div style={{ textAlign: 'center' }}><Arrow size={36} /></div>
-      <AgentStep n="04" who="AI" title="回報結果" detail={<>說明做了什麼，<br />等你檢查</>} />
-      <div style={{ textAlign: 'center' }}><Arrow size={36} /></div>
-      <AgentStep n="05" who="你" title="決定下一步" detail="繼續、修改或追問" you />
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', columnGap: 40, alignItems: 'center', marginTop: 72 }}>
+      <Steps>
+        <AgentStep n="01" who="你" title="說目標" detail="「整理這份筆記」" you />
+        <Step duration={STEP_MS}><ArrowCell gap={40} size={36}><AgentStep n="02" who="AI" title="先看資料" detail="讀筆記與工作規則" /></ArrowCell></Step>
+        <Step duration={STEP_MS}><ArrowCell gap={40} size={36}><AgentStep n="03" who="AI" title="動手做" detail="用搜尋、整理等工具" /></ArrowCell></Step>
+        <Step duration={STEP_MS}><ArrowCell gap={40} size={36}><AgentStep n="04" who="AI" title="回報結果" detail={<>說明做了什麼，<br />等你檢查</>} /></ArrowCell></Step>
+        <Step duration={STEP_MS}><ArrowCell gap={40} size={36}><AgentStep n="05" who="你" title="決定下一步" detail="繼續、修改或追問" you /></ArrowCell></Step>
+      </Steps>
     </div>
-    <div style={{ margin: '0 147px', height: 44, borderLeft: `3px solid ${amber}`, borderRight: `3px solid ${amber}`, borderBottom: `3px solid ${amber}` }} />
-    <div style={{ textAlign: 'center', marginTop: 14, fontSize: 28, color: amber }}>↺ 不滿意？回到第一步，把目標說得更清楚</div>
-    <div style={{ marginTop: 52 }}><Lead>它先看資料再動手，做完停下來回報；下一步由你決定。</Lead></div>
+    <Steps>
+      <Step duration={STEP_MS}>
+        <div style={{ margin: '0 147px', height: 44, borderLeft: `3px solid ${amber}`, borderRight: `3px solid ${amber}`, borderBottom: `3px solid ${amber}` }} />
+        <div style={{ textAlign: 'center', marginTop: 14, fontSize: 28, color: amber }}>↺ 不滿意？回到第一步，把目標說得更清楚</div>
+        <div style={{ marginTop: 52 }}><Lead>它先看資料再動手，做完停下來回報；下一步由你決定。</Lead></div>
+      </Step>
+    </Steps>
   </Shell>
 );
 
 // ---------- 02 開始用 Codex ----------
 
-const RouteStop = ({ number, label, detail, state }: { number: string; label: string; detail: string; state: 'done' | 'now' | 'next' }) => (
-  <div style={{ background: state === 'now' ? amberSoft : state === 'done' ? surface : '#FFFFFF', border: state === 'next' ? `1px dashed ${rule}` : 'none', borderTop: `3px solid ${state === 'now' ? amber : rule}`, padding: '30px 30px', minHeight: 250, boxSizing: 'border-box' }}>
+const RouteStop = ({ number, label, detail, state }: { number: string; label: string; detail: string; state: 'done' | 'now' | 'next' }) => {
+  const live = useIsActivePage();
+  return (
+  <div style={{ position: 'relative', background: state === 'now' ? amberSoft : state === 'done' ? surface : '#FFFFFF', border: state === 'next' ? `1px dashed ${rule}` : 'none', borderTop: `3px solid ${rule}`, padding: '30px 30px', minHeight: 250, boxSizing: 'border-box' }}>
+    {state === 'now' ? <span className={live ? 'atl-fill' : undefined} style={{ position: 'absolute', left: 0, right: 0, top: -3, height: 3, background: amber }} /> : null}
     <SmallLabel>{number}　{state === 'done' ? '已完成 ✓' : state === 'now' ? '你在這裡' : '接下來'}</SmallLabel>
     <div style={{ fontSize: 40, fontWeight: 600, marginTop: 18, color: state === 'next' ? faint : 'var(--osd-text)' }}>{label}</div>
     <div style={{ fontSize: 26, color: state === 'next' ? faint : muted, lineHeight: 1.5, marginTop: 14 }}>{detail}</div>
   </div>
-);
+  );
+};
 
 const RunItNow: Page = () => (
   <Shell>
@@ -537,7 +646,7 @@ const RunItNow: Page = () => (
 );
 
 const InstallRoadmap: Page = () => (
-  <Shell chapter={2}>
+  <Shell chapter={2} enterChapter>
     <Eyebrow>現在開始動手</Eyebrow>
     <Heading>跟著三站，打開 Codex</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 34, marginTop: 80 }}>
@@ -674,7 +783,8 @@ const SessionDesk: Page = () => (
   <Shell chapter={2}>
     <Eyebrow>Session 是什麼？</Eyebrow>
     <Heading>同一個 Session 內，AI 可以沿用剛才的脈絡</Heading>
-    <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 150px 1fr', alignItems: 'stretch', marginTop: 64 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'calc((100% - 150px) * 1.3 / 2.3) 1fr', alignItems: 'stretch', marginTop: 64 }}>
+      <Steps>
       <div style={{ background: amberSoft, border: `1px solid ${amber}`, padding: '30px 36px' }}>
         <SmallLabel>這個 Session ＝ 這次的工作桌</SmallLabel>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 24 }}>
@@ -685,13 +795,20 @@ const SessionDesk: Page = () => (
         </div>
         <div style={{ fontSize: 26, color: muted, marginTop: 22 }}>都在同一張桌上，所以可以一題接一題問</div>
       </div>
-      <div style={{ display: 'grid', placeItems: 'center', textAlign: 'center' }}><div><div style={{ fontSize: 24, color: muted, marginBottom: 8 }}>換 Session</div><Arrow size={60} /></div></div>
-      <div style={{ border: `2px dashed ${rule}`, padding: '30px 36px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <SmallLabel>新的 Session ＝ 換一張桌子</SmallLabel>
-        <div style={{ fontSize: 34, marginTop: 20, lineHeight: 1.5 }}>桌上空空的，<br />前面的對話不一定還在</div>
-      </div>
+      <Step duration={STEP_MS}>
+        <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', height: '100%' }}>
+          <div style={{ display: 'grid', placeItems: 'center', textAlign: 'center' }}><div><div style={{ fontSize: 24, color: muted, marginBottom: 8 }}>換 Session</div><Arrow size={60} /></div></div>
+          <div style={{ border: `2px dashed ${rule}`, padding: '30px 36px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <SmallLabel>新的 Session ＝ 換一張桌子</SmallLabel>
+            <div style={{ fontSize: 34, marginTop: 20, lineHeight: 1.5 }}>桌上空空的，<br />前面的對話不一定還在</div>
+          </div>
+        </div>
+      </Step>
+      </Steps>
     </div>
-    <div style={{ marginTop: 56 }}><Lead>所以重要的成果要存成檔案，換了 Session 也找得到。</Lead></div>
+    <Steps>
+      <Step duration={STEP_MS}><div style={{ marginTop: 56 }}><Lead>所以重要的成果要存成檔案，換了 Session 也找得到。</Lead></div></Step>
+    </Steps>
   </Shell>
 );
 
@@ -728,17 +845,23 @@ const FirstOutput: Page = () => (
     <Eyebrow>暖身 1｜看結果，不只看回答</Eyebrow>
     <Heading>它回答之後，先檢查三件事</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 33, marginTop: 72 }}>
-      <StepPanel number="看 1" title="有沒有進對資料夾？" detail="對照 Directory 與它讀的檔案" tint={surface} />
-      <StepPanel number="看 2" title="檔案用途說對了嗎？" detail="notes/、outputs/、diagrams/" tint={sage} />
-      <StepPanel number="看 3" title="這一步有沒有改檔案？" detail="應該沒有，這步只讀不改" tint={amberSoft} />
+      <Steps>
+        <StepPanel number="看 1" title="有沒有進對資料夾？" detail="對照 Directory 與它讀的檔案" tint={surface} />
+        <Step duration={STEP_MS}><StepPanel number="看 2" title="檔案用途說對了嗎？" detail="notes/、outputs/、diagrams/" tint={sage} /></Step>
+        <Step duration={STEP_MS}><StepPanel number="看 3" title="這一步有沒有改檔案？" detail="應該沒有，這步只讀不改" tint={amberSoft} /></Step>
+      </Steps>
     </div>
-    <div style={{ marginTop: 56 }}>
-      <SmallLabel>答錯了？這樣追問</SmallLabel>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginTop: 18 }}>
-        <PromptChip>「你剛才讀了哪些檔案？請列出檔名。」</PromptChip>
-        <PromptChip>「notes/ 裡有幾份筆記？各是什麼主題？」</PromptChip>
-      </div>
-    </div>
+    <Steps>
+      <Step duration={STEP_MS}>
+        <div style={{ marginTop: 56 }}>
+          <SmallLabel>答錯了？這樣追問</SmallLabel>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginTop: 18 }}>
+            <PromptChip>「你剛才讀了哪些檔案？請列出檔名。」</PromptChip>
+            <PromptChip>「notes/ 裡有幾份筆記？各是什麼主題？」</PromptChip>
+          </div>
+        </div>
+      </Step>
+    </Steps>
   </Shell>
 );
 
@@ -843,7 +966,9 @@ const PromptChoice: Page = () => (
       <div style={{ padding: '34px 38px', borderTop: `3px solid ${rule}`, background: surface, minHeight: 360, boxSizing: 'border-box' }}>
         <SmallLabel>A</SmallLabel>
         <p style={{ fontSize: 36, marginTop: 36 }}>幫我整理這個學習主題。</p>
-        <p style={{ fontSize: 26, color: faint, marginTop: 40 }}>看哪裡？做成什麼？都沒說。</p>
+        <Steps>
+          <Step duration={STEP_MS}><p style={{ fontSize: 26, color: faint, marginTop: 40 }}>看哪裡？做成什麼？都沒說。</p></Step>
+        </Steps>
       </div>
       <div style={{ padding: '34px 38px', borderTop: `3px solid ${amber}`, background: amberSoft, boxSizing: 'border-box' }}>
         <SmallLabel>B</SmallLabel>
@@ -854,7 +979,9 @@ const PromptChoice: Page = () => (
         </div>
       </div>
     </div>
-    <p style={{ fontSize: 32, color: muted, marginTop: 48 }}>B 把範圍、產出、限制都講清楚了。</p>
+    <Steps>
+      <Step duration={STEP_MS}><p style={{ fontSize: 32, color: muted, marginTop: 48 }}>B 把範圍、產出、限制都講清楚了。</p></Step>
+    </Steps>
   </Shell>
 );
 
@@ -877,7 +1004,7 @@ const Glossary: Page = () => (
 // ---------- 03 整理教育筆記 ----------
 
 const SaveToFiles: Page = () => (
-  <Shell chapter={3}>
+  <Shell chapter={3} enterChapter>
     <Eyebrow>開始整理之前</Eyebrow>
     <Heading>想讓下次接著用，就把成果寫進檔案</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '0.9fr 1.1fr', gap: 72, alignItems: 'center', marginTop: 72 }}>
@@ -989,16 +1116,34 @@ const AsciiTask: Page = () => (
 
 // ---------- 04 核對與視覺化 ----------
 
+// A row of the verification table: the draft's claim stays up; the source sentence and
+// the verdict arrive together on one click, the verdict landing a beat later.
+const CheckRow = ({ claim, source, verdict, tint }: { claim: React.ReactNode; source: React.ReactNode; verdict: React.ReactNode; tint?: string }) => (
+  <div style={{ display: 'grid', gridTemplateColumns: '540px 1fr', background: tint ?? 'transparent', borderBottom: `1px solid ${rule}`, fontSize: 28, lineHeight: 1.45 }}>
+    <Steps>
+      <div style={{ padding: '18px 22px' }}>{claim}</div>
+      <Step duration={STEP_MS}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 160px', height: '100%' }}>
+          <div style={{ padding: '18px 22px' }}>{source}</div>
+          <div className="atl-build" style={{ ...buildDelay(2), padding: '18px 22px' }}>{verdict}</div>
+        </div>
+      </Step>
+    </Steps>
+  </div>
+);
+
 const CheckOriginal: Page = () => (
-  <Shell chapter={4}>
+  <Shell chapter={4} enterChapter>
     <Eyebrow>練習 2｜回原文核對</Eyebrow>
     <Heading>草稿看起來合理，也要回頭對照原文</Heading>
     <Table marginTop={72}>
       <TRow head cols="540px 1fr 160px" cells={['草稿裡的關係', '原文哪一句支持它？', '結果']} />
-      <TRow cols="540px 1fr 160px" cells={['外在負荷 → 拆開步驟、標出關鍵資訊', '「教學時可以先降低不必要的外在負荷，例如拆開步驟、標出關鍵資訊」', <strong style={{ color: okGreen }}>✓ 保留</strong>]} />
-      <TRow cols="540px 1fr 160px" tint={amberSoft} cells={['降低負荷 → 所以教材越簡單越好', '原文反而寫：「認知負荷理論不是『教材越簡單越好』」', <strong style={{ color: amber }}>✗ 刪掉</strong>]} />
+      <CheckRow claim="外在負荷 → 拆開步驟、標出關鍵資訊" source="「教學時可以先降低不必要的外在負荷，例如拆開步驟、標出關鍵資訊」" verdict={<strong style={{ color: okGreen }}>✓ 保留</strong>} />
+      <CheckRow claim="降低負荷 → 所以教材越簡單越好" source="原文反而寫：「認知負荷理論不是『教材越簡單越好』」" verdict={<strong style={{ color: amber }}>✗ 刪掉</strong>} tint={amberSoft} />
     </Table>
-    <div style={{ marginTop: 64 }}><Lead>每條關係都問一句：原文哪一句支持它？找不到，就是 AI 自己加的。</Lead></div>
+    <Steps>
+      <Step duration={STEP_MS}><div style={{ marginTop: 64 }}><Lead>每條關係都問一句：原文哪一句支持它？找不到，就是 AI 自己加的。</Lead></div></Step>
+    </Steps>
   </Shell>
 );
 
@@ -1047,9 +1192,13 @@ const DiagramTask: Page = () => (
     <Heading>把核對過的關係，畫成知識圖</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 650px', gap: 67, alignItems: 'center', marginTop: 51 }}>
       <div style={{ fontSize: 36, lineHeight: 1.67 }}>請使用 <strong>diagram-design</strong>。<br />給 AI 兩份資料：<br /><strong>原始筆記</strong> ＋ <strong>核對過的 ASCII 草稿</strong><br /><br />請它先選圖的形式、說明設計；<br />確認圖的形式與關係後，<br />再把圖檔存到 <span style={{ fontFamily: mono, fontSize: 32, color: amber }}>diagrams/</span>。</div>
-      <ConceptMap />
+      <Steps>
+        <Step duration={STEP_MS}><ConceptMap /></Step>
+      </Steps>
     </div>
-    <p style={{ fontSize: 30, color: muted, marginTop: 22 }}>想想看：第一次接觸這個理論的人，看得懂這張圖嗎？</p>
+    <Steps>
+      <Step duration={STEP_MS}><p style={{ fontSize: 30, color: muted, marginTop: 22 }}>想想看：第一次接觸這個理論的人，看得懂這張圖嗎？</p></Step>
+    </Steps>
   </Shell>
 );
 
@@ -1071,20 +1220,24 @@ const Reflection: Page = () => (
   <Shell>
     <Eyebrow>回到小安</Eyebrow>
     <Heading>小安的筆記，變成了三份成果</Heading>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 56px 1fr 56px 1fr', alignItems: 'center', marginTop: 72 }}>
-      <OutputFile path="notes/cognitive-load-theory.md" title="原始筆記" detail="一個字都沒被改" />
-      <div style={{ textAlign: 'center' }}><Arrow /></div>
-      <OutputFile path="outputs/…-ascii.md" title="ASCII 草稿" detail="每條關係都核對過" />
-      <div style={{ textAlign: 'center' }}><Arrow /></div>
-      <OutputFile path="diagrams/" title="知識圖" detail="沒背景的人也看得懂" />
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', columnGap: 56, alignItems: 'center', marginTop: 72 }}>
+      <Steps>
+        <OutputFile path="notes/cognitive-load-theory.md" title="原始筆記" detail="一個字都沒被改" />
+        <Step duration={STEP_MS}><ArrowCell gap={56}><OutputFile path="outputs/…-ascii.md" title="ASCII 草稿" detail="每條關係都核對過" /></ArrowCell></Step>
+        <Step duration={STEP_MS}><ArrowCell gap={56}><OutputFile path="diagrams/" title="知識圖" detail="沒背景的人也看得懂" /></ArrowCell></Step>
+      </Steps>
     </div>
-    <div style={{ marginTop: 72 }}><SmallLabel>交出去之前，問自己四個問題</SmallLabel></div>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 18 }}>
-      <Reflect>我真的懂了，還是只是看過？</Reflect>
-      <Reflect>草稿有沒有保留原文的重點？</Reflect>
-      <Reflect>沒有背景的人，看得懂這張圖嗎？</Reflect>
-      <Reflect>哪裡還要回課本或問老師確認？</Reflect>
-    </div>
+    <Steps>
+      <Step duration={STEP_MS}>
+        <div style={{ marginTop: 72 }}><SmallLabel>交出去之前，問自己四個問題</SmallLabel></div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 18 }}>
+          <div className="atl-build" style={buildDelay(0)}><Reflect>我真的懂了，還是只是看過？</Reflect></div>
+          <div className="atl-build" style={buildDelay(1)}><Reflect>草稿有沒有保留原文的重點？</Reflect></div>
+          <div className="atl-build" style={buildDelay(2)}><Reflect>沒有背景的人，看得懂這張圖嗎？</Reflect></div>
+          <div className="atl-build" style={buildDelay(3)}><Reflect>哪裡還要回課本或問老師確認？</Reflect></div>
+        </div>
+      </Step>
+    </Steps>
   </Shell>
 );
 
@@ -1093,9 +1246,11 @@ const TeachingCheck: Page = () => (
     <Eyebrow>把它帶回教學現場</Eyebrow>
     <Heading>你會把哪一步交給 AI？</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 32, marginTop: 100 }}>
-      <StepPanel number="AI 可以先做" title="整理資料" detail="例：把六份筆記整理成比較表" tint={sage} />
-      <StepPanel number="和 AI 一起調整" title="設計呈現方式" detail="例：調整知識圖的版面" tint={surface} />
-      <StepPanel number="一定要自己確認" title="回原文查證" detail="例：核對引用、判斷學生程度" tint={amberSoft} />
+      <Steps>
+        <StepPanel number="AI 可以先做" title="整理資料" detail="例：把六份筆記整理成比較表" tint={sage} />
+        <Step duration={STEP_MS}><StepPanel number="和 AI 一起調整" title="設計呈現方式" detail="例：調整知識圖的版面" tint={surface} /></Step>
+        <Step duration={STEP_MS}><StepPanel number="一定要自己確認" title="回原文查證" detail="例：核對引用、判斷學生程度" tint={amberSoft} /></Step>
+      </Steps>
     </div>
     <div style={{ marginTop: 81 }}><Lead>和旁邊的人分享一個你想帶回去試的情境。</Lead></div>
   </Shell>
@@ -1105,8 +1260,20 @@ const ExitTicket: Page = () => (
   <Shell top={155}>
     <Eyebrow>一分鐘出口票</Eyebrow>
     <div style={{ marginTop: 52 }}><Title>AI 幫你做了什麼？<br />哪裡仍要你判斷？</Title></div>
-    <div style={{ marginTop: 48, fontFamily: 'var(--osd-font-display)', fontSize: 56, lineHeight: 1.3, color: amber }}>明天你想先拿哪一份資料試試看？</div>
-    <div style={{ display: 'flex', gap: 32, alignItems: 'center', marginTop: 56, fontSize: 33, color: muted }}>讀筆記 <Arrow size={35} /> 出草稿 <Arrow size={35} /> 回原文核對 <Arrow size={35} /> 畫成知識圖</div>
+    <Steps>
+      <Step duration={STEP_MS}><div style={{ marginTop: 48, fontFamily: 'var(--osd-font-display)', fontSize: 56, lineHeight: 1.3, color: amber }}>明天你想先拿哪一份資料試試看？</div></Step>
+      <Step duration={STEP_MS}>
+        <div style={{ display: 'flex', gap: 32, alignItems: 'center', marginTop: 56, fontSize: 33, color: muted }}>
+          <span className="atl-build" style={buildDelay(0)}>讀筆記</span>
+          <span className="atl-build" style={{ ...buildDelay(1), display: 'flex' }}><Arrow size={35} /></span>
+          <span className="atl-build" style={buildDelay(2)}>出草稿</span>
+          <span className="atl-build" style={{ ...buildDelay(3), display: 'flex' }}><Arrow size={35} /></span>
+          <span className="atl-build" style={buildDelay(4)}>回原文核對</span>
+          <span className="atl-build" style={{ ...buildDelay(5), display: 'flex' }}><Arrow size={35} /></span>
+          <span className="atl-build" style={buildDelay(6)}>畫成知識圖</span>
+        </div>
+      </Step>
+    </Steps>
   </Shell>
 );
 
@@ -1120,14 +1287,14 @@ export const notes: (string | undefined)[] = [
   '先問大家：上次請 AI 幫忙讀資料，你拿到的是一段回答，還是一份能留下來的整理？今天要試試後者。',
   '我是黃懷萱，中央大學碩士，研究 NLP、LLM 和 RAG；現在在關貿網路做智慧客服，參與 EZ WAY、eHub、TTLL 等已上線服務。平常工作和生活都常找 AI 幫忙，今天就帶大家拿教育筆記實際練一次。',
   '今天分四段走：認識 AI、開始用 Codex、整理教育筆記、核對與視覺化。右上角的小進度條會一直提醒大家現在在哪一段。',
-  '先認識今天的主角：小安是師培生，手上有一份認知負荷理論的筆記。名詞一大堆，讀了三遍還是說不出它們的關係，也不知道自己整理得對不對。可以問問台下：有沒有人也有這種經驗？',
-  '先看終點。同一條關係：工作記憶容量有限，所以要減少外在負荷，例如拆開步驟。這條關係會從原始筆記變成 ASCII 草稿，再變成知識圖。今天的主線就是：讀筆記、出草稿、回原文核對、畫成知識圖。',
+  '先認識今天的主角：小安是師培生，手上有一份認知負荷理論的筆記。名詞一大堆，讀了三遍還是說不出它們的關係，（點兩下：另外兩個問題）也不知道自己整理得對不對。可以問問台下：有沒有人也有這種經驗？（點一下：今天要陪小安做的事）',
+  '先看終點。同一條關係：工作記憶容量有限，所以要減少外在負荷，例如拆開步驟。這條關係會從原始筆記（點一下）變成 ASCII 草稿，（點一下）再變成知識圖。（點一下）今天的主線就是：讀筆記、出草稿、回原文核對、畫成知識圖。',
   '要做這件事，用哪個工具？一句話：想討論用 ChatGPT，要把事做完用 Codex。重點看黃色那一列：ChatGPT 給你一段回答，Codex 給你一個能打開檢查的檔案。兩者差在使用情境，分工沒有那麼絕對。',
-  '所以今天用 Codex 走這條主線：讀筆記、出草稿、回原文核對、畫成知識圖，四步都在 teacher-learning-lab 這個資料夾裡完成。不過動手之前，先看一個問題。',
+  '所以今天用 Codex 走這條主線：讀筆記、（點一下）出草稿、（點一下）回原文核對、（點一下）畫成知識圖，（點一下）四步都在 teacher-learning-lab 這個資料夾裡完成。不過動手之前，先看一個問題。',
   '請大家先猜畫面裡的答案能不能信，再看驗算結果 8484。這是早期模型的案例，只用來提醒：語氣肯定，不代表答案正確。這也是主線裡要「回原文核對」的原因。圖源：https://ithelp.ithome.com.tw/articles/10315994',
-  '為什麼會這樣？模型會根據前後文預測下一個詞。「學生需要更___」，它看「清楚的」機率最高就選它，再接著預測下一個。數字只是示意。這是簡化的說法，模型不只是機械地補字；但要記住：很像正確答案，不等於真的知道答案。',
-  '不過 AI 這幾年進步很多：從只會生成文字，到會先推理、會用工具，現在能自己執行任務。能用工具，就是從一般的 LLM 走到 Agent 的關鍵。',
-  '那 Agent 怎麼做事？沿著圖走一次：你說目標，它先讀筆記和工作規則、動手做、回報結果，最後由你決定下一步。不滿意就回到第一步，把目標說清楚。問大家：這五步裡，哪一步最需要你親自把關？',
+  '為什麼會這樣？模型會根據前後文預測下一個詞。「學生需要更___」，（點一下）它看「清楚的」機率最高就選它，再接著預測下一個。數字只是示意。這是簡化的說法，模型不只是機械地補字；（點一下）但要記住：很像正確答案，不等於真的知道答案。',
+  '不過 AI 這幾年進步很多：從只會生成文字，（點一下）到會先推理、（點一下）會用工具，（點一下）現在能自己執行任務。（點一下）能用工具，就是從一般的 LLM 走到 Agent 的關鍵。',
+  '那 Agent 怎麼做事？沿著圖走一次：你說目標，（點一下）它先讀筆記和工作規則、（點一下）動手做、（點一下）回報結果，（點一下）最後由你決定下一步。（點一下）不滿意就回到第一步，把目標說清楚。問大家：這五步裡，哪一步最需要你親自把關？',
   '看一下地圖：第一段「認識 AI」完成了，現在進入第二段。接下來要把剛才的流程實際跑一遍：先讓 Codex 進到正確資料夾，再交辦第一個小任務。',
   '打開 Codex 只要三站。先說為什麼要裝 Node.js：Codex 要用 npm 安裝，npm 是跟著 Node.js 一起來的，所以要先打好地基。先確認大家都找得到終端機。',
   '到 Node.js 官網選 LTS 安裝，重開終端機，打 node -v 和 npm -v。圖上 ① ② 兩個位置都有版本號就往下走；找不到指令，先重開終端機；還不行，就重裝一次 Node.js。',
@@ -1135,27 +1302,27 @@ export const notes: (string | undefined)[] = [
   '從課程專案根目錄執行 cd examples/teacher-learning-lab，走進練習資料夾，再輸入 codex 叫醒它。第一次啟動依畫面登入。',
   '啟動之後先別急著交辦，看兩個欄位：① Model 是現在用的模型，名稱會變，不用背；② Directory 一定要是 teacher-learning-lab，不是就先停下來調整。',
   '為什麼 Directory 這麼重要？因為 Codex 從這個資料夾開始工作。走對資料夾，讀得到筆記、成果也存在對的地方；走錯了，可能讀到不相關的檔案。',
-  '登入之後就坐進一個 Session。同一個 Session 內，背景、問題、回答、追問都在同一張桌上，所以可以一題接一題問。換一個 Session 就像換一張桌子，前面的對話不一定還在，所以重要成果要存成檔案。',
+  '登入之後就坐進一個 Session。同一個 Session 內，背景、問題、回答、追問都在同一張桌上，所以可以一題接一題問。（點一下）換一個 Session 就像換一張桌子，前面的對話不一定還在，（點一下）所以重要成果要存成檔案。',
   '暖身 1：第一句話請它先讀、不要改。看圖上四個編號：先說不要修改、問三個具體問題、看它讀了哪些檔案、請它先給草稿。它的順序是讀取、理解、回報、等你。巡視時確認大家都在 teacher-learning-lab。',
-  '它回答之後，別急著看寫得好不好，先檢查三件事：有沒有進對資料夾、每個檔案放什麼有沒有說對、這一步有沒有改檔案。答錯了就用下面這兩句追問。',
+  '它回答之後，別急著看寫得好不好，先檢查三件事：有沒有進對資料夾、（點一下）每個檔案放什麼有沒有說對、（點一下）這一步有沒有改檔案。（點一下）答錯了就用下面這兩句追問。',
   '暖身 2：交辦更多事之前，輸入 /status 查環境。框起來的兩行最重要：Directory 是它在哪工作，Permissions 是它能做哪些事、要不要先問你。右邊表格是每個欄位的白話。',
   '給大家 30 秒，自己在畫面上找這三格：它在哪裡、能做什麼、用哪個模型。模型名稱不用背，看得懂就好。之後每次交辦任務前，都先看一眼 Directory 和 Permissions。',
   '畫面最下面還有額度。用一盒點心比喻：Usage 是整盒還剩多少，Token 是這次拿了幾口。Token 是模型處理文字的片段，不完全等於字數；讀的檔案越多、對話越長，用得越多。不用講計費細節。',
   '怎麼省？你的 Prompt、它讀到的檔案、前面的對話，全部都會變成 Token。最有效的是第一條：說清楚要看哪一份檔案，它就不用把整個資料夾讀一遍。',
-  '請大家選 A 或 B。B 多交代了範圍、產出和限制：只看哪個檔案、要交出什麼、什麼不能做。範圍說清楚，它比較不會做多餘的事，也比較省 Token。',
+  '請大家選 A 或 B。（大家選完再點一下：A 少了什麼）B 多交代了範圍、產出和限制：只看哪個檔案、要交出什麼、什麼不能做。（點一下）範圍說清楚，它比較不會做多餘的事，也比較省 Token。',
   '第二段收尾，用一張表記住五個名詞。Directory 是工作桌擺在哪個房間、Session 是工作桌、Status 是系統資訊、Usage 是整盒點心、Token 是這次的幾口。環境準備好了，接下來回到小安的筆記。',
   '進入第三段，開始整理小安的筆記。先把剛才的 Session 觀念收回來：聊天內容換了 Session 可能就不在，想讓下次接著用，就把成果寫進檔案。練習 2 的草稿存 outputs/，練習 3 的知識圖存 diagrams/。',
   '六份筆記都只是 Markdown 文件，不用寫程式。請大家選一份你熟悉的，或最想弄懂的；示範會跟著小安用認知負荷理論。',
   '練習 1：先請 Codex 看過六份筆記，整理成一張表，欄位就是右邊這六個，而且先不要改檔案。',
   '它交回的表大概長這樣，注意上面的標籤：這只是兩列示範。請大家挑一列回原文查，再追問一題，例如「原文怎麼定義外在負荷？」',
   '練習 2：小安只挑認知負荷這一份，請 Codex 用 ASCII，也就是純文字的樹狀結構，排出中心問題、概念、做法和常見誤解。檢查概念有沒有漏、關係對不對。存進 outputs/ 之前，還要先回原文核對。',
-  '進入第四段，這是今天最重要的一步。看第二列：草稿寫「降低負荷，所以教材越簡單越好」，聽起來很合理，但原文明白寫著「不是教材越簡單越好」，所以要刪掉。每條關係都問一句：原文哪一句支持它？核對完，再把草稿存進 outputs/。',
+  '進入第四段，這是今天最重要的一步。（點一下：第一列有原文支持，保留）看第二列：草稿寫「降低負荷，所以教材越簡單越好」，聽起來很合理，（點一下）但原文明白寫著「不是教材越簡單越好」，所以要刪掉。（點一下）每條關係都問一句：原文哪一句支持它？核對完，再把草稿存進 outputs/。',
   '要把核對過的草稿畫成圖，會用到 Skill。Skill 像一張食譜，把「怎麼做」交給 AI；MCP 像借書證，讓它連到外部資料。今天只用 Skill，MCP 是延伸概念，等需要連 Google Drive 等外部工具時再用。',
   '練習 3：裝上 diagram-design 這張食譜。依官方說明加入 marketplace 並安裝 plugin，再開一個新的 Codex Session，新的 Session 才讀得到它。官方來源：https://github.com/cathrynlavery/diagram-design',
-  '請大家點名使用 diagram-design，給它原始筆記和核對過的 ASCII 草稿。先聽它說要畫哪種圖、為什麼，確認後再把圖檔存到 diagrams/。最後問自己：第一次接觸這個理論的人看得懂嗎？',
-  '回到小安：一開始讀三遍還串不起來的筆記，現在變成三份成果，原始筆記沒被改、草稿核對過、知識圖別人也看得懂。交出去之前，再問自己這四個問題。',
-  '把它帶回教學現場：哪些事 AI 可以先做、哪些和 AI 一起調整、哪些一定要自己確認？兩人一組分享一個可交辦的步驟，以及一個必須自己查證的步驟。',
-  '最後一分鐘，請大家寫下三句話：AI 幫我做了什麼？哪一步還是要我自己判斷？明天你想先拿哪一份資料試試看？下面這條主線，就是你可以帶走的做法。',
+  '請大家點名使用 diagram-design，給它原始筆記和核對過的 ASCII 草稿。先聽它說要畫哪種圖、為什麼，確認後再把圖檔存到 diagrams/。（點一下：知識圖）最後問自己：（點一下）第一次接觸這個理論的人看得懂嗎？',
+  '回到小安：一開始讀三遍還串不起來的筆記，現在變成三份成果，原始筆記沒被改、（點一下）草稿核對過、（點一下）知識圖別人也看得懂。（點一下）交出去之前，再問自己這四個問題。',
+  '把它帶回教學現場：哪些事 AI 可以先做、（點一下）哪些和 AI 一起調整、（點一下）哪些一定要自己確認？兩人一組分享一個可交辦的步驟，以及一個必須自己查證的步驟。',
+  '最後一分鐘，請大家寫下三句話：AI 幫我做了什麼？哪一步還是要我自己判斷？（點一下）明天你想先拿哪一份資料試試看？（點一下）下面這條主線，就是你可以帶走的做法。',
 ];
 
 export default [
