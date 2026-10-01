@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="skill-vs-mcp-title skill-vs-mcp-desc">
+  <title id="skill-vs-mcp-title">Skill 跟 MCP，到底差在哪裡？</title>
+  <desc id="skill-vs-mcp-desc">用食譜與借書證的比喻，說明 Skill 把工作方法放進 Agent，MCP 則讓 Agent 連接外部資料與工具。</desc>
+  <defs>
+    <marker id="skill-vs-mcp-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#5f7183"/>
+    </marker>
+    <marker id="skill-vs-mcp-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#d97736"/>
+    </marker>
+    <style>
+      .body { font-family: 'Geist', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; }
+      .mono { font-family: Consolas, 'Noto Sans TC', monospace; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#ffffff"/>
+
+  <text x="100" y="78" class="body" fill="#17324d" font-size="40" font-weight="600">Skill 跟 MCP，到底差在哪裡？</text>
+  <text x="100" y="122" class="body" fill="#5f7183" font-size="22">ELI5：Skill 教 Agent「怎麼做」；MCP 讓 Agent「拿得到什麼」。</text>
+
+  <!-- The three steps in each card are linked with straight vertical arrows. -->
+  <g fill="none" stroke-width="1.2">
+    <line x1="425" y1="384" x2="425" y2="410" stroke="#d97736" marker-end="url(#skill-vs-mcp-arrow-accent)"/>
+    <line x1="425" y1="484" x2="425" y2="510" stroke="#d97736" marker-end="url(#skill-vs-mcp-arrow-accent)"/>
+    <line x1="1175" y1="384" x2="1175" y2="410" stroke="#5f7183" marker-end="url(#skill-vs-mcp-arrow)"/>
+    <line x1="1175" y1="484" x2="1175" y2="510" stroke="#5f7183" marker-end="url(#skill-vs-mcp-arrow)"/>
+  </g>
+
+  <g class="body">
+    <!-- Skill card -->
+    <rect x="100" y="190" width="650" height="500" rx="6" fill="#fff8ed" stroke="#d97736" stroke-width="1.4"/>
+    <text x="140" y="236" class="mono" fill="#d97736" font-size="16" letter-spacing="0.12em">像：一張食譜</text>
+    <text x="140" y="282" fill="#17324d" font-size="31" font-weight="600">Skill：把方法放進 Agent</text>
+    <text x="140" y="318" fill="#5f7183" font-size="19">你不是只說「煮好吃一點」，而是給它步驟。</text>
+
+    <rect x="140" y="340" width="570" height="44" rx="4" fill="#ffffff" stroke="#e4d8ca"/>
+    <text x="164" y="369" fill="#17324d" font-size="19">1　放入工作規則：Skill 資料夾與 SKILL.md</text>
+    <rect x="140" y="410" width="570" height="74" rx="4" fill="#ffffff" stroke="#e4d8ca"/>
+    <text x="164" y="440" fill="#17324d" font-size="19">2　Agent 讀取方法</text>
+    <text x="164" y="468" fill="#5f7183" font-size="17">例如：先找重點，再決定圖型與排版</text>
+    <rect x="140" y="510" width="570" height="74" rx="4" fill="#ffffff" stroke="#e4d8ca"/>
+    <text x="164" y="540" fill="#17324d" font-size="19">3　Agent 照方法產出結果</text>
+    <text x="164" y="568" fill="#5f7183" font-size="17">同類任務可以用相近的方式完成</text>
+
+    <line x1="140" y1="616" x2="710" y2="616" stroke="#e4d8ca"/>
+    <text x="140" y="650" class="mono" fill="#d97736" font-size="17">本課例</text>
+    <text x="232" y="650" fill="#17324d" font-size="18">diagram-design：把教育筆記畫成知識圖</text>
+
+    <!-- MCP card -->
+    <rect x="850" y="190" width="650" height="500" rx="6" fill="#ffffff" stroke="#bfc0c0"/>
+    <text x="890" y="236" class="mono" fill="#5f7183" font-size="16" letter-spacing="0.12em">像：借書證或插座</text>
+    <text x="890" y="282" fill="#17324d" font-size="31" font-weight="600">MCP：把外部東西接進來</text>
+    <text x="890" y="318" fill="#5f7183" font-size="19">你不是教它怎麼讀書，而是讓它借得到書。</text>
+
+    <rect x="890" y="340" width="570" height="44" rx="4" fill="#f7fafb" stroke="#d8dde2"/>
+    <text x="914" y="369" fill="#17324d" font-size="19">1　接上外部服務：MCP server 與設定</text>
+    <rect x="890" y="410" width="570" height="74" rx="4" fill="#f7fafb" stroke="#d8dde2"/>
+    <text x="914" y="440" fill="#17324d" font-size="19">2　Agent 呼叫工具或讀取資料</text>
+    <text x="914" y="468" fill="#5f7183" font-size="17">例如：讀 GitHub、Google Drive 或資料庫</text>
+    <rect x="890" y="510" width="570" height="74" rx="4" fill="#f7fafb" stroke="#d8dde2"/>
+    <text x="914" y="540" fill="#17324d" font-size="19">3　取得結果，再繼續工作</text>
+    <text x="914" y="568" fill="#5f7183" font-size="17">通常還要處理登入、授權與使用權限</text>
+
+    <line x1="890" y1="616" x2="1460" y2="616" stroke="#d8dde2"/>
+    <text x="890" y="650" class="mono" fill="#5f7183" font-size="17">本課例</text>
+    <text x="982" y="650" fill="#17324d" font-size="18">筆記已在工作區，所以通常不需要 MCP</text>
+  </g>
+
+  <!-- The implementation difference in one line. -->
+  <rect x="180" y="754" width="1240" height="78" rx="6" fill="#f7fafb" stroke="#d8dde2"/>
+  <g class="body" font-size="20">
+    <rect x="240" y="774" width="250" height="38" rx="4" fill="#fff8ed" stroke="#d97736"/>
+    <text x="365" y="800" text-anchor="middle" fill="#d97736" font-weight="600">Skill：提供方法</text>
+    <text x="530" y="800" fill="#5f7183">＋</text>
+    <rect x="580" y="774" width="250" height="38" rx="4" fill="#ffffff" stroke="#bfc0c0"/>
+    <text x="705" y="800" text-anchor="middle" fill="#17324d" font-weight="600">MCP：提供資料／工具</text>
+    <text x="870" y="800" fill="#5f7183">→</text>
+    <text x="930" y="800" fill="#17324d" font-weight="600">Agent 產出結果</text>
+  </g>
+</svg>

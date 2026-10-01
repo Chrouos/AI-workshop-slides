@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="820" viewBox="0 0 1600 820" role="img" aria-labelledby="session-workspace-title session-workspace-desc">
+  <title id="session-workspace-title">Session：這次一起工作的桌子</title>
+  <desc id="session-workspace-desc">用工作桌的比喻，說明 Session 會保留這次對話中的背景、問題、結果與後續追問。</desc>
+  <defs>
+    <marker id="session-workspace-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#5f7183"/>
+    </marker>
+    <style>
+      .body { font-family: 'Geist', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; }
+      .mono { font-family: Consolas, 'Noto Sans TC', monospace; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="820" fill="#ffffff"/>
+  <text x="100" y="88" class="body" fill="#17324d" font-size="38" font-weight="600">Session：這次一起工作的桌子</text>
+  <text x="100" y="130" class="body" fill="#5f7183" font-size="21">坐在同一張桌子旁，Agent 才知道前面說過什麼、現在要做什麼。</text>
+
+  <!-- The table sends the same conversation context to four simple actions. -->
+  <g stroke="#5f7183" stroke-width="1.2" fill="none" marker-end="url(#session-workspace-arrow)">
+    <path d="M675 284 V356 H260 V442"/>
+    <path d="M735 284 V356 H620 V442"/>
+    <path d="M805 284 V356 H980 V442"/>
+    <path d="M865 284 V356 H1340 V442"/>
+  </g>
+
+  <g class="body">
+    <rect x="560" y="156" width="480" height="128" rx="6" fill="#fff8ed" stroke="#d97736" stroke-width="1.4"/>
+    <text x="800" y="205" text-anchor="middle" class="mono" fill="#d97736" font-size="17" letter-spacing="0.12em">SESSION</text>
+    <text x="800" y="248" text-anchor="middle" fill="#17324d" font-size="32" font-weight="600">這次協作的工作桌</text>
+
+    <g transform="translate(100 442)">
+      <rect width="320" height="150" rx="6" fill="#ffffff" stroke="#bfc0c0"/>
+      <text x="28" y="52" fill="#17324d" font-size="26" font-weight="600">你先說背景</text>
+      <text x="28" y="94" fill="#5f7183" font-size="19">我們要做什麼？</text>
+      <text x="28" y="122" fill="#5f7183" font-size="17">已經知道哪些事情？</text>
+    </g>
+    <g transform="translate(460 442)">
+      <rect width="320" height="150" rx="6" fill="#ffffff" stroke="#bfc0c0"/>
+      <text x="28" y="52" fill="#17324d" font-size="26" font-weight="600">你提出問題</text>
+      <text x="28" y="94" fill="#5f7183" font-size="19">想先弄懂哪裡？</text>
+      <text x="28" y="122" fill="#5f7183" font-size="17">可以一題一題問</text>
+    </g>
+    <g transform="translate(820 442)">
+      <rect width="320" height="150" rx="6" fill="#ffffff" stroke="#bfc0c0"/>
+      <text x="28" y="52" fill="#17324d" font-size="26" font-weight="600">Agent 回答</text>
+      <text x="28" y="94" fill="#5f7183" font-size="19">整理內容、給出結果</text>
+      <text x="28" y="122" fill="#5f7183" font-size="17">你可以檢查它說得對不對</text>
+    </g>
+    <g transform="translate(1180 442)">
+      <rect width="320" height="150" rx="6" fill="#ffffff" stroke="#bfc0c0"/>
+      <text x="28" y="52" fill="#17324d" font-size="26" font-weight="600">你再確認</text>
+      <text x="28" y="94" fill="#5f7183" font-size="19">繼續、修改或追問</text>
+      <text x="28" y="122" fill="#5f7183" font-size="17">這些也會留在這張桌子上</text>
+    </g>
+  </g>
+
+  <rect x="260" y="690" width="1080" height="52" rx="6" fill="#f7fafb" stroke="#d8dde2"/>
+  <text x="800" y="723" text-anchor="middle" class="body" fill="#17324d" font-size="21">換到另一張 Session，就像換一張桌子：前面的對話不一定還在。</text>
+</svg>

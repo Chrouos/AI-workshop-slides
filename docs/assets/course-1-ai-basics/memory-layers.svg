@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="760" viewBox="0 0 1600 760" role="img" aria-labelledby="memory-layers-title memory-layers-desc">
+  <title id="memory-layers-title">Memory：Agent 記得的東西，放在哪裡？</title>
+  <desc id="memory-layers-desc">用桌上的便利貼與書包裡的筆記作比喻，說明 Session 記憶和專案檔案記憶的差別。</desc>
+  <style>
+    .body { font-family: 'Geist', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; }
+    .mono { font-family: Consolas, 'Noto Sans TC', monospace; }
+  </style>
+
+  <rect width="1600" height="760" fill="#ffffff"/>
+  <text x="100" y="84" class="body" fill="#17324d" font-size="38" font-weight="600">Memory：Agent 記得的東西，放在哪裡？</text>
+  <text x="100" y="126" class="body" fill="#5f7183" font-size="21">有些內容暫時放在這次對話裡，有些內容要寫進專案檔案，才容易再次使用。</text>
+
+  <text x="112" y="242" class="mono" fill="#7a8399" font-size="15" letter-spacing="0.08em">CURRENT SESSION</text>
+  <text x="112" y="490" class="mono" fill="#7a8399" font-size="15" letter-spacing="0.08em">PROJECT FILES</text>
+  <g stroke="#d97736" stroke-width="1.4" fill="none">
+    <path d="M88 266 V440"/>
+    <path d="M88 514 V620"/>
+  </g>
+
+  <g class="body">
+    <rect x="220" y="190" width="1260" height="190" rx="6" fill="#fff8ed" stroke="#d97736" stroke-width="1.4"/>
+    <text x="270" y="250" fill="#d97736" font-size="32" font-weight="600">Session：桌上的便利貼</text>
+    <text x="270" y="296" fill="#5f7183" font-size="22">這次聊天暫時記得的內容，像放在眼前的紙條。</text>
+    <text x="270" y="334" fill="#17324d" font-size="19">背景、問題、剛剛做的決定</text>
+    <rect x="1010" y="238" width="160" height="54" rx="6" fill="#ffffff" stroke="#d8c4ae"/>
+    <text x="1090" y="272" text-anchor="middle" fill="#5f7183" font-size="19">背景</text>
+    <rect x="1190" y="238" width="160" height="54" rx="6" fill="#ffffff" stroke="#d8c4ae"/>
+    <text x="1270" y="272" text-anchor="middle" fill="#5f7183" font-size="19">決定</text>
+
+    <rect x="220" y="438" width="1260" height="190" rx="6" fill="#ffffff" stroke="#bfc0c0"/>
+    <text x="270" y="498" fill="#17324d" font-size="32" font-weight="600">專案檔案：書包裡的筆記</text>
+    <text x="270" y="544" fill="#5f7183" font-size="22">寫進檔案的規則與知識，下次打開專案還能再看。</text>
+    <text x="270" y="582" fill="#17324d" font-size="19">重要內容不要只放在聊天裡</text>
+    <rect x="925" y="486" width="170" height="54" rx="6" fill="#f5f5f5" stroke="#bfc0c0"/>
+    <text x="1010" y="520" text-anchor="middle" class="mono" fill="#5f7183" font-size="17">README.md</text>
+    <rect x="1115" y="486" width="170" height="54" rx="6" fill="#f5f5f5" stroke="#bfc0c0"/>
+    <text x="1200" y="520" text-anchor="middle" class="mono" fill="#5f7183" font-size="17">AGENTS.md</text>
+    <rect x="1305" y="486" width="120" height="54" rx="6" fill="#f5f5f5" stroke="#bfc0c0"/>
+    <text x="1365" y="520" text-anchor="middle" class="mono" fill="#5f7183" font-size="17">notes/</text>
+  </g>
+
+  <rect x="290" y="672" width="1020" height="48" rx="6" fill="#f7fafb" stroke="#d8dde2"/>
+  <text x="800" y="703" text-anchor="middle" class="body" fill="#17324d" font-size="21">要讓重要知識留下來，就把它寫進專案檔案。</text>
+</svg>

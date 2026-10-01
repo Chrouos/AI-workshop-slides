@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="760" viewBox="0 0 1600 760" role="img" aria-labelledby="agent-task-flow-title agent-task-flow-desc">
+  <title id="agent-task-flow-title">Agent 做事的五個步驟</title>
+  <desc id="agent-task-flow-desc">用交代小幫手的比喻，說明 Agent 從理解任務、讀取工作區、使用工具、回報結果到等待下一步的流程。</desc>
+  <defs>
+    <marker id="agent-task-flow-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#5f7183"/>
+    </marker>
+    <style>
+      .body { font-family: 'Geist', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; }
+      .mono { font-family: Consolas, 'Noto Sans TC', monospace; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="760" fill="#ffffff"/>
+  <text x="100" y="84" class="body" fill="#17324d" font-size="38" font-weight="600">Agent 做事，就像一個會工作的學習小幫手</text>
+  <text x="100" y="126" class="body" fill="#5f7183" font-size="21">你先交代任務，它會一步一步理解、查資料、動手做，再把結果交回來。</text>
+
+  <g stroke="#5f7183" stroke-width="1.2" fill="none" marker-end="url(#agent-task-flow-arrow)">
+    <line x1="340" y1="410" x2="378" y2="410"/>
+    <line x1="626" y1="410" x2="664" y2="410"/>
+    <line x1="912" y1="410" x2="950" y2="410"/>
+    <line x1="1198" y1="410" x2="1236" y2="410"/>
+  </g>
+
+  <g class="body">
+    <g transform="translate(100 292)">
+      <rect width="240" height="236" rx="6" fill="#ffffff" stroke="#bfc0c0"/>
+      <text x="24" y="42" class="mono" fill="#7a8399" font-size="18">01</text>
+      <text x="24" y="90" fill="#17324d" font-size="25" font-weight="600">你說目標</text>
+      <text x="24" y="130" fill="#5f7183" font-size="18">像交代小幫手：</text>
+      <text x="24" y="160" fill="#5f7183" font-size="18">「請幫我整理這份筆記」</text>
+      <text x="24" y="204" class="mono" fill="#7a8399" font-size="16">prompt</text>
+    </g>
+    <g transform="translate(386 292)">
+      <rect width="240" height="236" rx="6" fill="#fff8ed" stroke="#d97736" stroke-width="1.4"/>
+      <text x="24" y="42" class="mono" fill="#d97736" font-size="18">02</text>
+      <text x="24" y="90" fill="#17324d" font-size="25" font-weight="600">它先看資料</text>
+      <text x="24" y="130" fill="#5f7183" font-size="18">先看工作區裡有什麼：</text>
+      <text x="24" y="160" fill="#5f7183" font-size="18">筆記、README、規則</text>
+      <text x="24" y="204" class="mono" fill="#d97736" font-size="16">Reading files...</text>
+    </g>
+    <g transform="translate(672 292)">
+      <rect width="240" height="236" rx="6" fill="#ffffff" stroke="#bfc0c0"/>
+      <text x="24" y="42" class="mono" fill="#7a8399" font-size="18">03</text>
+      <text x="24" y="90" fill="#17324d" font-size="25" font-weight="600">它動手做</text>
+      <text x="24" y="130" fill="#5f7183" font-size="18">用搜尋、整理或其他工具</text>
+      <text x="24" y="160" fill="#5f7183" font-size="18">完成你交代的工作</text>
+      <text x="24" y="204" class="mono" fill="#7a8399" font-size="16">search · inspect</text>
+    </g>
+    <g transform="translate(958 292)">
+      <rect width="240" height="236" rx="6" fill="#ffffff" stroke="#bfc0c0"/>
+      <text x="24" y="42" class="mono" fill="#7a8399" font-size="18">04</text>
+      <text x="24" y="90" fill="#17324d" font-size="25" font-weight="600">它交回結果</text>
+      <text x="24" y="130" fill="#5f7183" font-size="18">告訴你做了什麼、</text>
+      <text x="24" y="160" fill="#5f7183" font-size="18">看到了什麼</text>
+      <text x="24" y="204" class="mono" fill="#7a8399" font-size="16">Summary ready</text>
+    </g>
+    <g transform="translate(1244 292)">
+      <rect width="240" height="236" rx="6" fill="#ffffff" stroke="#bfc0c0"/>
+      <text x="24" y="42" class="mono" fill="#7a8399" font-size="18">05</text>
+      <text x="24" y="90" fill="#17324d" font-size="25" font-weight="600">你再確認</text>
+      <text x="24" y="130" fill="#5f7183" font-size="18">說「繼續」、修改，</text>
+      <text x="24" y="160" fill="#5f7183" font-size="18">或提出下一個問題</text>
+      <text x="24" y="204" class="mono" fill="#7a8399" font-size="16">next step?</text>
+    </g>
+  </g>
+
+  <rect x="100" y="632" width="1384" height="54" rx="6" fill="#f7fafb" stroke="#d8dde2"/>
+  <text x="792" y="666" text-anchor="middle" class="body" fill="#17324d" font-size="21">重點：Agent 不是猜答案，而是先理解工作環境，再採取行動。</text>
+</svg>
