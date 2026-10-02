@@ -17,6 +17,7 @@
 ```text
 teacher-learning-lab/
 ├── README.md
+├── prompts.md
 ├── notes/
 │   ├── README.md
 │   ├── cognitive-load-theory.md
@@ -33,6 +34,7 @@ teacher-learning-lab/
     └── README.md
 ```
 
+- `prompts.md`：投影片上用到的所有 Prompt，依上課順序排列，可以直接複製
 - `notes/`：六份教育專業知識筆記
 - `templates/knowledge-note.md`：整理其他專業筆記時可以使用的模板
 - `diagrams/`：第三個練習產生的 HTML、SVG 或 PNG 圖檔
