@@ -5,6 +5,7 @@ import nodeNpmCheck from './assets/node-npm-check.png';
 import codexStart from './assets/codex-cli-start.png';
 import codexStatus from './assets/codex-cli-status.png';
 import codexFirstTask from './assets/codex-cli-first-task.png';
+import repoQr from './assets/repo-qr.svg';
 
 export const design: DesignSystem = {
   palette: { bg: '#FAFAF9', text: '#1C1917', accent: '#78716C' },
@@ -76,7 +77,8 @@ if (typeof document !== 'undefined') {
 const buildDelay = (i: number, base = 120) => ({ transitionDelay: `${base + i * BUILD_GAP}ms` });
 
 const muted = '#57534E';
-const faint = '#A8A29E';
+const faint = '#948D88'; // strokes and arrows only
+const quiet = '#736D68'; // secondary text that must still read on a projector (≈4.9:1 on bg)
 const rule = '#D6D3D1';
 const surface = '#F5F5F4';
 const raised = '#EFEDEB';
@@ -123,7 +125,7 @@ const Footer = () => {
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         fontSize: 22,
         fontWeight: 400,
-        color: '#A8A29E',
+        color: quiet,
       }}
     >
       <span>AI 協作課｜教育筆記</span>
@@ -144,6 +146,18 @@ const Eyebrow = ({ children }: { children: React.ReactNode }) => (
     }}
   >
     {children}
+  </div>
+);
+
+// Hands-on pages: the eyebrow plus a time box and what to do when stuck, in one style.
+const PracticeEyebrow = ({ children, time }: { children: React.ReactNode; time: string }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+    <Eyebrow>{children}</Eyebrow>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '6px 18px', fontSize: 24, color: muted, whiteSpace: 'nowrap' }}>
+      <strong style={{ color: amber }}>⏱ {time}</strong>
+      <span style={{ width: 1, height: 22, background: rule }} />
+      卡住了？看隔壁，或舉手
+    </span>
   </div>
 );
 
@@ -168,7 +182,7 @@ const RouteBar = ({ chapter, enter = false }: { chapter: Chapter; enter?: boolea
       <RouteSeg color={chapter === 2 ? amber : chapter > 2 ? faint : rule} fill={fill && chapter === 2} />
       <RouteSeg color={chapter === 3 ? amber : chapter > 3 ? faint : rule} fill={fill && chapter === 3} />
       <RouteSeg color={chapter === 4 ? amber : rule} fill={fill && chapter === 4} />
-      <span style={{ marginLeft: 12, fontSize: 22, fontWeight: 600, color: amber, letterSpacing: '0.04em' }}>
+      <span style={{ marginLeft: 12, fontSize: 24, fontWeight: 600, color: amber, letterSpacing: '0.04em' }}>
         {String(chapter).padStart(2, '0')}｜{CHAPTERS[chapter - 1]}
       </span>
     </div>
@@ -221,15 +235,15 @@ const StepPanel = ({ number, title, detail, tint = surface }: { number: string; 
 // The last node echoes the deletion on CheckOriginal: the misconception stays on the map, crossed out.
 const ConceptMap = ({ compact = false }: { compact?: boolean }) => (
   <div style={{ width: compact ? 446 : 650, height: compact ? 380 : 540, boxSizing: 'border-box', background: '#FFFFFF', border: `1px solid ${rule}`, padding: compact ? 22 : 34, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-    <div style={{ color: 'var(--osd-accent)', fontSize: compact ? 22 : 25, fontWeight: 600, letterSpacing: '0.07em' }}>認知負荷理論 / 關係圖</div>
+    <div style={{ color: 'var(--osd-accent)', fontSize: compact ? 24 : 25, fontWeight: 600, letterSpacing: '0.07em' }}>認知負荷理論 / 關係圖</div>
     <div className="atl-build" style={{ ...buildDelay(0), minHeight: compact ? 60 : 88, boxSizing: 'border-box', background: '#1C1917', color: '#FAFAF9', padding: compact ? '9px 18px' : '16px 25px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <div style={{ fontSize: compact ? 27 : 36, fontWeight: 600 }}>工作記憶容量有限</div>
     </div>
-    <div className="atl-build" style={{ ...buildDelay(1), textAlign: 'center', color: amber, fontSize: compact ? 20 : 25, lineHeight: 1 }}>↓ 降低干擾</div>
+    <div className="atl-build" style={{ ...buildDelay(1), textAlign: 'center', color: amber, fontSize: compact ? 24 : 25, lineHeight: 1 }}>↓ 降低干擾</div>
     <div className="atl-build" style={{ ...buildDelay(2), minHeight: compact ? 60 : 88, boxSizing: 'border-box', background: amberSoft, borderLeft: `5px solid ${amber}`, padding: compact ? '9px 18px' : '16px 25px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <div style={{ fontSize: compact ? 26 : 34, fontWeight: 600 }}>減少不必要的外在負荷</div>
     </div>
-    <div className="atl-build" style={{ ...buildDelay(3), textAlign: 'center', color: faint, fontSize: compact ? 20 : 25, lineHeight: 1 }}>↓ 教學做法</div>
+    <div className="atl-build" style={{ ...buildDelay(3), textAlign: 'center', color: quiet, fontSize: compact ? 24 : 25, lineHeight: 1 }}>↓ 教學做法</div>
     <div className="atl-build" style={{ ...buildDelay(4), display: 'grid', gridTemplateColumns: '1fr 1fr', gap: compact ? 11 : 16 }}>
       <div style={{ minHeight: compact ? 52 : 72, background: sage, display: 'grid', placeItems: 'center', fontSize: compact ? 24 : 30, fontWeight: 600 }}>拆開步驟</div>
       <div style={{ minHeight: compact ? 52 : 72, background: surface, display: 'grid', placeItems: 'center', fontSize: compact ? 24 : 30, fontWeight: 600 }}>標出關鍵資訊</div>
@@ -259,7 +273,7 @@ const Terminal = ({ title, children, width = 1000 }: { title: string; children: 
       <span style={{ width: 13, height: 13, borderRadius: 20, background: '#DF6A63' }} />
       <span style={{ width: 13, height: 13, borderRadius: 20, background: '#E9B650' }} />
       <span style={{ width: 13, height: 13, borderRadius: 20, background: '#73BB78' }} />
-      <span style={{ fontFamily: mono, color: '#BCC3CC', fontSize: 22, marginLeft: 18 }}>{title}</span>
+      <span style={{ fontFamily: mono, color: '#BCC3CC', fontSize: 24, marginLeft: 18 }}>{title}</span>
     </div>
     <div style={{ padding: '35px 42px 42px', boxSizing: 'border-box' }}>{children}</div>
   </div>
@@ -349,7 +363,7 @@ const SpeakerIntro: Page = () => (
         <SmallLabel>工作</SmallLabel>
         <div style={{ fontFamily: 'var(--osd-font-display)', fontSize: 68, lineHeight: 1.25, marginTop: 25 }}>關貿網路</div>
         <div style={{ fontSize: 31, color: muted, marginTop: 18 }}>AI Engineer · 智慧客服</div>
-        <div style={{ fontSize: 24, color: faint, marginTop: 14 }}>已上線：EZ WAY · eHub · TTLL</div>
+        <div style={{ fontSize: 24, color: quiet, marginTop: 14 }}>已上線：EZ WAY · eHub · TTLL</div>
       </div>
     </div>
     <div style={{ display: 'flex', alignItems: 'center', gap: 26, marginTop: 56 }}>
@@ -370,7 +384,7 @@ const Agenda: Page = () => (
       {[
         ['01', '認識 AI', 'ChatGPT 和 Codex 差在哪、Agent 怎麼做事'],
         ['02', '開始用 Codex', '安裝、啟動，確認工作資料夾'],
-        ['03', '整理教育筆記', '讓 AI 讀筆記、比較概念、出草稿'],
+        ['03', '整理教育筆記', '讀六份筆記、說清楚範圍、出草稿'],
         ['04', '核對與視覺化', '回原文核對，再畫成知識圖'],
       ].map(([number, title, detail]) => (
         <div key={number} style={{ display: 'grid', gridTemplateColumns: '110px 500px 1fr', alignItems: 'center', minHeight: 126, borderBottom: `1px solid ${rule}` }}>
@@ -380,7 +394,7 @@ const Agenda: Page = () => (
         </div>
       ))}
     </div>
-    <p style={{ fontSize: 26, color: faint, marginTop: 30 }}>右上角的進度條，會一直告訴你現在走到哪一段。</p>
+    <p style={{ fontSize: 26, color: quiet, marginTop: 30 }}>右上角的進度條，會一直告訴你現在走到哪一段。</p>
   </Shell>
 );
 
@@ -396,7 +410,7 @@ const StoryStart: Page = () => (
     <Heading>一位學生讀了三遍，還是串不起來</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center', marginTop: 64 }}>
       <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '34px 40px', transform: 'rotate(-1deg)' }}>
-        <div style={{ fontFamily: mono, fontSize: 22, color: faint }}>notes/cognitive-load-theory.md</div>
+        <div style={{ fontFamily: mono, fontSize: 24, color: quiet }}>notes/cognitive-load-theory.md</div>
         <div style={{ fontSize: 42, fontWeight: 600, marginTop: 14 }}>認知負荷理論</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 28 }}>
           <Chip tint={surface}>工作記憶</Chip>
@@ -522,7 +536,7 @@ const WrongAnswer: Page = () => (
         <div style={{ marginTop: 18, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '30px 40px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <SmallLabel>AI 給的參考文獻</SmallLabel>
-            <span style={{ background: amberSoft, color: amber, fontSize: 22, fontWeight: 600, padding: '6px 14px' }}>示意｜作者與期刊皆為虛構</span>
+            <span style={{ background: amberSoft, color: amber, fontSize: 24, fontWeight: 600, padding: '6px 14px' }}>示意｜作者與期刊皆為虛構</span>
           </div>
           <div style={{ fontSize: 30, lineHeight: 1.65, marginTop: 18, paddingLeft: 60, textIndent: -60 }}>
             王小明、李大華（2021）。降低外在認知負荷對國小學生數學解題之影響。<strong>臺灣認知教學評論，14</strong>(2)，45–67。<Path size={24}>https://doi.org/10.0000/tcir.2021.14.2.45</Path>
@@ -557,7 +571,7 @@ const NextWord = ({ word, pct, top = false, order = 0 }: { word: string; pct: nu
   <div style={{ display: 'grid', gridTemplateColumns: '170px 1fr 90px', alignItems: 'center', gap: 20 }}>
     <span style={{ fontSize: 34, fontWeight: top ? 600 : 400, color: top ? 'var(--osd-text)' : muted }}>{word}</span>
     <div style={{ height: 30, background: surface }}><div className="atl-bar" style={{ ...buildDelay(order), width: `${pct}%`, height: '100%', background: top ? amber : rule }} /></div>
-    <span style={{ fontSize: 26, color: top ? amber : faint, textAlign: 'right' }}>{pct}%</span>
+    <span style={{ fontSize: 26, color: top ? amber : quiet, textAlign: 'right' }}>{pct}%</span>
   </div>
 );
 
@@ -664,8 +678,8 @@ const RouteStop = ({ number, label, detail, state }: { number: string; label: st
   <div style={{ position: 'relative', background: state === 'now' ? amberSoft : state === 'done' ? surface : '#FFFFFF', border: state === 'next' ? `1px dashed ${rule}` : 'none', borderTop: `3px solid ${rule}`, padding: '30px 30px', minHeight: 250, boxSizing: 'border-box' }}>
     {state === 'now' ? <span className={live ? 'atl-fill' : undefined} style={{ position: 'absolute', left: 0, right: 0, top: -3, height: 3, background: amber }} /> : null}
     <SmallLabel>{number}　{state === 'done' ? '已完成 ✓' : state === 'now' ? '你在這裡' : '接下來'}</SmallLabel>
-    <div style={{ fontSize: 40, fontWeight: 600, marginTop: 18, color: state === 'next' ? faint : 'var(--osd-text)' }}>{label}</div>
-    <div style={{ fontSize: 26, color: state === 'next' ? faint : muted, lineHeight: 1.5, marginTop: 14 }}>{detail}</div>
+    <div style={{ fontSize: 40, fontWeight: 600, marginTop: 18, color: state === 'next' ? quiet : 'var(--osd-text)' }}>{label}</div>
+    <div style={{ fontSize: 26, color: state === 'next' ? quiet : muted, lineHeight: 1.5, marginTop: 14 }}>{detail}</div>
   </div>
   );
 };
@@ -677,10 +691,10 @@ const RunItNow: Page = () => (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 20, marginTop: 96 }}>
       <RouteStop number="01" label="認識 AI" detail="工具差異、幻覺、Agent" state="done" />
       <RouteStop number="02" label="開始用 Codex" detail="安裝、啟動、暖身練習" state="now" />
-      <RouteStop number="03" label="整理教育筆記" detail="讀六份筆記、出草稿" state="next" />
+      <RouteStop number="03" label="整理教育筆記" detail="讀筆記、省 Token、出草稿" state="next" />
       <RouteStop number="04" label="核對與視覺化" detail="回原文核對、畫成知識圖" state="next" />
     </div>
-    <div style={{ marginTop: 88 }}><Lead>先讓 Codex 進到正確資料夾，再交辦第一個小任務。</Lead></div>
+    <div style={{ marginTop: 88 }}><Lead>接下來，大家和這位學生一起動手：先讓 Codex 進到正確資料夾，再交辦第一個小任務。</Lead></div>
   </Shell>
 );
 
@@ -817,9 +831,30 @@ const OpenProject: Page = () => (
   </Shell>
 );
 
+// If Codex won't install or log in, the same practices still work in the ChatGPT web app.
+const PlanB: Page = () => (
+  <Shell chapter={2}>
+    <Eyebrow>Plan B｜裝不起來也沒關係</Eyebrow>
+    <Heading>Codex 裝不起來？改用 ChatGPT 網頁版</Heading>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 22, marginTop: 48 }}>
+      <FlowStep n="1">打開 <Path size={28}>chatgpt.com</Path></FlowStep><Arrow size={36} />
+      <FlowStep n="2">上傳 <Path size={28}>notes/</Path> 裡的筆記</FlowStep><Arrow size={36} />
+      <FlowStep n="3">貼上 <Path size={28}>prompts.md</Path> 的 Prompt</FlowStep>
+    </div>
+    <Table marginTop={40}>
+      <TRow head cols="330px 1fr 1fr" cells={['', 'Codex', 'ChatGPT 網頁版']} />
+      <TRow cols="330px 1fr 1fr" tint={amberSoft} cells={[<SmallLabel>成果存在哪</SmallLabel>, '它寫進 outputs/、diagrams/', <strong>你複製下來，自己存檔</strong>]} />
+      <TRow cols="330px 1fr 1fr" cells={[<SmallLabel>暖身 2｜/status</SmallLabel>, '要做', '跳過']} />
+      <TRow cols="330px 1fr 1fr" cells={[<SmallLabel>練習 3｜畫知識圖</SmallLabel>, '用 diagram-design', '請它畫圖，或列出圖的結構']} />
+      <TRow cols="330px 1fr 1fr" cells={[<SmallLabel>回原文核對</SmallLabel>, '一定要做', '一樣一定要做']} />
+    </Table>
+    <div style={{ marginTop: 40 }}><Lead>練習照做，只是成果要自己存。裝好的人，下一頁看啟動畫面。</Lead></div>
+  </Shell>
+);
+
 const StartScreen: Page = () => (
   <Shell chapter={2}>
-    <Eyebrow>看懂啟動畫面</Eyebrow>
+    <Eyebrow>這位學生第一次打開 Codex</Eyebrow>
     <Heading>啟動後，先確認兩個欄位</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '900px 1fr', gap: 56, alignItems: 'start', marginTop: 48 }}>
       <Shot src={codexStart} alt="Codex CLI 啟動畫面，標出 model 與 directory 兩個欄位" crop={[110, 160, 960, 610]} width={900}>
@@ -894,7 +929,7 @@ const SessionDesk: Page = () => (
 
 const FirstPrompt: Page = () => (
   <Shell chapter={2}>
-    <Eyebrow>暖身 1｜第一個任務</Eyebrow>
+    <PracticeEyebrow time="5 分鐘">暖身 1｜第一個任務</PracticeEyebrow>
     <Heading>第一句話：請它先讀，不要改</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '780px 1fr', gap: 64, alignItems: 'start', marginTop: 48 }}>
       <Shot src={codexFirstTask} alt="第一個任務：請 Codex 先閱讀練習資料夾並回報理解，先不要修改檔案" crop={[110, 230, 780, 590]} width={780}>
@@ -923,7 +958,7 @@ const PromptChip = ({ children }: { children: React.ReactNode }) => (
 
 const FirstOutput: Page = () => (
   <Shell chapter={2}>
-    <Eyebrow>暖身 1｜看結果，不只看回答</Eyebrow>
+    <PracticeEyebrow time="3 分鐘">暖身 1｜看結果，不只看回答</PracticeEyebrow>
     <Heading>它回答之後，先檢查三件事</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 33, marginTop: 72 }}>
       <Steps>
@@ -948,7 +983,7 @@ const FirstOutput: Page = () => (
 
 const StatusScreen: Page = () => (
   <Shell chapter={2}>
-    <Eyebrow>暖身 2｜交辦前，先查環境</Eyebrow>
+    <PracticeEyebrow time="2 分鐘">暖身 2｜交辦前，先查環境</PracticeEyebrow>
     <Heading>輸入 /status，看懂它的工作環境</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '760px 1fr', gap: 56, alignItems: 'start', marginTop: 48 }}>
       <div>
@@ -956,7 +991,7 @@ const StatusScreen: Page = () => (
           <RowMark top={88} width={748} />
           <RowMark top={121} width={748} />
         </Shot>
-        <p style={{ fontSize: 22, color: faint, marginTop: 14 }}>教材範例｜帳號與即時額度已隱藏</p>
+        <p style={{ fontSize: 24, color: quiet, marginTop: 14 }}>教材範例｜帳號與即時額度已隱藏</p>
       </div>
       <Table>
         <TRow head cols="240px 1fr" cells={['欄位', '白話來說']} />
@@ -965,7 +1000,7 @@ const StatusScreen: Page = () => (
         <TRow cols="240px 1fr" tint={amberSoft} cells={[<span style={{ fontFamily: mono, fontSize: 25 }}>Permissions</span>, <strong>它能做哪些事、要不要先問你</strong>]} />
         <TRow cols="240px 1fr" cells={[<span style={{ fontFamily: mono, fontSize: 25 }}>Agents.md</span>, '專案有沒有額外的工作規則']} />
         <TRow cols="240px 1fr" cells={[<span style={{ fontFamily: mono, fontSize: 25 }}>Session</span>, '這次協作的編號']} />
-        <TRow cols="240px 1fr" cells={[<span style={{ fontFamily: mono, fontSize: 25 }}>5h · Weekly</span>, '還剩多少額度（等一下說明）']} />
+        <TRow cols="240px 1fr" cells={[<span style={{ fontFamily: mono, fontSize: 25 }}>5h · Weekly</span>, '還剩多少額度（練習 1 後再看）']} />
       </Table>
     </div>
   </Shell>
@@ -973,7 +1008,7 @@ const StatusScreen: Page = () => (
 
 const StatusChallenge: Page = () => (
   <Shell chapter={2}>
-    <Eyebrow>暖身 2｜換你找找看</Eyebrow>
+    <PracticeEyebrow time="30 秒">暖身 2｜換你找找看</PracticeEyebrow>
     <Heading>30 秒，在畫面上找到這三格</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 30, marginTop: 105 }}>
       <StepPanel number="?" title="它在哪裡？" detail="找 Directory" tint={surface} />
@@ -1014,62 +1049,47 @@ const ApprovalPrompt: Page = () => (
 );
 
 const TokenBlock = ({ w, dark = false }: { w: number; dark?: boolean }) => (
-  <span style={{ display: 'inline-block', width: w, height: 36, background: dark ? muted : faint }} />
+  <span style={{ display: 'inline-block', width: w, height: 32, background: dark ? muted : faint }} />
 );
 
-const UsageToken: Page = () => (
-  <Shell chapter={2}>
-    <Eyebrow>那畫面最下面的額度呢？</Eyebrow>
-    <Heading>Usage 是總額度，Token 是這次用量</Heading>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, marginTop: 60 }}>
-      <div style={{ background: amberSoft, borderTop: `3px solid ${amber}`, padding: '34px 40px' }}>
-        <SmallLabel>像：一整盒點心</SmallLabel>
-        <div style={{ fontSize: 44, fontWeight: 600, marginTop: 14 }}>Usage：整盒還剩多少？</div>
-        <div style={{ height: 36, background: '#FFFFFF', border: `1px solid ${rule}`, marginTop: 36 }}><div style={{ width: '63%', height: '100%', background: amber }} /></div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12, fontSize: 24 }}><span style={{ color: amber }}>已使用</span><span style={{ color: faint }}>還剩下</span></div>
-        <p style={{ fontSize: 28, color: muted, margin: '26px 0 0' }}>看的範圍：整個帳號／方案</p>
+// Placed right after practice 1: the class has just read six notes, so the cost is concrete,
+// and the next page (PromptChoice) shows how to narrow the scope for practice 2.
+const TokenCost: Page = () => (
+  <Shell chapter={3}>
+    <Eyebrow>剛才讀了六份筆記，用掉多少？</Eyebrow>
+    <Heading>讀得越多，Token 用得越多</Heading>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginTop: 48, fontSize: 30 }}>
+      <Chip tint={surface}>你的 Prompt</Chip><span style={{ color: faint }}>＋</span><Chip tint={surface}>讀到的檔案</Chip><span style={{ color: faint }}>＋</span><Chip tint={surface}>前面的對話</Chip><Arrow size={40} /><strong>都算 Token</strong>
+    </div>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, marginTop: 44 }}>
+      <div style={{ background: amberSoft, borderTop: `3px solid ${amber}`, padding: '30px 38px' }}>
+        <SmallLabel>Usage ＝ 一整盒點心</SmallLabel>
+        <div style={{ fontSize: 38, fontWeight: 600, marginTop: 12 }}>帳號還能用多少</div>
+        <div style={{ height: 32, background: '#FFFFFF', border: `1px solid ${rule}`, marginTop: 26 }}><div style={{ width: '63%', height: '100%', background: amber }} /></div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10, fontSize: 24 }}><span style={{ color: amber }}>已使用</span><span style={{ color: quiet }}>還剩下</span></div>
       </div>
-      <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderTop: `3px solid ${rule}`, padding: '34px 40px' }}>
-        <SmallLabel>像：這次拿出的幾口</SmallLabel>
-        <div style={{ fontSize: 44, fontWeight: 600, marginTop: 14 }}>Token：這次用了多少？</div>
-        <div style={{ display: 'flex', gap: 10, marginTop: 36 }}>
+      <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderTop: `3px solid ${rule}`, padding: '30px 38px' }}>
+        <SmallLabel>Token ＝ 這次拿了幾口</SmallLabel>
+        <div style={{ fontSize: 38, fontWeight: 600, marginTop: 12 }}>這次讀、寫了多少</div>
+        <div style={{ display: 'flex', gap: 10, marginTop: 26 }}>
           <TokenBlock w={70} dark /><TokenBlock w={44} /><TokenBlock w={96} dark /><TokenBlock w={52} /><TokenBlock w={80} dark /><TokenBlock w={40} /><TokenBlock w={66} dark />
         </div>
-        <div style={{ marginTop: 12, fontSize: 24, color: faint }}>一小塊 ＝ 文字的一小段，不完全等於字數</div>
-        <p style={{ fontSize: 28, color: muted, margin: '26px 0 0' }}>看的範圍：這一次工作</p>
+        <div style={{ marginTop: 10, fontSize: 24, color: quiet }}>一小塊 ＝ 文字的一小段，不完全等於字數</div>
       </div>
     </div>
-    <div style={{ marginTop: 52 }}><Lead>讀的檔案越多、對話越長，Token 通常用得越多。</Lead></div>
-  </Shell>
-);
-
-const TokenTips: Page = () => (
-  <Shell chapter={2}>
-    <Eyebrow>怎麼讓 Token 花在刀口上？</Eyebrow>
-    <Heading>說清楚範圍，就能少用 Token</Heading>
-    <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginTop: 52, fontSize: 30 }}>
-      <Chip tint={surface}>你的 Prompt</Chip><span style={{ color: faint }}>＋</span><Chip tint={surface}>讀到的檔案</Chip><span style={{ color: faint }}>＋</span><Chip tint={surface}>前面的對話</Chip><Arrow size={40} /><strong>都會變成 Token</strong>
-    </div>
-    <Table marginTop={44}>
-      <TRow head cols="1fr 1fr" cells={['這樣做', '為什麼能省']} />
-      <TRow cols="1fr 1fr" tint={amberSoft} cells={[<strong>說清楚要看哪一份檔案</strong>, '不用把整個資料夾讀一遍']} />
-      <TRow cols="1fr 1fr" cells={['一次只做一件事', '對話不會越拉越長']} />
-      <TRow cols="1fr 1fr" cells={['重複的流程交給 Skill', '不用每次重新說明方法']} />
-      <TRow cols="1fr 1fr" cells={['任務太長，整理後換 Session', '不必帶著一大串舊對話']} />
-    </Table>
-    <p style={{ fontSize: 30, color: muted, marginTop: 36 }}>第一條最重要，下一頁就來練習。</p>
+    <div style={{ marginTop: 48 }}><Lead>練習 2 只讀一份筆記。範圍說清楚，就能少用 Token。</Lead></div>
   </Shell>
 );
 
 const Tagged = ({ tag, children }: { tag: string; children: React.ReactNode }) => (
   <div style={{ display: 'grid', gridTemplateColumns: '96px 1fr', gap: 18, alignItems: 'baseline' }}>
-    <span style={{ background: amber, color: '#FFFFFF', fontSize: 22, fontWeight: 600, textAlign: 'center', padding: '6px 0' }}>{tag}</span>
+    <span style={{ background: amber, color: '#FFFFFF', fontSize: 24, fontWeight: 600, textAlign: 'center', padding: '6px 0' }}>{tag}</span>
     <span style={{ fontSize: 32, lineHeight: 1.5 }}>{children}</span>
   </div>
 );
 
 const PromptChoice: Page = () => (
-  <Shell chapter={2}>
+  <Shell chapter={3}>
     <Eyebrow>現場二選一</Eyebrow>
     <Heading>哪句交代比較清楚？</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '0.62fr 1.38fr', gap: 48, marginTop: 64 }}>
@@ -1077,7 +1097,7 @@ const PromptChoice: Page = () => (
         <SmallLabel>A</SmallLabel>
         <p style={{ fontSize: 36, marginTop: 36 }}>幫我整理這個學習主題。</p>
         <Steps>
-          <Step duration={STEP_MS}><p style={{ fontSize: 26, color: faint, marginTop: 40 }}>看哪裡？做成什麼？都沒說。</p></Step>
+          <Step duration={STEP_MS}><p style={{ fontSize: 26, color: quiet, marginTop: 40 }}>看哪裡？做成什麼？都沒說。</p></Step>
         </Steps>
       </div>
       <div style={{ padding: '34px 38px', borderTop: `3px solid ${amber}`, background: amberSoft, boxSizing: 'border-box' }}>
@@ -1090,7 +1110,7 @@ const PromptChoice: Page = () => (
       </div>
     </div>
     <Steps>
-      <Step duration={STEP_MS}><p style={{ fontSize: 32, color: muted, marginTop: 48 }}>B 把範圍、產出、限制都講清楚了。</p></Step>
+      <Step duration={STEP_MS}><p style={{ fontSize: 32, color: muted, marginTop: 48 }}>B 把範圍、產出、限制都講清楚了。練習 2 就照這樣交代。</p></Step>
     </Steps>
   </Shell>
 );
@@ -1098,14 +1118,13 @@ const PromptChoice: Page = () => (
 const Glossary: Page = () => (
   <Shell chapter={2}>
     <Eyebrow>第二段整理</Eyebrow>
-    <Heading>五個名詞，一張表記住</Heading>
+    <Heading>四個名詞，一張表記住</Heading>
     <Table marginTop={56}>
       <TRow head cols="240px 1fr 1fr" cells={['名詞', '白話', '比喻']} />
       <TRow cols="240px 1fr 1fr" cells={[<strong>Directory</strong>, 'AI 從哪個資料夾開始工作', '工作桌擺在哪個房間']} />
       <TRow cols="240px 1fr 1fr" cells={[<strong>Session</strong>, '這次一起工作的過程', '一張工作桌']} />
       <TRow cols="240px 1fr 1fr" cells={[<strong>Status</strong>, '現在的環境設定', '系統資訊頁']} />
-      <TRow cols="240px 1fr 1fr" cells={[<strong>Usage</strong>, '帳號還能用多少', '整盒點心還剩多少']} />
-      <TRow cols="240px 1fr 1fr" cells={[<strong>Token</strong>, '模型處理文字的片段', '這次拿了幾口']} />
+      <TRow cols="240px 1fr 1fr" cells={[<strong>Permissions</strong>, '它能做哪些事、要不要先問你', '工作桌的使用規則']} />
     </Table>
     <p style={{ fontSize: 32, color: muted, marginTop: 44 }}>環境準備好了。接下來，把這些用在學生真正的筆記上。</p>
   </Shell>
@@ -1120,7 +1139,7 @@ const SaveToFiles: Page = () => (
     <div style={{ display: 'grid', gridTemplateColumns: '0.9fr 1.1fr', gap: 72, alignItems: 'center', marginTop: 72 }}>
       <div style={{ background: surface, borderLeft: `3px solid ${rule}`, padding: '36px 46px', fontFamily: mono, fontSize: 38, lineHeight: 1.9 }}>
         teacher-learning-lab/<br />
-        <span style={{ color: faint }}>├ notes/</span><br />
+        <span style={{ color: quiet }}>├ notes/</span><br />
         <span style={{ color: amber }}>├ outputs/</span><br />
         <span style={{ color: amber }}>└ diagrams/</span>
       </div>
@@ -1159,7 +1178,7 @@ const LabOverview: Page = () => (
 
 const ScanTask: Page = () => (
   <Shell chapter={3}>
-    <Eyebrow>練習 1｜讀筆記</Eyebrow>
+    <PracticeEyebrow time="5 分鐘">練習 1｜讀筆記</PracticeEyebrow>
     <Heading>先請 Codex 看過六份筆記</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '400px 96px 1fr', alignItems: 'center', marginTop: 64 }}>
       <div style={{ background: surface, padding: '30px 34px' }}>
@@ -1185,9 +1204,9 @@ const ScanTask: Page = () => (
 
 const ScanOutput: Page = () => (
   <Shell chapter={3}>
-    <Eyebrow>練習 1｜檢查結果</Eyebrow>
+    <PracticeEyebrow time="5 分鐘">練習 1｜檢查結果</PracticeEyebrow>
     <Heading>看完這張表，你想追問哪一題？</Heading>
-    <div style={{ display: 'inline-block', marginTop: 44, background: amberSoft, borderLeft: `5px solid ${amber}`, padding: '14px 26px', fontSize: 30, fontWeight: 600, color: amber }}>以下只有兩列示範，內容仍要回原文核對。</div>
+    <div style={{ display: 'inline-block', marginTop: 44, background: amberSoft, borderLeft: `5px solid ${amber}`, padding: '14px 26px', fontSize: 30, fontWeight: 600, color: amber }}>節錄示範：2 列、6 欄裡的 4 欄。內容仍要回原文核對。</div>
     <Table marginTop={30}>
       <TRow head cols="230px 460px 430px 1fr" cells={['筆記', '核心問題', '3 個專有名詞', '常見誤解']} />
       <TRow cols="230px 460px 430px 1fr" cells={[<strong>認知負荷理論</strong>, '工作記憶能承受多少複雜度？', '工作記憶、外在負荷、基模', '「教材越簡單越好」']} />
@@ -1206,7 +1225,7 @@ const FlowStep = ({ n, tint = '#FFFFFF', children }: { n: string; tint?: string;
 
 const AsciiTask: Page = () => (
   <Shell chapter={3}>
-    <Eyebrow>練習 2｜出草稿</Eyebrow>
+    <PracticeEyebrow time="5 分鐘">練習 2｜出草稿</PracticeEyebrow>
     <Heading>先用文字排出關係，先不要存</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'start', marginTop: 48 }}>
       <PromptBox>
@@ -1255,7 +1274,7 @@ const CheckRow = ({ claim, source, verdict, tint }: { claim: React.ReactNode; so
 
 const CheckOriginal: Page = () => (
   <Shell chapter={4} enterChapter>
-    <Eyebrow>練習 2｜回原文核對</Eyebrow>
+    <PracticeEyebrow time="8 分鐘">練習 2｜回原文核對</PracticeEyebrow>
     <Heading>草稿看起來合理，也要回頭對照原文</Heading>
     <div style={{ marginTop: 40 }}>
       <PromptBox pad="22px 36px">
@@ -1302,7 +1321,7 @@ const SkillMcp: Page = () => (
 
 const SkillSetup: Page = () => (
   <Shell chapter={4}>
-    <Eyebrow>練習 3｜裝上剛才說的 Skill</Eyebrow>
+    <PracticeEyebrow time="5 分鐘">練習 3｜裝上剛才說的 Skill</PracticeEyebrow>
     <Heading>安裝 diagram-design，再開一個新 Session</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 480px', gap: 56, alignItems: 'center', marginTop: 64 }}>
       <Terminal title="在終端機依序輸入" width={1096}>
@@ -1311,13 +1330,13 @@ const SkillSetup: Page = () => (
       <div style={{ background: sage, padding: '34px 40px', fontSize: 31, lineHeight: 1.7 }}>1. 加入 Skill 來源<br />2. 安裝 diagram-design<br />3. 開一個新 Session</div>
     </div>
     <div style={{ marginTop: 56 }}><Lead>為什麼要開新的？新的 Session 才讀得到剛裝好的食譜。</Lead></div>
-    <p style={{ fontSize: 24, color: faint, marginTop: 24 }}>來源：diagram-design 官方安裝說明（github.com/cathrynlavery/diagram-design）</p>
+    <p style={{ fontSize: 24, color: quiet, marginTop: 24 }}>來源：diagram-design 官方安裝說明（github.com/cathrynlavery/diagram-design）</p>
   </Shell>
 );
 
 const DiagramTask: Page = () => (
   <Shell chapter={4}>
-    <Eyebrow>練習 3｜畫成知識圖</Eyebrow>
+    <PracticeEyebrow time="10 分鐘">練習 3｜畫成知識圖</PracticeEyebrow>
     <Heading>把核對過的關係，畫成知識圖</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 650px', gap: 64, alignItems: 'center', marginTop: 44 }}>
       <div>
@@ -1345,7 +1364,7 @@ const DiagramTask: Page = () => (
 
 const OutputFile = ({ path, title, detail }: { path: string; title: string; detail: string }) => (
   <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderTop: `3px solid ${amber}`, padding: '32px 32px' }}>
-    <div style={{ fontFamily: mono, fontSize: 22, color: faint }}>{path}</div>
+    <div style={{ fontFamily: mono, fontSize: 24, color: quiet }}>{path}</div>
     <div style={{ fontSize: 44, fontWeight: 600, marginTop: 14 }}>{title}</div>
     <div style={{ fontSize: 28, color: muted, marginTop: 10 }}>{detail}</div>
   </div>
@@ -1395,6 +1414,40 @@ const TeachingCheck: Page = () => (
   </Shell>
 );
 
+const TakeItem = ({ n, label, children }: { n: string; label: string; children: React.ReactNode }) => (
+  <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 22, alignItems: 'start', borderTop: `1px solid ${rule}`, paddingTop: 20 }}>
+    <NumDot n={n} />
+    <div>
+      <SmallLabel>{label}</SmallLabel>
+      <div style={{ marginTop: 8 }}>{children}</div>
+    </div>
+  </div>
+);
+
+const Takeaway: Page = () => (
+  <Shell>
+    <Eyebrow>帶走清單</Eyebrow>
+    <Heading>回家自己再做一次，需要這四樣</Heading>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 72, alignItems: 'center', marginTop: 48 }}>
+      <div style={{ display: 'grid', gap: 22 }}>
+        <TakeItem n="1" label="Node.js 官網（選 LTS）"><Path size={32}>nodejs.org</Path></TakeItem>
+        <TakeItem n="2" label="安裝 Codex"><Path size={32}>npm install -g @openai/codex@latest</Path></TakeItem>
+        <TakeItem n="3" label="今天的每一句 Prompt"><Path size={32}>examples/teacher-learning-lab/prompts.md</Path></TakeItem>
+        <TakeItem n="4" label="課程資料夾"><Path size={32}>github.com/Chrouos/AI-workshop-slides</Path></TakeItem>
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <img src={repoQr} alt="課程資料夾 github.com/Chrouos/AI-workshop-slides 的 QR code" style={{ display: 'block', width: 340, height: 340, border: `1px solid ${rule}` }} />
+        <div style={{ fontSize: 26, color: muted, marginTop: 16 }}>掃描打開課程資料夾</div>
+      </div>
+    </div>
+    <div style={{ marginTop: 48 }}><Lead>最後一分鐘，寫下出口票。</Lead></div>
+  </Shell>
+);
+
+// Where the audience writes the exit ticket (paper slip, form link, ...). Fill this in before class;
+// while it's empty the page shows a dashed placeholder so it can't be missed.
+const EXIT_TICKET_WHERE = '';
+
 const ExitTicket: Page = () => (
   <Shell top={155}>
     <Eyebrow>一分鐘出口票</Eyebrow>
@@ -1413,6 +1466,9 @@ const ExitTicket: Page = () => (
         </div>
       </Step>
     </Steps>
+    <div style={{ marginTop: 52, fontSize: 30, color: muted }}>
+      寫在：{EXIT_TICKET_WHERE ? <strong style={{ color: 'var(--osd-text)' }}>{EXIT_TICKET_WHERE}</strong> : <span style={{ border: `2px dashed ${amber}`, color: amber, padding: '4px 18px' }}>講者填：紙本或表單連結</span>}
+    </div>
   </Shell>
 );
 
@@ -1436,7 +1492,7 @@ export const notes: (string | undefined)[] = [
   '為什麼會這樣？模型會根據前後文預測下一個詞。「學生需要更___」，（點一下）它看「清楚的」機率最高就選它，再接著預測下一個。數字只是示意。這是簡化的說法，模型不只是機械地補字；（點一下）但要記住：很像正確答案，不等於真的知道答案。',
   '不過 AI 這幾年進步很多：從只會生成文字，（點一下）到會先推理、（點一下）會用工具，（點一下）現在能自己執行任務。（點一下）能用工具，就是從一般的 LLM 走到 Agent 的關鍵。',
   '那 Agent 怎麼做事？沿著圖走一次：你說目標，（點一下）它先讀筆記和工作規則、（點一下）動手做、（點一下）回報結果，（點一下）最後由你決定下一步。（點一下）不滿意就回到第一步，把目標說清楚。問大家：這五步裡，哪一步最需要你親自把關？',
-  '看一下地圖：第一段「認識 AI」完成了，現在進入第二段。接下來要把剛才的流程實際跑一遍：先讓 Codex 進到正確資料夾，再交辦第一個小任務。',
+  '看一下地圖：第一段「認識 AI」完成了，現在進入第二段。接下來，大家和這位學生一起動手，把剛才的流程實際跑一遍：先讓 Codex 進到正確資料夾，再交辦第一個小任務。',
   `進入第二段，動手之前先確認四件事。第一，課程資料夾：到 GitHub 的課程頁面，按 Code、Download ZIP，再解壓縮；資料夾名稱多了 -main 沒關係。會用 git 的人可以直接 git clone。
 第二，打開終端機：Mac 按 ⌘ 加空白鍵叫出 Spotlight，搜尋 Terminal；Windows 在開始選單搜尋 PowerShell。
 第三，讓終端機走進課程資料夾：輸入 cd 加一個空格，把資料夾拖進視窗，按 Enter；或在資料夾按右鍵找「在終端機開啟」，名稱依系統略有不同。
@@ -1446,23 +1502,23 @@ export const notes: (string | undefined)[] = [
   '到 Node.js 官網選 LTS 安裝，重開終端機，打 node -v 和 npm -v。圖上 ① ② 兩個位置都有版本號就往下走；找不到指令，先重開終端機；還不行，就重裝一次 Node.js。',
   '這行指令拆開來看：① npm install 是安裝；② -g 是裝在整台電腦；③ @openai/codex 是要裝的東西；④ @latest 是最新版。CLI 是在終端機裡打字操作的版本，跟 Codex 是同一個工具。',
   '事前準備已經讓終端機停在課程資料夾的最上層，也就是 AI-workshop-slides（ZIP 版叫 AI-workshop-slides-main）。在這裡輸入 cd examples/teacher-learning-lab，走進練習資料夾，再輸入 codex 叫醒它。第一次啟動依畫面登入 ChatGPT 帳號。',
-  '啟動之後先別急著交辦，看兩個欄位：① Model 是現在用的模型，名稱會變，不用背；② Directory 一定要是 teacher-learning-lab，不是就先停下來調整。',
+  '如果到這裡還是裝不起來，或登入一直失敗，不要卡住，改走 Plan B：打開 chatgpt.com，把 notes/ 裡要用的筆記上傳，再貼上 prompts.md 裡同一段 Prompt。第一段說過，ChatGPT 也能讀上傳的檔案。差別看黃色那一列：它不會自己存檔，成果要你複製下來存好。暖身 2 的 /status 可以跳過；練習 3 沒有 diagram-design，就請它畫圖或列出圖的結構。回原文核對一樣一定要做。裝好的人，下一頁一起看啟動畫面。',
+  '這位學生第一次打開 Codex，先別急著交辦，看兩個欄位：1 號 Model 是現在用的模型，名稱會變，不用背；2 號 Directory 一定要是 teacher-learning-lab，不是就先停下來調整。',
   '為什麼 Directory 這麼重要？因為 Codex 從這個資料夾開始工作。走對資料夾，讀得到筆記、成果也存在對的地方；走錯了，可能讀到不相關的檔案。',
   '登入之後就坐進一個 Session。同一個 Session 內，背景、問題、回答、追問都在同一張桌上，所以可以一題接一題問。（點一下）換一個 Session 就像換一張桌子，前面的對話不一定還在，（點一下）所以重要成果要存成檔案。',
   '暖身 1：第一句話請它先讀、不要改。看圖上四個編號：先說不要修改、問三個具體問題、看它讀了哪些檔案、請它先給草稿。它的順序是讀取、理解、回報、等你。今天每一句 Prompt 都整理在 teacher-learning-lab/prompts.md，打開就能複製，不用照著投影片打字。巡視時確認大家都在 teacher-learning-lab。',
   '它回答之後，別急著看寫得好不好，先檢查三件事：有沒有進對資料夾、（點一下）每個檔案放什麼有沒有說對、（點一下）這一步有沒有改檔案。（點一下）答錯了就用下面這兩句追問。',
-  '暖身 2：交辦更多事之前，輸入 /status 查環境。框起來的兩行最重要：Directory 是它在哪工作，Permissions 是它能做哪些事、要不要先問你。右邊表格是每個欄位的白話。',
+  '暖身 2：交辦更多事之前，輸入 /status 查環境。框起來的兩行最重要：Directory 是它在哪工作，Permissions 是它能做哪些事、要不要先問你。右邊表格是每個欄位的白話；最下面的額度，等練習 1 做完再一起看。',
   '給大家 30 秒，自己在畫面上找這三格：它在哪裡、能做什麼、用哪個模型。模型名稱不用背，看得懂就好。之後每次交辦任務前，都先看一眼 Directory 和 Permissions。',
   `剛才的 Permissions 決定它什麼時候要先問你。交辦任務之後，Codex 有時會停下來，請你同意它做某件事，例如寫入檔案或執行指令。左邊只是示意，實際文字和按鍵依版本不同，照畫面上的選項操作就好。
 判斷分三步：先讀它想做什麼；（點一下）在 teacher-learning-lab 裡、又是你交辦的事，就同意；（點一下）看不懂或不確定，就先拒絕，再問它「你為什麼要做這一步？」（點一下）拒絕只是讓它先別做，不會弄壞你的檔案，放心按。`,
-  '畫面最下面還有額度。用一盒點心比喻：Usage 是整盒還剩多少，Token 是這次拿了幾口。Token 是模型處理文字的片段，不完全等於字數；讀的檔案越多、對話越長，用得越多。不用講計費細節。',
-  '怎麼省？你的 Prompt、它讀到的檔案、前面的對話，全部都會變成 Token。最有效的是第一條：說清楚要看哪一份檔案，它就不用把整個資料夾讀一遍。',
-  '請大家選 A 或 B。（大家選完再點一下：A 少了什麼）B 多交代了範圍、產出和限制：只看哪個檔案、要交出什麼、什麼不能做。（點一下）範圍說清楚，它比較不會做多餘的事，也比較省 Token。',
-  '第二段收尾，用一張表記住五個名詞。Directory 是工作桌擺在哪個房間、Session 是工作桌、Status 是系統資訊、Usage 是整盒點心、Token 是這次的幾口。環境準備好了，接下來回到這位學生的筆記。',
+  '第二段收尾，用一張表記住四個名詞：Directory 是工作桌擺在哪個房間、Session 是工作桌、Status 是系統資訊頁、Permissions 是工作桌的使用規則。環境準備好了，接下來回到這位學生的筆記。',
   '進入第三段，開始整理這位學生的筆記。先把剛才的 Session 觀念收回來：聊天內容換了 Session 可能就不在，想讓下次接著用，就把成果寫進檔案。練習 2 的草稿存 outputs/，練習 3 的知識圖存 diagrams/。',
   '六份筆記都只是 Markdown 文件，不用寫程式。請大家選一份你熟悉的，或最想弄懂的；示範會用認知負荷理論。',
   '練習 1：先請 Codex 看過六份筆記，整理成一張表，欄位就是右邊這六個，而且先不要改檔案。',
-  '它交回的表大概長這樣，注意上面的標籤：這只是兩列示範。請大家挑一列回原文查，再追問一題，例如「原文怎麼定義外在負荷？」',
+  '它交回的表大概長這樣，注意上面的標籤：這是節錄，只放 2 列，而且完整的表有 6 欄，這裡只列 4 欄。請大家挑一列回原文查，再追問一題，例如「原文怎麼定義外在負荷？」',
+  '剛才一次讀了六份筆記，順便看一下用量。你的 Prompt、它讀到的檔案、前面的對話，全部都算 Token。用一盒點心比喻：Usage 是整盒還剩多少，Token 是這次拿了幾口。Token 是模型處理文字的片段，不完全等於字數；讀得越多、對話越長，用得越多。計費細節不用講。練習 2 只讀一份筆記：範圍說清楚，就能少用 Token。其他省法可以順口帶過：一次只做一件事、重複的流程交給 Skill、任務太長就整理後換 Session。',
+  '練習 2 之前，先比一比：A 和 B 哪一句交代得比較清楚？請大家選。（大家選完再點一下：A 少了什麼）B 多交代了範圍、產出和限制：只看哪個檔案、要交出什麼、什麼不能做。（點一下）範圍說清楚，它比較不會做多餘的事，也比較省 Token。練習 2 就照這樣交代。',
   '練習 2：示範只挑認知負荷這一份。左邊這段 Prompt 請它只讀這份筆記，用 ASCII，也就是純文字的樹狀結構，排出中心問題、概念、關係和常見誤解，而且只顯示在畫面上，先不要存檔。右邊是它可能交回的草稿，看起來每一條都很合理，對吧？先別說破最後一條。順序是下面這三格：出草稿、回原文核對、對了才存進 outputs/。',
   `進入第四段，這是今天最重要的一步。可以請 Codex 幫忙對照：上面這段 Prompt 請它把每一條關係，對應到原文哪一句，找不到就寫「找不到」。它只是幫你找句子，最後由你判斷。
 （點一下：第一列有原文支持，保留）看第二列，就是上一頁草稿的最後一條：「降低負荷，所以教材越簡單越好」，聽起來很合理，（點一下）但原文明白寫著「不是教材越簡單越好」，所以要刪掉。
@@ -1472,15 +1528,16 @@ export const notes: (string | undefined)[] = [
   '請大家複製左邊這段 Prompt：點名使用 diagram-design，給它原始筆記和核對過的 ASCII 草稿，並要它先說明要畫哪種圖、為什麼。接著照下面三步：先看它提的設計，確認後它才存進 diagrams/，最後打開圖檔對照原文。（點一下：知識圖。注意最下面那格：剛才刪掉的誤解，用打叉的方式留在圖上，提醒讀者別這樣想）最後問自己：（點一下）第一次接觸這個理論的人看得懂嗎？',
   '回到這位學生：一開始讀三遍還串不起來的筆記，現在變成三份成果，原始筆記沒被改、（點一下）草稿核對過、（點一下）知識圖別人也看得懂。（點一下）交出去之前，再問自己這四個問題。',
   '把它帶回教學現場：哪些事 AI 可以先做、（點一下）哪些和 AI 一起調整、（點一下）哪些一定要自己確認？兩人一組分享一個可交辦的步驟，以及一個必須自己查證的步驟。',
-  '最後一分鐘，請大家寫下三句話：AI 幫我做了什麼？哪一步還是要我自己判斷？（點一下）明天你想先拿哪一份資料試試看？（點一下）下面這條主線，就是你可以帶走的做法。',
+  '回家想自己再做一次，需要這四樣：Node.js 官網、安裝 Codex 的那一行指令、今天每一句 Prompt 都在 prompts.md，還有課程資料夾。右邊的 QR code 掃了就是課程資料夾。接下來最後一分鐘，寫出口票。',
+  '最後一分鐘，請大家寫下三句話：AI 幫我做了什麼？哪一步還是要我自己判斷？（點一下）明天你想先拿哪一份資料試試看？（點一下）下面這條主線，就是你可以帶走的做法。寫在哪裡看最下面那行；上課前記得把 EXIT_TICKET_WHERE 填好。',
 ];
 
 export default [
   Cover, SpeakerIntro, Agenda, StoryStart, ResultFirst,
   ToolComparison, ToolRoles, WrongAnswer, TokenPrediction, LlmEvolution, AgentFlow,
-  RunItNow, Prep, InstallRoadmap, CheckNode, InstallCodex, OpenProject, StartScreen, DirectoryScope, SessionDesk,
-  FirstPrompt, FirstOutput, StatusScreen, StatusChallenge, ApprovalPrompt, UsageToken, TokenTips, PromptChoice, Glossary,
-  SaveToFiles, LabOverview, ScanTask, ScanOutput, AsciiTask,
+  RunItNow, Prep, InstallRoadmap, CheckNode, InstallCodex, OpenProject, PlanB, StartScreen, DirectoryScope, SessionDesk,
+  FirstPrompt, FirstOutput, StatusScreen, StatusChallenge, ApprovalPrompt, Glossary,
+  SaveToFiles, LabOverview, ScanTask, ScanOutput, TokenCost, PromptChoice, AsciiTask,
   CheckOriginal, SkillMcp, SkillSetup, DiagramTask,
-  Reflection, TeachingCheck, ExitTicket,
+  Reflection, TeachingCheck, Takeaway, ExitTicket,
 ] satisfies Page[];
