@@ -1,6 +1,8 @@
 # 課堂 Prompt 一覽
 
-投影片上用到的每一句 Prompt 都在這裡，依上課順序排列。複製貼進 Codex 即可。
+投影片上用到的每一句 Prompt 都在這裡，照上課順序排好，複製貼進 Codex 就能用。
+
+用 ChatGPT 網頁版（Plan B）的人：先上傳要用的筆記，再貼同一段 Prompt。要它「寫入檔案」的那幾句，改成把結果複製下來，自己存檔。
 
 示範用的是 `notes/cognitive-load-theory.md`。如果你選了別份筆記，把檔名換掉就好。
 

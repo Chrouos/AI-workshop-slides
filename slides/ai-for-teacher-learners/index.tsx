@@ -563,7 +563,7 @@ const WrongAnswer: Page = () => (
         </Step>
       </Steps>
     </div>
-    <p style={{ fontSize: 26, color: muted, marginTop: 72 }}>另一個例子：早期模型曾肯定地把一道算式算成 8402，驗算其實是 8484。語氣肯定，不代表答案正確。</p>
+    <p style={{ fontSize: 26, color: muted, marginTop: 72 }}>另一個例子：早期模型把一道算式算成 8402，驗算其實是 8484。語氣肯定，不代表答案正確。</p>
   </Shell>
 );
 
@@ -848,7 +848,7 @@ const PlanB: Page = () => (
       <TRow cols="330px 1fr 1fr" cells={[<SmallLabel>練習 3｜畫知識圖</SmallLabel>, '用 diagram-design', '請它畫圖，或列出圖的結構']} />
       <TRow cols="330px 1fr 1fr" cells={[<SmallLabel>回原文核對</SmallLabel>, '一定要做', '一樣一定要做']} />
     </Table>
-    <div style={{ marginTop: 40 }}><Lead>練習照做，只是成果要自己存。裝好的人，下一頁看啟動畫面。</Lead></div>
+    <div style={{ marginTop: 40 }}><Lead>練習一樣做，只是成果要自己存。裝好的人，下一頁看啟動畫面。</Lead></div>
   </Shell>
 );
 
@@ -1499,8 +1499,8 @@ export const notes: (string | undefined)[] = [
 第四，登入要用 ChatGPT 帳號，需要哪種方案以課前通知為準。
 巡視一圈，確認每個人的終端機都已經停在課程資料夾。`,
   '打開 Codex 只要三站。先說為什麼要裝 Node.js：Codex 要用 npm 安裝，npm 是跟著 Node.js 一起來的，所以要先打好地基。終端機剛才已經打開了，接下來的指令都在那個視窗裡輸入。',
-  '到 Node.js 官網選 LTS 安裝，重開終端機，打 node -v 和 npm -v。圖上 ① ② 兩個位置都有版本號就往下走；找不到指令，先重開終端機；還不行，就重裝一次 Node.js。',
-  '這行指令拆開來看：① npm install 是安裝；② -g 是裝在整台電腦；③ @openai/codex 是要裝的東西；④ @latest 是最新版。CLI 是在終端機裡打字操作的版本，跟 Codex 是同一個工具。',
+  '到 Node.js 官網選 LTS 安裝，重開終端機，打 node -v 和 npm -v。圖上 1、2 號兩個位置都有版本號，就往下走。找不到指令，先重開終端機；還不行，再重裝一次 Node.js。',
+  '這行指令拆開來看：1 號 npm install 是安裝，2 號 -g 是裝在整台電腦，3 號 @openai/codex 是要裝的東西，4 號 @latest 是最新版。CLI 是在終端機裡打字操作的版本，跟 Codex 是同一個工具。',
   '事前準備已經讓終端機停在課程資料夾的最上層，也就是 AI-workshop-slides（ZIP 版叫 AI-workshop-slides-main）。在這裡輸入 cd examples/teacher-learning-lab，走進練習資料夾，再輸入 codex 叫醒它。第一次啟動依畫面登入 ChatGPT 帳號。',
   '如果到這裡還是裝不起來，或登入一直失敗，不要卡住，改走 Plan B：打開 chatgpt.com，把 notes/ 裡要用的筆記上傳，再貼上 prompts.md 裡同一段 Prompt。第一段說過，ChatGPT 也能讀上傳的檔案。差別看黃色那一列：它不會自己存檔，成果要你複製下來存好。暖身 2 的 /status 可以跳過；練習 3 沒有 diagram-design，就請它畫圖或列出圖的結構。回原文核對一樣一定要做。裝好的人，下一頁一起看啟動畫面。',
   '這位學生第一次打開 Codex，先別急著交辦，看兩個欄位：1 號 Model 是現在用的模型，名稱會變，不用背；2 號 Directory 一定要是 teacher-learning-lab，不是就先停下來調整。',
