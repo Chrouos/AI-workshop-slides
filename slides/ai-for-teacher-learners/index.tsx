@@ -379,20 +379,20 @@ const StoryStart: Page = () => (
   </Shell>
 );
 
-const LargeStoryGraph = () => (
-  <div style={{ position: 'relative', height: 480, background: '#FFFFFF', border: `1px solid ${rule}` }}>
+const LargeStoryGraph = ({ height = 480 }: { height?: number }) => (
+  <div style={{ position: 'relative', height, background: '#FFFFFF', border: `1px solid ${rule}` }}>
     <Steps>
-      <svg viewBox="0 0 1600 500" style={{ width: '100%', height: 470, position: 'absolute', inset: 0 }} role="img" aria-label="劉備人物節點">
+      <svg viewBox="0 0 1600 500" style={{ width: '100%', height: height - 10, position: 'absolute', inset: 0 }} role="img" aria-label="劉備人物節點">
         <circle cx="840" cy="100" r="55" fill={amberSoft} stroke={amber} strokeWidth="2" /><text x="840" y="112" textAnchor="middle" fontSize="35" fill="#1C1917">劉備</text>
       </svg>
-      <Step duration={STEP_MS}><svg viewBox="0 0 1600 500" style={{ width: '100%', height: 470, position: 'absolute', inset: 0 }} role="img" aria-label="關羽、張飛、曹操依序出現">
+      <Step duration={STEP_MS}><svg viewBox="0 0 1600 500" style={{ width: '100%', height: height - 10, position: 'absolute', inset: 0 }} role="img" aria-label="關羽、張飛、曹操依序出現">
         {[['關羽', 170], ['張飛', 470], ['曹操', 1360]].map(([name, x], i) => <g key={name} className="atl-build" style={buildDelay(i, 0)}><circle cx={Number(x)} cy="100" r="55" fill={surface} stroke={rule} strokeWidth="2" /><text x={Number(x)} y="112" textAnchor="middle" fontSize="35" fill="#1C1917">{name}</text></g>)}
       </svg></Step>
-      <Step duration={STEP_MS}><svg viewBox="0 0 1600 500" style={{ width: '100%', height: 470, position: 'absolute', inset: 0 }} role="img" aria-label="桃園結義連到關羽、張飛、劉備">
+      <Step duration={STEP_MS}><svg viewBox="0 0 1600 500" style={{ width: '100%', height: height - 10, position: 'absolute', inset: 0 }} role="img" aria-label="桃園結義連到關羽、張飛、劉備">
         <g fill="none" stroke={amber} strokeWidth="4"><path d="M170 155 C170 240 290 260 360 320"/><path d="M470 155 V320"/><path d="M810 147 C790 240 650 280 580 320"/></g>
         <rect x="300" y="320" width="340" height="90" fill={sage} stroke={okGreen} strokeWidth="2"/><text x="470" y="377" textAnchor="middle" fontSize="38" fill="#1C1917">桃園結義</text><text x="470" y="455" textAnchor="middle" fontSize="26" fill={quiet}>三人參與結義｜第 1 回</text>
       </svg></Step>
-      <Step duration={STEP_MS}><svg viewBox="0 0 1600 500" style={{ width: '100%', height: 470, position: 'absolute', inset: 0 }} role="img" aria-label="煮酒論英雄連到劉備、曹操">
+      <Step duration={STEP_MS}><svg viewBox="0 0 1600 500" style={{ width: '100%', height: height - 10, position: 'absolute', inset: 0 }} role="img" aria-label="煮酒論英雄連到劉備、曹操">
         <g fill="none" stroke={okGreen} strokeWidth="4"><path d="M870 147 C910 235 1000 270 1050 320"/><path d="M1360 155 C1360 240 1280 275 1220 320"/></g>
         <rect x="970" y="320" width="340" height="90" fill={amberSoft} stroke={amber} strokeWidth="2"/><text x="1140" y="377" textAnchor="middle" fontSize="38" fill="#1C1917">煮酒論英雄</text><text x="1140" y="455" textAnchor="middle" fontSize="26" fill={quiet}>兩人談論英雄｜第 21 回</text>
       </svg></Step>
@@ -576,15 +576,14 @@ const ScanTask: Page = () => (
 const ScanOutput: Page = () => (
   <Shell chapter={2}>
     <Eyebrow>練習 1｜檢查結果</Eyebrow>
-    <Heading>同一個劉備，接在兩段故事裡</Heading>
-    <div style={{ marginTop: 44, fontSize: 28, color: amber }}>示範表格節錄：完整表格應列出六份筆記</div>
-    <Table marginTop={30}>
-      <TRow head cols="280px 160px 400px 1fr" cells={['筆記', '類型', '可核對的關係', '依據']} />
-      <TRow cols="280px 160px 400px 1fr" cells={[<strong>桃園結義</strong>, '事件', '劉備、關羽、張飛結義', '桃園結義.md｜第 1 回']} />
-      <TRow cols="280px 160px 400px 1fr" cells={[<strong>煮酒論英雄</strong>, '事件', '曹操與劉備談論英雄', '煮酒論英雄.md｜第 21 回']} />
-      <TRow cols="280px 160px 400px 1fr" cells={[<strong>劉備</strong>, '人物', '參與上面兩件事', '劉備.md，並回看兩張事件卡']} />
+    <Heading>關係、原句和來源，要一起留下來</Heading>
+    <div style={{ marginTop: 34, fontSize: 28, color: amber }}>六份筆記中的兩列示例：檔名讓你找到資料，原句才讓你核對關係</div>
+    <Table marginTop={28}>
+      <TRow head cols="370px 1fr 320px" cells={['整理出的關係', '支持這條關係的原句', '來源']} />
+      <TRow cols="370px 1fr 320px" cells={['劉備、關羽、張飛參與結義', '「劉備、關羽、張飛在桃園結為兄弟」', '桃園結義.md｜第 1 回']} />
+      <TRow cols="370px 1fr 320px" cells={['曹操與劉備共同談論英雄', '「曹操與劉備在煮酒論英雄的情節中談論誰是英雄」', '煮酒論英雄.md｜第 21 回']} />
     </Table>
-    <p style={{ fontSize: 30, color: muted, marginTop: 42 }}>追問：「為什麼兩件事都有劉備？請列出筆記裡支持的句子。」</p>
+    <p style={{ fontSize: 32, color: muted, lineHeight: 1.6, marginTop: 38 }}>同一個劉備出現在兩件事裡<br />選一列，自己打開筆記，確認原句真的支持這個關係</p>
   </Shell>
 );
 
@@ -708,9 +707,13 @@ const DiagramTask: Page = () => (
 const DiagramCheck: Page = () => (
   <Shell chapter={4}>
     <Eyebrow>練習 3｜打開 HTML，逐線檢查</Eyebrow>
-    <Heading>現在回頭看，這張圖的每條線能解釋嗎？</Heading>
-    <div style={{ marginTop: 38 }}><LargeStoryGraph /></div>
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginTop: 28, fontSize: 28, lineHeight: 1.5 }}><div>桃園結義只有三人？<br />核對 notes/桃園結義.md</div><div>煮酒連線只表示對話？<br />沒有擅自改成「盟友」</div><div>同一個劉備只畫一次？<br />能接上兩段故事的來源</div></div>
+    <Heading>選一條線，說清楚它的意思和證據</Heading>
+    <div style={{ marginTop: 26 }}><LargeStoryGraph height={390} /></div>
+    <div style={{ display: 'grid', gridTemplateColumns: '440px 1fr', gap: 30, marginTop: 22, background: sage, padding: '20px 28px' }}>
+      <div><div style={{ fontSize: 31, fontWeight: 600 }}>劉備 → 煮酒論英雄</div><div style={{ fontSize: 27, marginTop: 12 }}>線的意思：參與對話</div></div>
+      <div><div style={{ fontSize: 25, color: muted }}>來源：notes/煮酒論英雄.md｜第 21 回</div><div style={{ fontSize: 28, lineHeight: 1.5, marginTop: 10 }}>「曹操與劉備在煮酒論英雄的情節中談論誰是英雄」</div></div>
+    </div>
+    <p style={{ fontSize: 27, color: muted, marginTop: 18 }}>示範核對一條線；你的 HTML 中，每條線都要有關係名稱、來源與原句</p>
   </Shell>
 );
 
@@ -755,7 +758,7 @@ const Reflection: Page = () => (
     <Heading>保留原始筆記，再做出草稿和知識圖</Heading>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', columnGap: 56, alignItems: 'center', marginTop: 72 }}>
       <Steps>
-        <OutputFile path="notes/桃園結義.md" title="原始筆記" detail="保留查證依據" />
+        <OutputFile path="notes/煮酒論英雄.md" title="原始筆記" detail="保留查證依據" />
         <Step duration={STEP_MS}><ArrowCell gap={56}><OutputFile path="outputs/…-ascii.md" title="ASCII 草稿" detail="每條關係都核對過" /></ArrowCell></Step>
         <Step duration={STEP_MS}><ArrowCell gap={56}><OutputFile path="diagrams/" title="知識圖" detail="人物、事件與來源一起看" /></ArrowCell></Step>
       </Steps>
@@ -912,14 +915,14 @@ export const notes: (string | undefined)[] = [
   "8:00–9:00。正式進入練習一區段。確認notes/有四人物兩事件的六份筆記，不含README。打開一份看內容，接下來先看單篇提示詞範例，再擴到六篇。",
   "9:00–10:00。讓大家先選A或B，用一個理由說明。這一頁只讀桃園結義，是單篇示範；下一頁正式練習才擴大讀六份，範圍改變但仍要列依據、先不改檔。",
   "10:00–15:00。練習5分鐘。打開prompts.md練習1，正式讀六份故事筆記，不含README，列人物/事件、關係、原句與來源。先不要改檔。確認它真的讀六份，再自己開一份對照。",
-  "15:00–20:00。留5分鐘讓較慢者完成，並挑一列分享來源。這是完整表的三列節錄，每人至少指出一條原句。劉備參與兩事件，不代表所有參與者都是同一種關係。接著精讀煮酒論英雄。",
+  "15:00–20:00。留5分鐘讓較慢者完成，並挑一列分享來源。這是完整表的兩列節錄，包含原句與來源，每人至少指出一條原句。劉備參與兩事件，不代表所有參與者都是同一種關係。接著精讀煮酒論英雄。",
   "20:00–25:00。練習5分鐘，只讀煮酒論英雄.md，用ASCII純文字排參與人物、事件、關係與回目。先顯示草稿，不存檔。即使AI沒出錯，下一頁的教學草稿也能練習區分原文和推論。",
   "25:00–26:00。先請學員說出自己的草稿，再展示這份教學示意。人物對、事件對，但盟友是新推論。不要把缺乏支持直接說成歷史上的反命題；我們現在只問這份筆記能否支持這條線。AI實際輸出不一定相同；沒有錯誤時也用這個示例練習。",
   "26:00–34:00。練習8分鐘：開自己的筆記，逐條對照，不只請AI自我檢查。兩人談論英雄有原句支持；盟友沒有。可保留在待確認區，但不能當成已確認連線。每人指出一條支持句與一個不能從句子推得的結論。確認後存outputs/煮酒論英雄-ascii.md，notes來源保留。",
   "34:00–35:00。一分鐘收束：支持就保留，資料不足標待確認，原文明確不符就修正。盟友不是被這份筆記證明錯誤，而是沒有足夠依據。這個區分比只找明顯錯字更接近日常AI使用。下一步只把已支持關係畫成實線。",
   "35:00–36:00。Skill就是事先寫好的工作說明。今天用課前已備好的diagram-design；不用現場逐條重新教AI排版。沒有此Skill時，照prompts.md的標準HTML指示也能練習，教師不要花課堂時間排除安裝問題。MCP留附錄，不在本段引入。",
   "36:00–48:00。12分鐘只做必做Graph：四人物兩事件、每條線有來源，存單檔HTML並開啟。使用prompts.md練習3必做段，課前已有diagram-design可用；沒有則沿用一般HTML指示。先提出設計，確認後寫入。不要同時要求Timeline，先確保每個人完成最重要的關係圖。",
-  "48:00–55:00。留7分鐘開啟、查證與修圖。對每條線問：表示什麼、哪句支持？每人至少展示一條來源。劉備只出現一次，不能多連曹操到桃園，也不能把共同對話改成盟友。已完成核對者才看下一頁加分；其他人繼續Graph。這7分鐘不因展示加分頁而提早結束。",
+  "48:00–55:00。留7分鐘開啟、查證與修圖。對每條線問：表示什麼、哪句支持？每人至少展示一條來源，依綠色查證卡示範完整說出人物、事件、線的意思、檔名和原句。劉備只出現一次，不能多連曹操到桃園，也不能把共同對話改成盟友。已完成核對者才看下一頁加分；其他人繼續Graph。這7分鐘不因展示加分頁而提早結束。",
   "48:00–55:00同時段的加分選做，不另占時間。只對已完成Graph查證的學員說明：時間線依小說第1回與第21回排先後，不是歷史年份，間距不代表時間長短。用prompts.md加分提示詞，不要求全班完成。其餘學員繼續核對Graph，55分鐘一同收尾。",
   "55:00–55:30。快速回看三種檔案：來源、核對後草稿、HTML圖。來源與整理分開保存，以便之後修正。不要逐題再討論，留時間給下一頁的教學轉用。",
   "55:30–58:30。3分鐘兩人分享。各選一份自己能使用的教材，說出要整理的關係及查證來源。AI先列關係與排圖，教師確認內容和教學適用性。",
@@ -929,7 +932,7 @@ export const notes: (string | undefined)[] = [
   "我是黃懷萱，中央大學碩士，研究 NLP、LLM 和 RAG；現在在關貿網路做智慧客服，參與 EZ WAY、eHub、TTLL 等服務。今天用大家聽過的三國人物，實際試一次 Agent 如何讀筆記、核對並畫圖。",
   "課前預留15–20分鐘，不含帳號或網路問題排除。教學單位先確認帳號、網路和資料使用規範。當天若尚未完成就用備用方式或與同伴共用已準備環境。技術指令以課前文件及工具官方說明為準。",
   '事前準備已經讓終端機停在課程資料夾的最上層，也就是 AI-workshop-slides（ZIP 版叫 AI-workshop-slides-main）。在這裡輸入 cd examples/teacher-learning-lab，走進練習資料夾，再輸入 codex 叫醒它。第一次啟動依畫面登入 ChatGPT 帳號。',
-  '暖身 2：交辦更多事之前，輸入 /status 查環境。框起來的兩行最重要：Directory 是它在哪工作，Permissions 是它能做哪些事、要不要先問你。右邊表格是每個欄位的白話；最下面的額度，等練習 1 做完再一起看。',
+  '暖身 2：交辦更多事之前，輸入 /status 查環境。框起來的兩行最重要：Directory 是它在哪工作，Permissions 是它能做哪些事、要不要先問你。右邊表格供課前及課後查詢，主線只確認工作位置與操作權限。',
   '練習 3：裝上 diagram-design 這張食譜。依官方說明加入 marketplace 並安裝 plugin，再開一個新的 Codex Session，新的 Session 才讀得到它。官方來源：https://github.com/cathrynlavery/diagram-design',
   "課後延伸，60分鐘主線不講。MCP是一種連接AI應用與外部工具、資料的協定；Skill是工作說明，兩者功能不同並非步驟先後。"
 ];
