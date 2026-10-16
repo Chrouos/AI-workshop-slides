@@ -371,7 +371,7 @@ const StoryStart: Page = () => (
     <div style={{ display: 'grid', gridTemplateColumns: '940px 1fr', gap: 50, marginTop: 48, alignItems: 'center' }}>
       <div><img src={peachGarden} alt="桃園結義想像插畫：劉備、關羽、張飛在桃樹下舉杯" style={{ width: 940, height: 510, objectFit: 'cover', display: 'block' }} /><div style={{ fontSize: 23, color: quiet, marginTop: 14 }}>《三國演義》桃園結義｜AI 生成的情境插畫</div></div>
       <div style={{ display: 'grid', gap: 34 }}>
-        <div style={{ fontSize: 40, lineHeight: 1.5 }}>劉備跟哪些人有關？<br />是在哪一段故事裡？</div>
+        <div style={{ fontSize: 40, lineHeight: 1.5 }}>劉備跟哪些人有關？<br />劉備參與哪些戰役？</div>
         <div style={{ borderTop: `2px solid ${amber}`, paddingTop: 28, fontSize: 34, lineHeight: 1.6, color: muted }}>請 AI 讀筆記、整理關係、畫成圖</div>
         <Steps><Step duration={STEP_MS}><div style={{ fontSize: 36, lineHeight: 1.5, color: amber }}>但圖上的每一條線，<br />真的都有根據嗎？</div></Step></Steps>
       </div>
@@ -403,10 +403,10 @@ const LargeStoryGraph = ({ height = 480 }: { height?: number }) => (
 const ResultFirst: Page = () => (
   <Shell>
     <Eyebrow>先看今天的成果</Eyebrow>
-    <Heading>人物是節點，關係是線</Heading>
-    <div style={{ marginTop: 26 }}><Lead>每個人物各寫一份筆記，透過事件把他們串起來</Lead></div>
+    <Heading>知識圖</Heading>
+    <div style={{ marginTop: 26 }}><Lead>人物是節點，用線連接起來</Lead></div>
     <div style={{ marginTop: 38 }}><LargeStoryGraph /></div>
-    <p style={{ fontSize: 28, color: muted, marginTop: 26 }}>這堂課先做可查證的知識圖；下一篇用 Obsidian 保存、連結並擴充這些筆記</p>
+    <p style={{ fontSize: 28, color: muted, marginTop: 26 }}>每個內容都是一份筆記，都是可查證的資料，重點是要讓 AI 可以遵循這些線路去尋找相關資訊</p>
   </Shell>
 );
 
@@ -415,15 +415,15 @@ const ResultFirst: Page = () => (
 const WrongAnswer: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>你想知道故事裡有哪些人物</Eyebrow>
-    <Heading>你問桃園結義，AI 卻把曹操也算進來</Heading>
+    <Heading>如果沒有參考資料呢？幻覺</Heading>
     <div style={{ marginTop: 40, display: 'grid', gap: 22 }}>
       <div style={{ display: 'grid', gridTemplateColumns: '165px 1fr', gap: 24, alignItems: 'center', padding: '24px 32px', background: surface }}><SmallLabel>你問</SmallLabel><div style={{ fontSize: 38 }}>「《三國演義》裡，桃園結義有哪些人？」</div></div>
       <Steps>
-        <Step duration={STEP_MS}><div style={{ display: 'grid', gridTemplateColumns: '165px 1fr', gap: 24, alignItems: 'start', padding: '24px 32px', background: '#FFFFFF', border: `1px solid ${rule}` }}><SmallLabel>AI 回答</SmallLabel><div><div style={{ fontSize: 37, lineHeight: 1.5 }}>「劉備、關羽、張飛，還有曹操」</div><div style={{ marginTop: 12, fontSize: 24, color: quiet }}>教學用的錯誤回答示意</div></div></div></Step>
-        <Step duration={STEP_MS}><div style={{ marginTop: 24, padding: '24px 32px', borderLeft: `4px solid ${amber}`, background: amberSoft }}><div style={{ fontSize: 34 }}>故事裡結義的是劉備、關羽、張飛，沒有曹操</div><div style={{ marginTop: 18, fontSize: 31, color: muted, lineHeight: 1.5 }}><strong style={{ color: amber }}>AI 幻覺（Hallucination）</strong><br />AI 把錯誤或沒有根據的內容，當成事實說出來</div></div></Step>
+        <Step duration={STEP_MS}><div style={{ display: 'grid', gridTemplateColumns: '165px 1fr', gap: 24, alignItems: 'start', padding: '24px 32px', background: '#FFFFFF', border: `1px solid ${rule}` }}><SmallLabel>AI 回答</SmallLabel><div><div style={{ fontSize: 37, lineHeight: 1.5 }}>「劉備、關羽、張飛，還有曹操」</div><div style={{ marginTop: 12, fontSize: 24, color: quiet }}>教學示範用，錯誤的</div></div></div></Step>
+        <Step duration={STEP_MS}><div style={{ marginTop: 24, padding: '24px 32px', borderLeft: `4px solid ${amber}`, background: amberSoft }}><div style={{ fontSize: 34 }}>故事裡結義的是劉備、關羽、張飛，沒有曹操</div><div style={{ marginTop: 18, fontSize: 31, color: muted, lineHeight: 1.5 }}><strong style={{ color: amber, fontWeight: '700' }}>AI 幻覺（Hallucination）</strong><br />AI 把錯誤或沒有根據的內容，當成事實說出來</div></div></Step>
       </Steps>
     </div>
-    <Steps><Step duration={STEP_MS}><div style={{ marginTop: 28, fontSize: 33, color: amber }}>如果先讓它找到故事原文，再回答呢？</div></Step></Steps>
+    <Steps><Step duration={STEP_MS}><div style={{ marginTop: 28, fontSize: 33, color: amber }}>如果先讓它找到故事內容後，用這個當作參考資料，再回答呢？</div></Step></Steps>
   </Shell>
 );
 
@@ -431,17 +431,29 @@ const RagFlow: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>給 AI 可以參考的資料</Eyebrow>
     <Heading>RAG：先找資料，再回答問題</Heading>
-    <div style={{ marginTop: 26 }}><Lead>讓 AI 先參考筆記，回答時有資料可依循</Lead></div>
-    <div style={{ marginTop: 38, padding: '22px 30px', background: surface, fontSize: 35 }}>問題：桃園結義有哪些人？</div>
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', columnGap: 52, marginTop: 38 }}>
+    <div style={{ marginTop: 26, translate: '0px 51.66px' }}><Lead>讓 AI 先參考筆記，回答時有資料可依循</Lead></div>
+    <div style={{ marginTop: 38, padding: '22px 30px', background: surface, fontSize: 35, translate: '0px 51.66px' }}>問題：桃園結義有哪些人？</div>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', columnGap: 52, marginTop: 38, translate: '0px 51.66px' }}>
       <Steps>
-        <StepPanel number="1" title="找資料" detail="找到〈桃園結義〉筆記" tint={surface} />
-        <Step duration={STEP_MS}><ArrowCell gap={52}><StepPanel number="2" title="交給 AI" detail="問題＋相關筆記" tint={amberSoft} /></ArrowCell></Step>
-        <Step duration={STEP_MS}><ArrowCell gap={52}><StepPanel number="3" title="產生回答" detail="劉備、關羽、張飛" tint={sage} /></ArrowCell></Step>
+        <div style={{ background: surface, borderTop: `3px solid ${rule}`, padding: '32px 34px', minHeight: 192, boxSizing: 'border-box' }}>
+          <span style={{ color: 'var(--osd-accent)', fontSize: 25, fontWeight: 600, letterSpacing: '0.07em' }}>1</span>
+          <div style={{ fontSize: 40, fontWeight: 600, marginTop: 18, lineHeight: 1.3 }}>找資料</div>
+          <div style={{ fontSize: 27, color: muted, lineHeight: 1.45, marginTop: 13 }}>找到〈桃園結義〉故事{''}{''}</div>
+        </div>
+        <Step duration={STEP_MS}><ArrowCell gap={52}><div style={{ background: amberSoft, borderTop: `3px solid ${rule}`, padding: '32px 34px', minHeight: 192, boxSizing: 'border-box' }}>
+          <span style={{ color: 'var(--osd-accent)', fontSize: 25, fontWeight: 600, letterSpacing: '0.07em' }}>2</span>
+          <div style={{ fontSize: 40, fontWeight: 600, marginTop: 18, lineHeight: 1.3 }}>交給 AI</div>
+          <div style={{ fontSize: 27, color: muted, lineHeight: 1.45, marginTop: 13 }}>問題＋相關筆記</div>
+        </div></ArrowCell></Step>
+        <Step duration={STEP_MS}><ArrowCell gap={52}><div style={{ background: sage, borderTop: `3px solid ${rule}`, padding: '32px 34px', minHeight: 192, boxSizing: 'border-box' }}>
+          <span style={{ color: 'var(--osd-accent)', fontSize: 25, fontWeight: 600, letterSpacing: '0.07em' }}>3</span>
+          <div style={{ fontSize: 40, fontWeight: 600, marginTop: 18, lineHeight: 1.3 }}>產生回答</div>
+          <div style={{ fontSize: 27, color: muted, lineHeight: 1.45, marginTop: 13 }}>劉備、關羽、張飛</div>
+        </div></ArrowCell></Step>
       </Steps>
     </div>
-    <p style={{ marginTop: 46, fontSize: 32, color: amber }}>有資料不代表一定正確，仍然需要查證</p>
-    <div style={{ marginTop: 28, fontSize: 24, color: quiet }}>RAG = Retrieval-Augmented Generation（檢索增強生成）</div>
+    <p style={{ marginTop: 46, fontSize: 32, color: amber, translate: '0px 51.66px' }}>有資料不代表一定正確，仍然可能因為資料太多導致注意力下降，仍需要查證<br />但相較於毫無資料參考而言，準確率會上升很多</p>
+    <div style={{ marginTop: 28, fontSize: 24, color: quiet, translate: '0px -630.72px' }}>RAG = Retrieval-Augmented Generation（檢索增強生成）</div>
   </Shell>
 );
 
@@ -827,16 +839,81 @@ const ExitTicket: Page = () => (
   </Shell>
 );
 
+// Three small maps, one per subject. Each marks one line with "?" — the line the
+// audience would check against the textbook.
+const MiniMap = ({ label, caption, alt, children }: { label: string; caption: string; alt: string; children: React.ReactNode }) => (
+  <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '26px 28px 24px', boxSizing: 'border-box' }}>
+    <SmallLabel>{label}</SmallLabel>
+    <svg viewBox="0 0 464 200" style={{ display: 'block', width: 464, height: 200, marginTop: 14 }} role="img" aria-label={alt}>{children}</svg>
+    <div style={{ fontSize: 29, lineHeight: 1.4, marginTop: 10 }}>{caption}</div>
+  </div>
+);
+
+const MapPerson = ({ x, y, name }: { x: number; y: number; name: string }) => (
+  <g><circle cx={x} cy={y} r="48" fill={amberSoft} stroke={amber} strokeWidth="2" /><text x={x} y={y + 11} textAnchor="middle" fontSize="30" fill="#1C1917">{name}</text></g>
+);
+
+const MapBox = ({ x, y, w = 120, label, fill = surface, stroke = rule }: { x: number; y: number; w?: number; label: string; fill?: string; stroke?: string }) => (
+  <g><rect x={x} y={y} width={w} height="60" fill={fill} stroke={stroke} strokeWidth="2" /><text x={x + w / 2} y={y + 41} textAnchor="middle" fontSize="30" fill="#1C1917">{label}</text></g>
+);
+
+const MapArrow = ({ x1, x2, y, hot = false }: { x1: number; x2: number; y: number; hot?: boolean }) => (
+  <g fill={hot ? amber : faint} stroke={hot ? amber : faint}><line x1={x1} y1={y} x2={x2 - 12} y2={y} strokeWidth={hot ? 4 : 3} /><polygon points={`${x2},${y} ${x2 - 14},${y - 8} ${x2 - 14},${y + 8}`} strokeWidth="0" /></g>
+);
+
+const AskMark = ({ x, y }: { x: number; y: number }) => (
+  <g><circle cx={x} cy={y} r="18" fill={amber} /><text x={x} y={y + 9} textAnchor="middle" fontSize="26" fontWeight="700" fill="#FFFFFF">?</text></g>
+);
+
 const TeacherTransfer: Page = () => (
   <Shell>
     <Eyebrow>換成你的教材，也能這樣讀</Eyebrow>
     <Heading>今天找人物關係，明天找課本概念</Heading>
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, marginTop: 70 }}>
-      <StepPanel number="國文｜三國故事" title="人物 × 事件" detail="劉備 → 桃園結義 → 關羽" tint={amberSoft} />
-      <StepPanel number="歷史｜一個單元" title="事件 × 先後" detail="從課文整理事件的前因後果" tint={surface} />
-      <StepPanel number="自然｜課本概念" title="概念 × 關係" detail="從課文整理食物鏈與能量流動" tint={sage} />
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, marginTop: 52 }}>
+      <Steps>
+        <MiniMap label="國文｜三國故事" caption="人物和事件怎麼連起來" alt="劉備和關羽都連到桃園結義，關羽那條線打上問號">
+          <path d="M100 86 L196 136" stroke={faint} strokeWidth="3" />
+          <path d="M364 86 L268 136" stroke={amber} strokeWidth="4" />
+          <MapPerson x={70} y={52} name="劉備" />
+          <MapPerson x={394} y={52} name="關羽" />
+          <MapBox x={152} y={136} w={160} label="桃園結義" fill={sage} stroke={okGreen} />
+          <AskMark x={316} y={111} />
+        </MiniMap>
+        <Step duration={STEP_MS}>
+          <MiniMap label="歷史｜一個單元" caption="事件的前因後果" alt="原因、事件、結果三格相連，事件到結果的箭頭打上問號">
+            <MapBox x={0} y={96} label="原因" />
+            <MapBox x={172} y={96} label="事件" fill={amberSoft} stroke={amber} />
+            <MapBox x={344} y={96} label="結果" />
+            <MapArrow x1={124} x2={168} y={126} />
+            <MapArrow x1={296} x2={340} y={126} hot />
+            <AskMark x={318} y={70} />
+          </MiniMap>
+        </Step>
+        <Step duration={STEP_MS}>
+          <MiniMap label="自然｜課本概念" caption="誰吃誰，能量往哪裡走" alt="草、兔子、老鷹的食物鏈，兔子到老鷹的箭頭打上問號">
+            <MapBox x={0} y={96} label="草" fill={sage} stroke={okGreen} />
+            <MapBox x={172} y={96} label="兔子" fill={sage} stroke={okGreen} />
+            <MapBox x={344} y={96} label="老鷹" fill={sage} stroke={okGreen} />
+            <MapArrow x1={124} x2={168} y={126} />
+            <MapArrow x1={296} x2={340} y={126} hot />
+            <AskMark x={318} y={70} />
+          </MiniMap>
+        </Step>
+      </Steps>
     </div>
-    <div style={{ marginTop: 60, fontSize: 38, lineHeight: 1.6 }}>換一份教材，保留同一個問題：<br /><strong style={{ color: amber }}>圖上的這條關係，課文哪一句有寫？</strong></div>
+    <Steps>
+      <Step duration={STEP_MS}>
+        <div>
+          <svg viewBox="0 0 1632 64" style={{ display: 'block', width: 1632, height: 64 }} aria-hidden="true">
+            <g fill="none" stroke={amber} strokeWidth="3" strokeDasharray="8 8"><path d="M260 0 C260 40 700 30 760 64" /><path d="M816 0 V64" /><path d="M1372 0 C1372 40 932 30 872 64" /></g>
+          </svg>
+          <div style={{ width: 1040, margin: '0 auto', boxSizing: 'border-box', border: `2px solid ${amber}`, background: amberSoft, padding: '22px 40px', textAlign: 'center' }}>
+            <div style={{ fontSize: 28, color: muted }}>圖長得不一樣，問的是同一件事</div>
+            <div style={{ fontSize: 44, lineHeight: 1.35, color: amber, fontWeight: 600, marginTop: 6 }}>圖上的這條關係，課文哪一句有寫？</div>
+          </div>
+        </div>
+      </Step>
+    </Steps>
   </Shell>
 );
 
@@ -908,7 +985,7 @@ export const notes: (string | undefined)[] = [
   "1:20–2:00。先出現劉備；點一下依序出現其他人物，再點一下接到桃園結義，最後接上煮酒論英雄。每個人物都可以寫成獨立筆記；線要寫清楚是什麼關係。劉備只畫一次，兩段故事接在同一個節點。這堂課成果是可核對的圖，不是已經建好完整知識庫。採用使用者註解中的節點與線說法。",
   "2:00–3:10。延續上一頁的圖，先問一個具體問題：桃園結義有哪些人？點一下出現教學用錯答，先請大家找出多了誰。下一次點擊才指出故事沒有曹操，再命名：AI把錯誤或無根據內容當成事實說出來，這叫幻覺。這是示意，不是實際模型測試。最後問：如果先找到原文再回答呢？轉到下一頁RAG。小說來源：https://zh.wikisource.org/wiki/三國演義/第001回",
   "3:10–4:10。只講核心：同樣問桃園有哪些人，先找到筆記，再把問題和相關筆記交給AI，產生回答。分兩次揭示，不逐字解釋英文。像拿著課文作答，可能降低無根據回答，但仍要核對來源。本課Codex讀本機筆記，是示範類似RAG的先取得資料再回答概念，不是建置完整RAG系統。全名供課後查閱，不考術語。來源：https://arxiv.org/abs/2005.11401 、https://arxiv.org/abs/2312.10997",
-  "4:10–4:40。把剛才先找資料再回答的方法帶回課堂：歷史可整理事件，國文可整理人物，自然可整理概念。來源換成授權教材，仍問圖上的關係課文哪句有寫。先想一份自己的教材，最後再分享。",
+  "4:10–4:40。把剛才先找資料再回答的方法帶回課堂。國文畫人物和事件；按一下，歷史畫前因後果；再按一下，自然畫草、兔子、老鷹的食物鏈。三張圖長得不一樣，再按一下，問的是同一件事：打問號的這條線，課文哪一句有寫？來源換成有授權的教材。先想一份自己的教材，最後再分享。",
   "4:40–5:00。只說大方向：前8分鐘看故事與概念，8到20分讀筆記，20到35分查證，35到55分完成知識圖，最後5分鐘教學轉用。接著用30秒口頭說明：ChatGPT可上傳筆記討論，今天用Codex直接讀練習資料夾並交出圖檔；不再展示比較表。",
   "5:30–6:00。30秒提醒：今天只用已備好的三國筆記。換成自己的教材前，學生個資、未公開試題、敏感文件須依校方規範確認能否給這個工具；刪姓名不一定無法識別。UNESCO指引：https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research?hub=387",
   "6:00–8:00。只示範Directory工作位置和Permissions操作權限，不講Session。請大家立刻打開練習資料夾與prompts.md，8分鐘時開始第一個練習區段。需要時/status查看工作位置。課前未完成設定，直接用ChatGPT上傳六份筆記或與同伴共用，避免等待安裝。",
