@@ -92,6 +92,14 @@ diagram-design 於課前安裝。若沒有這個 Skill，移除下方「使用 d
 來源連結指向 ../notes/ 裡的筆記；不要修改來源檔。
 ```
 
+### 開啟成果與來源
+
+1. 先確認 Agent 已完成寫入，請它列出 `diagrams/三國故事.html` 的完整路徑；只有對話中的程式碼還不算存好
+2. 在 Finder（macOS）或檔案總管（Windows）進入 `teacher-learning-lab/diagrams`，把 `三國故事.html` 拖進瀏覽器
+3. 用文字編輯器打開 `notes/` 對應的 `.md` 筆記，對照來源原句；若瀏覽器點來源後只下載檔案，直接開原本的本機筆記核對
+
+這是本機 HTML，不需要啟動伺服器或另外開 PORT。使用 ChatGPT 備用方式時，先下載 HTML 到 `diagrams/` 再開啟。
+
 ### 開圖後，再核對一次
 
 ```text

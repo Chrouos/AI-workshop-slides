@@ -699,7 +699,7 @@ const DiagramTask: Page = () => (
         <div style={{ fontSize: 28, lineHeight: 1.6, marginTop: 16 }}>先提出設計，確認後存成 diagrams/三國故事.html；保留原始筆記。</div>
       </PromptBox>
     </div>
-    <div style={{ marginTop: 32, background: sage, padding: '20px 28px', fontSize: 29, lineHeight: 1.5 }}><strong>完成檢查：</strong>能開啟 HTML，四個人物、兩個事件，每條線都找得到依據</div>
+    <div style={{ marginTop: 32, background: sage, padding: '20px 28px', fontSize: 29, lineHeight: 1.5 }}><strong>開啟成果：</strong>確認已寫入，再到 Finder／檔案總管找到 diagrams/三國故事.html，拖進瀏覽器</div>
     <p style={{ fontSize: 28, color: muted, marginTop: 22 }}>加分：Graph 核對完成後，再依小說回目加入 Timeline</p>
   </Shell>
 );
@@ -713,7 +713,7 @@ const DiagramCheck: Page = () => (
       <div><div style={{ fontSize: 31, fontWeight: 600 }}>劉備 → 煮酒論英雄</div><div style={{ fontSize: 27, marginTop: 12 }}>線的意思：參與對話</div></div>
       <div><div style={{ fontSize: 25, color: muted }}>來源：notes/煮酒論英雄.md｜第 21 回</div><div style={{ fontSize: 28, lineHeight: 1.5, marginTop: 10 }}>「曹操與劉備在煮酒論英雄的情節中談論誰是英雄」</div></div>
     </div>
-    <p style={{ fontSize: 27, color: muted, marginTop: 18 }}>示範核對一條線；你的 HTML 中，每條線都要有關係名稱、來源與原句</p>
+    <p style={{ fontSize: 27, color: muted, marginTop: 18 }}>開圖：HTML 拖進瀏覽器｜查證：用文字編輯器打開來源 .md，每條線都照此核對</p>
   </Shell>
 );
 
@@ -921,8 +921,8 @@ export const notes: (string | undefined)[] = [
   "26:00–34:00。練習8分鐘：開自己的筆記，逐條對照，不只請AI自我檢查。兩人談論英雄有原句支持；盟友沒有。可保留在待確認區，但不能當成已確認連線。每人指出一條支持句與一個不能從句子推得的結論。確認後存outputs/煮酒論英雄-ascii.md，notes來源保留。",
   "34:00–35:00。一分鐘收束：支持就保留，資料不足標待確認，原文明確不符就修正。盟友不是被這份筆記證明錯誤，而是沒有足夠依據。這個區分比只找明顯錯字更接近日常AI使用。下一步只把已支持關係畫成實線。",
   "35:00–36:00。Skill就是事先寫好的工作說明。今天用課前已備好的diagram-design；不用現場逐條重新教AI排版。沒有此Skill時，照prompts.md的標準HTML指示也能練習，教師不要花課堂時間排除安裝問題。MCP留附錄，不在本段引入。",
-  "36:00–48:00。12分鐘只做必做Graph：四人物兩事件、每條線有來源，存單檔HTML並開啟。使用prompts.md練習3必做段，課前已有diagram-design可用；沒有則沿用一般HTML指示。先提出設計，確認後寫入。不要同時要求Timeline，先確保每個人完成最重要的關係圖。",
-  "48:00–55:00。留7分鐘開啟、查證與修圖。對每條線問：表示什麼、哪句支持？每人至少展示一條來源，依綠色查證卡示範完整說出人物、事件、線的意思、檔名和原句。劉備只出現一次，不能多連曹操到桃園，也不能把共同對話改成盟友。已完成核對者才看下一頁加分；其他人繼續Graph。這7分鐘不因展示加分頁而提早結束。",
+  "36:00–48:00。12分鐘只做必做Graph：四人物兩事件、每條線有來源，存單檔HTML。確認Agent已寫入，在Finder／檔案總管找到diagrams/三國故事.html，拖進瀏覽器開啟。使用prompts.md練習3必做段，課前已有diagram-design可用；沒有則沿用一般HTML指示。先提出設計，確認後寫入。不要同時要求Timeline，先確保每個人完成最重要的關係圖。",
+  "48:00–55:00。留7分鐘開啟、查證與修圖。用文字編輯器打開notes/對應來源筆記，再對每條線問：表示什麼、哪句支持？若瀏覽器點來源後只下載檔案，直接開原本的本機筆記核對。每人至少展示一條來源，依綠色查證卡示範完整說出人物、事件、線的意思、檔名和原句。劉備只出現一次，不能多連曹操到桃園，也不能把共同對話改成盟友。已完成核對者才看下一頁加分；其他人繼續Graph。這7分鐘不因展示加分頁而提早結束。",
   "48:00–55:00同時段的加分選做，不另占時間。只對已完成Graph查證的學員說明：時間線依小說第1回與第21回排先後，不是歷史年份，間距不代表時間長短。用prompts.md加分提示詞，不要求全班完成。其餘學員繼續核對Graph，55分鐘一同收尾。",
   "55:00–55:30。快速回看三種檔案：來源、核對後草稿、HTML圖。來源與整理分開保存，以便之後修正。不要逐題再討論，留時間給下一頁的教學轉用。",
   "55:30–58:30。3分鐘兩人分享。各選一份自己能使用的教材，說出要整理的關係及查證來源。AI先列關係與排圖，教師確認內容和教學適用性。",
