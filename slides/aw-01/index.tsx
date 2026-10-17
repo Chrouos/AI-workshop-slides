@@ -137,6 +137,7 @@ const warn = '#9B4A3C';
 const warnSoft = '#F3E1DC';
 const link = '#7654C7'; // Obsidian's internal-link purple
 const linkSoft = '#EEE7F2';
+const linkPale = '#B9A6E3'; // Obsidian's fainter purple for a link with no card yet
 const term = '#1F2226';
 const mono = '"Source Code Pro", Consolas, Menlo, monospace';
 const display = 'var(--osd-font-display)';
@@ -450,7 +451,7 @@ const Bubble = ({ x, y, w, h, fill = '#FFFFFF', stroke = rule }: { x: number; y:
 const Cover: Page = () => (
   <Shell top={174}>
     <In i={0}><Eyebrow>AI WORKSHOP｜第 1 堂（共 4 堂）</Eyebrow></In>
-    <In i={1} style={{ marginTop: 62 }}><Title>{'認識 AI\n學會用 Codex'}</Title></In>
+    <In i={1} style={{ marginTop: 62 }}><Title>{'GPT 是什麼'}</Title></In>
     <In i={2} style={{ marginTop: 40, fontSize: 35, color: muted }}>從文字接龍，到寫好一份三國大綱</In>
     <In i={3} style={{ width: 160, height: 5, background: amber, marginTop: 72 }}><span /></In>
     <div style={{ position: 'absolute', right: 144, bottom: 170 }}>
@@ -510,7 +511,7 @@ const LessonStop = ({ x, n, name, sub, today = false, children }: { x: number; n
 const CourseMap: Page = () => (
   <Shell>
     <Eyebrow>課程地圖｜四堂課只做一件作品</Eyebrow>
-    <Heading>四堂課，做一座三國知識庫</Heading>
+    <Heading>四堂課，做一份知識庫</Heading>
     <Fit>
       <Figure h={470} label="第 1 堂大綱、第 2 堂筆記庫、第 3 堂時間軸、第 4 堂網站">
         <InG i={0}>
@@ -636,7 +637,16 @@ const SectionPage = ({ chapter, label, lead }: { chapter: Chapter; label: string
 
 // ---------- 01 GPT 怎麼走到今天 ----------
 
-const Section1: Page = () => <SectionPage chapter={1} label="01 / GPT" lead="它怎麼寫出一段話，又為什麼會寫錯" />;
+const Section1: Page = () => (
+  <Shell top={192} chapter={1} enterChapter>
+    <In i={0}><Eyebrow>01 / GPT</Eyebrow></In>
+    <In i={1} style={{ marginTop: 63 }}><Title>GPT 怎麼走到今天</Title></In>
+    <In i={2} style={{ fontSize: 36, lineHeight: 1.5, color: muted, marginTop: 30, maxWidth: 1500 }}>
+      和以前的 AI 有什麼不同？他是怎麼寫出一段話？要怎麼用
+    </In>
+    <div style={{ marginTop: 96 }}><ChapterTrack chapter={1} /></div>
+  </Shell>
+);
 
 // One link of the chain: a circle with an icon, a name, and what it means.
 const ChainNode = ({ x, kind, label, sub, tone }: { x: number; kind: IconKind; label: string; sub: string; tone: 'plain' | 'warn' | 'blue' | 'amber' }) => {
@@ -864,7 +874,7 @@ const Randomness: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>隨機性｜Temperature</Eyebrow>
     <Heading>隨機性：機率高的不一定中</Heading>
-    <Lead>像擲一顆灌了鉛的骰子</Lead>
+    <Lead>像轉一個大小不均的轉盤</Lead>
     <Fit>
       <Stage h={520}>
         <Steps>
@@ -992,9 +1002,12 @@ const WhyHallucinate: Page = () => (
             <InG i={1}><MapArrow x1={266} x2={344} y={180} /></InG>
             <InG i={2}>
               <PipeBox x={470} label="機率表">
-                <rect x="380" y="120" width="160" height="30" fill={amber} />
-                <rect x="380" y="166" width="70" height="30" fill={rule} />
-                <rect x="380" y="212" width="40" height="30" fill={rule} />
+                <text x="372" y="146" fontSize="26" fontWeight="600" fill={amber}>好</text>
+                <rect x="410" y="122" width="150" height="30" fill={amber} />
+                <text x="372" y="192" fontSize="26" fill={muted}>熱</text>
+                <rect x="410" y="168" width="64" height="30" fill={rule} />
+                <text x="372" y="238" fontSize="26" fill={muted}>冷</text>
+                <rect x="410" y="214" width="36" height="30" fill={rule} />
               </PipeBox>
             </InG>
           </Layer>
@@ -1086,7 +1099,7 @@ const WebSearch: Page = () => (
         <div>
           <In i={0}>
             <Screenshot src={webSearch} aspect={1586 / 484} width={1100} alt="ChatGPT 回答台灣新聞前，先搜尋中央社和路透社兩個網站">
-              <RegionMark n={1} i={2} x={7.5} y={51} w={36} h={28} />
+              <RegionMark n={1} i={2} x={7.5} y={51} w={36} h={28} badge="right" />
             </Screenshot>
           </In>
           <Steps>
@@ -1317,7 +1330,7 @@ const AgentPage: Page = () => (
             <InG i={0}>
               <circle cx="110" cy="250" r="70" fill={surface} stroke={rule} strokeWidth="2" />
               <text x="110" y="262" textAnchor="middle" fontSize="38" fontWeight="600" fill={ink}>你</text>
-              <text x="110" y="364" textAnchor="middle" fontSize="28" fill={muted}>交代任務</text>
+              <text x="110" y="156" textAnchor="middle" fontSize="28" fill={muted}>交代任務</text>
             </InG>
             <InG i={1}><MapArrow x1={186} x2={370} y={250} hot /></InG>
             <InG i={2}><LoopNode x={446} y={250} kind="chat" label="理解任務" ly={360} /></InG>
@@ -1332,7 +1345,7 @@ const AgentPage: Page = () => (
             <g className="aw1-build" style={buildDelay(3)}><LoopNode x={1186} y={250} kind="tool" label="用工具" ly={360} /></g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={500} label="存好檔案，回報給你">
-            <g fill="none" stroke={amber} strokeWidth="4"><StepPath d="M1146 300 Q1080 430 892 432" /><StepPath d="M740 440 Q300 500 140 330" i={2} /></g>
+            <g fill="none" stroke={amber} strokeWidth="4"><StepPath d="M1146 300 Q1080 430 892 432" /><StepPath d="M740 440 Q260 520 110 326" i={2} /></g>
             <g className="aw1-build" style={buildDelay(1)}><LoopNode x={816} y={432} kind="save" label="存檔回報" ly={530} /></g>
           </Layer></Step>
         </Steps>
@@ -1402,7 +1415,7 @@ const LaneStep = ({ kind, text, hot = false, you = false }: { kind: IconKind; te
   <div style={{ width: 236, height: 150, boxSizing: 'border-box', background: hot ? amberSoft : '#FFFFFF', border: `2px solid ${hot ? amber : rule}`, display: 'grid', justifyItems: 'center', alignContent: 'center', gap: 12, position: 'relative' }}>
     <Icon kind={kind} size={56} color={hot ? amber : muted} />
     <span style={{ fontSize: 28, fontWeight: 600 }}>{text}</span>
-    {you ? <span style={{ position: 'absolute', top: -16, right: -12, background: warn, color: '#FFFFFF', fontSize: 22, fontWeight: 600, padding: '2px 10px' }}>你做</span> : null}
+    {you ? <span style={{ position: 'absolute', top: 8, right: 8, background: warn, color: '#FFFFFF', fontSize: 22, fontWeight: 600, padding: '2px 10px' }}>你做</span> : null}
   </div>
 );
 
@@ -1563,6 +1576,8 @@ const Practice1Check: Page = () => (
             <div style={{ display: 'flex', gap: 12 }}>
               <CharTile c="今" /><CharTile c="天" /><CharTile c="下" /><CharTile c="英" /><CharTile c="雄" /><CharTile c="，" /><CharTile c="唯" bad /><CharTile c="使" /><CharTile c="君" /><CharTile c="與" /><CharTile c="操" /><CharTile c="耳" />
             </div>
+            <span />
+            <div style={{ marginTop: 14, marginLeft: 6 * 104, fontSize: 28, fontWeight: 600, color: warn }}>↑ 原文是「惟」，這裡寫成「唯」</div>
             </div>
           </Step>
         </Steps>
@@ -1721,7 +1736,7 @@ const StartScreen: Page = () => (
             <RowMark top={202} height={46} width={960} />
             <RowMark top={355} height={46} width={500} />
           </Shot>
-          <Caption>教材範例｜帳號與即時額度已隱藏</Caption>
+          <Caption>教材範例｜路徑是講師的另一個資料夾，你的會是 aw-01-lab</Caption>
         </In>
         <div style={{ display: 'grid', gap: 40 }}>
           <Steps>
@@ -1789,7 +1804,7 @@ const StatusPage: Page = () => (
             <RowMark top={125} width={768} />
             <RowMark top={259} width={768} />
           </Shot>
-          <Caption>教材範例｜帳號與即時額度已隱藏</Caption>
+          <Caption>教材範例｜你的 Directory 會是自己的資料夾</Caption>
         </In>
         <div>
           <div style={{ borderTop: `3px solid ${rule}` }}>
@@ -2034,7 +2049,7 @@ const OpenLab: Page = () => (
       <div style={{ display: 'grid', gridTemplateColumns: '1060px 1fr', gap: 56, alignItems: 'center' }}>
         <In i={0}>
           <Terminal title="終端機（示意，路徑依電腦而定）" size={30}>
-            <Typed>$</Typed>{' cd '}<Dim>{'〔把 aw-01-lab 拖進來〕\n'}</Dim>
+            <Typed>$</Typed>{' cd '}<Dim>{'〔打空格，再把 aw-01-lab 資料夾拖進來〕\n'}</Dim>
             <Steps>
               <Step duration={STEP_MS}><div><Typed>$</Typed>{' codex'}</div></Step>
               <Step duration={STEP_MS}><div><AskLine>{'› /status'}</AskLine></div></Step>
@@ -2265,8 +2280,8 @@ const Recap: Page = () => (
 
 const GraphNode = ({ x, y, name, empty = false }: { x: number; y: number; name: string; empty?: boolean }) => (
   <g>
-    <circle cx={x} cy={y} r="40" fill={empty ? '#FFFFFF' : linkSoft} stroke={empty ? faint : link} strokeWidth="3" strokeDasharray={empty ? '7 6' : undefined} />
-    <text x={x} y={y + 10} textAnchor="middle" fontSize="27" fill={empty ? quiet : link}>{name}</text>
+    <circle cx={x} cy={y} r="40" fill={empty ? '#FFFFFF' : linkSoft} stroke={empty ? linkPale : link} strokeWidth="3" strokeDasharray={empty ? '7 6' : undefined} />
+    <text x={x} y={y + 10} textAnchor="middle" fontSize="27" fill={empty ? linkPale : link}>{name}</text>
   </g>
 );
 
@@ -2294,22 +2309,25 @@ const NextLesson: Page = () => (
             <text x="590" y="58" fontSize="28" fontWeight="600" fill={ink}>Obsidian 筆記庫</text>
             <g stroke={link} strokeWidth="3">
               <line x1="1060" y1="230" x2="840" y2="130" /><line x1="1060" y1="230" x2="820" y2="320" />
-              <line x1="1060" y1="230" x2="990" y2="370" /><line x1="1060" y1="230" x2="1290" y2="110" />
-              <line x1="1060" y1="230" x2="1320" y2="300" />
+              <line x1="1060" y1="230" x2="990" y2="370" /><line x1="1060" y1="230" x2="1290" y2="100" />
+              <line x1="1060" y1="230" x2="1250" y2="360" />
             </g>
             <circle cx="1060" cy="230" r="52" fill={amberSoft} stroke={amber} strokeWidth="3" />
             <text x="1060" y="240" textAnchor="middle" fontSize="28" fontWeight="600" fill={ink}>大綱</text>
             <GraphNode x={840} y={130} name="劉備" />
             <GraphNode x={820} y={320} name="關羽" />
             <GraphNode x={990} y={370} name="張飛" />
-            <GraphNode x={1290} y={110} name="曹操" />
-            <GraphNode x={1320} y={300} name="孫權" />
+            <GraphNode x={1290} y={100} name="曹操" />
+            <GraphNode x={1250} y={360} name="孫權" />
+            <circle cx="606" cy="396" r="14" fill={linkSoft} stroke={link} strokeWidth="3" />
+            <text x="630" y="405" fontSize="25" fill={link}>深紫＝已經有人物卡</text>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={440} label="還沒有卡的人名，會是灰色連結">
-            <g stroke={faint} strokeWidth="3" strokeDasharray="8 7"><line x1="1060" y1="230" x2="1500" y2="160" /><line x1="1060" y1="230" x2="1500" y2="340" /></g>
-            <GraphNode x={1500} y={160} name="董卓" empty />
-            <GraphNode x={1500} y={340} name="呂布" empty />
-            <text x="1500" y="416" textAnchor="middle" fontSize="25" fill={quiet}>灰色＝還沒有卡</text>
+          <Step duration={STEP_MS}><Layer h={440} label="還沒有卡的人名，會是淡紫色連結">
+            <g stroke={linkPale} strokeWidth="3" strokeDasharray="8 7"><line x1="1060" y1="230" x2="1520" y2="170" /><line x1="1060" y1="230" x2="1520" y2="300" /></g>
+            <GraphNode x={1520} y={170} name="董卓" empty />
+            <GraphNode x={1520} y={300} name="呂布" empty />
+            <circle cx="1374" cy="396" r="14" fill="#FFFFFF" stroke={linkPale} strokeWidth="3" strokeDasharray="5 4" />
+            <text x="1398" y="405" fontSize="25" fill={linkPale}>淡紫＝還沒有卡</text>
           </Layer></Step>
         </Steps>
       </Stage>
@@ -2328,14 +2346,24 @@ const NextLesson: Page = () => (
 
 // ---------- Appendix: no Codex plan ----------
 
-const RouteCard = ({ y, kind, title, sub, sub2 }: { y: number; kind: IconKind; title: string; sub: string; sub2: string }) => (
-  <g>
-    <rect x="420" y={y} width="520" height="180" fill="#FFFFFF" stroke={ink} strokeWidth="2" />
-    <SvgIcon kind={kind} x={486} y={y + 70} size={72} color={amber} />
-    <text x="548" y={y + 64} fontSize="36" fontWeight="600" fill={ink}>{title}</text>
-    <text x="548" y={y + 112} fontSize="28" fill={ink}>{sub}</text>
-    <text x="548" y={y + 152} fontSize="25" fill={quiet}>{sub2}</text>
-  </g>
+// One backup route: icon, name, what you need, and a tag saying how to treat it.
+const RouteCard = ({ y, kind, title, sub, tag, tone }: { y: number; kind: IconKind; title: string; sub: string; tag: string; tone: 'ok' | 'plain' | 'warn' }) => {
+  const c = tone === 'ok' ? okGreen : tone === 'warn' ? warn : amber;
+  const soft = tone === 'ok' ? sage : tone === 'warn' ? warnSoft : amberSoft;
+  return (
+    <g>
+      <rect x="400" y={y} width="640" height="132" fill="#FFFFFF" stroke={tone === 'ok' ? okGreen : ink} strokeWidth={tone === 'ok' ? 3 : 2} />
+      <SvgIcon kind={kind} x={462} y={y + 66} size={66} color={c} />
+      <text x="522" y={y + 56} fontSize="34" fontWeight="600" fill={ink}>{title}</text>
+      <text x="522" y={y + 102} fontSize="27" fill={muted}>{sub}</text>
+      <rect x="1064" y={y + 40} width="120" height="52" rx="26" fill={soft} stroke={c} strokeWidth="2" />
+      <text x="1124" y={y + 76} textAnchor="middle" fontSize="27" fontWeight="600" fill={c}>{tag}</text>
+    </g>
+  );
+};
+
+const RouteWhy = ({ y, children }: { y: number; children: ReactNode }) => (
+  <text x="1214" y={y + 76} fontSize="27" fill={ink}>{children}</text>
 );
 
 const NoPlan: Page = () => (
@@ -2343,38 +2371,189 @@ const NoPlan: Page = () => (
     <Eyebrow>附錄｜沒有 Codex 方案的備案</Eyebrow>
     <Heading>沒有 Codex 方案怎麼辦</Heading>
     <Fit>
-      <Stage h={480}>
+      <Stage h={470}>
         <Steps>
-          <Layer h={480} label="起點：沒有含 Codex 的 ChatGPT 方案">
+          <Layer h={470} label="起點：沒有含 Codex 的 ChatGPT 方案">
             <InG i={0}>
-              <rect x="0" y="180" width="280" height="120" fill={warnSoft} stroke={warn} strokeWidth="2" />
-              <text x="140" y="232" textAnchor="middle" fontSize="30" fontWeight="600" fill={warn}>沒有含 Codex</text>
-              <text x="140" y="274" textAnchor="middle" fontSize="30" fontWeight="600" fill={warn}>的方案</text>
+              <rect x="0" y="175" width="300" height="120" fill={warnSoft} stroke={warn} strokeWidth="2" />
+              <text x="150" y="227" textAnchor="middle" fontSize="30" fontWeight="600" fill={warn}>沒有含 Codex</text>
+              <text x="150" y="269" textAnchor="middle" fontSize="30" fontWeight="600" fill={warn}>的方案</text>
             </InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={480} label="兩條路：A Ollama 本機模型，B OpenRouter 雲端免費模型">
-            <g fill="none" stroke={faint} strokeWidth="3"><StepPath d="M280 240 C350 240 350 110 420 110" /><StepPath d="M280 240 C350 240 350 370 420 370" i={1} /></g>
-            <g className="aw1-build" style={buildDelay(1)}><RouteCard y={20} kind="laptop" title="A｜Ollama" sub="模型裝在自己電腦" sub2="免費｜建議 16 GB 記憶體" /></g>
-            <g className="aw1-build" style={buildDelay(2)}><RouteCard y={280} kind="cloud" title="B｜OpenRouter" sub="雲端的免費模型" sub2="要帳號和 API Key｜每天 50 次" /></g>
-          </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={480} label="兩條路都寫進 config.toml，再打 codex，跳過登入">
-            <g fill="none" stroke={amber} strokeWidth="4"><StepPath d="M940 110 C1000 110 1000 240 1060 240" /><StepPath d="M940 370 C1000 370 1000 240 1060 240" i={1} /></g>
-            <g className="aw1-build" style={buildDelay(2)}>
-              <DocShape x={1070} y={160} w={240} h={160} fill={amberSoft} stroke={amber} sw={3} />
-              <text x="1190" y="236" textAnchor="middle" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>config.toml</text>
-              <text x="1190" y="282" textAnchor="middle" fontSize="25" fill={muted}>換成這個模型</text>
+          <Step duration={STEP_MS}><Layer h={470} label="備案 A：opencode 加免費雲端模型，不用登入，首選">
+            <g fill="none" stroke={okGreen} strokeWidth="4"><StepPath d="M300 235 C350 235 350 76 400 76" /></g>
+            <g className="aw1-build" style={buildDelay(1)}>
+              <RouteCard y={10} kind="cloud" title="A｜opencode＋免費模型" sub="不用登入、不用信用卡" tag="首選" tone="ok" />
+              <RouteWhy y={10}>寫大綱實測正確</RouteWhy>
             </g>
-            <g className="aw1-build" style={buildDelay(3)}>
-              <MapArrow x1={1320} x2={1390} y={240} hot />
-              <rect x="1400" y="170" width="232" height="140" fill={term} />
-              <text x="1516" y="252" textAnchor="middle" fontSize="32" fontFamily={mono} fill="#F5F5F4">$ codex</text>
-              <text x="1516" y="360" textAnchor="middle" fontSize="26" fill={okGreen} fontWeight="600">不用登入</text>
-              <text x="1516" y="398" textAnchor="middle" fontSize="24" fill={muted}>直接問信任資料夾</text>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={470} label="備案 B：Codex 加 OpenRouter，要帳號和 API Key">
+            <g fill="none" stroke={faint} strokeWidth="3"><StepPath d="M300 235 H400" /></g>
+            <g className="aw1-build" style={buildDelay(1)}>
+              <RouteCard y={169} kind="key" title="B｜Codex＋OpenRouter" sub="要帳號和 API Key" tag="備用" tone="plain" />
+              <RouteWhy y={169}>操作和 Codex 一樣</RouteWhy>
+            </g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={470} label="備案 C：自己電腦跑模型，只能示範">
+            <g fill="none" stroke={faint} strokeWidth="3" strokeDasharray="10 8"><StepPath d="M300 235 C350 235 350 394 400 394" /></g>
+            <g className="aw1-build" style={buildDelay(1)}>
+              <RouteCard y={328} kind="laptop" title="C｜自己電腦跑模型" sub="Ollama，資料不出電腦" tag="示範" tone="warn" />
+              <RouteWhy y={328}>小模型會亂寫</RouteWhy>
             </g>
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>兩條路都改 config.toml，不用 --oss</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>先走 A，不行再試 B；C 只拿來示範</Takeaway></Step></Steps>
+    </Fit>
+  </Shell>
+);
+
+const CmdRow = ({ n, cmd, note }: { n: number; cmd: string; note: string }) => (
+  <div style={{ display: 'grid', gridTemplateColumns: '52px 1fr', alignItems: 'center', gap: 18, padding: '10px 0', borderBottom: `1px solid ${rule}` }}>
+    <NumDot n={n} />
+    <div>
+      <div style={{ fontFamily: mono, fontSize: 30, fontWeight: 600 }}>{cmd}</div>
+      <div style={{ fontSize: 25, color: muted, marginTop: 4 }}>{note}</div>
+    </div>
+  </div>
+);
+
+const ModelRow = ({ name, tag, hot = false }: { name: string; tag: string; hot?: boolean }) => (
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', background: hot ? 'rgba(141,212,160,0.16)' : 'transparent', outline: hot ? '3px solid #8DD4A0' : 'none', outlineOffset: -3 }}>
+    <span style={{ fontFamily: mono, fontSize: 27, color: '#F5F5F4' }}>{name}</span>
+    <span style={{ fontSize: 24, fontWeight: 600, color: hot ? '#8DD4A0' : '#BCC3CC' }}>{tag}</span>
+  </div>
+);
+
+const MapChip = ({ codex, oc }: { codex: string; oc: string }) => (
+  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '10px 18px', fontSize: 27, whiteSpace: 'nowrap' }}>
+    <span style={{ fontFamily: mono, color: muted }}>{codex}</span>
+    <span style={{ color: faint }}>→</span>
+    <span style={{ fontWeight: 600 }}>{oc}</span>
+  </span>
+);
+
+const OpencodeSteps: Page = () => (
+  <Shell>
+    <Eyebrow>附錄｜備案 A｜opencode-ai 1.19.3 實測</Eyebrow>
+    <Heading>備案 A：opencode＋免費模型</Heading>
+    <Fit>
+      <div style={{ display: 'grid', gridTemplateColumns: '880px 1fr', gap: 56, alignItems: 'center' }}>
+        <In i={0}>
+          <CmdRow n={1} cmd="node -v" note="有版本號就好（第三章裝過）" />
+          <CmdRow n={2} cmd="npm install -g opencode-ai" note="Mac、Windows 同一行" />
+          <CmdRow n={3} cmd="cd 練習資料夾 → opencode" note="不用登入" />
+          <CmdRow n={4} cmd="/models" note="挑一個免費模型" />
+          <CmdRow n={5} cmd="貼上 prompts.md 的提示詞" note="和 Codex 練習一樣" />
+        </In>
+        <div>
+          <Steps>
+            <Step duration={STEP_MS}>
+              <div style={{ background: term, border: '1px solid #555B60' }}>
+                <div style={{ height: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', background: '#30343A', fontFamily: mono, fontSize: 23, color: '#BCC3CC' }}><span>/models</span><span>示意</span></div>
+                <div style={{ padding: '12px 0' }}>
+                  <ModelRow name="DeepSeek V4.1 Flash Free" tag="推薦" hot />
+                  <ModelRow name="GLM-5.3 Flash Free" tag="推薦" />
+                  <ModelRow name="Big Pickle" tag="預設，較慢" />
+                </div>
+              </div>
+            </Step>
+          </Steps>
+        </div>
+      </div>
+      <Steps>
+        <Step duration={STEP_MS}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 36, flexWrap: 'wrap' }}>
+            <SmallLabel>和 Codex 的對照</SmallLabel>
+            <MapChip codex="/status" oc="畫面上直接看模型" />
+            <MapChip codex="/new" oc="/new" />
+            <MapChip codex="AGENTS.md" oc="一樣會讀" />
+          </div>
+        </Step>
+      </Steps>
+    </Fit>
+  </Shell>
+);
+
+const OpencodeRun: Page = () => (
+  <Shell>
+    <Eyebrow>附錄｜備案 A｜講師電腦實測 2026-10-17</Eyebrow>
+    <Heading>opencode 實測：29 秒建好檔案</Heading>
+    <Fit>
+      <div style={{ display: 'grid', gridTemplateColumns: '960px 1fr', gap: 48, alignItems: 'center' }}>
+        <In i={0}>
+          <Terminal title="終端機｜aw-01-lab 的複本" size={25}>
+            <Typed>$</Typed>{' opencode run -m opencode/deepseek-v4.1-flash-free \\\n'}<AskLine>{'  "列出這個資料夾的檔案，然後建立 hello.md，內容是：你好"\n'}</AskLine>
+            <Steps>
+              <Step duration={STEP_MS}><div><Dim>{'$ ls -la …'}</Dim></div></Step>
+              <Step duration={STEP_MS}><div>{'← Write hello.md\n'}<span style={{ color: '#8DD4A0' }}>Wrote file successfully.</span></div></Step>
+              <Step duration={STEP_MS}><div>{'檔案：README.md、prompts.md、原文/（目錄）、回目.md。\n已建立 hello.md，內容為「你好」。'}</div></Step>
+            </Steps>
+          </Terminal>
+        </In>
+        <div style={{ display: 'grid', gap: 24 }}>
+          <Steps>
+            <Step duration={STEP_MS}>
+              <div style={{ background: sage, borderTop: `5px solid ${okGreen}`, padding: '20px 24px' }}>
+                <SmallLabel color={okGreen}>大綱提示詞｜15 秒</SmallLabel>
+                <div style={{ fontSize: 27, lineHeight: 1.55, marginTop: 10 }}><L>[[劉備]]</L>、<L>[[關羽]]</L>、<L>[[張飛]]</L>於桃園結義，聚鄉勇投軍討伐<L>[[張角]]</L>的黃巾賊……</div>
+                <div style={{ marginTop: 10 }}><StatusLine ok size={27}>內容和原文對得上</StatusLine></div>
+              </div>
+            </Step>
+            <Step duration={STEP_MS}>
+              <div style={{ background: amberSoft, borderLeft: `6px solid ${amber}`, padding: '16px 22px', fontSize: 27, lineHeight: 1.5 }}>
+                <strong style={{ color: amber }}>免費額度沒有公開</strong><br />全班同時用，可能被擋
+              </div>
+            </Step>
+          </Steps>
+        </div>
+      </div>
+    </Fit>
+  </Shell>
+);
+
+// One rung of the model-size ladder: a bar, a verdict mark, the model and what happened.
+const Rung = ({ x, h, size, name, l1, l2, verdict }: { x: number; h: number; size: string; name: string; l1: string; l2: string; verdict: 'no' | 'meh' | 'demo' | 'ok' }) => {
+  const fill = verdict === 'no' ? warnSoft : verdict === 'meh' ? amberSoft : verdict === 'demo' ? sage : blueSoft;
+  const stroke = verdict === 'no' ? warn : verdict === 'meh' ? amber : verdict === 'demo' ? okGreen : blue;
+  const top = 300 - h;
+  return (
+    <g>
+      <rect x={x - 110} y={top} width="220" height={h} fill={fill} stroke={stroke} strokeWidth="2" />
+      <text x={x} y={288} textAnchor="middle" fontSize="30" fontWeight="600" fill={stroke}>{size}</text>
+      {verdict === 'no' ? <NoDot x={x} y={top - 34} r={26} /> : verdict === 'meh' ? <AskMark x={x} y={top - 34} r={26} /> : <OkDot x={x} y={top - 34} r={26} />}
+      {verdict === 'demo' ? <text x={x + 36} y={top - 26} fontSize="25" fontWeight="600" fill={okGreen}>只能示範</text> : null}
+      <text x={x} y={348} textAnchor="middle" fontSize="27" fontFamily={mono} fontWeight="600" fill={ink}>{name}</text>
+      <text x={x} y={392} textAnchor="middle" fontSize="26" fill={muted}>{l1}</text>
+      <text x={x} y={428} textAnchor="middle" fontSize="26" fill={muted}>{l2}</text>
+    </g>
+  );
+};
+
+const LocalLadder: Page = () => (
+  <Shell>
+    <Eyebrow>附錄｜備案 C｜1B、2B 夠不夠？講師電腦實測</Eyebrow>
+    <Heading>備案 C：1B、2B 的模型不夠用</Heading>
+    <Fit>
+      <Stage h={450}>
+        <Steps>
+          <Layer h={450} label="1B 和 1.7B：不會動手，或亂編內容">
+            <line x1="20" y1="300" x2="1612" y2="300" stroke={ink} strokeWidth="2" />
+            <InG i={0}><Rung x={163} h={60} size="1B" name="llama3.2:1b" l1="只印出指令" l2="沒有動手" verdict="no" /></InG>
+            <InG i={1}><Rung x={489} h={90} size="1.7B" name="qwen3:1.7b" l1="編出 [[李四]]" l2="「劉備字孔明」" verdict="no" /></InG>
+          </Layer>
+          <Step duration={STEP_MS}><Layer h={450} label="4B：很慢，大綱寫成紅樓夢">
+            <g className="aw1-build" style={buildDelay(0, 0)}><Rung x={816} h={130} size="4B" name="qwen3:4b" l1="一題約 270 秒" l2="寫出紅樓夢人物" verdict="meh" /></g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={450} label="gemma4:e2b：能讀檔、建檔，大綱不可靠，只能示範">
+            <g className="aw1-build" style={buildDelay(0, 0)}><Rung x={1143} h={170} size="e2b" name="gemma4:e2b" l1="能讀檔、建檔" l2="大綱不可靠" verdict="demo" /></g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={450} label="雲端免費模型：大綱正確">
+            <g className="aw1-build" style={buildDelay(0, 0)}><Rung x={1469} h={220} size="雲端" name="免費雲端模型" l1="大綱正確" l2="約 15 秒" verdict="ok" /></g>
+          </Layer></Step>
+        </Steps>
+      </Stage>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>最少要 gemma4:e2b，而且只能拿來示範</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2387,41 +2566,40 @@ const CtxTick = ({ label, hot = false, bad = false }: { label: string; hot?: boo
 
 const OllamaRoute: Page = () => (
   <Shell>
-    <Eyebrow>附錄｜備案 A｜Ollama 0.40.3 實測</Eyebrow>
-    <Heading>備案 A：用 Ollama 跑本機模型</Heading>
+    <Eyebrow>附錄｜備案 C｜Ollama 0.40.3 實測</Eyebrow>
+    <Heading>備案 C：用 Ollama 示範本機模型</Heading>
     <Fit>
-      <div style={{ display: 'grid', gridTemplateColumns: '640px 1fr', gap: 48, alignItems: 'center' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '620px 1fr', gap: 48, alignItems: 'center' }}>
         <In i={0} style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '30px 34px 34px' }}>
           <SmallLabel>Ollama 設定｜Context length</SmallLabel>
           <div style={{ position: 'relative', height: 40, marginTop: 40 }}>
             <div style={{ position: 'absolute', left: 10, right: 10, top: 16, height: 10, background: raised }} />
-            <div style={{ position: 'absolute', left: 10, width: '76%', top: 16, height: 10, background: okGreen }} />
-            <div style={{ position: 'absolute', left: 'calc(76% - 12px)', top: 0, width: 42, height: 42, borderRadius: 21, background: '#FFFFFF', border: `5px solid ${okGreen}`, boxSizing: 'border-box' }} />
+            <div style={{ position: 'absolute', left: 10, width: '58%', top: 16, height: 10, background: okGreen }} />
+            <div style={{ position: 'absolute', left: 'calc(58% - 12px)', top: 0, width: 42, height: 42, borderRadius: 21, background: '#FFFFFF', border: `5px solid ${okGreen}`, boxSizing: 'border-box' }} />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
-            <CtxTick label="4k" bad /><CtxTick label="8k" /><CtxTick label="16k" /><CtxTick label="32k" /><CtxTick label="64k" hot /><CtxTick label="128k" />
+            <CtxTick label="4k" bad /><CtxTick label="8k" /><CtxTick label="16k" /><CtxTick label="32k" hot /><CtxTick label="64k" /><CtxTick label="128k" />
           </div>
           <div style={{ display: 'grid', gap: 16, marginTop: 34 }}>
             <StatusLine ok={false} size={28}>預設 4k：提示詞被默默截斷</StatusLine>
-            <StatusLine ok size={28}>調到 64k（16 GB 至少 32k）</StatusLine>
+            <StatusLine ok size={28}>調到 32k 以上</StatusLine>
           </div>
         </In>
         <div>
           <Steps>
             <Step duration={STEP_MS}>
               <Terminal title="終端機" size={27}>
-                <Dim>{'# 先到 ollama.com/download 安裝\n'}</Dim>
-                <Typed>$</Typed>{' ollama pull gpt-oss:20b  '}<Dim>{'# 約 14 GB\n'}</Dim>
-                <Dim>{'# ~/.codex/config.toml 加兩行\n'}</Dim>
-                <AskLine>{'model_provider = "ollama"\nmodel = "gpt-oss:20b"\n'}</AskLine>
-                <Typed>$</Typed>{' ollama ps  '}<Dim>{'# CONTEXT 不能是 4096\n'}</Dim>
-                <Typed>$</Typed>{' codex'}
+                <Dim>{'# 先到 ollama.com 下載安裝\n'}</Dim>
+                <Typed>$</Typed>{' ollama pull gemma4:e2b  '}<Dim>{'# 約 4.6 GB\n'}</Dim>
+                <Typed>$</Typed>{' ollama run gemma4:e2b   '}<Dim>{'# 聊天，/bye 離開\n'}</Dim>
+                <Typed>$</Typed>{' ollama launch opencode \\\n    --model gemma4:e2b\n'}
+                <Typed>$</Typed>{' ollama ps  '}<Dim>{'# CONTEXT 要是 32768'}</Dim>
               </Terminal>
             </Step>
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}>先調大 Context，再開 Codex</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}>16 GB 的電腦才示範，8 GB 不要跑</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2436,7 +2614,7 @@ const ErrorCard = ({ msg, fix }: { msg: string; fix: string }) => (
 const OpenRouterRoute: Page = () => (
   <Shell>
     <Eyebrow>附錄｜備案 B｜codex-cli 0.154.0 實測</Eyebrow>
-    <Heading>備案 B：用 OpenRouter 免費模型</Heading>
+    <Heading>備案 B：Codex＋OpenRouter</Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '900px 1fr', gap: 44, alignItems: 'center' }}>
         <In i={0}>
@@ -2494,7 +2672,7 @@ const deck: Page[] = [
   Section4, StartScreen, SessionDesk, StatusPage, UsageToken, MemoryLayers, AgentsFile,
   Section5, DownloadLab, OpenLab, RulePractice, OutlinePrompt, OutlineResult, CheckSource,
   Recap, NextLesson,
-  NoPlan, OllamaRoute, OpenRouterRoute,
+  NoPlan, OpencodeSteps, OpencodeRun, OpenRouterRoute, LocalLadder, OllamaRoute,
 ];
 
 function pageOf(page: Page) {
@@ -2686,9 +2864,7 @@ AGENTS.md 長什麼樣子？它就放在練習資料夾最上層，內容是幾�
   [Section5, `90:00–90:30。
 第五章：用 Codex 寫大綱。今天的作品就在這一章完成。`],
   [DownloadLab, `90:30–93:00。
-練習資料夾在 GitHub：
-${LAB_URL}
-用電腦掃 QR code 或按下載按鈕，會下載 aw-01-lab.zip：${LAB_ZIP_URL} 。手機掃碼會下載到手機，用電腦的人請直接按按鈕。解壓縮後打開，要看到 原文/、回目.md、prompts.md；Windows 的「全部解壓縮」常多包一層，看到另一個 aw-01-lab 就再點進去。資料夾也可以在 GitHub 上瀏覽：
+用電腦掃 QR code 或按下載按鈕，會下載 aw-01-lab.zip：${LAB_ZIP_URL} 。手機掃碼會下載到手機，用電腦的人請直接按按鈕。解壓縮後打開，要看到 原文/、回目.md、prompts.md；Windows 的「全部解壓縮」常多包一層，看到另一個 aw-01-lab 就再點進去。資料夾也可以在 GitHub 上瀏覽：${LAB_URL}
 裡面有：原文/ 資料夾，第 1 到 21 回的全文，一回一個檔，取自維基文庫，是公有領域；回目.md，21 回的回目清單；prompts.md，等一下要貼的提示詞，請直接從這裡複製；README.md，資料夾說明。`],
   [OpenLab, `93:00–96:00（練習 3 分鐘）。
 練習 2-1。打開終端機，打 cd 和一個空格，把 aw-01-lab 資料夾拖進視窗，按 Enter。
@@ -2713,6 +2889,7 @@ ${LAB_URL}
 每一回一個段落，標題寫成「## 第 N 回 回目」。
 每段寫 2 到 3 句，說這一回發生了什麼事。
 內文的人名都寫成 Obsidian 連結，例如 [[劉備]]；標題裡的人名不用加連結。
+事件名稱如果第二堂的筆記庫已經有卡，也寫成連結：[[桃園結義]]、[[煮酒論英雄]]。
 每段最後一行寫「出處：原文/第00N回.txt」。
 【限制】
 只能用原文裡的內容，原文沒寫的事情不要加。
@@ -2727,7 +2904,7 @@ ${LAB_URL}
 這是講師電腦上用 Codex 0.154 實跑的結果，1 分 38 秒寫完 21 段。
 按一下：人名都變成 [[連結]]，第二堂放進 Obsidian 就能連到人物卡。
 按一下：每段最後都附了出處，21 段、21 個出處。
-按一下：有個小毛病：它把回目標題裡的人名也改了，「張翼德怒鞭督郵」變成「[[張飛]]怒鞭督郵」，「何國舅」變成「[[何進]]」，回目就不是原文了。講師實測時用的是舊版提示詞；現在 prompts.md 已經補上「標題裡的人名不用加連結」。你如果還是遇到，就跟它說：「標題照回目原文，不要加連結」。`],
+按一下：有個小毛病：它把回目標題裡的人名也改了，「張翼德怒鞭督郵」變成「[[張飛]]怒鞭督郵」，「何國舅」變成「[[何進]]」，回目就不是原文了。講師實測時用的是舊版提示詞；補上「標題裡的人名不用加連結」之後重跑（2026-10-17），21 段的標題都沒有連結了。你如果還是遇到，就跟它說：「標題照回目原文，不要加連結」。`],
   [CheckSource, `108:00–112:00（練習 4 分鐘）。
 練習 2-4：打開三國演義大綱.md，隨便挑兩段。這裡用講師結果的第 21 回當例子。
 大綱說：曹操邀他煮酒論英雄，說天下英雄只有劉備與自己，劉備借雷聲掩飾驚惶。
@@ -2742,27 +2919,54 @@ ${LAB_URL}
 下一堂把今天的大綱放進 Obsidian。
 左邊是今天的三國演義大綱.md，人名都是 [[連結]]。
 按一下：放進筆記庫後，[[劉備]]、[[關羽]]、[[張飛]]、[[曹操]]、[[孫權]] 會連到講師準備的人物卡，大綱就變成一張網。
-按一下：還沒有卡的人名，例如董卓、呂布，會是灰色連結，下一堂再決定要不要補卡。
+按一下：還沒有卡的人名，例如董卓、呂布，會是淡紫色連結（比有卡的紫色淡），下一堂再決定要不要補卡。
 按一下：請在下一堂前先安裝 Obsidian：https://obsidian.md 。大綱檔請存好，下一堂要用。`],
   [NoPlan, `附錄（備用，不計入 120 分鐘）。
-沒有含 Codex 的 ChatGPT 方案，還是可以用 Codex，只是模型換成別家的。
-按一下：兩條路。A 是 Ollama：模型裝在自己電腦，免費，但電腦要夠力，建議 16 GB 記憶體。B 是 OpenRouter：用雲端的免費模型，要註冊帳號、建立 API Key，免費帳號每天只有 50 次請求。
-按一下：兩條路都是在 ~/.codex/config.toml（Windows：%USERPROFILE%\\.codex\\config.toml）寫好模型設定，再打 codex。設定好之後 Codex 會跳過登入，直接問你信不信任資料夾。
-最後一下：不要用 codex --oss：在沒登入的電腦上，0.154 還是會先跳 ChatGPT 登入畫面；而且沒加 -m 的話，會自動下載約 14 GB 的 gpt-oss:20b。
-小模型比較慢、用工具也比較弱，備案只拿來做小任務：列檔案、讀檔、建一個檔。
-講師電腦實測：codex-cli 0.154.0、Ollama 0.40.3。`],
-  [OllamaRoute, `附錄（備用）。備案 A：Ollama。
-1. 到 https://ollama.com/download 安裝（Mac 要 macOS 14 以上；Windows 用 OllamaSetup.exe，Windows 10 22H2 以上）。
-2. 左邊這張最重要：打開 Ollama 設定，把 Context length 調到 64k（16 GB 的電腦至少 32k）。預設 4k 會默默截斷 Codex 的提示詞，模型就會回「我沒有權限存取本地檔案」，而且不會報錯。
+沒有含 Codex 的 ChatGPT 方案，還是有三條路可以練習，照順序試。
+按一下：備案 A，opencode 加免費雲端模型。opencode 是另一套和 Codex 很像的工具，不用登入、不用信用卡，講師實測用它跑大綱提示詞，內容正確。這是首選。
+按一下：備案 B，Codex 加 OpenRouter。操作和今天教的 Codex 一樣，但要註冊 OpenRouter 帳號、建立 API Key，免費帳號每天只有 50 次請求。
+按一下：備案 C，用 Ollama 在自己電腦跑模型。好處是資料不出電腦，但學生電腦跑得動的小模型會亂寫，所以只拿來示範，不當真正的備案。
+最後一下：先走 A，不行再試 B；C 只拿來示範。
+講師電腦實測：opencode-ai 1.19.3、codex-cli 0.154.0、Ollama 0.40.3。`],
+  [OpencodeSteps, `附錄（備用）。備案 A：opencode 加免費模型。
+五步，都在終端機打：
+1. node -v，有版本號就好，第三章已經裝過 Node.js。
+2. npm install -g opencode-ai，Mac 和 Windows 同一行。裝完可以打 opencode --version 確認。
+3. cd 進練習資料夾，打 opencode，不用登入。
+4. 輸入 /models，選一個免費模型。
+5. 從 prompts.md 貼上提示詞，和 Codex 的練習一樣。
+按一下：/models 的清單（畫面為示意）。沒登入時 opencode models 就會列出免費模型，例如 deepseek-v4.1-flash-free、glm-5.3-flash-free、big-pickle（預設）。推薦 DeepSeek V4.1 Flash Free 或 GLM-5.3 Flash Free；依官方文件，這兩個不會拿提示詞去訓練，Big Pickle、LL Alpha、MiMo 可能會（文件說明，講師未驗證）。預設的 Big Pickle 寫大綱也對，但花了 148 秒。
+按一下：和 Codex 的對照。opencode 沒有 /status，模型名稱直接顯示在畫面上，用 /models 換模型；/new 開新 Session、/sessions 看舊的；/init 會建立 AGENTS.md（以上依文件）。講師實測：opencode 會讀 AGENTS.md，寫一條「最後一行寫——小助教」，它有照做；沒有 AGENTS.md 時會改讀 CLAUDE.md。
+Windows：官方文件建議用 WSL，講師沒有在原生 Windows 上測過。
+來源：免費模型與隱私 https://opencode.ai/docs/zen/ 、指令 https://opencode.ai/docs/tui/ 、AGENTS.md https://opencode.ai/docs/rules/ 、Windows 用 WSL https://opencode.ai/docs/windows-wsl/`],
+  [OpencodeRun, `附錄（備用）。講師電腦 2026-10-17 實測，在 aw-01-lab 的複本裡跑。
+指令：opencode run -m opencode/deepseek-v4.1-flash-free "列出這個資料夾的檔案，然後建立 hello.md，內容是：你好"
+按一下：它先執行 ls -la 看資料夾。
+按一下：寫入 hello.md，回報 Wrote file successfully.
+按一下：最後回答檔案清單，並說已建立 hello.md。全程 29 秒，hello.md 真的出現了。
+按一下：用 prompts.md 的大綱提示詞再跑一次，15 秒，第 1 回寫成「[[劉備]]、[[關羽]]、[[張飛]]於桃園結義，聚鄉勇投軍討伐[[張角]]的黃巾賊。三人隨[[盧植]]、[[皇甫嵩]]、[[朱儁]]征戰……」，和原文對得上。
+按一下：注意事項。免費額度沒有公開，超過會出現 HTTP 429 FreeUsageLimitError；第三方說大約一天 100 次，但沒有官方數字。全班在同一個 IP 上用，可能一起被擋。速度從 6 秒到 2 分鐘以上都有。免費模型清單變得很快，上課前一天要再跑一次 opencode models 確認。不要把個人資料放進提示詞。
+來源：免費模型與隱私 https://opencode.ai/docs/zen/ 、模型供應商 https://opencode.ai/docs/providers/`],
+  [LocalLadder, `附錄（備用）。有人問：能不能在自己電腦裝 1B、2B 的小模型就好？答案是不行。以下都是講師電腦實測，Ollama 0.40.3，Context 設 32k。
+llama3.2:1b：把工具指令當文字印出來，從頭到尾沒有動手。opencode 0/2、Codex 0/2。
+qwen3:1.7b：在 opencode 裡 3 次有 2 次建好檔案，但在 Codex 裡只會規劃或亂編。寫大綱時編出「[[李四]]、[[王五]]」「張飛關羽首創太平道」；直接 ollama run 問，它說「劉備，字孔明」。
+按一下：qwen3:4b 很慢，一題約 270 秒，大綱裡還寫出《紅樓夢》的人物。
+按一下：gemma4:e2b（下載約 4.6 GB，32k 時吃約 7 GB 記憶體）：在 opencode 裡列檔、讀檔、建檔 3 次都成功，每次 40–45 秒；在 Codex 裡 2 次都成功。但寫大綱時內容含糊或寫錯。
+按一下：對照組是雲端免費模型，大綱正確，約 15 秒。
+最後一下：4B 以下不可靠。最少要 gemma4:e2b，而且只拿來示範「看資料夾、讀檔、建檔」。記憶體：8 GB 的電腦不要跑本機 Agent，連 1.7B 在 32k 都要約 5 GB；16 GB 可以示範 gemma4:e2b。
+來源：opencode 接 Ollama https://opencode.ai/docs/providers/ 、https://docs.ollama.com/integrations/opencode 、Context 長度 https://docs.ollama.com/context-length`],
+  [OllamaRoute, `附錄（備用）。備案 C：用 Ollama 示範本機模型。
+1. 到 https://ollama.com/download 下載安裝（Mac 要 macOS 14 以上；Windows 用 OllamaSetup.exe，Windows 10 22H2 以上）。
+2. 左邊這張最重要：打開 Ollama 設定，把 Context length 調到 32k 以上。預設 4k 會默默截斷提示詞：光是 opencode 的提示詞就約 7,900 個 Token，Codex 的更長。截斷後模型會回「我沒有權限存取本地檔案」，而且不會報錯。
 按一下，右邊的終端機：
-3. ollama pull gpt-oss:20b，約 14 GB，建議 16 GB 記憶體。
-4. 在 config.toml 加兩行：model_provider = "ollama"、model = "gpt-oss:20b"。
-5. ollama ps，CONTEXT 那一欄不能是 4096。
-6. cd 進練習資料夾，打 codex。
-實測：Context 設 32k，小模型 gemma4:e2b 大約 12 秒列出檔案、建立 hello.md。每次都會出現「Model metadata … not found」和「failed to refresh available models」兩行訊息，不影響使用，請忽略。
-最後一下：先調大 Context，再開 Codex。
+3. ollama pull gemma4:e2b，約 4.6 GB。
+4. ollama run gemma4:e2b 可以直接聊天，打 /bye 離開。
+5. ollama launch opencode --model gemma4:e2b，不用寫設定檔就能用 opencode 開它。也可以接 Codex：在 ~/.codex/config.toml 寫 model_provider = "ollama"、model = "gemma4:e2b"，再打 codex（不要用 codex --oss，0.154 在沒登入的電腦上還是會先跳登入畫面，而且會自動下載約 14 GB 的 gpt-oss:20b）。
+6. ollama ps 看 CONTEXT 那一欄要是 32768；ollama list 看裝了哪些模型；ollama rm 模型名稱 可以刪掉。
+用 Codex 接 Ollama 時，每次都會出現「Model metadata … not found」和「failed to refresh available models」兩行訊息，不影響使用。
+最後一下：16 GB 的電腦才示範，8 GB 不要跑。
 來源：https://docs.ollama.com/integrations/codex 、https://docs.ollama.com/context-length`],
-  [OpenRouterRoute, `附錄（備用）。備案 B：OpenRouter。
+  [OpenRouterRoute, `附錄（備用）。備案 B：Codex 加 OpenRouter，操作和今天的 Codex 一樣。
 1. 到 https://openrouter.ai 註冊，Keys → 建立一把 Key。
 2. 設定 Key。Mac：echo 'export OPENROUTER_API_KEY="sk-or-v1-..."' >> ~/.zshrc && source ~/.zshrc。Windows PowerShell：setx OPENROUTER_API_KEY "sk-or-v1-..."，再關掉、重開終端機。
 3. config.toml 寫成畫面上這樣。可以再加 request_max_retries = 0 和 stream_max_retries = 0，認證錯誤時就不會白白重試 5 次。

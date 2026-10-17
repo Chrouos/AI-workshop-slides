@@ -520,7 +520,8 @@ const SiteGoal: Page = () => (
         <InG i={3}><SitePage x={434} kind="導覽頁" name="知識庫導覽" line="人物、事件、時間" next="時間軸" /></InG>
         <InG i={5}><SitePage x={838} kind="時間軸" name="時間軸" line="第 1 回 桃園結義" next="劉備" /></InG>
         <InG i={7}><SitePage x={1242} kind="人物" name="劉備" line="字玄德，涿縣人" /></InG>
-        <g fill="none" stroke={amber} strokeWidth="4"><DrawPath i={2} d="M200 336 C300 400 360 240 430 230" /><DrawPath i={4} d="M604 336 C704 400 764 240 834 230" /><DrawPath i={6} d="M1008 336 C1108 400 1168 240 1238 230" /></g>
+        <g fill="none" stroke={amber} strokeWidth="4"><DrawPath i={2} d="M374 231 H418" /><DrawPath i={4} d="M778 231 H822" /><DrawPath i={6} d="M1182 231 H1226" /></g>
+        <InG i={7}><polygon points="432,231 416,222 416,240" fill={amber} /><polygon points="836,231 820,222 820,240" fill={amber} /><polygon points="1240,231 1224,222 1224,240" fill={amber} /></InG>
       </Figure>
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}>同學從首頁，點得到每一張卡</Takeaway></Step></Steps>
     </Fit>
@@ -716,7 +717,7 @@ const FlowStation = ({ x, kicker, name, fill, kind }: { x: number; kicker: strin
     <rect x={x} y="0" width="330" height="5" fill={amber} />
     <text x={x + 26} y="48" fontSize="25" fontWeight="600" fill={amber}>{kicker}</text>
     <text x={x + 26} y="96" fontSize="34" fontWeight="600" fill={ink}>{name}</text>
-    <SvgIcon kind={kind} x={x + 280} y={70} size={56} color={muted} />
+    <SvgIcon kind={kind} x={x + 296} y={36} size={40} color={muted} />
   </g>
 );
 
@@ -910,7 +911,7 @@ const PublishFilter: Page = () => (
       <Stage h={450}>
         <Steps>
           <Layer h={450} label="你的儲存庫有五張卡，三張勾了 dg-publish，兩張沒勾">
-            <InG i={0}><SvgIcon kind="folder" x={26} y={22} size={44} color={link} /><text x="60" y="34" fontSize="28" fontWeight="600" fill={ink}>你的儲存庫</text></InG>
+            <InG i={0}><SvgIcon kind="folder" x={26} y={22} size={44} color={link} /><text x="60" y="34" fontSize="28" fontWeight="600" fill={ink}>你的儲存庫</text><TickBox x={250} y={12} on /><text x="288" y="34" fontSize="25" fill={muted}>＝開頭寫了 dg-publish: true</text></InG>
             <InG i={1}><CardRow x={0} y={70} w={360} name="三國演義" on /><CardRow x={0} y={140} w={360} name="劉備" on /><CardRow x={0} y={210} w={360} name="時間軸" on /></InG>
             <InG i={2}><CardRow x={0} y={280} w={360} name="我的草稿" on={false} /><CardRow x={0} y={350} w={360} name="上課筆記" on={false} /></InG>
             <InG i={3}>
@@ -1233,7 +1234,7 @@ const InstallPlugin: Page = () => (
         </In>
         <div style={{ display: 'grid', alignContent: 'start', gap: 34, paddingTop: 10 }}>
           <Steps>
-            <Step duration={STEP_MS}><TourStep n={1} title="第三方外掛" box={[4, 374, 296, 56]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={1} title="第三方外掛" box={[4, 374, 296, 56]} badge="right" /></Step>
             <Step duration={STEP_MS}><TourStep n={2} title="按「瀏覽」" box={[860, 92, 132, 60]} badge="right" /></Step>
             <Step duration={STEP_MS}><TourStep n={3} title="安裝、啟用" box={[316, 200, 668, 170]} /></Step>
           </Steps>
@@ -1451,15 +1452,15 @@ const SourceDoc = ({ x, y, w, h, name, lines, highlight }: { x: number; y: numbe
 
 const FrontmatterCheck: Page = () => (
   <Shell chapter={4}>
-    <Eyebrow>實測：eli5 改寫的劉備卡</Eyebrow>
+    <Eyebrow>實測：第三堂產出的兩張卡</Eyebrow>
     <Heading>發布前檢查 frontmatter</Heading>
     <Fit>
       <Stage h={470}>
         <Steps>
           <Layer h={470} label="人物/劉備.md 經過 eli5 改寫，產生 劉備-國中生版.md">
-            <InG i={0}><SourceDoc x={0} y={0} w={620} h={250} name="人物/劉備.md" lines={['---', 'dg-publish: true', '---', '劉備，字玄德，是中山靖王之後']} /></InG>
+            <InG i={0}><SourceDoc x={0} y={0} w={620} h={268} name="人物/劉備.md" lines={['---', 'dg-publish: true', '---', '劉備，字玄德，是中山靖王之後']} /></InG>
             <InG i={1}><MapArrow x1={640} x2={992} y={124} hot /><text x="816" y="104" textAnchor="middle" fontSize="28" fontWeight="600" fill={amber}>eli5 改寫</text></InG>
-            <InG i={2}><SourceDoc x={1012} y={0} w={620} h={250} name="劉備-國中生版.md" lines={['---', 'dg-publish: true', '---', '劉備，字玄德，是中山靖王的後代。']} highlight={1} /></InG>
+            <InG i={2}><SourceDoc x={1012} y={0} w={620} h={268} name="劉備-國中生版.md" lines={['---', 'dg-publish: true', '---', '劉備，字玄德，是中山靖王的後代。']} highlight={1} /></InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={470} label="改寫版連 dg-publish: true 也一起抄過去">
             <Build>
@@ -1468,7 +1469,7 @@ const FrontmatterCheck: Page = () => (
             </Build>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={470} label="發布後，網站上會多一張劉備">
-            <DownArrowSvg x={1322} y1={258} y2={300} color={warn} />
+            <DownArrowSvg x={1322} y1={272} y2={304} color={warn} />
             <Build>
               <BrowserFrame x={830} y={306} w={802} h={160} url="….vercel.app" />
               <SvgChip x={860} y={378} w={180} h={56} label="劉備" size={27} />
@@ -1476,12 +1477,12 @@ const FrontmatterCheck: Page = () => (
               <text x="1374" y="415" fontSize="26" fontWeight="600" fill={warn}>多一張劉備</text>
             </Build>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={470} label="不想公開：刪掉這行，或取消勾選">
+          <Step duration={STEP_MS}><Layer h={470} label="如果有 dg-publish、又不想公開，就刪掉那行">
             <Build>
               <rect x="0" y="320" width="380" height="130" fill={sage} stroke={okGreen} strokeWidth="2" />
               <OkDot x={40} y={370} r={22} />
-              <text x="74" y="380" fontSize="28" fontWeight="600" fill={ink}>不想公開</text>
-              <text x="74" y="424" fontSize="26" fill={muted}>刪掉這行</text>
+              <text x="74" y="380" fontSize="26" fontWeight="600" fill={ink}>如果有 dg-publish</text>
+              <text x="74" y="424" fontSize="26" fill={muted}>又不想公開：刪掉那行</text>
             </Build>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={470} label="反過來：時間軸.md 沒有這行，要公開就自己加上">
@@ -1702,7 +1703,7 @@ const ExtraFolder: Page = () => (
               <rect x="440" y="290" width="440" height="160" fill={surface} stroke={faint} strokeWidth="2" />
               <Folder x={466} y={318} w={110} h={80} fill="#FFFFFF" stroke={faint} />
               <text x="596" y="336" fontSize="29" fontWeight="600" fill={ink}>repo 的 extra/</text>
-              <text x="596" y="376" fontSize="25" fill={muted}>在 GitHub 網頁新增</text>
+              <text x="596" y="376" fontSize="24" fontFamily={mono} fill={muted}>sanguo-map.html</text>
               <text x="596" y="420" fontSize="25" fill={amber}>＋ .eleventy.js 加一行</text>
               <OkDot x={850} y={320} r={20} />
             </Build>
@@ -1736,11 +1737,11 @@ const Practice3: Page = () => (
     </PillRow>
     <Fit>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 16 }}>
-        <FlowStep i={1} n={1} w={330} kind="search" label="查開頭三行" sub="每張新卡" />
+        <FlowStep i={1} n={1} w={330} kind="search" label="查開頭三行" sub="多了刪、少了補" />
         <FlowArrow i={2} />
-        <FlowStep i={3} n={2} w={330} kind="home" label="做導覽頁" sub="首頁連過去" />
+        <FlowStep i={3} n={2} w={330} kind="home" label="做導覽頁" sub="首頁加 [[知識庫導覽]]" />
         <FlowArrow i={4} />
-        <FlowStep i={5} n={3} w={330} kind="ok" label="勾 dg-publish" sub="要公開的卡" />
+        <FlowStep i={5} n={3} w={330} kind="ok" label="勾 dg-publish" sub="導覽頁、時間軸" />
         <FlowArrow i={6} />
         <FlowStep i={7} n={4} w={330} kind="upload" label="全部發布" sub="Publish All Notes" />
       </div>
@@ -1828,12 +1829,12 @@ const Practice4: Page = () => (
               <DocShape x={210} y={30} w={330} h={160} fill="#FFFFFF" stroke={link} sw={2} />
               <SvgNum x={210} y={30} n={1} />
               <text x="240" y="84" fontSize="28" fontWeight="600" fill={ink}>公開一張新卡</text>
-              <text x="240" y="128" fontSize="25" fill={muted}>例：官渡之戰</text>
+              <text x="240" y="128" fontSize="25" fill={muted}>例：三英戰呂布</text>
               <text x="240" y="168" fontSize="25" fill={muted}>導覽頁加連結</text>
             </InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={420} label="把網址傳給同學">
-            <Build><SvgNum x={600} y={60} n={2} /></Build>
+            <Build><SvgNum x={600} y={60} n={2} /><text x="636" y="70" fontSize="28" fontWeight="600" fill={ink}>傳網址給同學</text></Build>
             <Build i={1}><MapArrow x1={560} x2={1180} y={110} hot /><rect x="660" y="136" width="420" height="54" rx="27" fill="#FFFFFF" stroke={amber} strokeWidth="2" /><text x="870" y="171" textAnchor="middle" fontSize="25" fontFamily={mono} fill={ink}>my-garden-….vercel.app</text></Build>
             <Build i={2}><PersonBadge x={1300} label="同學" tint={amberSoft} stroke={amber} /></Build>
           </Layer></Step>
@@ -1844,11 +1845,11 @@ const Practice4: Page = () => (
               <MapArrow x1={1046} x2={1096} y={292} />
               <SvgChip x={1104} y={262} w={180} h={60} label="導覽頁" size={28} />
               <MapArrow x1={1290} x2={1340} y={292} />
-              <SvgChip x={1348} y={262} w={200} h={60} label="官渡之戰" size={28} fill={sage} stroke={okGreen} />
+              <SvgChip x={1348} y={262} w={200} h={60} label="三英戰呂布" size={28} fill={sage} stroke={okGreen} />
             </Build>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={420} label="回報：走到了，或卡在哪一頁">
-            <Build><SvgNum x={600} y={380} n={4} /></Build>
+            <Build><SvgNum x={600} y={380} n={4} /><text x="636" y="390" fontSize="28" fontWeight="600" fill={ink}>回報結果</text></Build>
             <Build i={1}><OkDot x={900} y={380} r={22} /><text x="934" y="390" fontSize="28" fill={okGreen} fontWeight="600">走到了</text></Build>
             <Build i={2}><NoDot x={1120} y={380} r={22} /><text x="1154" y="390" fontSize="28" fill={warn} fontWeight="600">回報卡在哪一頁</text></Build>
           </Layer></Step>
@@ -2259,7 +2260,7 @@ const NOTES = new Map<Page, string>([
 這是第三堂實測時發生的事。我們用 eli5 把 人物/劉備.md 改寫成國中生看得懂的版本，存成 劉備-國中生版.md。內容是對的。
 按一下：但它把開頭的 dg-publish: true 也一起抄了過去。
 按一下：結果是一發布，網站上會多一張〈劉備-國中生版〉，和原本的〈劉備〉並排，讀者會搞不清楚哪張才對。
-按一下：如果你不打算公開它，刪掉這行，或在屬性取消勾選。
+按一下：如果有 dg-publish、又不想公開，就刪掉那行，或在屬性取消勾選。第三堂的 eli5 提示詞現在最後一句是「新檔不要加 dg-publish。」，所以你的國中生版可能本來就沒有這行；講師實測那次是舊提示詞，才會抄過去。
 按一下：反過來的情況也有。第三堂時間軸 Skill 實跑產出的 時間軸.md，開頭完全沒有屬性，直接就是 <table>。它不會被發布；要公開的話，在最上面自己加三行：---、dg-publish: true、---，或打開它執行 Add publish flag。
 最後一下：新卡發布前，先看開頭三行。多了要刪，少了要補。`],
   [HomeFlag, `72:30–74:00
@@ -2301,7 +2302,7 @@ eleventyConfig.addPassthroughCopy({ "extra": "extra" });
 最後一下：外掛只送筆記，.html 要自己放。這也是本機測試的結果，線上發布請大家幫忙驗證。`],
   [Practice3, `83:00–95:00
 練習 3，12 分鐘：把時間軸卡和導覽頁發布上去。
-1. 查開頭三行：第三堂新增的卡一張一張打開。eli5 的〈劉備-國中生版〉多了 dg-publish，不公開就刪掉；時間軸.md 沒有屬性，要公開就在最上面加 ---、dg-publish: true、---。
+1. 查開頭三行：第三堂新增的卡一張一張打開。〈劉備-國中生版〉如果有 dg-publish、又不想公開，就刪掉那行；時間軸.md 沒有屬性，要公開就在最上面加 ---、dg-publish: true、---。
 2. 做導覽頁：可以手打，或請 Codex 做。完整提示詞：
 「請在 整理/ 新增〈知識庫導覽〉。分成人物、事件、時間三段，每段用 [[連結]] 列出筆記庫裡已經有的卡；只連到已有的卡，不要新增卡片。開頭加上 dg-publish: true。寫入前先給我看。」
 接著打開〈三國演義〉，最後一行加 [[知識庫導覽]]。導覽頁的「時間」那一段要連到 [[時間軸]]（用你的實際檔名）。
@@ -2319,7 +2320,7 @@ eleventyConfig.addPassthroughCopy({ "extra": "extra" });
 最後一下：補勾之後，再發布一次，等兩分鐘重新走。`],
   [Practice4, `97:30–107:00
 練習 4，10 分鐘：互相驗收。兩人一組。
-1. 你先公開一張新卡，例如第三堂新增的〈官渡之戰〉，並在導覽頁加上它的連結，發布。
+1. 你先公開一張新卡，例如第三堂新增的〈三英戰呂布〉，並在導覽頁加上它的連結，發布。
 按一下：2. 把網址傳給同學。
 按一下：3. 同學只能從首頁開始點，不能直接打卡片的網址，看走不走得到這張新卡。
 按一下：4. 走到了就打勾；走不到，回報卡在哪一頁，你回去查那一頁的 dg-publish 和連結，修好再發布。

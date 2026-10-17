@@ -8,13 +8,11 @@ import vaultTaoyuan from './assets/vault-taoyuan.png';
 import outlineCh1 from './assets/outline-ch1.png';
 import liubeiCard from './assets/liubei-card.png';
 import backlinksPane from './assets/backlinks-pane.png';
-import outlineCloseup from './assets/outline-links-closeup.png';
 import ownCard from './assets/own-card-sanying.png';
 import vaultGraph from './assets/vault-graph.png';
 import localGraph from './assets/liubei-local-graph.png';
 import ch21Before from './assets/ch21-before.png';
 import ch21After from './assets/ch21-after.png';
-import diagramResult from './assets/diagram-design-result.png';
 
 export const design: DesignSystem = {
   palette: { bg: '#FAFAF9', text: '#1C1917', accent: '#78716C' },
@@ -311,20 +309,45 @@ const Screenshot = ({ src, aspect, width, caption, alt, url, children }: { src: 
   </div>
 );
 
+// Where a marker's number badge sits. 'above' and 'below' hang the badge off a short
+// leader line (`drop` px long), so it lands in empty space instead of on the text.
+type Badge = 'left' | 'right' | 'above' | 'below';
+
+const BADGE_STYLE: CSSProperties = { position: 'absolute', width: 48, height: 48, borderRadius: 24, background: amber, color: '#FFFFFF', display: 'grid', placeItems: 'center', fontSize: 26, fontWeight: 600, boxShadow: '0 0 0 4px #FFFFFF' };
+
+const MarkBadge = ({ n, badge, drop }: { n: number; badge: Badge; drop: number }) => {
+  if (badge === 'left') return <span style={{ ...BADGE_STYLE, left: -26, top: -26 }}>{n}</span>;
+  if (badge === 'right') return <span style={{ ...BADGE_STYLE, right: -60, top: '50%', marginTop: -24 }}>{n}</span>;
+  const up = badge === 'above';
+  return (
+    <>
+      <span style={{ position: 'absolute', left: '50%', marginLeft: -2, width: 4, height: drop, background: '#E9B650', ...(up ? { bottom: '100%' } : { top: '100%' }) }} />
+      <span style={{ ...BADGE_STYLE, left: '50%', marginLeft: -24, ...(up ? { bottom: `calc(100% + ${drop}px)` } : { top: `calc(100% + ${drop}px)` }) }}>{n}</span>
+    </>
+  );
+};
+
 // An outline drawn over one region of a screenshot (in % of the image), with its number.
-const RegionMark = ({ x, y, w, h, n, i, badge = 'left' }: { x: number; y: number; w: number; h: number; n: number; i: number; badge?: 'left' | 'right' }) => {
+const RegionMark = ({ x, y, w, h, n, i, badge = 'left', drop = 16 }: { x: number; y: number; w: number; h: number; n: number; i: number; badge?: Badge; drop?: number }) => {
   const live = useIsActivePage();
   return (
     <div className={live ? 'aw2-in' : undefined} style={{ position: 'absolute', left: `${x}%`, top: `${y}%`, width: `${w}%`, height: `${h}%`, border: '4px solid #E9B650', boxSizing: 'border-box', animationDelay: live ? enterDelay(i) : undefined }}>
-      <span style={{ position: 'absolute', ...(badge === 'left' ? { left: -26, top: -26 } : { right: -56, top: '50%', marginTop: -24 }), width: 48, height: 48, borderRadius: 24, background: amber, color: '#FFFFFF', display: 'grid', placeItems: 'center', fontSize: 26, fontWeight: 600, boxShadow: '0 0 0 4px #FFFFFF' }}>{n}</span>
+      <MarkBadge n={n} badge={badge} drop={drop} />
     </div>
   );
 };
 
 // The same outline, without the entrance: used inside a <Step> so it lands with the click.
-const StepMark = ({ x, y, w, h, n, badge = 'left' }: { x: number; y: number; w: number; h: number; n: number; badge?: 'left' | 'right' }) => (
+const StepMark = ({ x, y, w, h, n, badge = 'left', drop = 16 }: { x: number; y: number; w: number; h: number; n: number; badge?: Badge; drop?: number }) => (
   <div style={{ position: 'absolute', left: `${x}%`, top: `${y}%`, width: `${w}%`, height: `${h}%`, border: '4px solid #E9B650', boxSizing: 'border-box' }}>
-    <span style={{ position: 'absolute', ...(badge === 'left' ? { left: -26, top: -26 } : { right: -56, top: '50%', marginTop: -24 }), width: 48, height: 48, borderRadius: 24, background: amber, color: '#FFFFFF', display: 'grid', placeItems: 'center', fontSize: 26, fontWeight: 600, boxShadow: '0 0 0 4px #FFFFFF' }}>{n}</span>
+    <MarkBadge n={n} badge={badge} drop={drop} />
+  </div>
+);
+
+// A marker placed in pixels on a fixed-size picture (for pages built on one absolute stage).
+const PxMark = ({ x, y, w, h, n, badge = 'left', drop = 16, color = '#E9B650', dash = false }: { x: number; y: number; w: number; h: number; n?: number; badge?: Badge; drop?: number; color?: string; dash?: boolean }) => (
+  <div style={{ position: 'absolute', left: x, top: y, width: w, height: h, border: `4px ${dash ? 'dashed' : 'solid'} ${color}`, boxSizing: 'border-box' }}>
+    {n ? <MarkBadge n={n} badge={badge} drop={drop} /> : null}
   </div>
 );
 
@@ -747,44 +770,46 @@ const VaultFolder: Page = () => (
     <Heading>筆記庫就是一個資料夾</Heading>
     <Lead>像抽屜櫃：一張卡就是一個 .md 檔</Lead>
     <Fit>
-      <Stage h={450}>
+      <Stage h={490}>
         <Steps>
-          <Layer h={450} label="三國人物知識庫資料夾：入口卡三國演義.md，人物 5 張、勢力 3 張、關係 3 張；另有原文和整理資料夾">
+          <Layer h={490} label="三國人物知識庫資料夾：入口卡三國演義.md，人物 5 張、勢力 3 張、關係 3 張；另有原文（第 1 到 21 回全文和三份節選）和整理資料夾">
             <InG i={0}>
-              <Folder x={436} y={0} w={760} h={440} fill="#FBF7F2" stroke={amber} sw={3} />
+              <Folder x={436} y={0} w={760} h={486} fill="#FBF7F2" stroke={amber} sw={3} />
               <text x={466} y={62} fontSize="32" fontWeight="600" fill={ink}>三國人物知識庫/</text>
               <text x={1166} y={62} textAnchor="end" fontSize="26" fill={amber}>12 張 .md 卡</text>
             </InG>
-            <InG i={1}><DocShape x={466} y={88} w={130} h={60} fill={amberSoft} stroke={amber} /><text x={531} y={128} textAnchor="middle" fontSize="23" fill={ink}>三國演義</text>
-              <rect x="640" y="92" width="250" height="52" fill="#FFFFFF" stroke={faint} strokeWidth="2" strokeDasharray="8 6" /><text x={656} y={127} fontSize="24" fill={quiet}>原文/：節選 .txt</text>
-              <rect x="910" y="92" width="256" height="52" fill="#FFFFFF" stroke={faint} strokeWidth="2" strokeDasharray="8 6" /><text x={926} y={127} fontSize="24" fill={quiet}>整理/：練習產出</text></InG>
-            <InG i={2}><Drawer x={466} y={172} w={700} label="人物" count="5 張" />
-              <FileTile x={486} y={240} name="劉備" /><FileTile x={622} y={240} name="關羽" /><FileTile x={758} y={240} name="張飛" /><FileTile x={894} y={240} name="曹操" /><FileTile x={1030} y={240} name="孫權" /></InG>
-            <InG i={3}><Drawer x={466} y={318} w={330} label="勢力" count="3 張" /><Drawer x={836} y={318} w={330} label="關係" count="3 張" />
-              <FileTile x={476} y={384} name="蜀漢" /><FileTile x={582} y={384} name="曹魏" /><FileTile x={688} y={384} name="東吳" />
-              <FileTile x={846} y={384} name="桃園" /><FileTile x={952} y={384} name="煮酒" /><FileTile x={1058} y={384} name="赤壁" /></InG>
+            <InG i={1}>
+              <DocShape x={466} y={88} w={130} h={54} fill={amberSoft} stroke={amber} /><text x={531} y={124} textAnchor="middle" fontSize="24" fill={ink}>三國演義</text>
+              <rect x="612" y="88" width="314" height="54" fill="#FFFFFF" stroke={faint} strokeWidth="2" strokeDasharray="8 6" /><text x={769} y={124} textAnchor="middle" fontSize="24" fill={quiet}>原文/：第 1–21 回＋節選</text>
+              <rect x="942" y="88" width="224" height="54" fill="#FFFFFF" stroke={faint} strokeWidth="2" strokeDasharray="8 6" /><text x={1054} y={124} textAnchor="middle" fontSize="24" fill={quiet}>整理/：練習產出</text>
+            </InG>
+            <InG i={2}><Drawer x={466} y={166} w={700} label="人物" count="5 張" />
+              <FileTile x={490} y={238} name="劉備" /><FileTile x={624} y={238} name="關羽" /><FileTile x={758} y={238} name="張飛" /><FileTile x={892} y={238} name="曹操" /><FileTile x={1026} y={238} name="孫權" /></InG>
+            <InG i={3}><Drawer x={466} y={322} w={330} label="勢力" count="3 張" /><Drawer x={836} y={322} w={330} label="關係" count="3 張" />
+              <FileTile x={478} y={394} name="蜀漢" /><FileTile x={583} y={394} name="曹魏" /><FileTile x={688} y={394} name="東吳" />
+              <FileTile x={848} y={394} name="桃園" /><FileTile x={953} y={394} name="煮酒" /><FileTile x={1058} y={394} name="赤壁" /></InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={450} label="Obsidian 打開這個資料夾來寫筆記">
+          <Step duration={STEP_MS}><Layer h={490} label="Obsidian 打開這個資料夾來寫筆記">
             <g className="aw2-build" style={buildDelay(0)}>
-              <rect x="0" y="130" width="360" height="190" fill={linkSoft} stroke={link} strokeWidth="2" />
-              <text x="28" y="180" fontSize="28" fontWeight="600" fill={link}>Obsidian</text>
-              <text x="28" y="240" fontSize="44" fill={ink}>打開來寫</text>
-              <text x="28" y="290" fontSize="25" fill={muted}>看到的就是這些檔案</text>
+              <rect x="0" y="148" width="360" height="190" fill={linkSoft} stroke={link} strokeWidth="2" />
+              <text x="28" y="198" fontSize="28" fontWeight="600" fill={link}>Obsidian</text>
+              <text x="28" y="258" fontSize="44" fill={ink}>打開來寫</text>
+              <text x="28" y="308" fontSize="25" fill={muted}>看到的就是這些檔案</text>
             </g>
-            <g className="aw2-build" style={buildDelay(1)}><MapArrow x1={366} x2={428} y={225} color={link} hot /></g>
+            <g className="aw2-build" style={buildDelay(1)}><MapArrow x1={366} x2={428} y={243} color={link} hot /></g>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={450} label="Codex 讀同一個資料夾，不用上傳">
-            <g className="aw2-build" style={buildDelay(1)}><BackArrow x1={1266} x2={1204} y={225} color={okGreen} /></g>
+          <Step duration={STEP_MS}><Layer h={490} label="Codex 讀同一個資料夾，不用上傳">
+            <g className="aw2-build" style={buildDelay(1)}><BackArrow x1={1266} x2={1204} y={243} color={okGreen} /></g>
             <g className="aw2-build" style={buildDelay(0)}>
-              <rect x="1272" y="130" width="360" height="190" fill={sage} stroke={okGreen} strokeWidth="2" />
-              <text x="1300" y="180" fontSize="28" fontWeight="600" fill={okGreen}>Codex</text>
-              <text x="1300" y="240" fontSize="44" fill={ink}>讀同一份</text>
-              <text x="1300" y="290" fontSize="25" fill={muted}>不用上傳</text>
+              <rect x="1272" y="148" width="360" height="190" fill={sage} stroke={okGreen} strokeWidth="2" />
+              <text x="1300" y="198" fontSize="28" fontWeight="600" fill={okGreen}>Codex</text>
+              <text x="1300" y="258" fontSize="44" fill={ink}>讀同一份</text>
+              <text x="1300" y="308" fontSize="25" fill={muted}>不用上傳</text>
             </g>
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>檔案在你的電腦裡，Codex 也讀得到</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>檔案在你的電腦裡，Codex 也讀得到</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1075,8 +1100,8 @@ const FirstLaunch: Page = () => (
     <Fit z={1.15}>
       <In i={0}>
         <Screenshot src={firstLaunch} aspect={1520 / 470} width={1300} caption="Obsidian 起始畫面（實際擷取）" alt="Obsidian 起始畫面：建立新的儲存庫、開啟資料夾為儲存庫、連接至 Obsidian Sync 和最下方的語言選單">
-          <RegionMark n={1} i={2} x={6} y={83} w={92} h={14} />
-          <RegionMark n={2} i={5} x={1.5} y={29} w={97} h={20} />
+          <RegionMark n={1} i={2} x={6} y={83} w={92} h={14} badge="right" />
+          <RegionMark n={2} i={5} x={1.5} y={29} w={97} h={20} badge="right" />
         </Screenshot>
       </In>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, marginTop: 30 }}>
@@ -1138,11 +1163,11 @@ const VaultCheck: Page = () => (
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1240px 1fr', gap: 44, alignItems: 'center' }}>
         <In i={0}>
-          <Screenshot src={vaultTaoyuan} aspect={2000 / 1007} width={1240} caption="Obsidian 實際畫面｜三國人物知識庫，打開〈桃園結義〉" alt="Obsidian 左側展開人物、勢力、關係資料夾，中間打開桃園結義關係卡，人名是紫色連結">
+          <Screenshot src={vaultTaoyuan} aspect={2000 / 1007} width={1240} caption="Obsidian 實際畫面" alt="Obsidian 左側展開人物、勢力、關係資料夾，中間打開桃園結義關係卡，人名是紫色連結">
             <Steps>
               <Step duration={STEP_MS}><StepMark n={1} x={3.5} y={11.5} w={22} h={65} /></Step>
-              <Step duration={STEP_MS}><StepMark n={2} x={44.5} y={44} w={54} h={53} /></Step>
-              <Step duration={STEP_MS}><StepMark n={3} x={73} y={51} w={5.5} h={6.5} badge="right" /></Step>
+              <Step duration={STEP_MS}><StepMark n={2} x={44.5} y={44} w={54} h={53} badge="above" drop={12} /></Step>
+              <Step duration={STEP_MS}><StepMark n={3} x={51.4} y={91.4} w={3.6} h={4.2} badge="below" drop={34} /></Step>
             </Steps>
           </Screenshot>
         </In>
@@ -1165,48 +1190,50 @@ const MergeOutline: Page = () => (
     <PracticeEyebrow time="3 分鐘">練習 2｜合併</PracticeEyebrow>
     <Heading>練習（合併）：大綱放進整理資料夾</Heading>
     <Fit>
-      <Stage h={540}>
+      <Stage h={460}>
         <Steps>
-          <Layer h={540} label="第一堂的 aw-01-lab 資料夾裡有 三國演義大綱.md">
+          <Layer h={460} label="第一堂的 aw-01-lab 資料夾裡有 三國演義大綱.md">
             <InG i={0}>
-              <Folder x={0} y={0} w={500} h={360} fill={surface} stroke={faint} sw={3} />
-              <text x="28" y="62" fontSize="30" fontWeight="600" fill={ink}>aw-01-lab/</text>
-              <text x="40" y="128" fontSize="27" fontFamily={mono} fill={muted}>原文/</text>
-              <text x="40" y="180" fontSize="27" fontFamily={mono} fill={muted}>回目.md</text>
-              <text x="40" y="232" fontSize="27" fontFamily={mono} fill={muted}>prompts.md</text>
-              <rect x="28" y="258" width="444" height="58" fill={amberSoft} stroke={amber} strokeWidth="3" />
-              <text x="44" y="297" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>三國演義大綱.md</text>
+              <Folder x={0} y={40} w={460} h={330} fill={surface} stroke={faint} sw={3} />
+              <text x="26" y="100" fontSize="30" fontWeight="600" fill={ink}>aw-01-lab/</text>
+              <text x="40" y="160" fontSize="27" fontFamily={mono} fill={muted}>原文/</text>
+              <text x="40" y="206" fontSize="27" fontFamily={mono} fill={muted}>回目.md</text>
+              <text x="40" y="252" fontSize="27" fontFamily={mono} fill={muted}>prompts.md</text>
+              <rect x="24" y="282" width="412" height="58" fill={amberSoft} stroke={amber} strokeWidth="3" />
+              <text x="40" y="321" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>三國演義大綱.md</text>
             </InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={540} label="拖進三國人物知識庫的 整理 資料夾">
-            <g fill="none" stroke={amber} strokeWidth="5"><StepPath d="M476 287 C620 287 640 300 760 300" /></g>
-            <g className="aw2-build" style={buildDelay(1)}><polygon points="784,300 762,288 762,312" fill={amber} />
-              <Folder x={800} y={0} w={832} h={360} fill="#FBF7F2" stroke={amber} sw={3} />
-              <text x="828" y="62" fontSize="30" fontWeight="600" fill={ink}>三國人物知識庫/</text>
-              <text x="840" y="128" fontSize="27" fontFamily={mono} fill={muted}>人物/　勢力/　關係/　原文/</text>
-              <text x="840" y="200" fontSize="28" fontFamily={mono} fontWeight="600" fill={amber}>整理/</text>
-              <rect x="868" y="226" width="440" height="58" fill={sage} stroke={okGreen} strokeWidth="3" />
-              <text x="884" y="265" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>三國演義大綱.md</text>
-              <OkDot x={1350} y={255} r={24} />
+          <Step duration={STEP_MS}><Layer h={460} label="只把大綱這一個檔，拖進三國人物知識庫的 整理 資料夾">
+            <g fill="none" stroke={amber} strokeWidth="5"><StepPath d="M436 311 C540 311 540 176 630 176" /></g>
+            <g className="aw2-build" style={buildDelay(1)}>
+              <polygon points="650,176 628,164 628,188" fill={amber} />
+              <Folder x={600} y={0} w={1032} h={450} fill="#FBF7F2" stroke={amber} sw={3} />
+              <text x="628" y="60" fontSize="30" fontWeight="600" fill={ink}>三國人物知識庫/</text>
+              <rect x="630" y="86" width="480" height="340" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+              <text x="652" y="128" fontSize="28" fontFamily={mono} fontWeight="600" fill={amber}>整理/</text>
+              <rect x="652" y="148" width="436" height="56" fill={sage} stroke={okGreen} strokeWidth="3" />
+              <text x="670" y="186" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>三國演義大綱.md</text>
+              <rect x="1140" y="86" width="470" height="340" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+              <text x="1162" y="128" fontSize="28" fontFamily={mono} fontWeight="600" fill={amber}>人物/</text>
+              <CardDoc x={1164} y={150} w={420} h={84} name="劉備.md" fill={amberSoft} stroke={amber} size={32} />
+              <text x="1164" y="292" fontSize="26" fontFamily={mono} fill={muted}>關羽.md　張飛.md</text>
+              <text x="1164" y="338" fontSize="26" fontFamily={mono} fill={muted}>曹操.md　孫權.md</text>
+              <text x="1374" y="402" textAnchor="middle" fontSize="24" fill={quiet}>講師的人物卡，不用動</text>
             </g>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={540} label="同名的人物卡只留講師那張：自己的 劉備.md 不要放進來">
+          <Step duration={STEP_MS}><Layer h={460} label="大綱第 1 回裡的 [[劉備]]，自己連到 人物/劉備.md">
             <g className="aw2-build" style={buildDelay(0)}>
-              <rect x="0" y="396" width="1632" height="140" fill={amberSoft} />
-              <DocShape x={40} y={414} w={200} h={104} fill="#FFFFFF" stroke={faint} dash="8 6" />
-              <text x="140" y="474" textAnchor="middle" fontSize="27" fontFamily={mono} fill={quiet}>劉備.md</text>
-              <text x="140" y="508" textAnchor="middle" fontSize="22" fill={quiet}>自己的</text>
-              <NoDot x={250} y={420} r={22} />
-              <DocShape x={320} y={414} w={240} h={104} fill="#FFFFFF" stroke={amber} sw={3} />
-              <text x="440" y="474" textAnchor="middle" fontSize="27" fontFamily={mono} fill={ink}>人物/劉備.md</text>
-              <text x="440" y="508" textAnchor="middle" fontSize="22" fill={amber}>講師的</text>
-              <OkDot x={570} y={420} r={22} />
-              <text x="640" y="462" fontSize="34" fontWeight="600" fill={ink}>同名的卡只留講師那張</text>
-              <text x="640" y="508" fontSize="28" fill={muted}>兩張都叫劉備，[[劉備]] 就不知道要連哪張</text>
+              <rect x="652" y="232" width="436" height="170" fill={surface} />
+              <text x="1070" y="268" textAnchor="end" fontSize="24" fill={quiet}>大綱 第 1 回</text>
+              <text x="670" y="324" fontSize="30" fill={ink}>……<tspan fill={link} textDecoration="underline">劉備</tspan>在涿縣遇到</text>
+              <text x="670" y="374" fontSize="30" fill={ink}>張飛、關羽……</text>
             </g>
+            <g fill="none" stroke={link} strokeWidth="5"><StepPath d="M758 292 C800 236 1000 214 1144 194" i={2} /></g>
+            <g className="aw2-build" style={buildDelay(5)}><polygon points="1166,191 1142,182 1145,205" fill={link} /><OkDot x={1584} y={150} r={24} /></g>
           </Layer></Step>
         </Steps>
       </Stage>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>只搬一個檔，連結自己會接上</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1272,36 +1299,56 @@ const BacklinksReal: Page = () => (
   </Shell>
 );
 
-// 74 names linked in the outline: 4 already have a card, 70 do not.
-const NameDots = () => {
-  const dots: ReactNode[] = [];
-  for (let k = 0; k < 74; k++) {
-    const col = k % 10;
-    const row = Math.floor(k / 10);
-    const has = k < 4;
-    dots.push(<circle key={k} cx={30 + col * 52} cy={30 + row * 52} r={18} fill={has ? link : '#FFFFFF'} stroke={has ? link : linkFaint} strokeWidth="3" />);
-  }
-  return <svg viewBox="0 0 540 420" style={{ width: 540, height: 420, display: 'block' }} role="img" aria-label="74 個點：4 個實心紫色，70 個淡色空心">{dots}</svg>;
-};
+// One row of the deep / pale legend under the outline screenshot.
+const LinkKind = ({ n, word, pale, title, sub }: { n: number; word: string; pale: boolean; title: string; sub: string }) => (
+  <div style={{ display: 'grid', gridTemplateColumns: '48px 130px 1fr', gap: 24, alignItems: 'center' }}>
+    <NumDot n={n} size={48} />
+    <span style={{ fontSize: 50, color: pale ? linkFaint : link, textDecoration: 'underline' }}>{word}</span>
+    <div>
+      <div style={{ fontSize: 34, fontWeight: 600 }}>{title}</div>
+      <div style={{ fontSize: 27, color: muted, marginTop: 4 }}>{sub}</div>
+    </div>
+  </div>
+);
+
+const CountChip = ({ value, tone }: { value: string; tone: 'deep' | 'pale' }) => (
+  <span style={{ display: 'inline-block', fontFamily: display, fontSize: 56, lineHeight: 1, color: tone === 'deep' ? link : amber }}>{value}</span>
+);
+
+// Outline excerpt (第 1 回) drawn 1500 px wide; k = 1500 / 1440.
+const GR_LEFT = 66;
+const GR_TOP = 64;
 
 const GrayReal: Page = () => (
   <Shell chapter={2}>
     <PracticeEyebrow time="2 分鐘">練習 2｜找淡色連結</PracticeEyebrow>
     <Heading>大綱裡顏色淡的連結</Heading>
     <Fit>
-      <div style={{ display: 'grid', gridTemplateColumns: '960px 1fr', gap: 72, alignItems: 'center' }}>
-        <In i={0}>
-          <Screenshot src={outlineCloseup} aspect={1408 / 816} width={960} caption="三國演義大綱第 1–3 回｜實際畫面" alt="大綱裡劉備、張飛、關羽是深紫色，張角、董卓、呂布是淡紫色">
-            <RegionMark n={1} i={2} x={93.2} y={7} w={6.3} h={6.5} badge="right" />
-            <RegionMark n={2} i={4} x={42.6} y={83} w={6.4} h={7.5} />
-          </Screenshot>
+      <div style={{ position: 'relative', width: 1632, height: 600 }}>
+        <In i={0} style={{ position: 'absolute', left: GR_LEFT, top: GR_TOP }}>
+          <Screenshot src={outlineCh1} aspect={1440 / 230} width={1500} alt="大綱第 1 回：劉備、張飛、關羽是深紫色連結，張角、張寶、張梁、董卓是淡紫色連結" />
         </In>
-        <div>
-          <Steps>
-            <div style={{ fontSize: 32, marginBottom: 18 }}>大綱連了幾個名字？</div>
-            <Step duration={STEP_MS}><div><NameDots /><div style={{ fontSize: 30, marginTop: 14 }}><strong style={{ color: link }}>4 個有卡</strong>　<span style={{ color: amber }}>70 個還沒有</span></div></div></Step>
-          </Steps>
-        </div>
+        <div style={{ position: 'absolute', left: GR_LEFT, top: 352, fontSize: 34 }}>哪些名字已經有卡？</div>
+        <Steps>
+          <Step duration={STEP_MS}>
+            <div style={{ position: 'absolute', inset: 0 }}>
+              <PxMark x={GR_LEFT + 1381} y={GR_TOP + 84} w={80} h={48} n={1} badge="above" drop={22} />
+              <div style={{ position: 'absolute', left: GR_LEFT, top: 412, width: 1200 }}><LinkKind n={1} word="劉備" pale={false} title="深紫：已經有卡，點了會打開" sub="例：劉備、關羽、張飛、曹操" /></div>
+            </div>
+          </Step>
+          <Step duration={STEP_MS}>
+            <div style={{ position: 'absolute', inset: 0 }}>
+              <PxMark x={GR_LEFT + 1350} y={GR_TOP + 133} w={78} h={48} n={2} badge="below" drop={70} />
+              <div style={{ position: 'absolute', left: GR_LEFT, top: 508, width: 1200 }}><LinkKind n={2} word="董卓" pale title="淡紫：還沒有卡，點了會新增空白卡" sub="例：張角、董卓、呂布……" /></div>
+            </div>
+          </Step>
+          <Step duration={STEP_MS}>
+            <div style={{ position: 'absolute', inset: 0 }}>
+              <div style={{ position: 'absolute', right: 66, top: 420 }}><CountChip value="4 個" tone="deep" /></div>
+              <div style={{ position: 'absolute', right: 66, top: 516 }}><CountChip value="70 個" tone="pale" /></div>
+            </div>
+          </Step>
+        </Steps>
       </div>
     </Fit>
   </Shell>
@@ -1355,6 +1402,17 @@ const GrayDecide: Page = () => (
   </Shell>
 );
 
+// One practice step on the right: a number, ≤16 字, and a small picture of it.
+const CardStep = ({ n, text, h, children }: { n: number; text: ReactNode; h: number; children: ReactNode }) => (
+  <div>
+    <NumLine n={n} size={29}>{text}</NumLine>
+    <svg viewBox={`0 0 520 ${h}`} style={{ display: 'block', width: 520, height: h, marginTop: 10, marginLeft: 62 }} aria-hidden="true">{children}</svg>
+  </div>
+);
+
+// The example card is drawn 1000 px wide from a 1540 px capture (s = 0.649).
+const PC_RIGHT = 1040;
+
 const Practice2Card: Page = () => (
   <Shell chapter={2}>
     <PracticeEyebrow time="9 分鐘">練習 2｜寫卡</PracticeEyebrow>
@@ -1365,17 +1423,57 @@ const Practice2Card: Page = () => (
       <Pill tag="限制">原文沒寫不寫</Pill>
     </PillRow>
     <Fit>
-      <div style={{ display: 'grid', gridTemplateColumns: '1040px 1fr', gap: 56, alignItems: 'center' }}>
-        <In i={1}>
-          <Screenshot src={ownCard} aspect={1540 / 700} width={1040} caption="範例：講師示範的〈三英戰呂布〉，取材第 5 回" alt="關係資料夾裡新增的三英戰呂布卡，句子裡有劉備、關羽、張飛的紫色連結和呂布的淡色連結，最後一行寫出處" />
+      <div style={{ position: 'relative', width: 1632, height: 570 }}>
+        <In i={1} style={{ position: 'absolute', left: 0, top: 0 }}>
+          <Screenshot src={ownCard} aspect={1540 / 700} width={1000} caption="範例：講師示範的〈三英戰呂布〉，取材第 5 回" alt="關係資料夾裡新增的三英戰呂布卡，句子裡有劉備、關羽、張飛的紫色連結，最後一行寫出處" />
         </In>
-        <div style={{ display: 'grid', gap: 34 }}>
-          <Steps>
-            <NumLine n={1} size={32}>關係/ 按右鍵，新增筆記</NumLine>
-            <Step duration={STEP_MS}><NumLine n={2} size={32}>寫成句子，人名打 [[</NumLine></Step>
-            <Step duration={STEP_MS}><NumLine n={3} size={32}>最後一行寫出處</NumLine></Step>
-          </Steps>
-        </div>
+        <Steps>
+          <Step duration={STEP_MS}>
+            <div style={{ position: 'absolute', left: PC_RIGHT, top: 0 }}>
+              <CardStep n={1} text="在「關係/」按右鍵 → 新增筆記" h={92}>
+                <rect x="0" y="8" width="170" height="52" fill={surface} stroke={rule} strokeWidth="2" />
+                <text x="20" y="44" fontSize="26" fontFamily={mono} fill={ink}>關係/</text>
+                <path d="M150 40 l14 22 l6 -9 l10 -2 Z" fill={ink} />
+                <rect x="200" y="8" width="230" height="78" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+                <rect x="204" y="12" width="222" height="36" fill={linkSoft} />
+                <text x="222" y="40" fontSize="25" fontWeight="600" fill={ink}>新增筆記</text>
+                <text x="222" y="76" fontSize="22" fill={quiet}>新增資料夾</text>
+              </CardStep>
+            </div>
+          </Step>
+          <Step duration={STEP_MS}>
+            <div style={{ position: 'absolute', inset: 0 }}>
+              <div style={{ position: 'absolute', left: PC_RIGHT, top: 168 }}>
+                <CardStep n={2} text={<>有卡的人名加 [[ ]]，例 <Path size={28}>[[劉備]]</Path></>} h={110}>
+                  <rect x="0" y="6" width="220" height="50" fill={term} />
+                  <text x="18" y="41" fontSize="27" fontFamily={mono} fill="#B79CF2">[[劉</text>
+                  <rect x="40" y="56" width="320" height="50" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+                  <rect x="42" y="58" width="316" height="46" fill={linkSoft} />
+                  <text x="60" y="90" fontSize="25" fontWeight="600" fill={ink}>劉備</text>
+                  <text x="130" y="90" fontSize="22" fill={quiet}>人物/劉備.md</text>
+                  <text x="380" y="90" fontSize="24" fill={link}>← 跳出選單</text>
+                </CardStep>
+              </div>
+              <PxMark x={22} y={208} w={56} h={36} color={link} />
+              <div style={{ position: 'absolute', left: 199, top: 240, width: 44, borderBottom: `5px dashed ${quiet}` }} />
+              <div style={{ position: 'absolute', left: 0, top: 512, display: 'flex', gap: 36, fontSize: 26 }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><span style={{ width: 34, height: 24, border: `4px solid ${link}` }} />加了 [[ ]]：變成連結</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><span style={{ width: 34, borderBottom: `5px dashed ${quiet}` }} />沒加：一般的字</span>
+              </div>
+            </div>
+          </Step>
+          <Step duration={STEP_MS}>
+            <div style={{ position: 'absolute', inset: 0 }}>
+              <div style={{ position: 'absolute', left: PC_RIGHT, top: 356 }}>
+                <CardStep n={3} text="最後一行寫出處" h={60}>
+                  <rect x="0" y="4" width="440" height="50" fill={surface} stroke={rule} strokeWidth="2" />
+                  <text x="18" y="38" fontSize="25" fontFamily={mono} fill={ink}>出處：原文/第005回.txt</text>
+                </CardStep>
+              </div>
+              <PxMark x={20} y={393} w={236} h={36} color="#E9B650" />
+            </div>
+          </Step>
+        </Steps>
       </div>
     </Fit>
   </Shell>
@@ -1813,16 +1911,19 @@ const CheckThree: Page = () => (
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36 }}>
         <Steps>
-          <In i={0} style={{ display: 'grid' }}><CheckPanel label="1｜檔案在嗎" caption="這座筆記庫裡有這個檔嗎？" alt="回答寫的出處 原文/第011回.txt 不在這座筆記庫的原文資料夾，打問號">
-            <Folder x={10} y={20} w={250} h={190} fill={surface} stroke={faint} />
-            <text x="30" y="80" fontSize="24" fontFamily={mono} fill={ink}>原文/</text>
-            <text x="30" y="122" fontSize="22" fontFamily={mono} fill={quiet}>第037回節選.txt</text>
-            <text x="30" y="156" fontSize="22" fontFamily={mono} fill={quiet}>第038回節選.txt</text>
-            <text x="30" y="190" fontSize="22" fontFamily={mono} fill={quiet}>第046回節選.txt</text>
-            <rect x="268" y="88" width="190" height="70" fill="#FFFFFF" stroke={amber} strokeWidth="3" strokeDasharray="8 6" />
-            <text x="367" y="118" textAnchor="middle" fontSize="22" fontFamily={mono} fill={amber}>原文/</text>
-            <text x="367" y="142" textAnchor="middle" fontSize="22" fontFamily={mono} fill={amber}>第011回.txt</text>
-            <AskMark x={440} y={78} />
+          <In i={0} style={{ display: 'grid' }}><CheckPanel label="1｜檔案在嗎" caption="這座筆記庫裡有這個檔嗎？" alt="回答寫的出處 原文/第011回.txt，在筆記庫的原文資料夾裡找得到，打勾">
+            <Folder x={10} y={14} w={250} h={206} fill={surface} stroke={faint} />
+            <text x="30" y="70" fontSize="24" fontFamily={mono} fill={ink}>原文/</text>
+            <text x="30" y="106" fontSize="22" fontFamily={mono} fill={quiet}>第001回.txt</text>
+            <text x="30" y="132" fontSize="22" fontFamily={mono} fill={quiet}>⋮</text>
+            <rect x="22" y="140" width="226" height="36" fill={sage} stroke={okGreen} strokeWidth="2" />
+            <text x="30" y="166" fontSize="22" fontFamily={mono} fontWeight="600" fill={ink}>第011回.txt</text>
+            <text x="30" y="204" fontSize="22" fontFamily={mono} fill={quiet}>⋮ 共 21 回＋節選</text>
+            <rect x="282" y="60" width="176" height="70" fill="#FFFFFF" stroke={okGreen} strokeWidth="2" />
+            <text x="370" y="88" textAnchor="middle" fontSize="22" fill={quiet}>回答寫的</text>
+            <text x="370" y="116" textAnchor="middle" fontSize="22" fontFamily={mono} fill={ink}>第011回.txt</text>
+            <path d="M282 112 C266 128 262 150 252 158" fill="none" stroke={okGreen} strokeWidth="3" />
+            <OkDot x={440} y={46} />
           </CheckPanel></In>
           <Step duration={STEP_MS}><CheckPanel label="2｜原句在嗎" caption="卡片裡找得到那句話嗎？" alt="大綱第 11 回寫了呂布趁曹操外出攻打濮陽，打勾">
             <DocShape x={10} y={20} w={420} h={190} />
@@ -2134,24 +2235,46 @@ const Recap: Page = () => (
   </Shell>
 );
 
+// One stop on the lesson-3 preview: an icon in a circle, a label, and what it gives you.
+const SkillStop = ({ x, n, kind, label }: { x: number; n: number; kind: IconKind; label: string }) => (
+  <g>
+    <circle cx={x} cy="110" r="92" fill={amberSoft} stroke={amber} strokeWidth="3" />
+    <SvgIcon kind={kind} x={x} y={110} size={96} color={amber} />
+    <SvgNum x={x - 70} y={40} n={n} />
+    <text x={x} y="262" textAnchor="middle" fontSize="40" fontWeight="600" fill={ink}>{label}</text>
+  </g>
+);
+
 const NextSkills: Page = () => (
   <Shell>
     <Eyebrow>下一堂預告</Eyebrow>
     <Heading>下一堂：用 Skill 擴充筆記庫</Heading>
+    <Lead>Skill＝寫好的做事說明，像一份食譜</Lead>
     <Fit>
-      <div style={{ display: 'grid', gridTemplateColumns: '800px 1fr', gap: 72, alignItems: 'center' }}>
-        <In i={0}>
-          <Screenshot src={diagramResult} aspect={2400 / 1770} width={800} caption="diagram-design 實跑畫出的三國關係圖｜線上標籤疊在一起，下一堂修" alt="diagram-design Skill 畫出的三國人物關係圖，部分線上的標籤互相重疊" />
-        </In>
-        <div style={{ display: 'grid', gap: 30 }}>
-          <Steps>
-            <div style={{ fontSize: 34, lineHeight: 1.5 }}>Skill＝寫好的做事說明</div>
-            <Step duration={STEP_MS}><div style={{ display: 'flex', alignItems: 'center', gap: 20, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '18px 24px' }}><Icon kind="graph" size={52} color={amber} /><span style={{ fontSize: 31 }}><Path size={30}>diagram-design</Path>　畫關係圖</span></div></Step>
-            <Step duration={STEP_MS}><div style={{ display: 'flex', alignItems: 'center', gap: 20, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '18px 24px' }}><Icon kind="doc" size={52} color={amber} /><span style={{ fontSize: 31 }}><Path size={30}>eli5</Path>　改寫成好讀版</span></div></Step>
-            <Step duration={STEP_MS}><div style={{ fontSize: 30, color: muted }}>最後自己寫一個 Skill</div></Step>
-          </Steps>
-        </div>
-      </div>
+      <Stage h={430}>
+        <Steps>
+          <Layer h={430} label="第一步：把 Skill 裝進 Codex">
+            <InG i={0}><SkillStop x={250} n={1} kind="down" label="裝 Skill" /></InG>
+            <InG i={1}><text x="250" y="320" textAnchor="middle" fontSize="28" fill={muted}>裝進 Codex</text></InG>
+          </Layer>
+          <Step duration={STEP_MS}><Layer h={430} label="第二步：用 Skill 畫關係圖、改寫成好讀版">
+            <g className="aw2-build" style={buildDelay(0)}><MapArrow x1={370} x2={570} y={110} hot /></g>
+            <g className="aw2-build" style={buildDelay(1)}>
+              <SkillStop x={816} n={2} kind="terminal" label="用 Skill" />
+              <SvgChip x={646} y={300} w={340} h={54} label="畫關係圖" size={28} fill="#FFFFFF" stroke={amber} />
+              <SvgChip x={646} y={366} w={340} h={54} label="改寫成好讀版" size={28} fill="#FFFFFF" stroke={amber} />
+            </g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={430} label="第三步：自己寫一個 Skill，做三國時間軸">
+            <g className="aw2-build" style={buildDelay(0)}><MapArrow x1={936} x2={1136} y={110} hot /></g>
+            <g className="aw2-build" style={buildDelay(1)}>
+              <SkillStop x={1382} n={3} kind="doc" label="自己寫一個" />
+              <SvgChip x={1212} y={300} w={340} h={54} label="三國時間軸" size={28} fill={sage} stroke={okGreen} />
+            </g>
+          </Layer></Step>
+        </Steps>
+      </Stage>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>同一座筆記庫，下一堂會多出圖和時間軸</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2207,7 +2330,7 @@ const NOTES = new Map<Page, string>([
 先看上一堂的成果。左邊是講師實際跑出來的 三國演義大綱.md：一回一段，人名都寫成 [[劉備]] 這種連結，每段最後一行是出處。
 按一下：21 段。按一下：21 個出處，每段最後一行，例如「出處：原文/第001回.txt」。按一下：講師這份用 Codex 跑了 1 分 38 秒。
 按一下：有個小毛病，框起來的地方，第 2 回標題裡的 [[張飛]] 也加了連結。提示詞明明寫「標題裡的人名不用加連結」，它還是加了。這不影響今天的練習，只是提醒大家：AI 照做九成，剩下一成要自己看。
-最後一下：今天把這份大綱放進筆記庫。請還沒寫完大綱的同學舉手，助教會給你講師的版本，檔案在課程 GitHub 的 examples/aw-01-lab。`],
+最後一下：今天把這份大綱放進筆記庫。第一堂沒來、或大綱不見的同學，可以用講師用現在這版提示詞跑出來的範例：課程 GitHub 的 examples/aw-01-sample-output/三國演義大綱.md，下載後一樣放進筆記庫的「整理」資料夾。`],
   [TodayGoal, `05:00–08:00
 左邊是第一堂結束時的樣子：大綱是一個單獨的檔案，裡面的 [[劉備]]、[[曹操]]、[[呂布]] 都是連結，但連到空處，因為還沒有那些卡。
 按一下：今天結束時，大綱放進「三國人物知識庫」的「整理」資料夾，大綱裡的劉備、關羽、張飛、曹操，就連到講師寫好的人物卡；人物卡再透過〈桃園結義〉〈煮酒論英雄〉這些關係卡連在一起。
@@ -2217,7 +2340,7 @@ const NOTES = new Map<Page, string>([
   [Section1, `10:00–10:30
 第一章：認識 Obsidian。三件事：筆記庫是什麼、連結怎麼寫、卡片分幾種。`],
   [VaultFolder, `10:30–13:00
-Obsidian 的筆記庫，就是你電腦裡的一個資料夾。這座「三國人物知識庫」裡有一張入口卡〈三國演義〉，人物 5 張、勢力 3 張、關係 3 張，一共 12 張 .md 卡；另外有 原文/（第 37、38、46 回節選，.txt 檔，Obsidian 預設不顯示）和 整理/（等一下大綱放這裡）。.md 是純文字檔，用記事本也打得開。Obsidian 繁中介面把筆記庫叫「儲存庫」，是同一個東西。
+Obsidian 的筆記庫，就是你電腦裡的一個資料夾。這座「三國人物知識庫」裡有一張入口卡〈三國演義〉，人物 5 張、勢力 3 張、關係 3 張，一共 12 張 .md 卡；另外有 原文/（第 1 到 21 回的全文，和第 37、38、46 回節選，都是 .txt 檔，Obsidian 預設不顯示）、整理/（等一下大綱放這裡）和 模板/（關係卡模板，第三堂會用到）。.md 是純文字檔，用記事本也打得開。Obsidian 繁中介面把筆記庫叫「儲存庫」，是同一個東西。
 按一下：Obsidian 打開這個資料夾來寫，看到的就是這些檔案。
 按一下：Codex 讀的也是同一個資料夾，不用上傳到任何地方。
 最後一下：檔案在你的電腦裡，Codex 也讀得到。這是今天 RAG 能做的前提。官方說明：https://obsidian.md/help/data-storage`],
@@ -2240,7 +2363,7 @@ Obsidian 的筆記庫，就是你電腦裡的一個資料夾。這座「三國�
 人物卡 5 張：劉備、關羽、張飛、曹操、孫權，一張寫一個人。
 按一下：勢力卡 3 張：蜀漢、曹魏、東吳，一張寫一方陣營。
 按一下：關係卡 3 張：桃園結義、煮酒論英雄、赤壁之戰，一張寫一件事：誰和誰、在第幾回、發生什麼事。
-最後一下：人物之間，靠關係卡接起來。第三堂會加上「回目」「年份」欄位排時間軸。`],
+最後一下：人物之間，靠關係卡接起來。三張關係卡最上面已經有「回目」欄位，〈桃園結義〉還寫了年份「中平元年」；模板/ 裡有一份關係卡模板，第三堂排時間軸會用到這兩個欄位。`],
   [StoryMap, `22:30–26:00
 上排五個人物。按一下：〈桃園結義〉接到關羽、張飛、劉備，第 1 回。按一下：〈煮酒論英雄〉接到劉備和曹操，第 21 回。按一下：〈赤壁之戰〉接到曹操和孫權，第 49 到 50 回。
 最後一下：劉備、曹操外面多一圈，各接了兩段故事。圖上只畫每段故事最核心的人；卡片正文其實連到更多人，例如〈赤壁之戰〉也連到劉備、關羽、張飛。
@@ -2259,15 +2382,17 @@ Obsidian 的筆記庫，就是你電腦裡的一個資料夾。這座「三國�
 ${VAULT_ZIP_URL}
 1 下載 ZIP。2 解壓縮：Windows 一定要在 ZIP 上按右鍵選「全部解壓縮」，直接雙擊只是預覽，Obsidian 打不開；解壓縮後外面可能多一層同名資料夾，往裡面點一層。Mac 雙擊就會解開。3 回到 Obsidian，按「開啟資料夾為儲存庫」，選「三國人物知識庫」這一層，不要選外層的下載資料夾。第一次打開可能會問要不要信任這個儲存庫的外掛，選信任即可，這份教材沒有裝第三方外掛。`],
   [VaultCheck, `41:00–45:00
-這是講師電腦上的實際畫面，用來對照。按一下，標 1：左邊看得到人物、勢力、關係三個資料夾，展開後人物 5 張、勢力 3 張、關係 3 張。按一下，標 2：中間是打開的〈桃園結義〉，內容是完整的句子，人名寫在句子裡。按一下，標 3：紫色的劉備，點下去就跳到人物卡。
+這是講師電腦上的實際畫面，打開的是〈桃園結義〉，用來對照。按一下，標 1：左邊看得到人物、勢力、關係三個資料夾，展開後人物 5 張、勢力 3 張、關係 3 張。按一下，標 2：中間是打開的〈桃園結義〉，內容是完整的句子，人名寫在句子裡。按一下，標 3：最後一行「參與人物」裡紫色的劉備，點下去就跳到人物卡。
 看到這三樣，練習 1 就完成了。左邊如果只看到一個「三國人物知識庫」資料夾，代表選到外層了，請在左下角的儲存庫名稱點一下，選「管理儲存庫」重新打開裡面那一層。還有時間的人自己點幾個紫色人名逛逛。`],
   [Section2, `45:00–45:30
 第二章：把第一堂的大綱放進筆記庫，跟講師的人物卡接起來。這一整章都是練習 2。`],
   [MergeOutline, `45:30–50:00
-練習 2 第一步，3 分鐘。左邊是第一堂的 aw-01-lab 資料夾，裡面有 三國演義大綱.md。
-按一下：把它拖進「三國人物知識庫」的「整理」資料夾。可以在檔案總管（Mac 是 Finder）裡拖，也可以直接拖到 Obsidian 左側的「整理」上。看到大綱出現在 整理/ 底下就對了。
-按一下：只放大綱這一個檔。有些同學第一堂讓 Codex 另外寫了 劉備.md 之類的人物卡，這次不要一起放進來。人物卡一律用講師的版本：兩張都叫劉備，[[劉備]] 就不知道要連哪一張，Obsidian 會連到其中一張，另一張變成孤兒。
-提醒：大綱每段最後的「出處：原文/第001回.txt」，指的是第一堂資料夾裡的原文，這座筆記庫的 原文/ 只有三份節選，第三章核對時會再提到。`],
+練習 2 第一步，3 分鐘。左邊是第一堂的 aw-01-lab 資料夾，裡面有大家寫好的 三國演義大綱.md。
+按一下：只要搬這一個檔，拖進「三國人物知識庫」的「整理」資料夾。可以在檔案總管（Mac 是 Finder）裡拖，也可以直接拖到 Obsidian 左側的「整理」上。旁邊的「人物」資料夾是講師的卡，不用動。
+按一下：大綱第 1 回裡寫的是 [[劉備]]，人物資料夾裡剛好有 劉備.md，所以這個連結自己就接上了，不用改任何字。
+最後一下：只搬一個檔，連結自己會接上。
+補充，給好奇的同學：如果有人第一堂另外讓 Codex 寫了自己的 劉備.md，這次先不要放進來。同一個筆記庫裡有兩張都叫劉備的卡，[[劉備]] 只會連到其中一張，另一張就沒人連得到。
+另外：大綱每段最後的「出處：原文/第001回.txt」，在這座筆記庫裡也找得到。原文/ 已經放了第 1 到 21 回的全文，跟第一堂的檔案一樣，所以出處點得開、核對得到，不用從第一堂的資料夾複製。`],
   [ClickLiubei, `50:00–52:30
 左邊是講師電腦上合併後的實際畫面：整理/三國演義大綱。標 1 是第 1 回裡的劉備，深紫色，代表找得到卡。
 按一下、再按一下：點它，就打開右邊這張講師的人物卡 人物/劉備。
@@ -2277,9 +2402,11 @@ ${VAULT_ZIP_URL}
 按一下，標 1：「已連結本筆記的檔案」變成 41。按一下，標 2：其中 24 處來自三國演義大綱。
 大綱一放進來，劉備卡就自動多了 24 條反向連結，大綱裡寫到劉備的每一回都列在這裡，點了就跳回大綱那一段。這就是雙向連結的好處：你沒有改劉備卡，它自己變豐富了。`],
   [GrayReal, `54:30–57:00
-練習 2 第二步，2 分鐘：在大綱裡找淡色連結。這是講師電腦上第 1 到 3 回的實際畫面。標 1 的劉備是深紫色；標 2 的董卓是淡紫色。張角、張寶、何進、丁原、呂布也都是淡的。
-先問：大綱一共連了幾個名字？按一下：講師這份大綱連了 74 個不同的名字，有卡的只有 4 個：劉備、關羽、張飛、曹操；另外 70 個還沒有卡。孫權在第 1 到 21 回還沒出場，所以大綱裡沒有他。
-每個人的大綱數字會不一樣，請大家自己捲一捲，看看你的大綱有多少淡色連結。`],
+練習 2 第二步，2 分鐘：在大綱裡找淡色連結。上面是講師電腦上大綱第 1 回的實際畫面。先問大家：哪些名字已經有卡？
+按一下，標 1：劉備是深紫色，代表筆記庫裡有 劉備.md，點了會打開。關羽、張飛、曹操也一樣。
+按一下，標 2：董卓是淡紫色，代表還沒有這張卡，點了 Obsidian 會幫你新增一張空白卡。同一行的張角、張寶、張梁也是淡的。
+按一下：講師這份大綱一共連了 74 個不同的名字，深紫的只有 4 個：劉備、關羽、張飛、曹操；淡紫的有 70 個。孫權在第 1 到 21 回還沒出場，所以大綱裡沒有他。
+每個人的大綱數字會不一樣，請大家自己捲一捲。有些人會看到第 2、3 回的回目標題裡，人名也變成連結，那是第一堂舊版提示詞的小毛病，現在的提示詞已經改掉，不影響今天的練習。`],
   [GrayDecide, `57:00–61:00
 練習 2 第三步，5 分鐘：淡色連結怎麼處理。
 左邊是講師的大綱裡出現最多次、還沒有卡的人：呂布 32 次、董卓 15 次、袁術 11 次、李傕 9 次、郭汜和袁紹各 7 次。右邊三種處理方式，一次一個：
@@ -2289,9 +2416,11 @@ ${VAULT_ZIP_URL}
 請每個人在自己的大綱裡挑一個處理：改一個別名，或記下最想補卡的人。`],
   [Practice2Card, `61:00–70:00
 練習 2 最後一步，9 分鐘：自己寫一張關係卡。條件在上面三個框：定位，從大綱挑一回；期望輸出，用完整句子寫，人名的 [[ ]] 放在句子裡；限制，原文沒寫的不寫。至少連到兩位人物。
-左邊是講師示範的〈三英戰呂布〉，取材第 5 回：第一句交代背景，第二、三句寫誰做了什麼，最後一行「參與人物」和「出處」。劉備、關羽、張飛是深紫色，呂布是淡色，因為還沒有呂布卡，這沒關係。
-步驟：按一下，1 在左側「關係」資料夾按右鍵，選「新增筆記」，取名就是事件名稱。按一下，2 寫成句子，打 [[ 會跳出選單，選人名。按一下，3 最後一行寫出處，例如「出處：原文/第005回.txt」。
-可以挑的事件：第 5 回三英戰呂布、第 8 回連環計、第 16 回轅門射戟、第 19 回白門樓。不確定細節就回第一堂資料夾的原文找。寫完打開自己的卡，看右邊的反向連結和關聯圖有沒有多一條線。`],
+左邊是講師示範的〈三英戰呂布〉，取材第 5 回：第一句交代背景，後面寫誰做了什麼，最後是「參與人物」和「出處」。
+按一下，1：在左側「關係」資料夾上按右鍵，選「新增筆記」，取名就是事件名稱。
+按一下，2：寫到有卡的人名時，前後加兩對中括號，例如 [[劉備]]。打完 [[ 和第一個字，Obsidian 會跳出選單，選人名再按 Enter 就好。看範例卡：紫框的張飛加了 [[ ]]，變成連結；底下畫虛線的呂布沒加，就是一般的字。同一個人在一張卡裡連一次就夠了，範例第一句的呂布有加，是淡紫色，因為還沒有呂布卡。
+按一下，3：最後一行寫出處，例如「出處：原文/第005回.txt」。
+請挑範例以外的事件，不要寫三英戰呂布和白門樓：第三堂會請 Codex 新增〈三英戰呂布〉和〈白門樓〉兩張關係卡，自己手寫的同名卡會撞名。可以挑：第 5 回〈溫酒斬華雄〉，連到關羽和曹操；第 16 回〈轅門射戟〉，連到呂布和劉備；第 8 回〈連環計〉。不確定細節，就打開筆記庫 原文/ 裡那一回的全文找。想省事的人，可以把 模板/關係卡模板.md 的內容複製過來再填；模板的規則是有卡的人名才加 [[ ]]，沒卡的寫純文字，所以範例第一句的董卓、呂布照模板可以不加。寫完打開自己的卡，看右邊的反向連結和關聯圖有沒有多一條線。`],
   [Section3, `70:00–70:30
 第三章是今天的重點：在筆記庫裡做 RAG。第一堂講過，Web Search 是 RAG，資料從網路來；今天資料從自己的筆記庫來。`],
   [RagIdea, `70:30–73:00
@@ -2339,7 +2468,7 @@ RAG 的限制一：筆記沒寫的，它找不到。實跑：問「官渡之戰�
 最後一下：範圍說清楚，再問一次。可是這 13 項也要核對，下一頁就用它來示範。`],
   [CheckThree, `90:00–91:00
 核對回答的三件事，用剛才那份 13 項的回答示範。
-1 檔案在嗎：它每一項的檔名寫的是「原文/第011回.txt」這種，是從大綱的出處抄來的。可是這座筆記庫的 原文/ 只有第 37、38、46 回的節選，第 11 回在第一堂的 aw-01-lab 資料夾裡。檔名要在你查得到的地方。
+1 檔案在嗎：它每一項的檔名寫的是「原文/第011回.txt」這種，是從大綱的出處抄來的。打開筆記庫的 原文/ 資料夾，第 1 到 21 回都在，第011回.txt 找得到，打勾。如果回答裡出現資料夾裡沒有的檔名，例如它寫成第 30 回，那就是第一個要抓的問題。
 按一下，2 原句在嗎：「濮陽之戰，與呂布交戰」，大綱第 11 回寫了「呂布趁曹操外出攻打濮陽……曹操用計收復濮陽」，打勾。
 按一下，3 有沒有多寫：它列了「虎牢關之戰」，但大綱第 5 回只寫「呂布在虎牢關迎戰，劉備、關羽、張飛合力將他擊退」，沒寫曹操上陣，這就是多寫了。
 最後一下：三件都打勾，才放心用。`],
@@ -2388,9 +2517,12 @@ Obsidian 內建關聯圖：按左側工具列的關聯圖圖示，或按 Ctrl+G�
 回顧四件事。一，筆記庫就是一個資料夾，Obsidian 和 Codex 讀同一份。二，大綱放進整理資料夾，[[劉備]] 接上講師的人物卡，淡色連結決定要補卡、改名還是先留著。三，RAG：先查筆記再回答，要求附檔名，用三件事核對：檔案在嗎、原句在嗎、有沒有多寫。四，知識圖譜是點和線，每條線都要找得到原句，找不到就刪。
 最後一下：筆記寫得清楚、連得好，AI 才答得準。`],
   [NextSkills, `118:00–120:00
-下一堂講 Skill。左邊是講師用 diagram-design 這個 Skill 實際畫出來的三國關係圖，線上的標籤疊在一起了，第一次畫出來不完美，下一堂會示範怎麼請它把標籤分開。
-Skill 就是一份寫好的做事說明，裝進 Codex 之後，它就照著做。按一下：diagram-design，畫關係圖；第一次用它會先問你要哪種樣式，選 1。按一下：eli5，把卡片改寫成好讀的版本。按一下：最後大家自己寫一個 Skill。
-課前請大家先註冊 GitHub 和 Vercel，第四堂發布網站要用，避免現場一起註冊卡在 email 驗證。今天的筆記庫請留著，下一堂接著用。`],
+下一堂講 Skill。Skill 就是一份寫好的做事說明，像食譜：照著做，每次的做法都一樣。
+第一步，把 Skill 裝進 Codex。
+按一下：第二步，用 Skill 做事。今天會預告兩個：diagram-design 畫關係圖，第一次用它會先問你要哪種樣式，選 1；eli5 把卡片改寫成好讀的版本。
+按一下：第三步，大家自己寫一個 Skill，用它把三國的事件排成時間軸。
+最後一下：同一座筆記庫，下一堂會多出圖和時間軸，今天的筆記庫請留著。
+課前請大家先註冊 GitHub 和 Vercel，第四堂發布網站要用，避免現場一起註冊卡在 email 驗證。`],
 ]);
 
 export const notes: (string | undefined)[] = deck.map(page => NOTES.get(page));
