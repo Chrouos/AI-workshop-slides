@@ -871,7 +871,7 @@ const ScanOutput: Page = () => (
 
 // ---------- 03 練習 2：打草稿 → 逐行找原句 → 刪掉再存 ----------
 
-// The prepared teaching draft (prompts.md 練習 2-①). Fixed geometry so the pen circle (p16) and
+// The prepared teaching draft (prompts.md 練習 2-1). Fixed geometry so the pen circle (p16) and
 // the strike-through (p18) land exactly on the 盟友 line.
 const DRAFT_LINE_H = 64;
 const DRAFT_TOP = 28 + 44;
@@ -902,7 +902,7 @@ const MENGYOU_Y = DRAFT_TOP + 4 * DRAFT_LINE_H + DRAFT_LINE_H / 2;
 
 const Practice2Draft: Page = () => (
   <Shell chapter={3} enterChapter>
-    <PracticeEyebrow time="5 分鐘" promptRef="練習 2-①">練習 2｜打草稿</PracticeEyebrow>
+    <PracticeEyebrow time="5 分鐘" promptRef="練習 2-1">練習 2｜打草稿</PracticeEyebrow>
     <Heading>草稿裡，哪一行是多的？</Heading>
     <Stage top={290}>
     <div style={{ position: 'relative', height: DRAFT_H }}>
@@ -949,7 +949,7 @@ const DraftCheckRow = ({ line, quote, ok }: { line: string; quote: string; ok: b
 
 const Practice2Check: Page = () => (
   <Shell chapter={3}>
-    <PracticeEyebrow time="7 分鐘" promptRef="練習 2-②">練習 2｜逐行找原句</PracticeEyebrow>
+    <PracticeEyebrow time="7 分鐘" promptRef="練習 2-2">練習 2｜逐行找原句</PracticeEyebrow>
     <Heading>請 AI 每行附上原句</Heading>
     <PillRow>
       <Pill tag="定位">煮酒論英雄.md</Pill>
@@ -975,7 +975,7 @@ const Practice2Check: Page = () => (
 
 const Practice2Save: Page = () => (
   <Shell chapter={3}>
-    <PracticeEyebrow time="3 分鐘" promptRef="練習 2-③">練習 2｜存檔</PracticeEyebrow>
+    <PracticeEyebrow time="3 分鐘" promptRef="練習 2-3">練習 2｜存檔</PracticeEyebrow>
     <Heading>刪掉那行，再存檔</Heading>
     <PillRow>
       <Pill tag="定位">剛才的草稿</Pill>
@@ -1395,7 +1395,7 @@ const OpenCodex: Page = () => (
         <div style={{ fontFamily: mono, fontSize: 31, lineHeight: 1.65, whiteSpace: 'pre' }}><span style={{ color: '#8DD4A0' }}>$</span>{' cd ~/Downloads/teacher-learning-lab\n'}<span style={{ color: '#8DD4A0' }}>$</span>{' codex\n'}<span style={{ color: '#E9B650' }}>{'> 列出 notes/ 裡的檔案，先不要修改任何檔案\n'}</span><span style={{ color: '#BCC3CC' }}>{'notes/ 裡有六份筆記和一份 README：\n'}</span>{'劉備.md　關羽.md　張飛.md　曹操.md\n桃園結義.md　煮酒論英雄.md　README.md'}</div>
       </Terminal></Step></Steps>
     </div>
-    <In i={5} style={{ background: surface, padding: '20px 34px', marginTop: 44, fontSize: 32 }}><strong>沒有 Codex？</strong>改用 ChatGPT，見附錄第 25 頁</In>
+    <In i={5} style={{ background: surface, padding: '20px 34px', marginTop: 44, fontSize: 32 }}><strong>沒有 Plus 方案？</strong>三條路，見附錄第 25 頁</In>
     </Stage>
   </Shell>
 );
@@ -1444,7 +1444,7 @@ const Appendix: Page = () => (
       <div style={{ borderTop: `2px solid ${rule}` }}>
         <In i={0}><AppendixRow kind="down" when="下載資料夾" fix="掃 QR 或下載 ZIP" page={9} /></In>
         <In i={1}><AppendixRow kind="save" when="安裝 Codex" fix="Node.js、npm、codex 四步" page={24} /></In>
-        <In i={2}><AppendixRow kind="chat" when="沒有 Codex" fix="改用 ChatGPT 做三個練習" page={25} /></In>
+        <In i={2}><AppendixRow kind="chat" when="沒有 Plus 方案" fix="ChatGPT、OpenRouter、Ollama" page={25} /></In>
         <In i={3}><AppendixRow kind="search" when="Codex 開錯資料夾" fix="輸入 /status 檢查" page={26} /></In>
         <In i={4}><AppendixRow kind="timeline" when="做完還有時間" fix="加分：排成時間軸" page={27} /></In>
       </div>
@@ -1487,25 +1487,35 @@ const Prework: Page = () => (
         <In i={0}><InstallStep n="1" title="下載 Node.js LTS" lines={'nodejs.org → LTS → 預設安裝'} /></In>
         <In i={1}><InstallStep n="2" title="重開終端機，看版本號" lines={'$ node -v   v24.21.0\n$ npm -v    11.6.2'} /></In>
         <In i={2}><InstallStep n="3" title="安裝 Codex" lines={'$ npm install -g @openai/codex@latest'} /></In>
-        <In i={3}><InstallStep n="4" title="啟動、登入" lines={'$ codex\n› Sign in with ChatGPT'} note="Plus、Pro、Business、Enterprise 方案含 Codex" /></In>
+        <In i={3}><InstallStep n="4" title="啟動、登入" lines={'$ codex\n› Sign in with ChatGPT'} note="Plus 以上方案含 Codex；沒有的看第 25 頁" /></In>
       </div>
       <div style={{ fontSize: 26, color: muted, marginTop: 24 }}>Windows：命令提示字元或 PowerShell｜Mac：終端機</div>
     </Stage>
   </Shell>
 );
 
+// One way to do the practices without a ChatGPT Plus plan.
+const Route = ({ n, name, need, fits, lines, status, ok, web = false }: { n: string; name: string; need: string; fits: string; lines: string; status: React.ReactNode; ok: boolean; web?: boolean }) => (
+  <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderTop: `5px solid ${ok ? okGreen : amber}`, padding: '24px 26px', display: 'grid', alignContent: 'start', gap: 16, height: '100%', boxSizing: 'border-box' }}>
+    <NumLine n={n} size={36}><strong>{name}</strong></NumLine>
+    <div style={{ fontSize: 28, lineHeight: 1.5 }}><span style={{ color: muted }}>需要：</span>{need}<br /><span style={{ color: muted }}>適合：</span>{fits}</div>
+    <div style={web ? { background: surface, border: `1px solid ${rule}`, fontSize: 27, lineHeight: 1.6, padding: '14px 18px', whiteSpace: 'pre' } : { background: '#1F2226', color: '#F5F5F4', fontFamily: mono, fontSize: 26, lineHeight: 1.5, padding: '14px 18px', whiteSpace: 'pre' }}>{lines}</div>
+    <div style={{ fontSize: 26, fontWeight: 600, color: ok ? okGreen : amber }}>{status}</div>
+  </div>
+);
+
 const ChatGPTRoute: Page = () => (
   <Shell>
-    <Eyebrow>附錄｜沒有 Codex 的人</Eyebrow>
-    <Heading>ChatGPT 版：三個練習怎麼做</Heading>
-    <div style={{ marginTop: 20 }}><Lead>ChatGPT 不能直接存進你的資料夾：請它「給我一個可下載的檔案」，下載後自己放進去</Lead></div>
-    <div style={{ marginTop: 36 }}>
-      <TRow head cols="200px 1fr 1fr" cells={['練習', 'prompts.md 寫的', 'ChatGPT 改這樣說']} />
-      <TRow cols="200px 1fr 1fr" cells={['開始前', '在資料夾裡啟動 Codex', '先上傳 notes/ 的六份筆記']} />
-      <TRow cols="200px 1fr 1fr" cells={['練習 2', <span>存成 <Path size={24}>outputs/煮酒論英雄-草稿.md</Path></span>, '「給我一個可下載的 .md 檔」，下載後放進 outputs/']} />
-      <TRow cols="200px 1fr 1fr" cells={['練習 3', <span>存成 <Path size={24}>diagrams/三國故事.html</Path></span>, '「給我一個可下載的 .html 檔」，下載後放進 diagrams/，再拖進瀏覽器']} />
-    </div>
-    <p style={{ fontSize: 28, color: muted, marginTop: 30, lineHeight: 1.5 }}>圖上的來源連結點不開時，直接打開本機 notes/ 裡的筆記核對<br />prompts.md 的「沒有 Codex」那段也寫了做法</p>
+    <Eyebrow>附錄｜沒有 Plus 方案</Eyebrow>
+    <Heading>沒有 Plus 方案？三條路</Heading>
+    <Stage top={290}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 28, alignItems: 'stretch' }}>
+        <In i={0}><Route n="1" name="ChatGPT 網頁版" need="ChatGPT 帳號" fits="不想裝軟體" lines={'1. 上傳六份筆記\n2. 貼 prompts.md 的提示詞\n3. 存檔改說「給我可下載的檔案」'} status="✓ 課堂備案" ok web /></In>
+        <In i={1}><Route n="2" name="OpenRouter" need="API key，按用量付費（有免費模型）" fits="想用 Codex、沒有 Plus" lines={'設定 config.toml\n$ codex'} status="未在課前實測" ok={false} /></In>
+        <In i={2}><Route n="3" name="Ollama 本機" need="16GB 電腦、把 context 調到 64K" fits="想離線、資料不出電腦" lines={'$ OLLAMA_CONTEXT_LENGTH=65536 \\\n  ollama serve\n$ codex --oss'} status={<>實測：只做得到練習 1<br />核對、存檔會出錯</>} ok={false} /></In>
+      </div>
+      <div style={{ fontSize: 26, color: muted, marginTop: 24 }}>設定步驟在 prework.md</div>
+    </Stage>
   </Shell>
 );
 
@@ -1541,22 +1551,22 @@ export const notes: (string | undefined)[] = [
   "3:10–4:10。先問一個具體問題：桃園結義有哪些人？點一下出現教學用的錯答，請大家找出多了誰。再點一下：故事裡沒有曹操。這就是幻覺：沒有根據，卻說得很肯定。這是示意，不是實際模型測試。最後一下：如果先給它參考資料，再回答呢？轉到下一頁。小說來源：https://zh.wikisource.org/wiki/三國演義/第001回現場想讓大家試出幻覺，可以改問比較難的題目，例如請它逐字引用第21回的一句原文，再對照維基文庫，常會對不上。",
   "4:10–5:00。RAG 全名 Retrieval-Augmented Generation（檢索增強生成），課後查閱用。只講核心：同樣問桃園有哪些人，先找到筆記，再把問題和相關筆記交給AI，產生回答。先出現問題和六份筆記；按一下交給AI，再按一下產生回答，最後一下出現提醒。不逐字解釋英文。就像開書考，先翻到那一頁再作答，可能降低無根據回答，但仍要核對來源。本課Codex讀本機筆記，是示範類似RAG的先取得資料再回答概念，不是建置完整RAG系統。全名供課後查閱，不考術語。來源：https://arxiv.org/abs/2005.11401 、https://arxiv.org/abs/2312.10997最後一下補一句：現在的ChatGPT會先上網搜尋再回答，這也是RAG；prompts.md的「補充」有一段可以課後試。",
   "5:00–6:00。像上課前大家先把課本翻到同一頁。用手機掃QR code會下載到手機，所以用電腦的人請打畫面上的網址，或直接按下載按鈕。下載後解壓縮，Windows按右鍵「全部解壓縮」常會多包一層，只看到另一個teacher-learning-lab就再點進去一層。打開後要看到右邊這棵樹：notes/裡的六份筆記、prompts.md是課堂提示詞、outputs/是練習2存檔的地方、diagrams/是練習3存檔的地方；其他檔案像README、prework.md是說明檔，可以先不管。",
-  "6:00–7:00。像先跟助教打聲招呼，確認他拿的是同一疊資料。四步：打開終端機（Mac叫Terminal，Windows叫PowerShell）；打cd和一個空格，把裡面有notes的那一層資料夾拖進視窗，按Enter；打codex；請它列出notes/裡的檔案，先不要修改任何檔案。按一下出現終端機畫面示意：看到六份筆記和一份README就成功了，路徑每台電腦不同。第一次啟動會有三個英文畫面，下一頁說明。沒有Codex的人改用ChatGPT，做法在附錄第25頁：先上傳六份筆記，需要存檔時改請它給可下載的檔案。",
+  "6:00–7:00。像先跟助教打聲招呼，確認他拿的是同一疊資料。四步：打開終端機（Mac叫Terminal，Windows叫PowerShell）；打cd和一個空格，把裡面有notes的那一層資料夾拖進視窗，按Enter；打codex；請它列出notes/裡的檔案，先不要修改任何檔案。按一下出現終端機畫面示意：看到六份筆記和一份README就成功了，路徑每台電腦不同。第一次啟動會有三個英文畫面，下一頁說明。沒有ChatGPT Plus方案的人，附錄第25頁有三條路：ChatGPT網頁版、OpenRouter、Ollama；課堂上最穩的是ChatGPT網頁版。",
   "7:00–8:00。第一次打開Codex會看到三個英文畫面，像第一次進學校系統：登入、同意、確認。第一個登入，選Sign in with ChatGPT，用瀏覽器登入。按一下，第二個問你信不信任這個資料夾，確認是teacher-learning-lab，選Yes, continue。再按一下，第三個是AI要寫檔案前問你，先看它要寫什麼，再選Yes, proceed；練習2、3存檔時都會遇到。登入畫面寫著Plus、Pro、Business、Enterprise方案包含Codex用量，其他方案請課前先確認；不能用的人走ChatGPT版。最下面那行提醒大家：卡住了就翻附錄第23頁。",
   "8:00–9:00。正式進入練習一。這是六份練習筆記：四個人物、兩件事。線表示這個人出現在這件事裡；劉備同時接到兩件事。先讀懂桃園結義，再用同一張劉備卡接到另一段故事。接下來先看單篇提示詞範例，再擴到六份。",
   "9:00–10:00。先只看A、B兩個輸入，請大家說差在哪：A只有一句話，定位、期望輸出、限制三件都沒寫；B三件都寫了，而且沒有先把答案告訴它，只說要列出人物和關係、每一項附原句。就像出學習單。按一下，出現A的AI回答（示意）：太廣，沒有出處，沒辦法核對。再按一下，出現B的回答：有原句，查得到。下一頁同樣三件事，換成讀六份筆記。",
   "10:00–15:00。練習5分鐘，用prompts.md練習1整段複製，不用照投影片打字。畫面上三格是重點：定位是notes/的六份筆記，期望輸出是一張四欄表（筆記、人物、關係、原句），限制是先不要改檔案。按一下，出現AI交回的表頭和第一列；再按兩下，出現另外兩列。畫面是節錄，句子都是筆記原文。確認六份都在表上、每列都有依據句子。",
   "15:00–20:00。留5分鐘讓較慢者完成，並示範怎麼檢查一列。這頁就是RAG的用處：筆記放進了輸入，AI比較不會亂編，而且每一列都找得回出處。先看AI表格裡關羽這一列。按一下：打開notes/關羽.md；打不開.md的人，按右鍵選記事本（Windows）或文字編輯（Mac）。再按一下：找到同一句，畫線。再按一下：句子一樣、關係也對，打勾。畫面上的筆記是節錄，最下面的「來源：三國演義第1回」就是出處。對照前面示範的錯答：多了曹操。請每人從自己的表挑一列，照這三步做一次。接著精讀煮酒論英雄。",
-  "20:00–25:00。這頁先貼一次：prompts.md的練習2-①，把教學草稿整段貼給AI，它只會回「收到」。每個人的AI寫出來的不一樣，為了大家拿到一樣的題目，課堂上一律用這份草稿。左邊是草稿，右邊是筆記原文。先問：哪一行是多的？給30秒，請一兩位說說看。按一下：紅筆圈起「兩人是盟友」，原文沒有。這就是前面看過的幻覺；筆記只寫兩人談論誰是英雄，坐同一桌吃飯，不代表是同一隊。",
-  "25:00–32:00。練習7分鐘：請AI每一行都附上原句，貼prompts.md的練習2-②。三格重點：定位是煮酒論英雄.md，期望輸出是草稿每一行附原句、找不到就寫找不到，限制是先不要改檔案。按一下出現第一行：參與人物，原句是「曹操與劉備在煮酒論英雄的情節中談論誰是英雄」，打勾。再按兩下，人物關係和來源回目也找得到原句。再按一下：兩人是盟友，找不到，打叉。最後一下：找不到原句，就刪。RAG是先把資料交給它，查證還是你負責；AI列出原句後，請大家自己打開筆記確認。",
-  "32:00–35:00。貼prompts.md的練習2-③：請AI刪掉「兩人是盟友」那行，再存成outputs/煮酒論英雄-草稿.md，不要改notes/的筆記。按一下：盟友那行劃掉。再按一下：存好的檔案出現，每行都有原句。存檔前Codex會問Would you like to make the following edits，看過要寫的內容再選Yes, proceed（第11頁教過）。請大家打開outputs/資料夾確認檔案真的存了。下一頁用這份草稿畫知識圖。",
+  "20:00–25:00。這頁先貼一次：prompts.md的練習2-1，把教學草稿整段貼給AI，它只會回「收到」。每個人的AI寫出來的不一樣，為了大家拿到一樣的題目，課堂上一律用這份草稿。左邊是草稿，右邊是筆記原文。先問：哪一行是多的？給30秒，請一兩位說說看。按一下：紅筆圈起「兩人是盟友」，原文沒有。這就是前面看過的幻覺；筆記只寫兩人談論誰是英雄，坐同一桌吃飯，不代表是同一隊。",
+  "25:00–32:00。練習7分鐘：請AI每一行都附上原句，貼prompts.md的練習2-2。三格重點：定位是煮酒論英雄.md，期望輸出是草稿每一行附原句、找不到就寫找不到，限制是先不要改檔案。按一下出現第一行：參與人物，原句是「曹操與劉備在煮酒論英雄的情節中談論誰是英雄」，打勾。再按兩下，人物關係和來源回目也找得到原句。再按一下：兩人是盟友，找不到，打叉。最後一下：找不到原句，就刪。RAG是先把資料交給它，查證還是你負責；AI列出原句後，請大家自己打開筆記確認。",
+  "32:00–35:00。貼prompts.md的練習2-3：請AI刪掉「兩人是盟友」那行，再存成outputs/煮酒論英雄-草稿.md，不要改notes/的筆記。按一下：盟友那行劃掉。再按一下：存好的檔案出現，每行都有原句。存檔前Codex會問Would you like to make the following edits，看過要寫的內容再選Yes, proceed（第11頁教過）。請大家打開outputs/資料夾確認檔案真的存了。下一頁用這份草稿畫知識圖。",
   "35:00–48:00。13分鐘只做必做的關係圖。先講流程五格：讀筆記、它提設計、你說可以（回它「可以，請存檔」）、存檔（Codex問Would you like to make the following edits時，看過再選Yes, proceed）、拖進瀏覽器打開。按一下出現提示詞三格：定位是六份筆記和核對過的草稿，期望輸出是一張存成diagrams/三國故事.html的知識圖，限制是只畫有原句的線、每條線附來源、先給你看設計再存。提示詞從prompts.md練習3整段複製；有沒有裝diagram-design都用同一段。檢查：劉備只畫一次，曹操沒有接到桃園結義。卡住時：AI沒存檔，就再說一次「請存成diagrams/三國故事.html」。",
   "48:00–55:00。留7分鐘開啟、查證與修圖。開圖：在Finder／檔案總管把HTML拖進瀏覽器；查證：用文字編輯器打開來源.md，每條線都照這樣核對。畫面是示意：你的HTML打開後大概長這樣，排版可能不同。進頁時圖會自己畫好，就是開場第5頁那張圖，現在是大家自己做出來的。按一下：劉備到煮酒論英雄那條線描粗，用綠色加粗，不用橘色（橘色只留給原文沒寫），下面出現它的意思和原句。用文字編輯器打開notes/對應的筆記，對每條線問：表示什麼、哪句支持？若瀏覽器點來源只會下載檔案，就直接開本機筆記核對。劉備只出現一次，不能多連曹操到桃園，也不能把共同對話改成盟友。核對完的人可以做附錄的時間軸加分練習；其他人繼續核對。每條線上都標了關係，事件下方寫著來源檔名；學生自己的HTML排版可能不同，但這兩樣都要有。",
   "55:00–57:00。今天的流程：發下來的原始筆記、你做出的草稿outputs/煮酒論英雄-草稿.md、你做出的知識圖diagrams/三國故事.html。來源和整理分開放，之後才能修正。按一下出現兩個問題，請每人花一分鐘寫在自己的筆記：我查了哪條關係、哪份筆記哪一句支持。再按一下：每條關係，都回原文找證據。",
   "57:00–60:00。兩人一組。先看分工：整理資料可以交給AI先做，例如把筆記整理成表；按一下，排版和AI一起調整；再按一下，回原文核對原句和回目一定要自己來。換你：用定位、期望輸出、限制，幫自己的教材寫一句提示詞，念給隔壁聽，兩分鐘。最後一分鐘：右邊QR code是課程repo，提示詞都在練習資料夾的prompts.md；下一篇Obsidian再練長期保存知識卡。收尾一句：AI畫出的每一條關係，都要回原文找證據。",
   "附錄目錄。主線在前一頁結束，這裡不逐頁講。開課前提醒大家：下載資料夾看第9頁；安裝Codex看第24頁；沒有Codex看第25頁；Codex好像開錯資料夾，翻第26頁輸入/status；做完還有時間，第27頁有加分練習。",
   "上課前完成，約15–20分鐘。四步：到nodejs.org下載LTS版，用預設選項安裝；重開終端機（Windows用命令提示字元或PowerShell，Mac用終端機），輸入node -v和npm -v，兩個都有版本號就對了；輸入npm install -g @openai/codex@latest安裝Codex；輸入codex，選Sign in with ChatGPT登入，Plus、Pro、Business、Enterprise方案包含Codex用量。卡住時：顯示「找不到指令」，先重開終端機；還是不行，重跑一次Node.js安裝程式。完整步驟在prework.md。",
-  "附錄。沒有Codex的人用ChatGPT：開始前先上傳notes/的六份筆記；需要存檔時，改請它「給我一個可下載的檔案」，下載後自己放進outputs/或diagrams/。知識圖的來源連結在ChatGPT版會失效，直接打開本機筆記核對。",
+  "附錄。沒有ChatGPT Plus方案的人有三條路。第一條是ChatGPT網頁版：先上傳notes/的六份筆記，貼prompts.md的提示詞；要存檔時改請它「給我一個可下載的檔案」，下載後自己放進outputs/或diagrams/，這是課堂備案，也是目前唯一實測可行的免費路線。第二條是OpenRouter：註冊拿API key，按用量付費、也有免費模型，在~/.codex/config.toml設定後一樣用codex；這條課前還沒實測。第三條是Ollama：在自己電腦跑模型、資料不出電腦。課前用16GB的Mac實測gemma4:e2b：Ollama預設context只有4K，要用OLLAMA_CONTEXT_LENGTH=65536開到64K，模型才看得到工具和筆記；開到64K後，Codex和OpenCode都能讀筆記做出練習1的表，但練習2的逐行核對會漏掉或亂抄，存檔會存錯內容，Codex甚至說已經存了其實沒有；練習3的圖也不完整。記憶體大約用3GB。所以Ollama只適合想自己玩的人，不建議當課堂備案。OpenCode內建的免費雲端模型，在無介面的指令模式下被擋，要在OpenCode的互動介面裡才能用，課前沒測到。設定步驟都在prework.md。",
   '卡住時用：覺得Codex開錯資料夾，就輸入/status。只看Directory那一行，要顯示teacher-learning-lab；不是的話，關掉Codex，回到第10頁重新cd進正確的資料夾。其他欄位（模型、權限、Session）新手不用管。',
   "附錄的加分練習，主線不講。給已經核對完關係圖的人做：時間軸依小說第1回、第21回排先後，不是歷史年份，間距也不代表經過多久。提示詞在prompts.md的加分段落，不要求全班完成。"
 ];
