@@ -1,61 +1,74 @@
 # 課前準備｜認識 AI：從三國故事到知識圖
 
-請預留 15–20 分鐘完成工具安裝與登入。課堂的 60 分鐘用來讀筆記、核對關係與畫圖。
+預留 15–20 分鐘。課堂的 60 分鐘留給讀筆記、核對和畫圖。
 
-## 1. 下載教材
+## 1. 下載練習資料夾
 
-打開 [課程 GitHub](https://github.com/Chrouos/AI-workshop-slides)，按 **Code → Download ZIP**，解壓縮後找到 `examples/teacher-learning-lab`。
+掃投影片第 9 頁的 QR code，或下載 [練習資料夾 ZIP](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/slides/ai-for-teacher-learners/assets/teacher-learning-lab.zip)。
 
-確認 `notes/` 有六份故事筆記，另有 README；`prompts.md` 可直接複製課堂提示詞。
+解壓縮後打開，要直接看到 `notes/`。Windows 按右鍵「全部解壓縮」常會多包一層，只看到另一個 `teacher-learning-lab` 就再點進去一層。
 
-## 2. 安裝與登入 Codex
-
-先依學校與課程規範確認可用的帳號及工具。帳號可用方案依官方當時的說明為準。
-
-到 [Node.js 官網](https://nodejs.org/) 安裝 LTS 版本，完成後重新打開終端機。macOS 搜尋 Terminal；Windows 搜尋 PowerShell。
-
-```bash
-node -v
-npm -v
-npm install -g @openai/codex@latest
+```text
+teacher-learning-lab/
+├─ notes/      劉備、關羽、張飛、曹操、桃園結義、煮酒論英雄
+├─ prompts.md  課堂提示詞
+├─ outputs/    練習 2 存這裡
+└─ diagrams/   練習 3 存這裡
 ```
 
-前兩行應顯示版本號。安裝遇到問題，可請課程協助人員確認或使用下方備用方式。
+## 2. 安裝 Codex
 
-在終端機輸入 `cd `（尾端有空格），把 `teacher-learning-lab` 資料夾拖進視窗，按 Enter。再輸入：
+終端機：Windows 用「命令提示字元」或 PowerShell，Mac 用「終端機」。
 
-```bash
-codex
+1. 到 [nodejs.org](https://nodejs.org/) 下載 LTS 版，用預設選項安裝。
+2. 重開終端機，確認有版本號：
+
+   ```bash
+   node -v
+   npm -v
+   ```
+
+3. 安裝 Codex：
+
+   ```bash
+   npm install -g @openai/codex@latest
+   ```
+
+4. 輸入 `codex`，用 ChatGPT 帳號登入。登入畫面寫著 Plus、Pro、Business、Enterprise 方案包含 Codex 用量；其他方案請先確認。
+
+顯示「找不到指令」：先重開終端機；還是不行，重跑一次 Node.js 安裝程式。
+
+## 3. 在練習資料夾打開 Codex
+
+輸入 `cd ` 加一個空格，把 `teacher-learning-lab` 資料夾拖進視窗，按 Enter，再輸入 `codex`。
+
+第一次會看到三個英文畫面：
+
+- Choose how you want to use Codex → **Sign in with ChatGPT**
+- Do you trust the contents of this directory? → 確認是 teacher-learning-lab，選 **Yes, continue**
+- Would you like to make the following edits?（寫檔前）→ 看過要寫什麼，再選 **Yes, proceed**
+
+試一句：
+
+```text
+列出 notes/ 裡的檔案，先不要修改任何檔案。
 ```
 
-依畫面登入。確認工作位置 Directory 是 `teacher-learning-lab`。需要時用 `/status` 查看。
+看到六份筆記和一份 README，就準備好了。`.md` 打不開的話，按右鍵選「記事本」（Windows）或「文字編輯」（Mac）。
 
-## 3. 課前備好畫圖 Skill
+## 沒有 Codex
 
-課程採用 [diagram-design 的官方安裝方式](https://github.com/cathrynlavery/diagram-design)：
+改用 ChatGPT：先上傳 `notes/` 的六份筆記，再貼 prompts.md 的提示詞。要存檔的地方，改請它「給我一個可下載的檔案」，下載後自己放進 `outputs/` 或 `diagrams/`。
+
+## 選做：畫圖 Skill
 
 ```bash
 codex plugin marketplace add cathrynlavery/diagram-design
 codex plugin add diagram-design@diagram-design
 ```
 
-安裝後重新開啟 Codex Session，確認仍在練習資料夾。若沒有這個 Skill，也可使用 prompts.md 的一般 HTML 模式，不影響核對關係的練習。
-
-## 4. 確認可以開始
-
-在 Codex 輸入：
-
-```text
-只讀 notes/桃園結義.md，列出參與人物與依據句子。
-先不要修改任何檔案。
-```
-
-自己打開同一份筆記，確認回覆有根據。出現操作授權時，先看清楚它要讀取、寫入或執行什麼。
-
-## 備用方式
-
-Codex 無法使用時，可在 ChatGPT 上傳這六份筆記，沿用 prompts.md 的提示詞。成果需要自行下載或複製存檔；若帳號不支援所需功能，可與已準備好的同伴共用練習環境。
+裝完重開 Codex。沒裝也沒關係，prompts.md 練習 3 一樣能畫出 HTML。
 
 ## 課堂資料
 
-今天只用已備好的三國練習筆記。學生個資、未公開試題、敏感文件，先確認校方規範、授權與工具的資料處理方式。去掉姓名不代表一定無法辨識個人。
+今天只用準備好的三國練習筆記。學生個資、未公開試題、敏感文件，請先確認校方規範和工具的資料處理方式。

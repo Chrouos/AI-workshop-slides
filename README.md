@@ -6,6 +6,7 @@ Slides as React components. Each slide lives under `slides/<id>/index.tsx` and d
 
 - [開啟簡報首頁](https://chrouos.github.io/AI-workshop-slides/)
 - [認識 AI：給師培學生的 Agent 協作課](https://chrouos.github.io/AI-workshop-slides/s/ai-for-teacher-learners/)
+- [下載練習資料夾（teacher-learning-lab.zip）](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/slides/ai-for-teacher-learners/assets/teacher-learning-lab.zip)
 
 ## Getting started
 

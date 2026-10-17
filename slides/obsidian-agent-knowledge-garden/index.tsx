@@ -60,10 +60,16 @@ const MOTION_CSS = `
 .okg-deck .okg-in { animation: okg-in ${ENTER_MS}ms ${EASE_OUT} both; }
 @keyframes okg-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 .okg-deck .okg-draw { stroke-dasharray: 1; animation: okg-draw ${DRAW_MS}ms ${EASE_OUT} both; }
-@keyframes okg-pop { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
+@keyframes okg-pop { from { opacity: 0; transform: scale(0.75); } to { opacity: 1; transform: scale(1); } }
 .okg-deck .okg-pop { transform-box: fill-box; transform-origin: center; animation: okg-pop 300ms ${EASE_OUT} both; }
 @keyframes okg-in-fade { from { opacity: 0; } to { opacity: 1; } }
+.okg-deck .okg-sweep { transform-box: fill-box; transform-origin: left center; transition: transform 600ms cubic-bezier(0.45, 0, 0.25, 1); }
+.okg-deck [data-osd-step="pending"] .okg-sweep { transform: scaleX(0); }
+.okg-deck .okg-stamp { transform-box: fill-box; transform-origin: center; transition: opacity 200ms ease, transform 300ms ${EASE_OUT}; }
+.okg-deck [data-osd-step="pending"] .okg-stamp { opacity: 0; transform: scale(0.75); }
 @media (prefers-reduced-motion: reduce) {
+  .okg-deck .okg-sweep, .okg-deck [data-osd-step="pending"] .okg-sweep { transform: none; transition: none; }
+  .okg-deck .okg-stamp, .okg-deck [data-osd-step="pending"] .okg-stamp { transform: none; transition: opacity 150ms ease; }
   .okg-deck .okg-in, .okg-deck .okg-pop { animation: okg-in-fade 150ms ease both; }
   .okg-deck .okg-draw { animation: none; stroke-dasharray: none; }
   .okg-deck .okg-stepdraw, .okg-deck [data-osd-step="pending"] .okg-stepdraw { transition: none; stroke-dasharray: none; stroke-dashoffset: 0; }
@@ -90,9 +96,9 @@ const buildDelay = (i: number, base = 120) => ({ transitionDelay: `${base + i * 
 // The i-th piece (0-based) of a page's entrance.
 const enterDelay = (i: number, base = 160) => `${base + i * ENTER_GAP}ms`;
 
-const In = ({ i, style, children }: { i: number; style?: CSSProperties; children: ReactNode }) => {
+const In = ({ i, style, figure = false, children }: { i: number; style?: CSSProperties; figure?: boolean; children: ReactNode }) => {
   const live = useIsActivePage();
-  return <div className={live ? 'okg-in' : undefined} style={live ? { ...style, animationDelay: enterDelay(i) } : style}>{children}</div>;
+  return <div data-figure={figure ? '' : undefined} className={live ? 'okg-in' : undefined} style={live ? { ...style, animationDelay: enterDelay(i) } : style}>{children}</div>;
 };
 
 // The same, for a group inside an SVG picture.
@@ -197,11 +203,24 @@ const RouteBar = ({ chapter, enter = false }: { chapter: Chapter; enter?: boolea
 };
 
 const Shell = ({ children, top = 112, chapter, enterChapter = false }: { children: ReactNode; top?: number; chapter?: Chapter; enterChapter?: boolean }) => (
-  <div className="okg-deck" style={{ width: '100%', height: '100%', boxSizing: 'border-box', position: 'relative', background: 'var(--osd-bg)', color: 'var(--osd-text)', fontFamily: 'var(--osd-font-body)', padding: `${top}px 144px 126px` }}>
+  <div className="okg-deck" style={{ width: '100%', height: '100%', boxSizing: 'border-box', position: 'relative', display: 'flex', flexDirection: 'column', background: 'var(--osd-bg)', color: 'var(--osd-text)', fontFamily: 'var(--osd-font-body)', padding: `${top}px 144px 126px` }}>
     {chapter ? <RouteBar chapter={chapter} enter={enterChapter} /> : null}
     {children}
     <Footer />
   </div>
+);
+
+// The page's main picture: fills the space between the heading and the footer, centred
+// vertically, and enlarged by `z` (set per page so it fits the width and the height).
+const Fit = ({ z = 1, children }: { z?: number; children: ReactNode }) => (
+  <div data-fit-outer="" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: 24 }}>
+    <div data-fit-inner="" style={{ zoom: z }}>{children}</div>
+  </div>
+);
+
+// The one line the audience should leave the page with, set large under the picture.
+const Takeaway = ({ children, color = amber }: { children: ReactNode; color?: string }) => (
+  <div style={{ fontFamily: display, fontSize: 44, lineHeight: 1.35, color, marginTop: 56, textAlign: 'center' }}>{children}</div>
 );
 
 const Heading = ({ children }: { children: ReactNode }) => (
@@ -237,7 +256,7 @@ const Callout = ({ n, title, detail }: { n: number; title: ReactNode; detail?: R
 
 // Real command / agent output. Lines starting with "$" are what the learner types.
 const Terminal = ({ label, children, width }: { label: string; children: ReactNode; width?: number }) => (
-  <div style={{ width, boxSizing: 'border-box', background: '#202326', color: '#D6D3D1', borderTop: `5px solid ${amber}`, padding: '24px 34px 28px' }}>
+  <div data-figure="" style={{ width, boxSizing: 'border-box', background: '#202326', color: '#D6D3D1', borderTop: `5px solid ${amber}`, padding: '24px 34px 28px' }}>
     <div style={{ color: '#BAB5B0', fontSize: 24, letterSpacing: '0.04em', marginBottom: 16 }}>{label}</div>
     <div style={{ fontFamily: mono, fontSize: 28, lineHeight: 1.6, whiteSpace: 'pre' }}>{children}</div>
   </div>
@@ -260,7 +279,7 @@ const MarkBubble = ({ n, left, top, i }: { n: number; left: string | number; top
 const Screenshot = ({ src, aspect, width, caption, alt, url, children }: { src: string; aspect: number; width: number; caption?: string; alt: string; url?: string; children?: ReactNode }) => {
   const h = Math.round(width / aspect);
   return (
-    <div style={{ width }}>
+    <div data-figure="" style={{ width }}>
       {url ? (
         <div style={{ width, height: 56, boxSizing: 'border-box', background: '#ECEAE8', border: `1px solid ${rule}`, borderBottom: 'none', display: 'flex', alignItems: 'center', gap: 10, padding: '0 18px' }}>
           <span style={{ width: 12, height: 12, borderRadius: 6, background: '#D87771' }} />
@@ -410,8 +429,8 @@ const AppFrame = ({ x, y, w, h, title }: { x: number; y: number; w: number; h: n
 const Cover: Page = () => (
   <Shell top={174}>
     <In i={0}><Eyebrow>AI WORKSHOP 02｜Obsidian × Agent</Eyebrow></In>
-    <In i={1} style={{ marginTop: 62 }}><Title>{'從 Obsidian 筆記，\n到自己的知識網站'}</Title></In>
-    <In i={2} style={{ marginTop: 40, fontSize: 35, color: muted }}>一盒已備好的三國知識卡：沿連結讀、請 AI 查、再選擇公開</In>
+    <In i={1} style={{ marginTop: 62 }}><Title>{'從 Obsidian 筆記\n到知識網站'}</Title></In>
+    <In i={2} style={{ marginTop: 40, fontSize: 35, color: muted }}>三國知識卡，做成自己的網站</In>
     <In i={3} style={{ width: 160, height: 5, background: amber, marginTop: 72 }}><span /></In>
     <div style={{ position: 'absolute', right: 144, bottom: 170 }}>
       <Figure w={720} h={230} label="卡片連成關係網，再放上網站">
@@ -427,13 +446,12 @@ const Cover: Page = () => (
 );
 
 // A table-of-contents row: chapter, what you do, and the thing you walk away with.
-const AGENDA_COLS = '90px 270px 1fr 300px 150px';
+const AGENDA_COLS = '90px 1fr 520px 180px';
 
 const AgendaRow = ({ i, n, doing, result, time, page, children }: { i: number; n: Chapter; doing: string; result: string; time: string; page: Page; children: ReactNode }) => (
-  <In i={i} style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, alignItems: 'center', minHeight: 92, borderBottom: `1px solid ${rule}` }}>
+  <In i={i} style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, alignItems: 'center', minHeight: 104, borderBottom: `1px solid ${rule}` }}>
     <span style={{ fontFamily: display, fontSize: 40, color: amber }}>{String(n).padStart(2, '0')}</span>
     <span style={{ fontSize: 35, fontWeight: 600 }}>{CHAPTERS[n - 1]}</span>
-    <span style={{ fontSize: 28, color: muted, lineHeight: 1.45, paddingRight: 28 }}>{doing}</span>
     <span style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
       <svg viewBox="0 0 110 70" style={{ width: 110, height: 70, flexShrink: 0 }} aria-hidden="true">{children}</svg>
       <span style={{ fontSize: 28 }}>{result}</span>
@@ -446,9 +464,9 @@ const Agenda: Page = () => (
   <Shell>
     <Eyebrow>AGENDA｜約 110 分鐘，含操作</Eyebrow>
     <Heading>課程大綱</Heading>
-    <Lead>每一章結束，手上都會多一樣東西</Lead>
+    <Fit z={1}>
     <div style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, marginTop: 26, paddingBottom: 12, borderBottom: `1px solid ${rule}` }}>
-      <span /><SmallLabel>章節</SmallLabel><SmallLabel>你會做的事</SmallLabel><SmallLabel>結束時手上有</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
+      <span /><SmallLabel>章節</SmallLabel><SmallLabel>結束時手上有</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
     </div>
     <AgendaRow i={0} n={1} doing="裝好 Obsidian，打開三國筆記庫，沿連結讀一段故事" result="一盒 12 張卡" time="00–20 分" page={Section1}>
       <rect x="8" y="14" width="44" height="52" fill={surface} stroke={faint} strokeWidth="2" /><rect x="22" y="8" width="44" height="52" fill="#FFFFFF" stroke={faint} strokeWidth="2" /><rect x="36" y="2" width="44" height="52" fill={amberSoft} stroke={amber} strokeWidth="2" />
@@ -472,7 +490,8 @@ const Agenda: Page = () => (
       <circle cx="16" cy="15" r="3" fill="#D87771" /><circle cx="26" cy="15" r="3" fill="#E4BB62" /><circle cx="36" cy="15" r="3" fill="#81B984" />
       <g stroke={link} strokeWidth="3"><path d="M18 36 H66" /><path d="M18 50 H54" /></g>
     </AgendaRow>
-    <In i={5} style={{ marginTop: 20, fontSize: 25, color: quiet }}>課前準備：裝好 Codex（同第一篇），註冊 GitHub 和 Vercel 免費帳號</In>
+    <In i={5} style={{ marginTop: 20, fontSize: 25, color: quiet }}>課前：裝好 Codex，註冊 GitHub、Vercel</In>
+    </Fit>
   </Shell>
 );
 
@@ -505,18 +524,19 @@ const TrackStop = ({ x, n, chapter }: { x: number; n: Chapter; chapter: Chapter 
   );
 };
 
-const SectionPage = ({ chapter, label, lead }: { chapter: Chapter; label: string; lead: string }) => (
+const SectionPage = ({ chapter, label, lead, extra }: { chapter: Chapter; label: string; lead: string; extra?: ReactNode }) => (
   <Shell top={192} chapter={chapter} enterChapter>
     <In i={0}><Eyebrow>{label}</Eyebrow></In>
     <In i={1} style={{ marginTop: 63 }}><Title>{CHAPTERS[chapter - 1]}</Title></In>
     <In i={2} style={{ fontSize: 36, lineHeight: 1.5, color: muted, marginTop: 30, maxWidth: 1500 }}>{lead}</In>
-    <div style={{ marginTop: 96 }}><ChapterTrack chapter={chapter} /></div>
+    <div style={{ marginTop: extra ? 64 : 96 }}><ChapterTrack chapter={chapter} /></div>
+    {extra}
   </Shell>
 );
 
 // ---------- 01 認識 Obsidian ----------
 
-const Section1: Page = () => <SectionPage chapter={1} label="01 / OBSIDIAN" lead="像一盒放在自己電腦裡的知識卡：先打開，再沿著卡上的連結走" />;
+const Section1: Page = () => <SectionPage chapter={1} label="01 / OBSIDIAN" lead="打開卡片盒，沿連結讀" />;
 
 // Five people on top, three relation cards below. People settle in when the page
 // arrives; each click adds one story and draws the lines that join it.
@@ -531,8 +551,8 @@ const StoryLinks = ({ story, paths }: { story: 0 | 1 | 2; paths: string[] }) => 
 const StoryMap: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>先看今天的例子</Eyebrow>
-    <Heading>三國筆記庫：人物卡靠關係卡連起來</Heading>
-    <Lead>像畫家族樹：人物是點，一起經歷的事件把人接起來</Lead>
+    <Heading>人物卡靠關係卡連起來</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 34, background: '#FFFFFF', border: `1px solid ${rule}` }}>
       <Stage h={440}>
         <Steps>
@@ -560,7 +580,8 @@ const StoryMap: Page = () => (
         </Steps>
       </Stage>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 30, color: muted, marginTop: 26 }}>劉備、曹操外面多一圈：各接上兩段故事，同一張卡能走到不同路線</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><Takeaway>劉備、曹操各接兩段故事</Takeaway></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -588,10 +609,10 @@ const TreeRow = ({ children, hot = false, indent = 22 }: { children: ReactNode; 
 const ObsidianWindow: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>認識工具</Eyebrow>
-    <Heading>Obsidian 畫面：資料夾、卡片、紫色連結</Heading>
-    <Lead>打開後的畫面像一本活頁夾：左邊是目錄，中間是翻開的那一頁</Lead>
+    <Heading>Obsidian 的畫面</Heading>
+    <Fit z={1.2}>
     <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1000px 1fr', gap: 44, marginTop: 36 }}>
-      <In i={0} style={{ position: 'relative', height: 500, border: `1px solid ${rule}`, background: '#FFFFFF', boxShadow: '0 10px 30px rgba(28,25,23,0.08)' }}>
+      <In i={0} figure style={{ position: 'relative', height: 500, border: `1px solid ${rule}`, background: '#FFFFFF', boxShadow: '0 10px 30px rgba(28,25,23,0.08)' }}>
         <div style={{ ...UI_PANE, left: 0, top: 0, right: 0, height: 52, background: '#F1F1F1', borderBottom: `1px solid ${rule}`, display: 'flex', alignItems: 'center', padding: '0 22px', fontSize: 23, color: muted }}>
           <span style={{ marginLeft: 330, background: '#FFFFFF', color: ink, padding: '10px 40px', border: `1px solid ${rule}`, borderBottom: 'none' }}>桃園結義</span>
         </div>
@@ -616,13 +637,13 @@ const ObsidianWindow: Page = () => (
       </In>
       <div style={{ display: 'grid', alignContent: 'start', gap: 20 }}>
         <Steps>
-          <Step duration={STEP_MS}><UiCallout n={1} title="左邊｜資料夾" detail="人物、勢力、關係各一格" spot={[285, 92]} /></Step>
-          <Step duration={STEP_MS}><UiCallout n={2} title="中間｜打開的卡" detail="讀〈桃園結義〉的故事" spot={[940, 92]} /></Step>
-          <Step duration={STEP_MS}><UiCallout n={3} title="紫色字｜連結" detail="點人名，走到那張人物卡" spot={[640, 380]} /></Step>
+          <Step duration={STEP_MS}><UiCallout n={1} title="左｜資料夾" detail="" spot={[285, 92]} /></Step>
+          <Step duration={STEP_MS}><UiCallout n={2} title="中｜打開的卡" detail="" spot={[940, 92]} /></Step>
+          <Step duration={STEP_MS}><UiCallout n={3} title="紫字｜連結" detail="" spot={[722, 302]} /></Step>
         </Steps>
       </div>
     </div>
-    <Caption>依 Obsidian 介面整理的示意，內容就是等一下發給大家的筆記</Caption>
+    </Fit>
   </Shell>
 );
 
@@ -646,8 +667,8 @@ const Drawer = ({ x, y, w, label, count }: { x: number; y: number; w: number; la
 const VaultFiles: Page = () => (
   <Shell chapter={2}>
     <Eyebrow>Agent 讀的是什麼</Eyebrow>
-    <Heading>筆記庫就是資料夾：每張卡是一個 .md</Heading>
-    <Lead>就是一般資料夾，每張卡是一個 .md 純文字檔；Obsidian 和 Agent 用的是同一個</Lead>
+    <Heading>筆記庫就是一個資料夾</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 30 }}>
       <Stage h={520}>
         <Steps>
@@ -686,7 +707,8 @@ const VaultFiles: Page = () => (
         </Steps>
       </Stage>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 28, color: muted, marginTop: 6 }}>之後簡報都叫它 Agent：資料夾負責分類，卡上的 [[連結]] 跨資料夾把卡接起來</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 28, color: muted, marginTop: 6 }}>之後都叫它 Agent</p></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -694,32 +716,33 @@ const DownloadObsidian: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>安裝 1／2</Eyebrow>
     <Heading>下載 Obsidian</Heading>
-    <Lead>像裝一般軟體：官網下載、照畫面安裝；免費，不用註冊帳號</Lead>
+    <Fit z={1.1}>
     <div style={{ display: 'grid', gridTemplateColumns: '760px 1fr', gap: 64, marginTop: 40, alignItems: 'start' }}>
       <In i={0} style={{ position: 'relative' }}>
-        <Screenshot src={downloadPage} aspect={1400 / 840} width={760} url="obsidian.md/download" caption="Obsidian 官方下載頁實際畫面（2026-10-12 擷取，瀏覽器放大 175%）" alt="Obsidian 下載頁上的紫色 Download for Windows 按鈕">
+        <Screenshot src={downloadPage} aspect={1400 / 840} width={760} url="obsidian.md/download" caption="官方下載頁（2026-10）" alt="Obsidian 下載頁上的紫色 Download for Windows 按鈕">
           <RegionMark x={13} y={41} w={74} h={29} i={3} />
           <MarkBubble n={2} left="8%" top="55%" i={4} />
         </Screenshot>
         <MarkBubble n={1} left={720} top={28} i={2} />
       </In>
       <div style={{ display: 'grid', gap: 40, paddingTop: 30 }}>
-        <In i={1}><Callout n={1} title="打開網址" detail={<Path size={28}>obsidian.md/download</Path>} /></In>
-        <In i={2}><Callout n={2} title="按下載按鈕" detail="網頁會自動顯示你的系統：Windows 或 macOS" /></In>
-        <In i={3}><Callout n={3} title="照畫面安裝，再打開 Obsidian" detail="Mac：把 Obsidian 拖進「應用程式」" /></In>
+        <In i={1}><Callout n={1} title={<Path size={30}>obsidian.md/download</Path>} /></In>
+        <In i={2}><Callout n={2} title="按下載" /></In>
+        <In i={3}><Callout n={3} title="照畫面安裝" /></In>
       </div>
     </div>
+    </Fit>
   </Shell>
 );
 
 const FirstLaunch: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>安裝 2／2</Eyebrow>
-    <Heading>第一次打開：先改成繁體中文</Heading>
-    <Lead>像新手機開機先選語言：在最下面選「繁體中文」</Lead>
+    <Heading>第一次打開，先改繁體中文</Heading>
+    <Fit z={1.15}>
     <div style={{ marginTop: 44 }}>
       <In i={0} style={{ position: 'relative' }}>
-        <Screenshot src={firstLaunch} aspect={1520 / 470} width={1300} caption="Obsidian 第一次打開的實際畫面（1.10.3，2026-10 擷取）" alt="Obsidian 起始畫面：建立新的儲存庫、開啟資料夾為儲存庫、連接至 Obsidian Sync 和最下方的語言選單">
+        <Screenshot src={firstLaunch} aspect={1520 / 470} width={1300} caption="Obsidian 1.10.3 實際畫面" alt="Obsidian 起始畫面：建立新的儲存庫、開啟資料夾為儲存庫、連接至 Obsidian Sync 和最下方的語言選單">
           <RegionMark x={6} y={83} w={92} h={14} i={2} />
           <MarkBubble n={1} left="-1.5%" top="90%" i={3} />
           <RegionMark x={1.5} y={29} w={97} h={20} i={5} />
@@ -728,9 +751,10 @@ const FirstLaunch: Page = () => (
       </In>
     </div>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, marginTop: 34 }}>
-      <In i={4}><Callout n={1} title="先改成繁體中文" detail="選單在畫面最下方" /></In>
-      <In i={7}><Callout n={2} title="等一下會用：開啟資料夾為儲存庫" detail="今天不建空白儲存庫，直接打開教材" /></In>
+      <In i={4}><Callout n={1} title="選繁體中文" /></In>
+      <In i={7}><Callout n={2} title="等一下用這個打開教材" /></In>
     </div>
+    </Fit>
   </Shell>
 );
 
@@ -738,8 +762,8 @@ const FirstLaunch: Page = () => (
 const GetVault: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>下載課堂教材</Eyebrow>
-    <Heading>下載三國筆記庫，用 Obsidian 打開</Heading>
-    <Lead>像拿到一盒裝好的卡片：拆開包裝，整盒放進 Obsidian</Lead>
+    <Heading>下載三國筆記庫</Heading>
+    <Fit z={1}>
     <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: 56, marginTop: 36, alignItems: 'start' }}>
       <In i={0} style={{ background: amberSoft, borderTop: `5px solid ${amber}`, padding: '20px 24px 24px', textAlign: 'center' }}>
         <div style={{ fontSize: 28, fontWeight: 600 }}>用電腦下載教材</div>
@@ -771,11 +795,10 @@ const GetVault: Page = () => (
             <text x="990" y="260" textAnchor="middle" fontSize="28" fontWeight="600" fill={ink}>3｜用 Obsidian 打開</text>
           </InG>
         </Figure>
-        <In i={6} style={{ marginTop: 20, background: surface, borderLeft: `4px solid ${amber}`, padding: '16px 26px', fontSize: 27, lineHeight: 1.5 }}>解壓縮｜Windows：ZIP 上按右鍵 →「全部解壓縮」（直接雙擊只是瀏覽）；Mac：雙擊即可<br />開啟時選「三國人物知識庫」這一層，不要選外層資料夾</In>
-        <In i={7} style={{ marginTop: 18, fontSize: 26, color: amber, fontWeight: 600 }}>完成檢查：左側看得到〈三國演義〉和人物、勢力、關係資料夾</In>
-        <In i={8} style={{ marginTop: 10, fontSize: 25, color: quiet }}>裡面另有 原文/（練習二用的小說節選）和 整理/（練習提示詞、之後的練習產出）</In>
+        <In i={6} style={{ marginTop: 20, background: surface, borderLeft: `4px solid ${amber}`, padding: '16px 26px', fontSize: 28 }}>Windows：右鍵 → 全部解壓縮｜Mac：雙擊</In>
       </div>
     </div>
+    </Fit>
   </Shell>
 );
 
@@ -793,8 +816,8 @@ const Station = ({ x, kind, name, line, why }: { x: number; kind: string; name: 
 const LinkWalk: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>沿連結閱讀</Eyebrow>
-    <Heading>點紫色人名：從劉備走到關羽</Heading>
-    <Lead>像坐捷運：從〈劉備〉上車，經過〈桃園結義〉，在〈關羽〉下車</Lead>
+    <Heading>點紫色人名，換一張卡</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 40, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '20px 0' }}>
       <Stage h={340}>
         <Steps>
@@ -817,7 +840,8 @@ const LinkWalk: Page = () => (
         </Steps>
       </Stage>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 30, color: muted, marginTop: 28 }}>關係卡不只是一條線：它寫出劉備和關羽為什麼相連</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><Takeaway>關係卡寫出兩人為什麼相連</Takeaway></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -844,7 +868,7 @@ const PracticeVault = () => {
   const [active, setActive] = useState<0 | 1 | 2>(0);
   const selected = practiceNoteExamples[active];
   return (
-    <div style={{ border: `1px solid ${rule}`, background: '#FFFFFF', height: 440, display: 'grid', gridTemplateColumns: '365px 1fr', boxShadow: '0 10px 30px rgba(28,25,23,0.06)' }}>
+    <div data-figure="" style={{ border: `1px solid ${rule}`, background: '#FFFFFF', height: 440, display: 'grid', gridTemplateColumns: '365px 1fr', boxShadow: '0 10px 30px rgba(28,25,23,0.06)' }}>
       <div style={{ background: surface, borderRight: `1px solid ${rule}` }}>
         <div style={{ padding: '18px 28px 14px', borderBottom: `1px solid ${rule}` }}>
           <div style={{ fontSize: 30, fontWeight: 600 }}>三國人物知識庫</div>
@@ -874,17 +898,61 @@ const PracticeVault = () => {
 const ReadRelations: Page = () => (
   <Shell chapter={1}>
     <PracticeEyebrow time="5 分鐘">動手做</PracticeEyebrow>
-    <Heading>練習：打開三張關係卡，點人名換卡</Heading>
-    <Lead>打開左側〈關係〉資料夾，切換三張卡，看每段故事連到誰</Lead>
+    <Heading>練習：點開三張關係卡</Heading>
+    <Fit z={1.2}>
     <In i={0} style={{ marginTop: 32 }}><PracticeVault /></In>
-    <In i={1} style={{ display: 'flex', alignItems: 'center', gap: 17, fontSize: 28, marginTop: 24 }}><NumDot n={1} /><span>在 Obsidian 打開一張關係卡，點紫色人名，看能走到哪裡</span></In>
-    <In i={2} style={{ color: amber, fontSize: 26, fontWeight: 600, marginTop: 14 }}>完成檢查：能從關係卡走到人物卡，再走向另一段關係</In>
+    <In i={1} style={{ display: 'flex', alignItems: 'center', gap: 17, fontSize: 28, marginTop: 24 }}><NumDot n={1} /><span>在 Obsidian 點紫色人名試試</span></In>
+    </Fit>
+  </Shell>
+);
+
+// Writing one card by hand: type [[劉備]], then watch a new dot join the graph view.
+const GraphDot = ({ x, y, r = 12, fill = '#BDB7B2' }: { x: number; y: number; r?: number; fill?: string }) => <circle cx={x} cy={y} r={r} fill={fill} />;
+
+const WriteOwnCard: Page = () => (
+  <Shell chapter={1}>
+    <PracticeEyebrow time="3 分鐘">動手寫一張</PracticeEyebrow>
+    <Heading>練習：自己寫一張卡</Heading>
+    <Fit z={1}>
+    <div style={{ display: 'grid', gridTemplateColumns: '700px 1fr', gap: 52, marginTop: 30, alignItems: 'start' }}>
+      <div style={{ display: 'grid', gap: 26, paddingTop: 6 }}>
+        <In i={0}><Callout n={1} title="整理/ 按右鍵 → 新增筆記" /></In>
+        <In i={1}><Callout n={2} title="打 [[劉，選〈劉備〉" /></In>
+        <In i={2}><Callout n={3} title="Ctrl／Cmd + P → 查看關聯圖" /></In>
+      </div>
+      <Stage w={880} h={540}>
+        <Steps>
+          <Layer w={880} h={540} label="編輯畫面：打 [[劉 時跳出選單，選劉備">
+            <InG i={1}>
+              <AppFrame x={0} y={0} w={880} h={230} title="整理/我最想認識的人物.md" />
+              <text x="30" y="104" fontSize="30" fill={ink}>我最想認識 <tspan fill={link}>[[劉</tspan>，因為他三顧茅廬。</text>
+              <rect x="190" y="124" width="300" height="92" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+              <rect x="192" y="126" width="296" height="44" fill={linkSoft} />
+              <text x="212" y="157" fontSize="26" fontWeight="600" fill={ink}>劉備</text><text x="300" y="157" fontSize="22" fill={quiet}>人物/劉備.md</text>
+              <text x="212" y="202" fontSize="24" fill={quiet}>三國演義</text>
+            </InG>
+            <InG i={2}>
+              <rect x="0" y="260" width="880" height="270" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+              <text x="24" y="296" fontSize="24" fill={quiet}>關聯圖（示意）</text>
+              <g stroke="#D6D3D1" strokeWidth="2"><path d="M300 400 L200 340" /><path d="M300 400 L210 470" /><path d="M300 400 L420 340" /><path d="M420 340 L540 380" /><path d="M540 380 L640 330" /><path d="M540 380 L620 470" /><path d="M300 400 L420 470" /></g>
+              <GraphDot x={200} y={340} /><GraphDot x={210} y={470} /><GraphDot x={420} y={340} /><GraphDot x={540} y={380} /><GraphDot x={640} y={330} /><GraphDot x={620} y={470} /><GraphDot x={420} y={470} />
+              <GraphDot x={300} y={400} r={16} fill={amber} /><text x="300" y="440" textAnchor="middle" fontSize="24" fill={ink}>劉備</text>
+            </InG>
+          </Layer>
+          <Step duration={STEP_MS}><Layer w={880} h={540} label="關聯圖上多了一個新點，連到劉備">
+            <g fill="none" stroke={okGreen} strokeWidth="4"><StepPath d="M316 398 L762 418" /></g>
+            <g className="okg-build" style={buildDelay(2)}><GraphDot x={780} y={420} r={18} fill={okGreen} /><text x="770" y="468" textAnchor="middle" fontSize="24" fontWeight="600" fill={okGreen}>我最想認識的人物</text></g>
+          </Layer></Step>
+        </Steps>
+      </Stage>
+    </div>
+    </Fit>
   </Shell>
 );
 
 // ---------- 02 理解 RAG ----------
 
-const Section2: Page = () => <SectionPage chapter={2} label="02 / RAG" lead="剛才是自己沿連結找資料；現在換 AI 先查筆記，再根據筆記回答" />;
+const Section2: Page = () => <SectionPage chapter={2} label="02 / RAG" lead="先查筆記，再回答" />;
 
 const MiniCard = ({ x, y, name, hot = false }: { x: number; y: number; name: string; hot?: boolean }) => (
   <g>
@@ -908,8 +976,9 @@ const Bubble = ({ x, y, w, h, fill = '#FFFFFF', stroke = rule, dash }: { x: numb
 const RagSteps: Page = () => (
   <Shell chapter={2}>
     <Eyebrow>RAG＝檢索增強生成</Eyebrow>
-    <Heading>RAG：先找卡、交給 AI、附檔名回答</Heading>
-    <Lead>像開書考：先翻到那一頁（R），把它攤在桌上（A），再寫答案（G）</Lead>
+    <Heading>RAG 三步：找卡、交給 AI、回答</Heading>
+    <Lead>像開書考：先翻到那一頁，再作答</Lead>
+    <Fit z={1}>
     <div style={{ marginTop: 34 }}>
       <Stage h={450}>
         <Steps>
@@ -920,9 +989,12 @@ const RagSteps: Page = () => (
               <rect x="24" y="106" width="452" height="56" rx="28" fill="#FFFFFF" stroke={ink} strokeWidth="2" />
               <text x="250" y="144" textAnchor="middle" fontSize="27" fill={ink}>曹操參與哪場戰役？</text>
             </InG>
-            <InG i={2}><MiniCard x={24} y={192} name="劉備" /><MiniCard x={182} y={192} name="關羽" /><MiniCard x={340} y={192} name="曹操" hot /></InG>
-            <InG i={3}><MiniCard x={24} y={268} name="桃園結義" /><MiniCard x={182} y={268} name="煮酒論英雄" /><MiniCard x={340} y={268} name="赤壁之戰" hot /></InG>
-            <InG i={4}><text x="250" y="378" textAnchor="middle" fontSize="26" fill={muted}>從筆記庫挑出相關的兩張</text></InG>
+            <InG i={2}><MiniCard x={24} y={192} name="劉備" /><MiniCard x={182} y={192} name="關羽" /><MiniCard x={340} y={192} name="曹操" /></InG>
+            <InG i={3}><MiniCard x={24} y={268} name="桃園結義" /><MiniCard x={182} y={268} name="煮酒論英雄" /><MiniCard x={340} y={268} name="赤壁之戰" /></InG>
+            {/* Retrieval lands: the two relevant cards are picked out of the six. */}
+            <PopG i={6}><MiniCard x={340} y={192} name="曹操" hot /></PopG>
+            <PopG i={7}><MiniCard x={340} y={268} name="赤壁之戰" hot /></PopG>
+            <InG i={8}><text x="250" y="378" textAnchor="middle" fontSize="26" fill={muted}>從筆記庫挑出相關的兩張</text></InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={450} label="A 增強：把問題和兩張卡一起交給 AI">
             <MapArrow x1={512} x2={560} y={246} hot />
@@ -961,7 +1033,8 @@ const RagSteps: Page = () => (
         </Steps>
       </Stage>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 28, color: muted, marginTop: 10 }}>RAG 不用改 AI 本身：只是回答前，先把找到的資料一起交給它</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><Takeaway>AI 沒變，只是多看了資料</Takeaway></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -969,8 +1042,8 @@ const RagSteps: Page = () => (
 const RagCompare: Page = () => (
   <Shell chapter={2}>
     <Eyebrow>查資料前後</Eyebrow>
-    <Heading>沒查筆記和先查筆記：差在有沒有出處</Heading>
-    <Lead>像寫作業：憑印象寫，和翻過課本再寫，差在講不講得出出處</Lead>
+    <Heading>先查筆記，答案才有出處</Heading>
+    <Fit z={1}>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, marginTop: 34 }}>
       <Steps>
         <div style={{ background: surface, borderTop: `5px solid ${faint}`, padding: '20px 30px 18px' }}>
@@ -1006,7 +1079,8 @@ const RagCompare: Page = () => (
         </div></Step>
       </Steps>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 26, color: quiet, marginTop: 16 }}>題目限定「這盒筆記」：筆記只記了赤壁，不代表曹操一生只打過這一仗</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 26, color: quiet, marginTop: 16 }}>只問這盒筆記，不是曹操的一生</p></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -1014,19 +1088,19 @@ const RagCompare: Page = () => (
 const OpenInCodex: Page = () => (
   <Shell chapter={2}>
     <Eyebrow>開始查詢前</Eyebrow>
-    <Heading>用 Codex 打開筆記庫，先點名</Heading>
-    <Lead>像請助理整理書櫃：先帶他走到那一格，再請他點名</Lead>
+    <Heading>用 Codex 打開筆記庫</Heading>
+    <Fit z={1}>
     <div style={{ display: 'grid', gridTemplateColumns: '880px 1fr', gap: 52, marginTop: 30, alignItems: 'start' }}>
       <div>
-        <In i={0}><Terminal label="Windows 開 PowerShell｜Mac 開「終端機」（Codex 安裝見第一篇）" width={880}>
+        <In i={0}><Terminal label="PowerShell／終端機" width={880}>
           <div><Typed>$ cd </Typed><span style={{ color: '#E9B650', fontFamily: 'var(--osd-font-body)', fontSize: 26 }}>← 打空格，再把資料夾拖進來</span></div>
           <div><Typed>$ codex</Typed></div>
           <div style={{ color: '#BAB5B0' }}>› 請列出這個資料夾裡所有的 .md 檔</div>
         </Terminal></In>
         <div style={{ display: 'grid', gap: 16, marginTop: 24 }}>
-          <In i={1}><Callout n={1} title="cd：走進「三國人物知識庫」這一層" detail="不要停在「文件」或「下載」：Codex 只看你所在的資料夾" /></In>
-          <In i={2}><Callout n={2} title="codex：第一次會請你登入" detail="問 Do you trust the contents of this directory? 選 Yes, continue" /></In>
-          <In i={3}><Callout n={3} title="提示詞整段複製、一次貼上，最後才按 Enter" detail="一行一行打的話，每按一次 Enter 就先送出一行" /></In>
+          <In i={1}><Callout n={1} title="cd 走進「三國人物知識庫」" /></In>
+          <In i={2}><Callout n={2} title="英文畫面選法見第一篇第 11 頁" /></In>
+          <In i={3}><Callout n={3} title="提示詞整段貼上，再按 Enter" /></In>
         </div>
       </div>
       <Steps>
@@ -1044,6 +1118,7 @@ const OpenInCodex: Page = () => (
         </Figure></Step>
       </Steps>
     </div>
+    </Fit>
   </Shell>
 );
 
@@ -1059,36 +1134,48 @@ const RouteStep = ({ y, label, sub, tone = 'card' }: { y: number; label: string;
 const AskAgent: Page = () => (
   <Shell chapter={2}>
     <PracticeEyebrow time="5 分鐘">練習提問</PracticeEyebrow>
-    <Heading>練習（RAG）：請 Agent 查曹操打過哪一仗</Heading>
-    <Lead>像考學生「出處在哪一頁」：答案和檔名都要交</Lead>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 460px', gap: 64, marginTop: 36, alignItems: 'start' }}>
-      <In i={0}><PromptSlots full="查筆記練習">
-        <SlotRow tag="範圍">這個筆記庫的 .md 卡，從〈曹操〉找起</SlotRow>
-        <SlotRow tag="產出">曹操參與哪場戰役？回答並附上檔名</SlotRow>
-        <SlotRow tag="限制">要核對相關的關係卡；找不到根據的細節不補寫</SlotRow>
-      </PromptSlots></In>
-      <div>
-        <SmallLabel>預期它會走的路</SmallLabel>
-        <Figure w={460} h={400} label="預期路線：先讀曹操.md，再核對赤壁之戰.md，最後回答並附兩個檔名" style={{ marginTop: 14 }}>
-          <InG i={1}><RouteStep y={0} label="1｜曹操.md" sub="找到赤壁戰事的記載" /></InG>
-          <InG i={2}><DownArrowSvg x={230} y1={100} y2={144} color={amber} /><RouteStep y={148} label="2｜赤壁之戰.md" sub="關係卡：核對交戰經過" /></InG>
-          <InG i={3}><DownArrowSvg x={230} y1={248} y2={292} color={okGreen} /><RouteStep y={296} label="3｜回答＋兩個檔名" sub="沒查到的不補" tone="answer" /></InG>
-        </Figure>
-      </div>
-    </div>
+    <Heading>練習（RAG）：曹操參與哪場戰役</Heading>
+    <PromptPage full="查筆記練習" pills={<><Pill tag="定位">從〈曹操〉找起</Pill><Pill tag="期望輸出">戰役＋檔名</Pill><Pill tag="限制">沒根據不補</Pill></>}>
+      <Stage h={330}>
+        <Steps>
+          <Step duration={STEP_MS}><Layer h={330} label="第一步：讀曹操.md，找到赤壁戰事">
+            <g className="okg-build" style={buildDelay(0)}><RouteBox x={0} n={1} label="曹操.md" sub="人物卡" /></g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={330} label="第二步：核對赤壁之戰.md 這張關係卡">
+            <g fill="none" stroke={amber} strokeWidth="5"><StepPath d="M440 160 H560" /></g>
+            <g className="okg-build" style={buildDelay(1)}><polygon points="580,160 560,149 560,171" fill={amber} /><RouteBox x={596} n={2} label="赤壁之戰.md" sub="關係卡" /></g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={330} label="第三步：回答赤壁之戰，附兩個檔名">
+            <g fill="none" stroke={okGreen} strokeWidth="5"><StepPath d="M1036 160 H1156" /></g>
+            <g className="okg-build" style={buildDelay(1)}><polygon points="1176,160 1156,149 1156,171" fill={okGreen} /><RouteBox x={1192} n={3} label="赤壁之戰" sub="附兩個檔名" answer /></g>
+          </Layer></Step>
+        </Steps>
+      </Stage>
+    </PromptPage>
   </Shell>
 );
 
+const RouteBox = ({ x, n, label, sub, answer = false }: { x: number; n: number; label: string; sub: string; answer?: boolean }) => (
+  <g>
+    <rect x={x} y="40" width="440" height="240" fill={answer ? sage : amberSoft} stroke={answer ? okGreen : amber} strokeWidth="3" />
+    <SvgNum x={x + 44} y={90} n={n} />
+    {answer ? null : <DocShape x={x + 300} y={70} w={100} h={120} />}
+    <text x={x + 40} y="200" fontSize="40" fontWeight="600" fill={ink}>{label}</text>
+    <text x={x + 40} y="248" fontSize="28" fill={muted}>{sub}</text>
+  </g>
+);
+
 // Each sentence of the answer is tied by a line to the sentence in the note that backs it.
-const QuoteLine = ({ x, y, w, text }: { x: number; y: number; w: number; text: string }) => (
-  <g><rect x={x} y={y - 30} width={w} height="42" fill={amberSoft} /><text x={x + 10} y={y} fontSize="26" fill={ink}>{text}</text></g>
+// The highlight sweeps on as the line from the answer reaches it (`at` = ms after the reveal).
+const QuoteLine = ({ x, y, w, text, at = 0 }: { x: number; y: number; w: number; text: string; at?: number }) => (
+  <g><rect className="okg-sweep" style={{ transitionDelay: `${at}ms` }} x={x} y={y - 30} width={w} height="42" fill={amberSoft} /><text x={x + 10} y={y} fontSize="26" fill={ink}>{text}</text></g>
 );
 
 const AgentAnswer: Page = () => (
   <Shell chapter={2}>
     <Eyebrow>回答示例</Eyebrow>
-    <Heading>好的回答：每一句都對到一張卡</Heading>
-    <Lead>像報告附出處：回答裡的每一句，都對得到筆記裡的一句</Lead>
+    <Heading>好答案每一句都有出處</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 36 }}>
       <Stage h={480}>
         <Steps>
@@ -1107,14 +1194,14 @@ const AgentAnswer: Page = () => (
             <g className="okg-build" style={buildDelay(0)}>
               <DocShape x={1000} y={0} w={632} h={190} />
               <text x="1028" y="46" fontSize="26" fontWeight="600" fill={amber}>人物/曹操.md</text>
-              <QuoteLine x={1024} y={112} w={470} text="在赤壁之戰被孫權麾下的周瑜火燒戰船" />
+              <QuoteLine x={1024} y={112} w={470} text="在赤壁之戰被孫權麾下的周瑜火燒戰船" at={640} />
               <text x="1028" y="166" fontSize="24" fill={quiet}>第 49 至 50 回</text>
             </g>
             <g className="okg-build" style={buildDelay(1)}>
               <DocShape x={1000} y={230} w={632} h={240} />
               <text x="1028" y="276" fontSize="26" fontWeight="600" fill={amber}>關係/赤壁之戰.md</text>
-              <QuoteLine x={1024} y={344} w={560} text="周瑜下令火攻，曹軍連在一起的戰船燒成一片" />
-              <QuoteLine x={1024} y={410} w={150} text="曹操大敗" />
+              <QuoteLine x={1024} y={344} w={560} text="周瑜下令火攻，曹軍連在一起的戰船燒成一片" at={730} />
+              <QuoteLine x={1024} y={410} w={150} text="曹操大敗" at={820} />
             </g>
             <g fill="none" stroke={okGreen} strokeWidth="4">
               <StepPath d="M380 124 C700 124 760 100 1018 100" i={2} />
@@ -1125,7 +1212,8 @@ const AgentAnswer: Page = () => (
         </Steps>
       </Stage>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 26, color: quiet, marginTop: 14 }}>範圍是今天的 12 張筆記；不代表曹操一生只參與赤壁一場戰役</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 26, color: quiet, marginTop: 14 }}>範圍只有今天的 12 張卡</p></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -1141,18 +1229,18 @@ const CheckPanel = ({ label, caption, alt, children }: { label: string; caption:
 const CheckAnswer: Page = () => (
   <Shell chapter={2}>
     <Eyebrow>核對回答</Eyebrow>
-    <Heading>核對回答三件事：出處、範圍、說不知道</Heading>
-    <Lead>像改考卷：對出處、看有沒有亂加、不知道有沒有老實說</Lead>
+    <Heading>核對回答的三件事</Heading>
+    <Fit z={1.5}>
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, marginTop: 40 }}>
       <Steps>
-        <In i={0} style={{ display: 'grid' }}><CheckPanel label="1｜出處" caption="回答提到的檔案真的存在嗎？" alt="資料夾裡找到回答引用的檔案，打勾">
+        <In i={0} style={{ display: 'grid' }}><CheckPanel label="1｜出處" caption="檔案真的在嗎？" alt="資料夾裡找到回答引用的檔案，打勾">
           <Folder x={40} y={40} w={240} h={150} />
           <DocShape x={120} y={70} w={110} h={100} fill="#FFFFFF" stroke={amber} sw={3} />
           <text x="175" y="130" textAnchor="middle" fontSize="22" fill={ink}>曹操.md</text>
           <circle cx="330" cy="100" r="40" fill="none" stroke={okGreen} strokeWidth="6" /><path d="M358 128 l40 40" stroke={okGreen} strokeWidth="8" strokeLinecap="round" />
           <OkDot x={420} y={50} />
         </CheckPanel></In>
-        <Step duration={STEP_MS}><CheckPanel label="2｜範圍" caption="回答有沒有超出筆記寫的？" alt="回答的一部分超出筆記範圍，打上問號">
+        <Step duration={STEP_MS}><CheckPanel label="2｜範圍" caption="有沒有多寫？" alt="回答的一部分超出筆記範圍，打上問號">
           <rect x="30" y="30" width="250" height="160" fill={surface} stroke={faint} strokeWidth="2" />
           <text x="155" y="64" textAnchor="middle" fontSize="22" fill={quiet}>筆記寫的範圍</text>
           <rect x="70" y="90" width="170" height="70" fill={sage} stroke={okGreen} strokeWidth="2" />
@@ -1161,7 +1249,7 @@ const CheckAnswer: Page = () => (
           <text x="340" y="134" textAnchor="middle" fontSize="24" fill={amber}>多加的細節</text>
           <AskMark x={430} y={84} />
         </CheckPanel></Step>
-        <Step duration={STEP_MS}><CheckPanel label="3｜誠實" caption="資料不夠時，有沒有說出來？" alt="AI 回答筆記裡找不到，打勾">
+        <Step duration={STEP_MS}><CheckPanel label="3｜誠實" caption="不知道就說不知道" alt="AI 回答筆記裡找不到，打勾">
           <Bubble x={30} y={40} w={400} h={110} stroke={okGreen} />
           <text x="60" y="88" fontSize="26" fill={ink}>筆記裡找不到這件事，</text>
           <text x="60" y="126" fontSize="26" fill={ink}>我無法確認。</text>
@@ -1169,100 +1257,117 @@ const CheckAnswer: Page = () => (
         </CheckPanel></Step>
       </Steps>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 30, color: muted, marginTop: 36 }}>RAG 能減少瞎掰，但找錯卡或筆記本身寫錯，回答一樣會錯</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 30, color: muted, marginTop: 36 }}>RAG 不保證對，還是要核對</p></Step></Steps>
+    </Fit>
   </Shell>
 );
 
 // ---------- 03 Agent 協作 ----------
 
-const Section3: Page = () => <SectionPage chapter={3} label="03 / AGENT" lead="像帶實習生：先拍下現況，再請他補卡，最後比一比前後" />;
+const Section3: Page = () => <SectionPage chapter={3} label="03 / AGENT" lead="像帶實習生：拍現況、補卡、比較" />;
 
-const PromptPage = ({ children, side }: { children: ReactNode; side: ReactNode }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: '1010px 1fr', gap: 52, marginTop: 36, alignItems: 'start' }}>
-    <In i={0}>{children}</In>
-    <div>{side}</div>
-  </div>
+// An exercise page: the prompt as one line of pills, then the result as the main picture
+// (revealed on a click). The full prompt lives in 整理/練習提示詞.md inside the vault.
+const Pill = ({ tag, children }: { tag: string; children: ReactNode }) => (
+  <span style={{ display: 'inline-flex', alignItems: 'stretch', border: `2px solid ${amber}`, borderRadius: 32, overflow: 'hidden', fontSize: 28, whiteSpace: 'nowrap' }}>
+    <span style={{ background: amber, color: '#FFFFFF', fontWeight: 600, padding: '8px 18px' }}>{tag}</span>
+    <span style={{ background: '#FFFFFF', padding: '8px 22px' }}>{children}</span>
+  </span>
 );
 
-// The short version of an exercise prompt, in the same three slots as deck 01:
-// where to look, what to hand back, what not to do. The full text lives in prompts.md.
-const SlotRow = ({ tag, children }: { tag: string; children: ReactNode }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', minHeight: 86 }}>
-    <div style={{ background: amber, color: '#FFFFFF', fontSize: 28, fontWeight: 600, display: 'grid', placeItems: 'center' }}>{tag}</div>
-    <div style={{ background: amberSoft, display: 'flex', alignItems: 'center', padding: '14px 26px', fontSize: 29, lineHeight: 1.4 }}>{children}</div>
-  </div>
-);
-
-const PromptSlots = ({ full, children }: { full: string; children: ReactNode }) => (
-  <div>
-    <SmallLabel>提示詞重點</SmallLabel>
-    <div style={{ display: 'grid', gap: 12, marginTop: 12 }}>{children}</div>
-    <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `5px solid ${amber}`, padding: '16px 24px', marginTop: 18, fontSize: 27 }}>完整版：在 Obsidian 打開 <Path size={26}>整理/練習提示詞.md</Path>，複製「{full}」整段</div>
-  </div>
+const PromptPage = ({ full, pills, z = 1, children }: { full: string; pills: ReactNode; z?: number; children: ReactNode }) => (
+  <>
+    <In i={0} style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 30 }}>
+      {pills}
+      <span style={{ marginLeft: 'auto', fontSize: 24, color: muted, border: `1px dashed ${faint}`, padding: '6px 14px', whiteSpace: 'nowrap' }}>📋 練習提示詞・{full}</span>
+    </In>
+    <Fit z={z}>{children}</Fit>
+  </>
 );
 
 const Practice1: Page = () => (
   <Shell chapter={3}>
     <PracticeEyebrow time="5 分鐘">練習一｜畫出起點</PracticeEyebrow>
-    <Heading>練習一：把 12 張卡畫成純文字關係圖</Heading>
-    <Lead>像整理房間前先拍照：留下「之前」，等一下才比得出差別</Lead>
-    <PromptPage side={
-      <In i={1} style={{ background: '#FFFFFF', border: `1px solid ${rule}`, boxShadow: '0 10px 30px rgba(28,25,23,0.08)', padding: '18px 18px 16px' }}>
-        <div style={{ background: '#202326', padding: '22px 24px', fontFamily: mono, fontSize: 25, lineHeight: 1.75, color: '#F5F5F4', whiteSpace: 'pre' }}>{'劉備 ─ 桃園結義 ─ 關羽\n劉備 ─ 桃園結義 ─ 張飛\n劉備 ─ 煮酒論英雄 ─ 曹操\n曹操 ─ 赤壁之戰 ─ 孫權'}<div style={{ color: '#BAB5B0', fontSize: 22, marginTop: 8 }}>來源：關係/桃園結義.md …</div></div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 14, fontSize: 24 }}><strong>擴充前（純文字圖）</strong><span style={{ color: quiet }}>示意</span></div>
-      </In>
-    }>
-      <PromptSlots full="練習一">
-        <SlotRow tag="範圍">〈三國演義〉和人物／勢力／關係，共 12 張卡</SlotRow>
-        <SlotRow tag="產出">純文字關係圖＋連結清單，存成 整理/人物關係圖－擴充前.md</SlotRow>
-        <SlotRow tag="限制">不改原檔；只用 [[連結]] 作線；新檔不加 dg-publish</SlotRow>
-      </PromptSlots>
+    <Heading>練習一：畫出現有的關係圖</Heading>
+    <PromptPage z={1.45} full="練習一" pills={<><Pill tag="定位">原有 12 張卡</Pill><Pill tag="期望輸出">純文字關係圖</Pill><Pill tag="限制">只看參與人物</Pill></>}>
+      <Steps><Step duration={STEP_MS}>
+        <div data-figure="" style={{ background: '#FFFFFF', border: `1px solid ${rule}`, boxShadow: '0 10px 30px rgba(28,25,23,0.08)', padding: '22px 30px 26px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+            <span style={{ fontSize: 28, fontWeight: 600 }}>整理/人物關係圖－擴充前.md</span><span style={{ fontSize: 22, color: quiet }}>實跑節選</span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36, marginTop: 18 }}>
+            <div style={{ background: surface, border: `1px solid ${rule}`, padding: '18px 24px', fontFamily: mono, fontSize: 28, lineHeight: 1.65, whiteSpace: 'pre' }}>{'劉備 → 桃園結義 → 關羽\n劉備 → 桃園結義 → 張飛\n曹操 → 煮酒論英雄 → 劉備\n孫權 → 赤壁之戰 → 曹操\n…共 14 條'}</div>
+            <div>
+              <div style={{ fontSize: 28, fontWeight: 600 }}>連結清單</div>
+              <div style={{ fontSize: 28, lineHeight: 1.8, marginTop: 8 }}><LinkText text="[[劉備]] — [[桃園結義]] — [[關羽]]" /><br /><LinkText text="[[劉備]] — [[桃園結義]] — [[張飛]]" /><br /><LinkText text="[[曹操]] — [[煮酒論英雄]] — [[劉備]]" /><br /><span style={{ color: quiet }}>…</span></div>
+            </div>
+          </div>
+        </div>
+      </Step></Steps>
     </PromptPage>
   </Shell>
 );
 
 // The new cards wait in a diff preview until the learner says yes.
-const DiffLine = ({ y, text }: { y: number; text: string }) => (
-  <g><text x="40" y={y} fontSize="25" fontFamily={mono} fill={okGreen}>+ {text}</text></g>
+const DiffLine = ({ x = 40, y, text }: { x?: number; y: number; text: string }) => (
+  <g><text x={x} y={y} fontSize="27" fontFamily={mono} fill={okGreen}>+ {text}</text></g>
 );
 
 const Practice2: Page = () => (
   <Shell chapter={3}>
     <PracticeEyebrow time="10 分鐘">練習二｜擴充故事</PracticeEyebrow>
-    <Heading>練習二：請 Agent 照原文新增 4 張卡</Heading>
-    <Lead>像實習生交稿：照附的原文寫，先給你看，你點頭才放進卡片盒</Lead>
-    <PromptPage side={
-      <Figure w={570} h={500} label="只讀原文資料夾的三份節選；4 張新卡先放在差異預覽，你確認後才寫入">
-        <InG i={1}>
-          <rect x="0" y="0" width="570" height="96" fill={surface} stroke={rule} strokeWidth="2" />
-          <DocShape x={22} y={14} w={50} h={66} /><DocShape x={44} y={18} w={50} h={66} />
-          <text x="116" y="44" fontSize="26" fill={ink}>原文/ 第 37、38、46 回節選</text>
-          <text x="116" y="78" fontSize="24" fill={warn}>不上網，只讀這三份</text>
-        </InG>
-        <InG i={2}>
-          <DownArrowSvg x={285} y1={104} y2={140} />
-          <rect x="0" y="146" width="570" height="220" fill="#FFFFFF" stroke={okGreen} strokeWidth="2" strokeDasharray="10 8" />
-          <text x="24" y="184" fontSize="24" fontWeight="600" fill={okGreen}>差異預覽：還沒寫入</text>
-          <DiffLine y={226} text="人物/諸葛亮.md" />
-          <DiffLine y={262} text="人物/周瑜.md" />
-          <DiffLine y={298} text="關係/三顧茅廬.md" />
-          <DiffLine y={334} text="關係/草船借箭.md" />
-        </InG>
-        <InG i={3}>
-          <DownArrowSvg x={285} y1={374} y2={410} color={amber} />
-          <rect x="0" y="416" width="570" height="80" fill={amberSoft} stroke={amber} strokeWidth="2" />
-          <text x="24" y="466" fontSize="28" fontWeight="600" fill={ink}>你看過來源和連結，才說「寫入」</text>
-        </InG>
-      </Figure>
-    }>
-      <PromptSlots full="練習二">
-        <SlotRow tag="範圍">事實只取自 <Path size={27}>原文/</Path> 三份節選；可以讀舊卡來接連結</SlotRow>
-        <SlotRow tag="產出">4 張新卡：諸葛亮、周瑜、三顧茅廬、草船借箭</SlotRow>
-        <SlotRow tag="限制">舊卡不覆寫，先看差異；節選沒寫到的標「待確認」；不加 dg-publish</SlotRow>
-      </PromptSlots>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 16, fontSize: 27, color: amber, fontWeight: 600 }}><span style={{ fontSize: 30 }}>⚠</span>如果 Codex 問「能不能寫檔」：先看過差異再允許；沒問的話，寫完回 Obsidian 看新卡</div>
+    <Heading>請 Agent 照原文補 4 張卡</Heading>
+    <PromptPage full="練習二" pills={<><Pill tag="定位">原文/ 三份節選</Pill><Pill tag="期望輸出">新增 4 張卡</Pill><Pill tag="限制">不改舊卡</Pill></>}>
+      <Stage h={470}>
+        <Steps>
+          <Step duration={STEP_MS}><Layer h={470} label="原文三份節選，交給 Agent 做出差異預覽：4 個新檔">
+            <g className="okg-build" style={buildDelay(0)}>
+              <DocShape x={0} y={90} w={200} h={250} fill={surface} /><DocShape x={30} y={110} w={200} h={250} fill={surface} /><DocShape x={60} y={130} w={200} h={250} />
+              <text x="160" y="250" textAnchor="middle" fontSize="28" fontWeight="600" fill={ink}>原文/</text>
+              <text x="160" y="292" textAnchor="middle" fontSize="24" fill={quiet}>第 37、38、46 回</text>
+              <text x="130" y="430" textAnchor="middle" fontSize="28" fill={ink}>三份節選</text>
+            </g>
+            <g className="okg-build" style={buildDelay(1)}><MapArrow x1={290} x2={390} y={240} hot /></g>
+            <g className="okg-build" style={buildDelay(2)}>
+              <rect x="410" y="70" width="430" height="320" fill="#FFFFFF" stroke={okGreen} strokeWidth="3" strokeDasharray="12 8" />
+              <text x="440" y="120" fontSize="26" fontWeight="600" fill={okGreen}>差異預覽</text>
+              <DiffLine x={440} y={180} text="人物/諸葛亮.md" />
+              <DiffLine x={440} y={230} text="人物/周瑜.md" />
+              <DiffLine x={440} y={280} text="關係/三顧茅廬.md" />
+              <DiffLine x={440} y={330} text="關係/草船借箭.md" />
+              <text x="625" y="430" textAnchor="middle" fontSize="28" fill={ink}>先給你看</text>
+            </g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={470} label="你看過來源，點頭">
+            <MapArrow x1={860} x2={950} y={240} hot />
+            <g className="okg-build" style={buildDelay(0)}>
+              <circle cx="1060" cy="240" r="90" fill={amberSoft} stroke={amber} strokeWidth="3" />
+              <g className="okg-stamp" style={{ transitionDelay: '320ms' }}><TickMark x={1060} y={244} size={70} color={amber} /></g>
+              <text x="1060" y="430" textAnchor="middle" fontSize="28" fill={ink}>你點頭</text>
+            </g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={470} label="卡片盒從 12 張變成 16 張">
+            <MapArrow x1={1170} x2={1250} y={240} hot />
+            <g className="okg-build" style={buildDelay(0)}>
+              <CardGrid x={1272} y={110} grow />
+              <text x="1452" y="430" textAnchor="middle" fontSize="28" fill={ink}>卡片盒多 4 張</text>
+            </g>
+          </Layer></Step>
+        </Steps>
+      </Stage>
     </PromptPage>
   </Shell>
+);
+
+// Twelve grey cards and four new green ones.
+// `grow`: inside a <Step>, the four new cards land one by one after the old twelve.
+const CardGrid = ({ x, y, k = 1, grow = false }: { x: number; y: number; k?: number; grow?: boolean }) => (
+  <g>
+    {[0, 1, 2, 3].map(r => [0, 1, 2, 3].map(c => {
+      const fresh = r === 3;
+      return <rect key={`${r}${c}`} className={grow && fresh ? 'okg-stamp' : undefined} style={grow && fresh ? { transitionDelay: `${380 + c * 110}ms` } : undefined} x={x + c * 92 * k} y={y + r * 66 * k} width={76 * k} height={52 * k} fill={fresh ? sage : '#FFFFFF'} stroke={fresh ? okGreen : faint} strokeWidth={fresh ? 3 : 2} />;
+    }))}
+  </g>
 );
 
 // A chapter-ordered timeline: event cards hang off an axis of novel chapters.
@@ -1277,49 +1382,52 @@ const TimeTick = ({ x, n, label, fresh = false }: { x: number; n: string; label:
 const Practice3: Page = () => (
   <Shell chapter={3}>
     <PracticeEyebrow time="8 分鐘">練習三｜再畫一次</PracticeEyebrow>
-    <Heading>練習三：重畫關係圖，再按回目排時間線</Heading>
-    <Lead>用同一把尺再量一次：畫法一樣，才看得出多了什麼</Lead>
-    <PromptPage side={
-      <div style={{ display: 'grid', gap: 22 }}>
-        <In i={1} style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '16px 20px' }}>
-          <SmallLabel>擴充後關係圖</SmallLabel>
-          <Figure w={528} h={170} label="擴充後的局部關係圖：劉備經三顧茅廬連到諸葛亮，諸葛亮經草船借箭連到周瑜" style={{ marginTop: 8 }}>
-            <g fill="none" strokeWidth="3"><path d="M60 50 L150 130" stroke={amber} /><path d="M264 50 L150 130" stroke={okGreen} /><path d="M264 50 L376 130" stroke={okGreen} /><path d="M470 50 L376 130" stroke={okGreen} /></g>
-            <Person x={60} y={44} name="劉備" r={34} size={24} />
-            <Person x={264} y={44} name="諸葛亮" r={40} size={22} fill={sage} stroke={okGreen} />
-            <Person x={470} y={44} name="周瑜" r={34} size={24} fill={sage} stroke={okGreen} />
-            <RelBox cx={150} y={112} w={170} label="三顧茅廬" size={24} />
-            <RelBox cx={376} y={112} w={170} label="草船借箭" size={24} />
-          </Figure>
-        </In>
-        <In i={2} style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '16px 20px' }}>
-          <SmallLabel>故事時間線｜依小說回目</SmallLabel>
-          <Figure w={528} h={118} label="時間線依回目：第 1 回桃園、第 21 回煮酒、第 37–38 回三顧、第 46 回草船、第 49–50 回赤壁" style={{ marginTop: 6 }}>
-            <line x1="10" y1="60" x2="518" y2="60" stroke={faint} strokeWidth="3" />
-            <TimeTick x={36} n="1" label="桃園" />
-            <TimeTick x={146} n="21" label="煮酒" />
-            <TimeTick x={262} n="37–38" label="三顧" fresh />
-            <TimeTick x={376} n="46" label="草船" fresh />
-            <TimeTick x={486} n="49–50" label="赤壁" />
-          </Figure>
-        </In>
+    <Heading>練習三：重畫圖，排時間線</Heading>
+    <PromptPage full="練習三" pills={<><Pill tag="定位">16 張卡</Pill><Pill tag="期望輸出">關係圖＋時間線</Pill><Pill tag="限制">照回目，不寫年份</Pill></>}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
+        <Steps>
+          <Step duration={STEP_MS}><div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '20px 26px', height: 430, boxSizing: 'border-box' }}>
+            <div style={{ fontSize: 28, fontWeight: 600 }}>關係圖</div>
+            <Figure w={734} h={330} label="擴充後的局部關係圖：劉備經三顧茅廬連到諸葛亮，諸葛亮經草船借箭連到周瑜" style={{ marginTop: 16 }}>
+              <g fill="none" strokeWidth="4"><path d="M90 96 L230 236" stroke={amber} /><path d="M370 96 L230 236" stroke={okGreen} /><path d="M370 96 L510 236" stroke={okGreen} /><path d="M650 96 L510 236" stroke={okGreen} /></g>
+              <Person x={90} y={70} name="劉備" />
+              <Person x={370} y={70} name="諸葛亮" fill={sage} stroke={okGreen} size={27} />
+              <Person x={650} y={70} name="周瑜" fill={sage} stroke={okGreen} />
+              <RelBox cx={230} y={236} w={210} label="三顧茅廬" />
+              <RelBox cx={510} y={236} w={210} label="草船借箭" />
+            </Figure>
+          </div></Step>
+          <Step duration={STEP_MS}><div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '20px 26px', height: 430, boxSizing: 'border-box' }}>
+            <div style={{ fontSize: 28, fontWeight: 600 }}>時間線</div>
+            <Figure w={734} h={330} label="時間線依回目：第 1 回桃園、第 21 回煮酒、第 37–38 回三顧、第 46 回草船、第 49–50 回赤壁" style={{ marginTop: 16 }}>
+              <line x1="20" y1="170" x2="714" y2="170" stroke={faint} strokeWidth="4" />
+              <BigTick x={60} n="1 回" label="桃園" />
+              <BigTick x={210} n="21 回" label="煮酒" />
+              <BigTick x={370} n="37–38 回" label="三顧" fresh />
+              <BigTick x={530} n="46 回" label="草船" fresh />
+              <BigTick x={670} n="49–50 回" label="赤壁" />
+            </Figure>
+          </div></Step>
+        </Steps>
       </div>
-    }>
-      <PromptSlots full="練習三">
-        <SlotRow tag="範圍">全部人物卡和關係卡，含剛加的 4 張</SlotRow>
-        <SlotRow tag="產出">整理/ 裡的〈人物關係圖－擴充後〉＋〈故事時間線〉</SlotRow>
-        <SlotRow tag="限制">同一套畫法；照回目排，不寫成年份；不加 dg-publish</SlotRow>
-      </PromptSlots>
     </PromptPage>
   </Shell>
+);
+
+const BigTick = ({ x, n, label, fresh = false }: { x: number; n: string; label: string; fresh?: boolean }) => (
+  <g>
+    <circle cx={x} cy="170" r={fresh ? 18 : 13} fill={fresh ? okGreen : amber} />
+    <text x={x} y="124" textAnchor="middle" fontSize="26" fill={fresh ? okGreen : amber}>{n}</text>
+    <text x={x} y="232" textAnchor="middle" fontSize="30" fontWeight={fresh ? 600 : 400} fill={ink}>{label}</text>
+  </g>
 );
 
 // One map, grown: the original cards stay put, the four new cards branch off them.
 const GrowthCompare: Page = () => (
   <Shell chapter={3}>
     <Eyebrow>前後對照</Eyebrow>
-    <Heading>擴充前後：同一張圖接出 4 張新卡</Heading>
-    <Lead>像植物長新枝：舊枝不動，新卡從旁邊接出去</Lead>
+    <Heading>擴充前後的關係圖</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 30, background: '#FFFFFF', border: `1px solid ${rule}` }}>
       <Stage h={520}>
         <Steps>
@@ -1347,120 +1455,79 @@ const GrowthCompare: Page = () => (
               <StepPath d="M888 450 L1030 416" i={2} />
               <StepPath d="M1250 416 L1394 448" i={3} />
             </g>
-            <g className="okg-build" style={buildDelay(2)}><RelBox cx={565} y={384} w={220} label="三顧茅廬" /><text x="565" y="478" textAnchor="middle" fontSize="23" fill={quiet}>第 37–38 回</text></g>
+            <g className="okg-build" style={buildDelay(2)}><RelBox cx={565} y={384} w={220} label="三顧茅廬" /><text x="565" y="478" textAnchor="middle" fontSize="23" fill={quiet}>第 37–38 回｜也連到關羽、張飛</text></g>
             <g className="okg-build" style={buildDelay(3)}><Person x={842} y={452} name="諸葛亮" fill={sage} stroke={okGreen} size={27} /></g>
-            <g className="okg-build" style={buildDelay(4)}><RelBox cx={1140} y={384} w={220} label="草船借箭" /><text x="1140" y="478" textAnchor="middle" fontSize="23" fill={quiet}>第 46 回</text></g>
+            <g className="okg-build" style={buildDelay(4)}><RelBox cx={1140} y={384} w={220} label="草船借箭" /><text x="1140" y="478" textAnchor="middle" fontSize="23" fill={quiet}>第 46 回｜也連到曹操</text></g>
             <g className="okg-build" style={buildDelay(5)}><Person x={1440} y={452} name="周瑜" fill={sage} stroke={okGreen} /></g>
           </Layer></Step>
         </Steps>
       </Stage>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 28, color: muted, marginTop: 20 }}>多了一條擴充前走不到的路：劉備 → 三顧茅廬 → 諸葛亮 → 草船借箭 → 周瑜</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><Takeaway>多一條路：劉備 → 諸葛亮 → 周瑜</Takeaway></Step></Steps>
+    </Fit>
   </Shell>
 );
 
-// An acceptance sheet: what to check, how to check it, and a small picture of each.
-const ACCEPT_COLS = '170px 1fr 560px';
 
-const AcceptRow = ({ icon, check, how }: { icon: ReactNode; check: string; how: string }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: ACCEPT_COLS, alignItems: 'center', minHeight: 150, borderBottom: `1px solid ${rule}` }}>
-    <svg viewBox="0 0 140 90" style={{ width: 140, height: 90 }} aria-hidden="true">{icon}</svg>
-    <span style={{ fontSize: 32, fontWeight: 600, lineHeight: 1.4, paddingRight: 32 }}>{check}</span>
-    <span style={{ fontSize: 28, color: muted, lineHeight: 1.45 }}>{how}</span>
+// Four checks as four big picture cards.
+const CheckCard = ({ label, sub, alt, children }: { label: string; sub: string; alt: string; children: ReactNode }) => (
+  <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderTop: `5px solid ${amber}`, padding: '24px 24px 26px', textAlign: 'center' }}>
+    <svg viewBox="0 0 320 220" style={{ display: 'block', width: '100%', height: 'auto' }} role="img" aria-label={alt}>{children}</svg>
+    <div style={{ fontSize: 34, fontWeight: 600, marginTop: 14 }}>{label}</div>
+    <div style={{ fontSize: 26, color: muted, marginTop: 6 }}>{sub}</div>
   </div>
 );
 
 const CheckAgentWork: Page = () => (
   <Shell chapter={3}>
     <Eyebrow>人工驗收</Eyebrow>
-    <Heading>驗收新卡：數量、連結、回目、dg-publish</Heading>
-    <Lead>像驗收裝潢：數數量、試開關、量尺寸</Lead>
-    <div style={{ display: 'grid', gridTemplateColumns: ACCEPT_COLS, marginTop: 30, paddingBottom: 12, borderBottom: `2px solid ${ink}` }}>
-      <span /><SmallLabel>檢查什麼</SmallLabel><SmallLabel>怎麼看</SmallLabel>
+    <Heading>驗收新卡的四件事</Heading>
+    <Fit z={1.5}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 28, marginTop: 48 }}>
+      <Steps>
+        <In i={0} style={{ display: 'grid' }}><CheckCard label="數量" sub="12＋4 張" alt="原本 12 張灰色卡加上 4 張綠色新卡">
+          <CardGrid x={22} y={8} k={0.78} />
+        </CheckCard></In>
+        <Step duration={STEP_MS}><CheckCard label="連結" sub="新線點得開" alt="兩張卡之間的紫色連結，打勾">
+          <rect x="20" y="70" width="100" height="80" fill={amberSoft} stroke={amber} strokeWidth="3" />
+          <rect x="200" y="70" width="100" height="80" fill={sage} stroke={okGreen} strokeWidth="3" />
+          <g fill="none" stroke={link} strokeWidth="5"><StepPath d="M124 110 H196" /></g>
+          <g className="okg-build" style={buildDelay(2)}><OkDot x={160} y={44} r={26} /></g>
+        </CheckCard></Step>
+        <Step duration={STEP_MS}><CheckCard label="回目" sub="不寫成年份" alt="時間軸標著第幾回，西元年被劃掉">
+          <line x1="20" y1="110" x2="300" y2="110" stroke={faint} strokeWidth="4" />
+          <circle cx="60" cy="110" r="12" fill={amber} /><circle cx="160" cy="110" r="12" fill={okGreen} /><circle cx="260" cy="110" r="12" fill={amber} />
+          <text x="160" y="70" textAnchor="middle" fontSize="30" fill={amber}>第 N 回</text>
+          <text x="160" y="176" textAnchor="middle" fontSize="28" fill={quiet}>西元年</text>
+          <line x1="96" y1="166" x2="224" y2="166" stroke={warn} strokeWidth="5" />
+        </CheckCard></Step>
+        <Step duration={STEP_MS}><CheckCard label="dg-publish" sub="新檔屬性是空的" alt="新卡的屬性欄，dg-publish 沒有勾">
+          <rect x="30" y="30" width="260" height="160" fill="#FFFFFF" stroke={faint} strokeWidth="3" /><rect x="30" y="30" width="260" height="40" fill={raised} />
+          <text x="48" y="58" fontSize="22" fill={quiet}>屬性</text>
+          <rect x="54" y="104" width="40" height="40" fill="#FFFFFF" stroke={faint} strokeWidth="4" />
+          <text x="110" y="134" fontSize="26" fill={muted}>dg-publish</text>
+        </CheckCard></Step>
+      </Steps>
     </div>
-    <Steps>
-      <In i={0}><AcceptRow check="原本 12 張還在？新的 4 張有來源？" how="數檔案；打開新卡，看回目和節選檔名" icon={<g>
-        {[0, 1, 2, 3].map(r => [0, 1, 2].map(c => <rect key={`${r}${c}`} x={6 + c * 22} y={4 + r * 21} width="16" height="16" fill={surface} stroke={faint} strokeWidth="2" />))}
-        {[0, 1, 2, 3].map(r => <rect key={r} x={84} y={4 + r * 21} width="16" height="16" fill={sage} stroke={okGreen} strokeWidth="2" />)}
-        <text x="108" y="50" fontSize="22" fill={okGreen}>+4</text>
-      </g>} /></In>
-      <Step duration={STEP_MS}><AcceptRow check="前後兩張圖畫法一樣？新線點得開？" how="在 Obsidian 點每一條新連結，目標卡要存在" icon={<g>
-        <g fill="none" stroke={amber} strokeWidth="2.5"><path d="M14 20 L32 60 L50 20" /></g><circle cx="14" cy="18" r="8" fill={amberSoft} stroke={amber} strokeWidth="2" /><circle cx="50" cy="18" r="8" fill={amberSoft} stroke={amber} strokeWidth="2" /><rect x="25" y="56" width="14" height="14" fill={sage} stroke={okGreen} strokeWidth="2" />
-        <text x="70" y="52" textAnchor="middle" fontSize="26" fill={muted}>=</text>
-        <g fill="none" stroke={okGreen} strokeWidth="2.5"><path d="M90 20 L108 60 L126 20" /></g><circle cx="90" cy="18" r="8" fill={sage} stroke={okGreen} strokeWidth="2" /><circle cx="126" cy="18" r="8" fill={sage} stroke={okGreen} strokeWidth="2" /><rect x="101" y="56" width="14" height="14" fill={sage} stroke={okGreen} strokeWidth="2" />
-      </g>} /></Step>
-      <Step duration={STEP_MS}><AcceptRow check="時間線照小說回目排，沒寫成歷史年份？" how="對照第 1、21、37–38、46、49–50 回" icon={<g>
-        <line x1="6" y1="40" x2="134" y2="40" stroke={faint} strokeWidth="3" />
-        <circle cx="20" cy="40" r="6" fill={amber} /><circle cx="60" cy="40" r="6" fill={amber} /><circle cx="100" cy="40" r="6" fill={okGreen} />
-        <text x="60" y="24" textAnchor="middle" fontSize="22" fill={amber}>第 N 回</text>
-        <text x="70" y="80" textAnchor="middle" fontSize="22" fill={quiet}>西元年</text><line x1="36" y1="72" x2="104" y2="72" stroke={warn} strokeWidth="3" />
-      </g>} /></Step>
-    </Steps>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 26, color: quiet, marginTop: 22 }}>也要看：草船借箭和赤壁之戰有沒有被硬寫成同一件事</p></Step></Steps>
+    </Fit>
   </Shell>
 );
 
 // ---------- 04 建立知識庫 ----------
 
-const Section4: Page = () => <SectionPage chapter={4} label="04 / 導覽" lead="卡、圖和時間線都有了；接下來做一張首頁，讓讀者知道從哪裡開始、怎麼找回來源" />;
+const Section4: Page = () => <SectionPage chapter={4} label="04 / 導覽" lead="做一張首頁，指向每張卡" />;
 
 
 
 // Library picture, built bottom-up: shelves of source cards, a wall map, a desk with rules.
-const Pile = ({ x, label, count, fresh = 0 }: { x: number; label: string; count: number; fresh?: number }) => (
-  <g>
-    <rect x={x + 16} y="300" width="260" height="120" fill={surface} stroke={faint} strokeWidth="2" />
-    <rect x={x + 8} y="310" width="260" height="120" fill="#FFFFFF" stroke={faint} strokeWidth="2" />
-    <rect x={x} y="320" width="260" height="120" fill={amberSoft} stroke={amber} strokeWidth="2" />
-    <text x={x + 24} y="370" fontSize="32" fontWeight="600" fill={ink}>{label}</text>
-    <text x={x + 24} y="414" fontSize="25" fill={muted}>{count} 張{fresh ? <tspan fill={okGreen} fontWeight="600">＋新 {fresh}</tspan> : null}</text>
-  </g>
-);
 
-// Library picture: the shelf of source cards first, then the wall maps that point into it.
-const KnowledgeLayers: Page = () => (
-  <Shell chapter={4}>
-    <Eyebrow>整理方法</Eyebrow>
-    <Heading>來源卡和導覽頁</Heading>
-    <Lead>像圖書館：書架上放原書，牆上掛館內地圖，告訴你該去哪一架</Lead>
-    <div style={{ marginTop: 36 }}>
-      <Stage h={460}>
-        <Steps>
-          <Layer h={460} label="書架：來源卡，入口 1 張、人物 5 加新 2、勢力 3、關係 3 加新 2">
-            <InG i={0}><text x="0" y="280" fontSize="30" fontWeight="600" fill={ink}>書架｜來源卡</text><text x="230" y="280" fontSize="26" fill={muted}>一張一個主題，留著出處</text></InG>
-            <InG i={1}><Pile x={60} label="入口" count={1} /></InG>
-            <InG i={2}><Pile x={460} label="人物" count={5} fresh={2} /></InG>
-            <InG i={3}><Pile x={860} label="勢力" count={3} /></InG>
-            <InG i={4}><Pile x={1260} label="關係" count={3} fresh={2} /></InG>
-          </Layer>
-          <Step duration={STEP_MS}><Layer h={460} label="牆上的地圖：導覽頁，關係圖和時間線，都連回書架上的卡">
-            <g className="okg-build" style={buildDelay(0)}>
-              <text x="0" y="30" fontSize="30" fontWeight="600" fill={ink}>牆上｜導覽頁</text><text x="230" y="30" fontSize="26" fill={muted}>同一批卡，兩種讀法</text>
-              <rect x="420" y="56" width="400" height="150" fill="#FFFFFF" stroke={ink} strokeWidth="3" />
-              <g fill="none" stroke={amber} strokeWidth="3"><path d="M480 100 L560 160 L640 100 L720 160 L780 100" /></g>
-              <circle cx="480" cy="100" r="12" fill={amberSoft} stroke={amber} strokeWidth="2" /><circle cx="640" cy="100" r="12" fill={amberSoft} stroke={amber} strokeWidth="2" /><circle cx="780" cy="100" r="12" fill={sage} stroke={okGreen} strokeWidth="2" />
-              <text x="620" y="236" textAnchor="middle" fontSize="26" fill={ink}>關係圖：誰連到誰</text>
-            </g>
-            <g className="okg-build" style={buildDelay(1)}>
-              <rect x="960" y="56" width="460" height="150" fill="#FFFFFF" stroke={ink} strokeWidth="3" />
-              <line x1="990" y1="130" x2="1390" y2="130" stroke={faint} strokeWidth="3" />
-              <circle cx="1020" cy="130" r="9" fill={amber} /><circle cx="1120" cy="130" r="9" fill={amber} /><circle cx="1220" cy="130" r="9" fill={okGreen} /><circle cx="1300" cy="130" r="9" fill={okGreen} /><circle cx="1370" cy="130" r="9" fill={amber} />
-              <text x="1190" y="236" textAnchor="middle" fontSize="26" fill={ink}>時間線：哪件事先</text>
-            </g>
-                      </Layer></Step>
-        </Steps>
-      </Stage>
-    </div>
-    <p style={{ fontSize: 28, color: muted, marginTop: 10 }}>地圖只負責指路；要查證，還是走到書架上的那張卡</p>
-  </Shell>
-);
 
 // One source card, reached two ways: across the map, or along the timeline.
 const TwoWays: Page = () => (
   <Shell chapter={4}>
     <Eyebrow>兩種讀法</Eyebrow>
-    <Heading>兩種找法：按人物關係、按小說回目</Heading>
-    <Lead>像找教室：可以看樓層平面圖，也可以照課表的時間找；最後都走到同一間</Lead>
+    <Heading>兩種找法，回到同一張卡</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 40 }}>
       <Stage h={470}>
         <Steps>
@@ -1501,7 +1568,8 @@ const TwoWays: Page = () => (
         </Steps>
       </Stage>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 28, color: muted, marginTop: 12 }}>圖和時間線幫忙找路；答案還是要回到來源卡和小說回目</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 28, color: muted, marginTop: 12 }}>地圖指路，查證回到卡片</p></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -1526,28 +1594,41 @@ const Signpost = ({ y, label, target, example }: { y: number; label: string; tar
 const HomePagePractice: Page = () => (
   <Shell chapter={4}>
     <PracticeEyebrow time="5 分鐘">導覽頁練習</PracticeEyebrow>
-    <Heading>練習：做導覽頁，並從〈三國演義〉連過去</Heading>
-    <Lead>像校門口的導覽圖：先告訴人可以往哪兩個方向走</Lead>
-    <PromptPage side={
-      <Figure w={570} h={480} label="知識庫導覽.md：兩個路標，從人物看關係、按故事順序看">
-        <InG i={1}><DocShape x={0} y={0} w={570} h={470} /><text x="30" y="52" fontSize="28" fontWeight="600" fill={ink}>知識庫導覽.md</text><line x1="30" y1="76" x2="520" y2="76" stroke={rule} strokeWidth="2" /></InG>
-        <InG i={2}><Signpost y={104} label="從人物看關係" target="人物關係圖－擴充後" example="例：劉備 → 三顧茅廬 → 諸葛亮" /></InG>
-        <InG i={3}><Signpost y={270} label="按故事順序看" target="故事時間線" example="例：第 37–38 回在第 46 回之前" /></InG>
-        <InG i={4}><text x="30" y="440" fontSize="24" fill={amber}>沒核對的卡標「待確認」</text></InG>
-      </Figure>
-    }>
-      <PromptSlots full="導覽頁練習">
-        <SlotRow tag="範圍">擴充後關係圖、故事時間線和來源卡</SlotRow>
-        <SlotRow tag="產出">整理/知識庫導覽.md：兩條路，各附一個例子</SlotRow>
-        <SlotRow tag="限制">不改來源卡；沒核對的標「待確認」；不加 dg-publish</SlotRow>
-      </PromptSlots>
+    <Heading>練習：做導覽頁</Heading>
+    <PromptPage full="導覽頁練習" pills={<><Pill tag="定位">圖、時間線、卡片</Pill><Pill tag="期望輸出">一張導覽頁</Pill><Pill tag="限制">不改來源卡</Pill></>}>
+      <div style={{ display: 'grid', gridTemplateColumns: '880px 1fr', gap: 52, alignItems: 'start' }}>
+        <Steps>
+          <Step duration={STEP_MS}><Figure w={880} h={450} label="知識庫導覽.md：兩個路標，從人物看關係、按故事順序看">
+            <DocShape x={0} y={0} w={880} h={440} /><text x="36" y="56" fontSize="30" fontWeight="600" fill={ink}>整理/知識庫導覽.md</text><line x1="36" y1="82" x2="820" y2="82" stroke={rule} strokeWidth="2" />
+            <Signpost y={112} label="從人物看關係" target="人物關係圖－擴充後" example="例：劉備 → 三顧茅廬 → 諸葛亮" />
+            <Signpost y={280} label="按故事順序看" target="故事時間線" example="例：第 37–38 回在第 46 回之前" />
+          </Figure></Step>
+          <Step duration={STEP_MS}><Figure w={700} h={450} label="自己動手：在三國演義最後一行打知識庫導覽的連結">
+            <text x="0" y="40" fontSize="30" fontWeight="600" fill={amber}>再自己動手一步</text>
+            <DocShape x={0} y={70} w={700} h={300} />
+            <text x="32" y="124" fontSize="28" fontWeight="600" fill={ink}>三國演義.md</text>
+            <g stroke={rule} strokeWidth="8"><path d="M32 170 H560" /><path d="M32 210 H500" /><path d="M32 250 H540" /></g>
+            <rect x="24" y="284" width="420" height="56" fill={linkSoft} stroke={link} strokeWidth="2" />
+            <text x="40" y="322" fontSize="30" fontFamily={mono} fill={link}>[[知識庫導覽]]</text>
+            <text x="0" y="420" fontSize="28" fill={ink}>網站首頁才點得到導覽頁</text>
+          </Figure></Step>
+        </Steps>
+      </div>
     </PromptPage>
   </Shell>
 );
 
 // ---------- 05 發布到網站 ----------
 
-const Section5: Page = () => <SectionPage chapter={5} label="05 / 發布" lead="從這裡開始，內容會公開到網路上：先挑要分享的卡，再交給 Digital Garden 變成網站" />;
+const Section5: Page = () => (
+  <SectionPage chapter={5} label="05 / 發布" lead="挑好的卡，才會公開" extra={
+    <In i={5} style={{ display: 'grid', gridTemplateColumns: '1fr 80px 1fr', alignItems: 'center', marginTop: 20, maxWidth: 1400 }}>
+      <div style={{ background: linkSoft, borderLeft: `5px solid ${link}`, padding: '16px 24px', fontSize: 28 }}><strong>Obsidian 儲存庫</strong>：你的電腦</div>
+      <div style={{ textAlign: 'center', fontSize: 44, color: warn }}>≠</div>
+      <div style={{ background: surface, borderLeft: `5px solid ${faint}`, padding: '16px 24px', fontSize: 28 }}><strong>GitHub repo</strong>：雲端</div>
+    </In>
+  } />
+);
 
 const TickBox = ({ x, y, on }: { x: number; y: number; on: boolean }) => (
   <g><rect x={x} y={y} width="26" height="26" fill="#FFFFFF" stroke={on ? okGreen : faint} strokeWidth="3" />{on ? <TickMark x={x + 13} y={y + 14} size={18} /> : null}</g>
@@ -1570,8 +1651,8 @@ const FlowStation = ({ x, kicker, name, fill }: { x: number; kicker: string; nam
 const PublishFlow: Page = () => (
   <Shell chapter={5}>
     <Eyebrow>網站路線</Eyebrow>
-    <Heading>發布路線：筆記經過四站變成網址</Heading>
-    <Lead>像寄出作品集：挑好作品、裝箱存放，再擺上展示櫃</Lead>
+    <Heading>筆記怎麼變成網址</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 36 }}>
       <Stage h={420}>
         <Steps>
@@ -1611,9 +1692,10 @@ const PublishFlow: Page = () => (
       </Stage>
     </div>
     <Steps><Step duration={STEP_MS}><div>
-      <p style={{ fontSize: 30, color: muted, margin: '20px 0 0' }}>沒打勾的筆記不會上網站；整個筆記庫不會被公開</p>
-      <div style={{ background: amberSoft, borderLeft: `5px solid ${amber}`, padding: '14px 24px', fontSize: 27, marginTop: 14 }}>課前先註冊好：GitHub、Vercel 免費帳號（Vercel 可以直接用 GitHub 登入）</div>
+      <Takeaway>沒勾的卡，不會上網站</Takeaway>
+      <div style={{ background: amberSoft, borderLeft: `5px solid ${amber}`, padding: '14px 24px', fontSize: 27, marginTop: 14 }}>課前：註冊 GitHub、Vercel</div>
     </div></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -1638,9 +1720,9 @@ const InstallPlugin: Page = () => (
   <Shell chapter={5}>
     <Eyebrow>第一次設定 1／4</Eyebrow>
     <Heading>安裝 Digital Garden 外掛</Heading>
-    <Lead>像在手機裝 App：打開商店、搜尋、安裝，再打開</Lead>
+    <Fit z={1.3}>
     <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1000px 1fr', gap: 56, marginTop: 36 }}>
-      <In i={0} style={{ height: 470, border: `1px solid ${rule}`, background: '#FFFFFF', display: 'grid', gridTemplateColumns: '300px 1fr', boxShadow: '0 10px 30px rgba(28,25,23,0.08)' }}>
+      <In i={0} figure style={{ height: 470, border: `1px solid ${rule}`, background: '#FFFFFF', display: 'grid', gridTemplateColumns: '300px 1fr', boxShadow: '0 10px 30px rgba(28,25,23,0.08)' }}>
         <div style={{ background: surface, borderRight: `1px solid ${rule}`, paddingTop: 18 }}>
           <div style={{ padding: '0 22px 10px', fontSize: 22, color: quiet }}>設定｜介面示意</div>
           <SetRow>一般</SetRow><SetRow>編輯器</SetRow><SetRow>檔案與連結</SetRow><SetRow>外觀</SetRow><SetRow>快捷鍵</SetRow><SetRow>核心外掛程式</SetRow><SetRow hot>第三方外掛程式</SetRow>
@@ -1659,13 +1741,13 @@ const InstallPlugin: Page = () => (
       </In>
       <div style={{ display: 'grid', alignContent: 'start', gap: 30, paddingTop: 10 }}>
         <Steps>
-          <Step duration={STEP_MS}><TourStep n={1} title="設定 → 第三方外掛程式" detail="左下角齒輪進設定" ring={[4, 374, 296, 56]} /></Step>
-          <Step duration={STEP_MS}><TourStep n={2} title="關閉受限模式，按「瀏覽」" detail="瀏覽的是社群外掛程式" ring={[860, 92, 132, 60]} /></Step>
-          <Step duration={STEP_MS}><TourStep n={3} title="搜尋 Digital Garden → 安裝 → 啟用" detail="裝在目前這個筆記庫" ring={[316, 200, 668, 170]} /></Step>
+          <Step duration={STEP_MS}><TourStep n={1} title="外掛頁" detail="" ring={[4, 374, 296, 56]} /></Step>
+          <Step duration={STEP_MS}><TourStep n={2} title="按瀏覽" detail="" ring={[860, 92, 132, 60]} /></Step>
+          <Step duration={STEP_MS}><TourStep n={3} title="裝好啟用" detail="" ring={[316, 200, 668, 170]} /></Step>
         </Steps>
       </div>
     </div>
-    <In i={2} style={{ background: amberSoft, borderLeft: `5px solid ${amber}`, marginTop: 26, padding: '16px 24px', fontSize: 27 }}>完成檢查：「已安裝外掛程式」裡看得到 Digital Garden，開關是開的</In>
+    </Fit>
   </Shell>
 );
 
@@ -1685,8 +1767,8 @@ const WizardPane = ({ x, n, title, children }: { x: number; n: number; title: st
 const DeploySite: Page = () => (
   <Shell chapter={5}>
     <Eyebrow>第一次設定 2／4</Eyebrow>
-    <Heading>按 Deploy to Vercel，建立你的網站</Heading>
-    <Lead>像照樣板開一間新店：按一個按鈕，GitHub 放檔案，Vercel 開門營業</Lead>
+    <Heading>部署你的網站</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 34 }}>
       <Stage h={470}>
         <Steps>
@@ -1732,7 +1814,8 @@ const DeploySite: Page = () => (
         </Steps>
       </Stage>
     </div>
-    <p style={{ fontSize: 26, color: amber, marginTop: 4 }}>官方入口：docs.forestry.md/getting-started/01-getting-started/<span style={{ color: quiet }}>　｜Vercel 畫面為示意，依版本可能不同</span></p>
+    <p style={{ fontSize: 26, color: amber, marginTop: 4 }}>docs.forestry.md/getting-started<span style={{ color: quiet }}>｜畫面示意</span></p>
+    </Fit>
   </Shell>
 );
 
@@ -1747,8 +1830,9 @@ const FormRow = ({ y, label, children }: { y: number; label: string; children: R
 const CreateToken: Page = () => (
   <Shell chapter={5}>
     <Eyebrow>第一次設定 3／4</Eyebrow>
-    <Heading>建立 GitHub token：只授權網站 repo</Heading>
-    <Lead>像打一把備用鑰匙：只開網站 repo 這一扇門，還要記得鑰匙哪天到期</Lead>
+    <Heading>建立 GitHub token</Heading>
+    <Lead>像備用鑰匙：只開一扇門，會到期</Lead>
+    <Fit z={1}>
     <div style={{ display: 'grid', gridTemplateColumns: '860px 1fr', gap: 52, marginTop: 28, alignItems: 'start' }}>
       <In i={0} style={{ position: 'relative' }}>
         <Figure w={860} h={540} label="GitHub 建立 fine-grained token 的表單示意：Token name、Expiration 90 天、Only select repositories、兩個權限 Read and write、Generate token">
@@ -1776,13 +1860,14 @@ const CreateToken: Page = () => (
         <MarkBubble n={5} left={0} top={495} i={6} />
       </In>
       <div style={{ display: 'grid', gap: 18, paddingTop: 4 }}>
-        <In i={2}><Callout n={1} title="登入 GitHub，打開這個網址" detail={<Path size={24}>github.com/settings/personal-access-tokens/new</Path>} /></In>
-        <In i={3}><Callout n={2} title="Expiration 改成 90 天" detail="到期後回同一頁按 Regenerate，再貼進外掛一次" /></In>
-        <In i={4}><Callout n={3} title="Only select repositories" detail="只選剛才建的網站 repo" /></In>
-        <In i={5}><Callout n={4} title="兩個權限改成 Read and write" detail="Contents、Pull requests；Metadata 自動唯讀" /></In>
-        <In i={6}><Callout n={5} title="Generate token，馬上複製" detail="只顯示這一次；下一頁貼進外掛" /></In>
+        <In i={2}><Callout n={1} title="打開網址" /></In>
+        <In i={3}><Callout n={2} title="到期日改 90 天" /></In>
+        <In i={4}><Callout n={3} title="只選網站 repo" /></In>
+        <In i={5}><Callout n={4} title="兩個權限改讀寫" /></In>
+        <In i={6}><Callout n={5} title="產生後馬上複製" /></In>
       </div>
     </div>
+    </Fit>
   </Shell>
 );
 
@@ -1799,8 +1884,8 @@ const Door = ({ x, label, open }: { x: number; label: string; open: boolean }) =
 const ConnectGitHub: Page = () => (
   <Shell chapter={5}>
     <Eyebrow>第一次設定 4／4</Eyebrow>
-    <Heading>把 token 填進 Digital Garden 設定</Heading>
-    <Lead>設定 → Digital Garden → GitHub Authentication，把上一頁的鑰匙交給外掛</Lead>
+    <Heading>把 token 填進外掛</Heading>
+    <Fit z={1}>
     <div style={{ display: 'grid', gridTemplateColumns: '500px 1fr', gap: 60, marginTop: 34, alignItems: 'start' }}>
       <div>
         <Figure w={500} h={290} label="fine-grained token 只打得開網站 repo，另外兩個 repo 打不開">
@@ -1811,20 +1896,20 @@ const ConnectGitHub: Page = () => (
       </div>
       <div>
         <In i={2} style={{ position: 'relative' }}>
-          <Screenshot src={dgSettings} aspect={1680 / 500} width={1070} caption="Digital Garden 外掛 2.96.0 實際畫面（2026-10 擷取），練習筆記庫" alt="Digital Garden 外掛設定中的 GitHub repo name、Username、token 欄位">
+          <Screenshot src={dgSettings} aspect={1680 / 500} width={1070} caption="設定 → Digital Garden" alt="Digital Garden 外掛設定中的 GitHub repo name、Username、token 欄位">
             <MarkBubble n={1} left="-2.5%" top="39%" i={4} />
             <MarkBubble n={2} left="-2.5%" top="64%" i={5} />
             <MarkBubble n={3} left="-2.5%" top="89%" i={6} />
           </Screenshot>
         </In>
         <div style={{ display: 'grid', gap: 14, marginTop: 20 }}>
-          <In i={4}><Callout n={1} title="GitHub repo name：只填 my-garden" detail="不含帳號、不含網址" /></In>
-          <In i={5}><Callout n={2} title="GitHub Username：你的帳號" /></In>
-          <In i={6}><Callout n={3} title="GitHub token：貼上上一頁的 token（只貼這裡）" /></In>
+          <In i={4}><Callout n={1} title="repo name：只填 my-garden" /></In>
+          <In i={5}><Callout n={2} title="Username：你的帳號" /></In>
+          <In i={6}><Callout n={3} title="token：貼上剛才那串" /></In>
         </div>
       </div>
     </div>
-    <Caption>權限圖解：docs.forestry.md/advanced/fine-grained-access-token/</Caption>
+    </Fit>
   </Shell>
 );
 
@@ -1841,8 +1926,8 @@ const ScopeCard = ({ x, y, name, on, home = false }: { x: number; y: number; nam
 const PublishScope: Page = () => (
   <Shell chapter={5}>
     <Eyebrow>選擇公開</Eyebrow>
-    <Heading>只有勾了 dg-publish 的卡會公開</Heading>
-    <Lead>像交作業前貼標籤：貼了「公開」（dg-publish）的，才會被收走</Lead>
+    <Heading>勾了 dg-publish 才會公開</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 44 }}>
       <Stage h={420}>
         <Steps>
@@ -1865,28 +1950,30 @@ const PublishScope: Page = () => (
         </Steps>
       </Stage>
     </div>
-    <p style={{ fontSize: 28, color: muted, marginTop: 0 }}>連到的卡不會自動公開。要公開一篇：打開它 → Ctrl／Cmd + P → <strong>Digital Garden: Add publish flag</strong></p>
+    <p style={{ fontSize: 28, color: muted, marginTop: 0 }}>要公開：<strong>Add publish flag</strong></p>
+    </Fit>
   </Shell>
 );
 
 const PublishCommand: Page = () => (
   <Shell chapter={5}>
     <Eyebrow>發布</Eyebrow>
-    <Heading>用命令面板發布所有勾選的卡</Heading>
-    <Lead>按 Ctrl／Cmd + P 叫出命令面板，搜尋 garden publish，選第二行</Lead>
+    <Heading>發布勾選的卡</Heading>
+    <Lead>Ctrl／Cmd + P，搜尋 garden publish</Lead>
+    <Fit z={1}>
     <div style={{ display: 'grid', gridTemplateColumns: '1100px 1fr', gap: 56, marginTop: 40, alignItems: 'start' }}>
       <In i={0}>
-        <Screenshot src={dgPalette} aspect={1800 / 720} width={1100} caption="Digital Garden 外掛 2.96.0 實際畫面（2026-10 擷取），練習筆記庫" alt="命令面板搜尋 garden publish 的結果">
+        <Screenshot src={dgPalette} aspect={1800 / 720} width={1100} caption="Digital Garden 2.96.0" alt="命令面板搜尋 garden publish 的結果">
           <RegionMark x={3} y={35} w={94} h={11.5} i={2} />
           <MarkBubble n={1} left="0%" top="41%" i={3} />
         </Screenshot>
       </In>
       <div style={{ display: 'grid', gap: 30, paddingTop: 30 }}>
-        <In i={3}><Callout n={1} title="Publish All Notes Marked for Publish" detail="發布所有勾了 dg-publish 的卡；今天只用這個" /></In>
-        <In i={4} style={{ fontSize: 25, color: quiet, lineHeight: 1.5, borderTop: `1px solid ${rule}`, paddingTop: 20 }}>上面那行 Publish Active Note 只發布正在看的這一篇，之後只改一篇時再用</In>
+        <In i={3}><Callout n={1} title="Publish All Notes Marked for Publish" /></In>
       </div>
     </div>
-    <In i={5} style={{ background: amberSoft, borderLeft: `5px solid ${amber}`, padding: '14px 24px', fontSize: 27, marginTop: 22 }}>網站沒更新？先等 1–2 分鐘 → 到 Vercel 看部署有沒有成功 → 確認那一篇有勾 dg-publish</In>
+    <In i={5} style={{ background: amberSoft, borderLeft: `5px solid ${amber}`, padding: '14px 24px', fontSize: 27, marginTop: 22 }}>沒更新？等 2 分鐘 → 看 Vercel → 查 dg-publish</In>
+    </Fit>
   </Shell>
 );
 
@@ -1904,8 +1991,8 @@ const SitePage = ({ x, kind, name, line, next }: { x: number; kind: string; name
 const SiteRoute: Page = () => (
   <Shell>
     <Eyebrow>先看今天的成果</Eyebrow>
-    <Heading>做完今天，你會有一個這樣的網址</Heading>
-    <Lead>像網站版的卡片盒：點人名或事件名，就走到下一張</Lead>
+    <Heading>今天會做出這個網站</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 36 }}>
       <Figure h={420} label="網站上的路徑：三國演義入口 → 劉備 → 桃園結義 → 關羽">
         <InG i={0}><BrowserFrame x={0} y={0} w={1632} h={410} url="https://your-garden.vercel.app" /></InG>
@@ -1916,7 +2003,8 @@ const SiteRoute: Page = () => (
         <g fill="none" stroke={amber} strokeWidth="4"><DrawPath i={2} d="M200 330 C300 400 360 240 436 230" /><DrawPath i={4} d="M640 330 C720 400 760 240 836 230" /><DrawPath i={6} d="M1000 330 C1100 400 1160 240 1236 230" /></g>
       </Figure>
     </div>
-    <Steps><Step duration={STEP_MS}><div style={{ marginTop: 26, fontSize: 34, color: amber }}>內容是一盒 12 張的三國卡片；今天就是從這盒卡，一路做到這個網站</div></Step></Steps>
+    <Steps><Step duration={STEP_MS}><div style={{ marginTop: 26, fontSize: 34, color: amber }}>從一盒 12 張卡開始</div></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -1931,8 +2019,8 @@ const RelayStop = ({ x, name, state }: { x: number; name: string; state: 'ok' | 
 const CheckSite: Page = () => (
   <Shell chapter={5}>
     <Eyebrow>網站驗收</Eyebrow>
-    <Heading>打開網址，從首頁一路點到每張卡</Heading>
-    <Lead>走一遍開場看過的那條路，像跑接力：斷在哪一棒，就檢查那一頁</Lead>
+    <Heading>從首頁一路點下去</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 40, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '10px 0' }}>
       <Stage h={330}>
         <Steps>
@@ -1957,7 +2045,8 @@ const CheckSite: Page = () => (
         </Steps>
       </Stage>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 28, color: muted, marginTop: 24 }}>勾好之後重新發布一次，再走一遍</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><Takeaway>勾好，再發布一次</Takeaway></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -1975,21 +2064,22 @@ const RunStep = ({ x, n, title, detail, fill }: { x: number; n: number; title: s
 const FullPractice: Page = () => (
   <Shell chapter={5}>
     <PracticeEyebrow time="12 分鐘">完整練習</PracticeEyebrow>
-    <Heading>完整練習：公開 4 張新卡，請同學走一遍</Heading>
-    <Lead>像請同學試玩你設計的關卡：他走得通，才算完成</Lead>
+    <Heading>完整練習：公開新卡給同學走</Heading>
+    <In i={0} style={{ marginTop: 20 }}><span style={{ fontSize: 24, color: muted, border: `1px dashed ${faint}`, padding: '6px 14px' }}>📋 練習提示詞・完整練習</span></In>
+    <Fit z={1}>
     <div style={{ marginTop: 48 }}>
       <Stage h={300}>
         <Steps>
-          <Layer h={300} label="1 選一條路線：人物 → 關係 → 人物">
-            <InG i={0}><RunStep x={0} n={1} title="選一條路線" detail={'人物 → 關係 → 人物\n例：曹操 → 赤壁 → 孫權'} fill={amberSoft} /></InG>
+          <Layer h={300} label="1 核對新卡：請 Agent 指出每一句的節選出處">
+            <InG i={0}><RunStep x={0} n={1} title="核對新卡" detail={'Agent 指出處'} fill={amberSoft} /></InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={300} label="2 請 Agent 解釋這段關係，你回來源卡核對">
+          <Step duration={STEP_MS}><Layer h={300} label="2 勾選並發布：4 張新卡和知識庫導覽">
             <MapArrow x1={368} x2={418} y={140} hot />
-            <g className="okg-build" style={buildDelay(0)}><RunStep x={426} n={2} title="請 Agent 解釋" detail={'這段關係是什麼？\n你回來源卡核對'} fill={linkSoft} /></g>
+            <g className="okg-build" style={buildDelay(0)}><RunStep x={426} n={2} title="勾選、發布" detail={'4 張＋導覽頁'} fill={linkSoft} /></g>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={300} label="3 發布，請同學在網站走一次">
+          <Step duration={STEP_MS}><Layer h={300} label="3 請同學從首頁走到周瑜">
             <MapArrow x1={794} x2={844} y={140} hot />
-            <g className="okg-build" style={buildDelay(0)}><RunStep x={852} n={3} title="發布，請同學走" detail={'把網址給同學\n從入口走完三層'} fill="#FFFFFF" /></g>
+            <g className="okg-build" style={buildDelay(0)}><RunStep x={852} n={3} title="同學走一遍" detail={'首頁 → 周瑜'} fill="#FFFFFF" /></g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={300} label="完成條件：同學走得通，而且每頁都有根據">
             <MapArrow x1={1220} x2={1270} y={140} hot />
@@ -1997,12 +2087,13 @@ const FullPractice: Page = () => (
               <rect x="1278" y="40" width="354" height="200" fill={sage} stroke={okGreen} strokeWidth="3" />
               <OkDot x={1318} y={86} />
               <text x="1356" y="96" fontSize="30" fontWeight="600" fill={ink}>完成</text>
-              <SvgLines x={1306} y={160} lines={['同學走得通', '每一頁都有根據']} size={26} fill={ink} anchor="start" />
+              <SvgLines x={1306} y={160} lines={['走得到', '有根據']} size={26} fill={ink} anchor="start" />
             </g>
           </Layer></Step>
         </Steps>
       </Stage>
     </div>
+    </Fit>
   </Shell>
 );
 
@@ -2020,19 +2111,20 @@ const RecapStop = ({ x, n, verb }: { x: number; n: Chapter; verb: string }) => (
 const Recap: Page = () => (
   <Shell>
     <Eyebrow>總結</Eyebrow>
-    <Heading>回顧：五章做出一個知識網站</Heading>
-    <Lead>五章走一圈：打開卡片盒，最後變成同學走得通的網站</Lead>
+    <Heading>從卡片盒到網站</Heading>
+    <Fit z={1}>
     <div style={{ marginTop: 64 }}>
-      <Figure h={280} label="五章：認識 Obsidian、理解 RAG、Agent 協作、建立知識庫、發布到網站">
+      <Figure h={280} label="五章：認識 Obsidian、理解 RAG、Agent 協作、做導覽首頁、發布到網站">
         <g fill="none" stroke={amber} strokeWidth="4"><DrawPath i={5} d="M220 90 H1412" /></g>
-        <InG i={0}><RecapStop x={160} n={1} verb="打開卡片盒、沿連結讀" /></InG>
-        <InG i={1}><RecapStop x={488} n={2} verb="請 Agent 查筆記、附檔名" /></InG>
-        <InG i={2}><RecapStop x={816} n={3} verb="請 Agent 補卡、重畫" /></InG>
-        <InG i={3}><RecapStop x={1144} n={4} verb="做導覽頁、回到來源" /></InG>
-        <InG i={4}><RecapStop x={1472} n={5} verb="挑卡發布、同學驗收" /></InG>
+        <InG i={0}><RecapStop x={160} n={1} verb="沿連結讀" /></InG>
+        <InG i={1}><RecapStop x={488} n={2} verb="查筆記附出處" /></InG>
+        <InG i={2}><RecapStop x={816} n={3} verb="補卡、重畫" /></InG>
+        <InG i={3}><RecapStop x={1144} n={4} verb="做導覽頁" /></InG>
+        <InG i={4}><RecapStop x={1472} n={5} verb="發布、驗收" /></InG>
       </Figure>
     </div>
-    <Steps><Step duration={STEP_MS}><div style={{ marginTop: 56, borderTop: `2px solid ${amber}`, paddingTop: 28, fontSize: 38, color: amber, lineHeight: 1.5 }}>想一想：為什麼同一張劉備卡，能同時出現在結義和煮酒兩條路上？</div></Step></Steps>
+    <Steps><Step duration={STEP_MS}><Takeaway>同一張劉備卡，為什麼能走到兩條路？</Takeaway></Step></Steps>
+    </Fit>
   </Shell>
 );
 
@@ -2048,16 +2140,16 @@ const Appendix: Page = () => (
   <Shell top={192}>
     <In i={0}><Eyebrow>APPENDIX</Eyebrow></In>
     <In i={1} style={{ marginTop: 63 }}><Title>課後選修</Title></In>
-    <In i={2} style={{ fontSize: 36, color: muted, marginTop: 30 }}>主線已經結束；下面兩段可以依經驗挑著看</In>
+    <In i={2} style={{ fontSize: 36, color: muted, marginTop: 30 }}>主線結束，挑著看</In>
     <div style={{ marginTop: 56, borderTop: `2px solid ${ink}`, maxWidth: 1400 }}>
-      <AppendixRow i={3} tag="A" name="llm-wiki：讓 Agent 照固定步驟整理筆記" detail="安裝與三個常用 Skill" page={LlmWiki} />
-      <AppendixRow i={4} tag="B" name="Git：看懂發布的幕後" detail="commit、push 和手動練習" page={GitBasics} />
+      <AppendixRow i={3} tag="A" name="llm-wiki" detail="三個常用 Skill" page={LlmWiki} />
+      <AppendixRow i={4} tag="B" name="Git" detail="commit 和 push" page={GitBasics} />
     </div>
   </Shell>
 );
 
 const CodeBlock = ({ label, children }: { label: string; children: ReactNode }) => (
-  <div style={{ background: '#202326', color: '#F5F5F4', borderTop: `5px solid ${amber}`, padding: '26px 36px 32px' }}>
+  <div data-figure="" style={{ background: '#202326', color: '#F5F5F4', borderTop: `5px solid ${amber}`, padding: '26px 36px 32px' }}>
     <div style={{ color: '#BAB5B0', fontSize: 24, letterSpacing: '0.08em', marginBottom: 18 }}>{label}</div>
     <div style={{ fontFamily: mono, fontSize: 30, lineHeight: 1.75, whiteSpace: 'pre' }}>{children}</div>
   </div>
@@ -2066,8 +2158,9 @@ const CodeBlock = ({ label, children }: { label: string; children: ReactNode }) 
 const LlmWiki: Page = () => (
   <Shell>
     <Eyebrow>課後選修 A｜進階安裝</Eyebrow>
-    <Heading>安裝 llm-wiki：幫 Agent 整理筆記的 Skill</Heading>
-    <Lead>llm-wiki 是一組 Skills：像交給助理一本固定的整理 SOP</Lead>
+    <Heading>安裝 llm-wiki</Heading>
+    <Lead>Skill 像交給 Agent 的一本 SOP</Lead>
+    <Fit z={1}>
     <div style={{ display: 'grid', gridTemplateColumns: '960px 1fr', gap: 64, marginTop: 44, alignItems: 'start' }}>
       <In i={0}><CodeBlock label="範例指令｜需要先裝 Python 3">
         <div><Typed>$</Typed> pip install obsidian-wiki</div>
@@ -2075,9 +2168,9 @@ const LlmWiki: Page = () => (
         <div><Typed>$</Typed> obsidian-wiki doctor</div>
       </CodeBlock></In>
       <div style={{ display: 'grid', gap: 30 }}>
-        <In i={1}><Callout n={1} title="把 <筆記庫路徑> 換成完整路徑" detail="setup 會把 Skills 連到 Agent 的設定資料夾" /></In>
-        <In i={2}><Callout n={2} title="doctor 檢查有沒有裝好" /></In>
-        <In i={3}><Callout n={3} title="在 Codex 打開筆記庫，說「set up my wiki」" /></In>
+        <In i={1}><Callout n={1} title="換成完整路徑" /></In>
+        <In i={2}><Callout n={2} title="doctor 檢查" /></In>
+        <In i={3}><Callout n={3} title="跟 Codex 說 set up my wiki" /></In>
       </div>
     </div>
     <In i={4} style={{ marginTop: 40 }}>
@@ -2087,9 +2180,10 @@ const LlmWiki: Page = () => (
         <rect x="270" y="20" width="200" height="90" fill={sage} stroke={okGreen} strokeWidth="2" /><text x="370" y="76" textAnchor="middle" fontSize="30" fontWeight="600" fill={ink}>Agent</text>
         <MapArrow x1={490} x2={570} y={65} />
         <Folder x={590} y={20} w={220} h={90} /><text x="700" y="80" textAnchor="middle" fontSize="26" fill={ink}>筆記庫</text>
-        <text x="860" y="76" fontSize="28" fill={muted}>Skill＝給 Agent 的做事說明；主線練習不用裝</text>
+        <text x="860" y="76" fontSize="28" fill={muted}>主線練習不用裝</text>
       </Figure>
     </In>
+    </Fit>
   </Shell>
 );
 
@@ -2104,21 +2198,21 @@ const SkillRow = ({ i, cmd, what, icon }: { i: number; cmd: string; what: string
 const WikiSkills: Page = () => (
   <Shell>
     <Eyebrow>課後選修 A｜常用 Skills</Eyebrow>
-    <Heading>三個 Wiki Skill：收資料、查資料、做健檢</Heading>
-    <Lead>像工具箱裡的三把工具：收資料、查資料、做健檢。裝好後，在 Codex 輸入 $ 叫出來</Lead>
+    <Heading>三個常用 Wiki Skill</Heading>
+    <Fit z={1.45}>
     <div style={{ display: 'grid', gap: 22, marginTop: 44 }}>
-      <SkillRow i={0} cmd="$wiki-ingest" what="把資料收進來，整理成附來源的 Wiki 頁" icon={<g>
+      <SkillRow i={0} cmd="$wiki-ingest" what="收資料，整理成 Wiki 頁" icon={<g>
         <DocShape x={4} y={14} w={40} h={52} /><MapArrow x1={50} x2={74} y={40} hot /><Folder x={78} y={18} w={30} h={44} />
       </g>} />
-      <SkillRow i={1} cmd="$wiki-query" what="從 Wiki 找答案，並附上出處" icon={<g>
+      <SkillRow i={1} cmd="$wiki-query" what="查答案，附出處" icon={<g>
         <circle cx="44" cy="36" r="24" fill="none" stroke={okGreen} strokeWidth="5" /><path d="M62 54 l22 22" stroke={okGreen} strokeWidth="6" strokeLinecap="round" />
       </g>} />
-      <SkillRow i={2} cmd="$wiki-lint" what="健檢：斷掉的連結、孤立頁、過時或矛盾的內容" icon={<g>
+      <SkillRow i={2} cmd="$wiki-lint" what="健檢：斷連結、孤立頁" icon={<g>
         <rect x="6" y="28" width="38" height="24" rx="12" fill="none" stroke={faint} strokeWidth="5" /><rect x="66" y="28" width="38" height="24" rx="12" fill="none" stroke={faint} strokeWidth="5" />
         <path d="M50 22 L60 58" stroke={warn} strokeWidth="5" strokeLinecap="round" />
       </g>} />
     </div>
-    <In i={3} style={{ fontSize: 28, color: muted, marginTop: 34 }}>先試一個：用 $wiki-query 問「劉備與曹操在哪段故事同場？」，再核對它引用的卡</In>
+    </Fit>
   </Shell>
 );
 
@@ -2137,8 +2231,9 @@ const GitStation = ({ x, kicker, name, detail, children, fill }: { x: number; ki
 const GitBasics: Page = () => (
   <Shell>
     <Eyebrow>課後選修 B｜Git 觀念</Eyebrow>
-    <Heading>Git：commit 存版本、push 送上 GitHub</Heading>
-    <Lead>像拍照存檔、寄出照片，店面再換上新照片</Lead>
+    <Heading>commit 和 push</Heading>
+    <Lead>像拍照存檔，再把照片寄出去</Lead>
+    <Fit z={1}>
     <div style={{ marginTop: 36 }}>
       <Stage h={420}>
         <Steps>
@@ -2163,22 +2258,23 @@ const GitBasics: Page = () => (
         </Steps>
       </Stage>
     </div>
-    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 28, color: muted, marginTop: 26 }}>Digital Garden 發布時，直接在 GitHub 建好新版本（等於替你做了前兩步），Vercel 接著更新網站</p></Step></Steps>
+    <Steps><Step duration={STEP_MS}><p style={{ fontSize: 28, color: muted, marginTop: 26 }}>Digital Garden 替你做了前兩步</p></Step></Steps>
+    </Fit>
   </Shell>
 );
 
 const CloneRepo: Page = () => (
   <Shell>
     <Eyebrow>課後選修 B｜取得 repo</Eyebrow>
-    <Heading>git clone：把網站 repo 抄到電腦</Heading>
-    <Lead>把 GitHub 上的網站 repo 抄一份到電腦；它和 Obsidian 筆記庫是兩個資料夾</Lead>
+    <Heading>把網站 repo 抄到電腦</Heading>
+    <Fit z={1}>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 600px', gap: 64, marginTop: 40, alignItems: 'start' }}>
       <div>
         <In i={0}><CodeBlock label="範例指令">
           <div><Typed>$</Typed> git clone {'<repo 網址>'}</div>
           <div><Typed>$</Typed> cd {'<資料夾名稱>'}</div>
         </CodeBlock></In>
-        <In i={1} style={{ marginTop: 34 }}><Callout n={1} title="按綠色 Code → HTTPS → 複製網址" detail="角括號要換成實際網址和資料夾名稱" /></In>
+        <In i={1} style={{ marginTop: 34 }}><Callout n={1} title="Code → HTTPS → 複製網址" /></In>
         <In i={2} style={{ marginTop: 30 }}>
           <Figure w={900} h={120} label="GitHub 上的網站 repo 與電腦裡的 Obsidian 筆記庫是兩個不同資料夾">
             <Folder x={0} y={10} w={300} h={100} fill={surface} stroke={faint} /><text x="150" y="80" textAnchor="middle" fontSize="26" fill={ink}>網站 repo</text>
@@ -2189,6 +2285,7 @@ const CloneRepo: Page = () => (
       </div>
       <In i={1}><Screenshot src={githubClone} aspect={926 / 694} width={600} caption="GitHub Docs 官方圖（CC BY 4.0）" alt="GitHub 綠色 Code 按鈕展開後的 HTTPS 網址" /></In>
     </div>
+    </Fit>
   </Shell>
 );
 
@@ -2204,12 +2301,12 @@ const GitLabel = ({ row, n, children }: { row: number; n: number; children: Reac
 const CommitPush: Page = () => (
   <Shell>
     <Eyebrow>課後選修 B｜手動練習</Eyebrow>
-    <Heading>練習：改 README，再 commit 與 push</Heading>
-    <Lead>在網站 repo 的 README 加一行字，再照順序打四個指令</Lead>
+    <Heading>練習：commit 與 push</Heading>
+    <Fit z={1.3}>
     <div style={{ display: 'grid', gridTemplateColumns: '880px 1fr', gap: 30, marginTop: 40 }}>
       <In i={0}>
-        <div style={{ background: '#202326', color: '#D6D3D1', borderTop: `5px solid ${amber}`, padding: '24px 34px 28px' }}>
-          <div style={{ color: '#BAB5B0', fontSize: 24, marginBottom: 16 }}>示例輸出｜在練習用網站 repo 執行</div>
+        <div data-figure="" style={{ background: '#202326', color: '#D6D3D1', borderTop: `5px solid ${amber}`, padding: '24px 34px 28px' }}>
+          <div style={{ color: '#BAB5B0', fontSize: 24, marginBottom: 16 }}>示例輸出</div>
           <div style={{ fontFamily: mono, fontSize: 28, lineHeight: `${GIT_ROW}px`, whiteSpace: 'pre' }}>
             <div><Typed>$ git status</Typed></div>
             <div>  modified: README.md</div>
@@ -2222,13 +2319,13 @@ const CommitPush: Page = () => (
         </div>
       </In>
       <div style={{ position: 'relative', marginTop: 88 }}>
-        <GitLabel row={0} n={1}>看改了什麼</GitLabel>
-        <GitLabel row={2} n={2}>選好要拍進去的檔案</GitLabel>
-        <GitLabel row={3} n={3}>拍一張快照</GitLabel>
-        <GitLabel row={5} n={4}>寄到 GitHub</GitLabel>
+        <GitLabel row={0} n={1}>看改了啥</GitLabel>
+        <GitLabel row={2} n={2}>選檔案</GitLabel>
+        <GitLabel row={3} n={3}>拍快照</GitLabel>
+        <GitLabel row={5} n={4}>寄出去</GitLabel>
       </div>
     </div>
-    <In i={6} style={{ fontSize: 26, color: quiet, marginTop: 24 }}>README 的字不會變成公開筆記；筆記仍從 Obsidian 的 Digital Garden 外掛發布</In>
+    </Fit>
   </Shell>
 );
 
@@ -2265,10 +2362,10 @@ export const meta: SlideMeta = {
 
 const deck: Page[] = [
   Cover, SiteRoute, Agenda,
-  Section1, StoryMap, DownloadObsidian, FirstLaunch, GetVault, ObsidianWindow, LinkWalk, ReadRelations,
+  Section1, StoryMap, DownloadObsidian, FirstLaunch, GetVault, ObsidianWindow, LinkWalk, ReadRelations, WriteOwnCard,
   Section2, RagSteps, RagCompare, VaultFiles, OpenInCodex, AskAgent, AgentAnswer, CheckAnswer,
   Section3, Practice1, Practice2, Practice3, GrowthCompare, CheckAgentWork,
-  Section4, KnowledgeLayers, TwoWays, HomePagePractice,
+  Section4, TwoWays, HomePagePractice,
   Section5, PublishFlow, InstallPlugin, DeploySite, CreateToken, ConnectGitHub, PublishScope, PublishCommand, CheckSite, FullPractice,
   Recap,
   Appendix, LlmWiki, WikiSkills, GitBasics, CloneRepo, CommitPush,
@@ -2283,50 +2380,50 @@ function pageOf(page: Page) {
 const NOTES = new Map<Page, string>([
   [Cover, '今天用《三國演義》當例子：12 張人物、勢力、關係卡都備好了，大家不用先抄資料。先點開一段關係，看懂卡為什麼連在一起；後面再請 AI 查筆記、幫忙擴充，最後挑幾張發布成網站。'],
   [SiteRoute, '開場先看成果：做完今天，每個人會有一個這樣的網址。從〈三國演義〉入口點〈劉備〉，進〈桃園結義〉，再走到〈關羽〉，像網站版的卡片盒。按一下出現最後一句：這個網站就是從一盒 12 張的卡片一路做出來的。畫面是示意，外觀和網址依個人設定不同。'],
-  [Agenda, '五章，約 110 分鐘，含大家動手的時間；附錄留到課後。每章結束手上都多一樣東西：第一章裝好 Obsidian、打開筆記庫、沿連結讀；第二章請 Agent（今天用 Codex）先查筆記再回答；第三章請 Agent 新增 4 張卡，重畫關係圖和時間線；第四章做一張導覽首頁；第五章挑卡發布，請同學驗收。時間是估計值，第三章和第五章最容易超時。課前準備：Codex 照第一篇裝好；GitHub、Vercel 帳號先註冊。'],
+  [Agenda, '五章，約 110 分鐘，含大家動手的時間；附錄留到課後。每章結束手上都多一樣東西：第一章裝好 Obsidian、打開筆記庫、沿連結讀；第二章請 Agent（今天用 Codex）先查筆記再回答；第三章請 Agent 新增 4 張卡，重畫關係圖和時間線；第四章做一張導覽首頁；第五章挑卡發布，請同學驗收。時間是估計值，第三章和第五章最容易超時。課前準備：Codex 照第一篇裝好；GitHub、Vercel 帳號先註冊。 大綱頁只列章名、成果、時間，各章做什麼口頭講。'],
   [Section1, '大家拿到的是講師準備好的 12 張筆記，直接用 Obsidian 打開現成的資料夾。Obsidian 讀寫的就是電腦裡的 .md 檔；這一章把時間花在讀懂卡和卡之間的關係。'],
-  [StoryMap, '五位人物進場後，按三次，依序出現三張關係卡和連線：桃園結義接關羽、張飛、劉備；煮酒論英雄接劉備、曹操；赤壁之戰接曹操、孫權。像畫家族樹，人是點，一起經歷的事件把人接起來。每張卡在圖上只出現一次，劉備和曹操外面多一圈，表示各接了兩段故事。這是 12 張卡中的 8 張；接下來先把 Obsidian 裝好、打開教材，自己點點看。小說出處：第 1、21、49、50 回。來源：https://zh.wikisource.org/wiki/三國演義/第001回 、https://zh.wikisource.org/wiki/三國演義/第021回 、https://zh.wikisource.org/wiki/三國演義/第049回 、https://zh.wikisource.org/wiki/三國演義/第050回'],
-  [DownloadObsidian, '網頁會自己判斷系統：Windows 顯示 Download for Windows，Mac 顯示 Download for macOS。沒看到按鈕就往下捲，在 Windows 或 Mac 那一列按 Universal。Windows 打開安裝檔照指示按下一步；macOS 打開 .dmg，把 Obsidian 拖進「應用程式」。裝好就打開，下一頁是第一次啟動的畫面。官方說明：https://obsidian.md/help/install'],
-  [FirstLaunch, '第一次打開，先在最下面選繁體中文。今天不建空白儲存庫：等一下下載教材後，用第二個選項「開啟資料夾為儲存庫」直接打開。Obsidian 繁中介面把 vault 叫「儲存庫」，簡報裡說的「筆記庫」是同一個東西。來源：https://obsidian.md/help/User+interface/Language+settings'],
-  [GetVault, 'QR code 連到 GitHub 上公開的教材 ZIP；畫面上的下載按鈕也連到同一份檔案，兩種都有 12 張 Markdown 筆記。解壓縮後，在 Obsidian 選「開啟資料夾為儲存庫」，指定「三國人物知識庫」這一層，不要選外層的下載資料夾。打開後左側要看得到〈三國演義〉和人物、勢力、關係三個資料夾。ZIP 裡另有 原文/（第 37、38、46 回節選，.txt 檔，Obsidian 預設不顯示內容，給練習二用）和放在筆記庫外面的 prompts.md（練習提示詞完整版）。教材：https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/obsidian-agent-knowledge-garden/%E4%B8%89%E5%9C%8B%E4%BA%BA%E7%89%A9%E7%9F%A5%E8%AD%98%E5%BA%AB.zip ；操作說明：https://obsidian.md/help/Getting+started/Create+a+vault'],
-  [ObsidianWindow, '打開後會看到這個畫面，像一本活頁夾。按三次，依序圈出：左邊的資料夾（入口卡加人物 5、勢力 3、關係 3）；中間打開的〈桃園結義〉；紫色的劉備、關羽、張飛，點下去就跨資料夾走到人物卡。這是照 Obsidian 介面整理的示意，內容就是剛下載的筆記。官方說明：https://obsidian.md/help/links'],
-  [LinkWalk, '像坐捷運。先看〈劉備〉，按一下，路線走到〈桃園結義〉；再按一下，到〈關羽〉。中間那張關係卡寫著第 1 回的結義，所以這條線有理由，不只是一條線。今天的卡已經加好 [[連結]]，下一頁大家自己點紫色字試試。官方說明：https://obsidian.md/help/Linking+notes+and+files/Internal+links'],
-  [ReadRelations, '在 12 張筆記中展開〈關係〉資料夾，看〈桃園結義〉、〈煮酒論英雄〉、〈赤壁之戰〉三張卡；投影片上也可以直接點左邊切換。點人物的紫色連結，確認能跨資料夾走到人物卡。三張卡分別寫結義、對話、對抗，原本各自獨立的人物筆記就有了不同路線。卡片用完整句子講故事，人名連結就寫在句子裡；投影片上只放摘要，完整內容在 Obsidian 裡讀。來源：https://zh.wikisource.org/wiki/三國演義/第001回 、https://zh.wikisource.org/wiki/三國演義/第021回 、https://zh.wikisource.org/wiki/三國演義/第049回 、https://zh.wikisource.org/wiki/三國演義/第050回'],
+  [StoryMap, '五位人物進場後，按三次，依序出現三張關係卡和連線：桃園結義接關羽、張飛、劉備；煮酒論英雄接劉備、曹操；赤壁之戰接曹操、孫權。像畫家族樹，人是點，一起經歷的事件把人接起來。每張卡在圖上只出現一次。最後再按一下，才說出結論：劉備和曹操外面多一圈，各接了兩段故事。圖上只畫每段故事最核心的人；卡片正文其實連到更多人，例如〈赤壁之戰〉也連到劉備、關羽、張飛，練習一會看到。這是 12 張卡中的 8 張；接下來先把 Obsidian 裝好、打開教材，自己點點看。小說出處：第 1、21、49、50 回。來源：https://zh.wikisource.org/wiki/三國演義/第001回 、https://zh.wikisource.org/wiki/三國演義/第021回 、https://zh.wikisource.org/wiki/三國演義/第049回 、https://zh.wikisource.org/wiki/三國演義/第050回'],
+  [DownloadObsidian, '網頁會自己判斷系統：Windows 顯示 Download for Windows，Mac 顯示 Download for macOS。沒看到按鈕就往下捲，在 Windows 或 Mac 那一列按 Universal。Windows 打開安裝檔照指示按下一步；macOS 打開 .dmg，把 Obsidian 拖進「應用程式」。裝好就打開，下一頁是第一次啟動的畫面。官方說明：https://obsidian.md/help/install 頁面只寫三步：打開網址、按下載、照畫面安裝。Obsidian 免費，不用註冊帳號。'],
+  [FirstLaunch, '第一次打開，先在最下面選繁體中文。今天不建空白儲存庫：等一下下載教材後，用第二個選項「開啟資料夾為儲存庫」直接打開。Obsidian 繁中介面把 vault 叫「儲存庫」，簡報裡說的「筆記庫」是同一個東西。來源：https://obsidian.md/help/User+interface/Language+settings 第 2 點「開啟資料夾為儲存庫」是等一下打開教材時要按的。'],
+  [GetVault, '請用電腦下載：手機掃 QR code 只會存到手機。畫面上的按鈕和 QR code 連到同一份 ZIP，裡面只有一個「三國人物知識庫」資料夾。Windows 要在 ZIP 上按右鍵選「全部解壓縮」，直接雙擊只是預覽，Obsidian 打不開；解壓縮後外面可能多一層同名資料夾，往裡面點一層。Mac 雙擊就會解開。解壓縮後，在 Obsidian 選「開啟資料夾為儲存庫」，指定「三國人物知識庫」這一層，不要選外層的下載資料夾。打開後左側要看得到〈三國演義〉和人物、勢力、關係三個資料夾。裡面另有 原文/（第 37、38、46 回節選，.txt 檔，Obsidian 預設不顯示，給練習二用）和 整理/（練習提示詞，之後的練習產出也存這裡）。教材：https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/obsidian-agent-knowledge-garden/%E4%B8%89%E5%9C%8B%E4%BA%BA%E7%89%A9%E7%9F%A5%E8%AD%98%E5%BA%AB.zip ；操作說明：https://obsidian.md/help/Getting+started/Create+a+vault 打開後左側要看得到〈三國演義〉和人物、勢力、關係資料夾，這是完成檢查。'],
+  [ObsidianWindow, '打開後會看到這個畫面，像一本活頁夾。按三次，依序圈出：左邊的資料夾（入口卡加人物 5、勢力 3、關係 3）；中間打開的〈桃園結義〉；紫色的劉備、關羽、張飛，點下去就跨資料夾走到人物卡。這是照 Obsidian 介面整理的示意，內容就是剛下載的筆記。官方說明：https://obsidian.md/help/links 頁面上只留三個標號：左邊是資料夾，人物、勢力、關係各一格；中間是打開的〈桃園結義〉；紫色字點下去就走到那張人物卡。'],
+  [LinkWalk, '像坐捷運。先看〈劉備〉，按一下，路線走到〈桃園結義〉；再按一下，到〈關羽〉。中間那張關係卡寫著第 1 回的結義，所以這條線有理由，不只是一條線。今天的卡已經加好 [[連結]]，下一頁大家自己點紫色字試試。官方說明：https://obsidian.md/help/Linking+notes+and+files/Internal+links最後再按一下，底下的結論句才出現。'],
+  [ReadRelations, '在 12 張筆記中展開〈關係〉資料夾，看〈桃園結義〉、〈煮酒論英雄〉、〈赤壁之戰〉三張卡；投影片上也可以直接點左邊切換。點人物的紫色連結，確認能跨資料夾走到人物卡。三張卡分別寫結義、對話、對抗，原本各自獨立的人物筆記就有了不同路線。卡片用完整句子講故事，人名連結就寫在句子裡；投影片上只放摘要，完整內容在 Obsidian 裡讀。來源：https://zh.wikisource.org/wiki/三國演義/第001回 、https://zh.wikisource.org/wiki/三國演義/第021回 、https://zh.wikisource.org/wiki/三國演義/第049回 、https://zh.wikisource.org/wiki/三國演義/第050回 完成檢查：能從一張關係卡走到人物卡，再走向另一段關係。'],
+  [WriteOwnCard, '三分鐘，自己寫一張卡。在左側「整理」資料夾上按右鍵，選「新增筆記」，取名「我最想認識的人物」。寫一句話，打兩個左中括號，再打「劉」，跳出選單時選〈劉備〉，字就變成紫色連結。接著按 Ctrl／Cmd + P，搜尋「關聯圖」，選「查看關聯圖」。按一下，圖上多了一個新的點，連到劉備。這張卡不勾 dg-publish，只留在自己電腦裡，也不會影響後面數卡片。介面用語依 Obsidian 官方繁中翻譯：新增筆記、查看關聯圖。 頁面只留三步，細節口頭說：取名「我最想認識的人物」，打 [[ 跳出選單時選〈劉備〉。'],
   [Section2, '剛才大家自己沿連結找資料，要先讀卡片內容，才知道人物為什麼相連。接下來把「先找資料」這一步交給 AI：先拆開 RAG 三個字母，再比較查筆記前後的回答。RAG 是一種工作方式，不是 Obsidian 裡的按鈕。'],
-  [RagSteps, '像開書考。題目是「曹操在這盒筆記中參與哪場戰役？」先看 R 檢索：從筆記庫挑出〈曹操〉和〈赤壁之戰〉。按一下是 A 增強：把找到的內容連同問題一起交給模型，AI 本身沒有被改，只是這次回答多了資料可以看。再按一下是 G 生成：模型照這些內容回答「赤壁之戰」，並標出檔名。來源：https://arxiv.org/abs/2005.11401 （Lewis 等人，2020）'],
-  [RagCompare, '左邊先出現：沒查筆記，AI 憑印象回答，可能對也可能錯，但沒有檔名可以回去核對。按一下出現右邊：先從〈曹操〉找到〈赤壁之戰〉，對照兩張卡，回答赤壁之戰並附檔名。提醒大家題目限定這盒筆記，不是說曹操一生只打過這一仗。RAG 也可以直接搜尋檔案，不一定要沿連結；找錯資料或資料本身寫錯，回答一樣會錯。來源：https://arxiv.org/abs/2005.11401'],
-  [VaultFiles, '進到 Agent 之前，先看筆記庫在電腦裡的樣子：就是一般資料夾。根目錄有〈三國演義〉入口卡，人物 5 張、勢力 3 張、關係 3 張，共 12 張 .md；原文/ 放 3 份 .txt 節選，練習二才用。左邊是剛才用過的 Obsidian，負責寫。按一下出現 Agent：會自己開檔、讀檔、寫檔的 AI，今天用的是 Codex。之後簡報統一叫它 Agent。兩邊用同一個資料夾，不用各存一份。來源：https://obsidian.md/help/Getting+started/Create+a+vault'],
-  [OpenInCodex, 'Codex 的安裝和登入沿用第一篇的課前準備。打開終端機，輸入 cd 和一個空格，再把「三國人物知識庫」資料夾從 Finder 或檔案總管拖進終端機，路徑會自己貼上，按 Enter。接著輸入 codex 叫醒它，第一次會請你登入，照畫面做。要停在「三國人物知識庫」這一層，不要停在「文件」或「下載」，因為 Codex 只看你所在的資料夾。按一下看回覆：請它列出所有 .md 檔，數到 12 個再開始提問；原文/ 是 .txt，不算在內。右邊是示意，實際文字會不同。'],
-  [AskAgent, '投影片只放三格重點，完整提示詞在 prompts.md「查筆記練習」，請大家整段貼上。右邊是預期路線：先讀〈曹操〉，再核對〈赤壁之戰〉，最後回答並附兩個檔名。看 Agent 有沒有沒查到就憑印象補細節。題目限定「依這盒筆記」。'],
-  [AgentAnswer, '這是照範例筆記寫的回答格式示意。三條線依序畫出：第一句對到〈曹操〉的赤壁戰事，第二句對到〈赤壁之戰〉的交戰，第三句對到「曹操軍敗退」。回答範圍是今天的 12 張筆記，不代表曹操一生只參與赤壁一場戰役。來源：練習筆記庫／人物／曹操.md、練習筆記庫／關係／赤壁之戰.md。'],
-  [CheckAnswer, '像改考卷。先看第一個檢查，再按兩次看後兩個：出處，回答提到的檔案真的存在嗎；範圍，有沒有多寫筆記沒寫的細節；誠實，資料不夠時有沒有說找不到。RAG 能減少瞎掰，但不保證正確。'],
+  [RagSteps, '像開書考。題目是「曹操在這盒筆記中參與哪場戰役？」先看 R 檢索：從筆記庫挑出〈曹操〉和〈赤壁之戰〉。按一下是 A 增強：把找到的內容連同問題一起交給模型，AI 本身沒有被改，只是這次回答多了資料可以看。再按一下是 G 生成：模型照這些內容回答「赤壁之戰」，並標出檔名。來源：https://arxiv.org/abs/2005.11401 （Lewis 等人，2020）最後再按一下，底下的結論句才出現。'],
+  [RagCompare, '左邊先出現：沒查筆記，AI 憑印象回答，可能對也可能錯，但沒有檔名可以回去核對。按一下出現右邊：先從〈曹操〉找到〈赤壁之戰〉，對照兩張卡，回答赤壁之戰並附檔名。提醒大家題目限定這盒筆記，不是說曹操一生只打過這一仗。RAG 也可以直接搜尋檔案，不一定要沿連結；找錯資料或資料本身寫錯，回答一樣會錯。來源：https://arxiv.org/abs/2005.11401 最後再按一下，底下的結論句才出現。'],
+  [VaultFiles, '進到 Agent 之前，先看筆記庫在電腦裡的樣子：就是一般資料夾。根目錄有〈三國演義〉入口卡，人物 5 張、勢力 3 張、關係 3 張，共 12 張 .md；原文/ 放 3 份 .txt 節選，練習二才用。左邊是剛才用過的 Obsidian，負責寫。按一下出現 Agent：會自己開檔、讀檔、寫檔的 AI，今天用的是 Codex。之後簡報統一叫它 Agent。兩邊用同一個資料夾，不用各存一份。來源：https://obsidian.md/help/Getting+started/Create+a+vault 最後再按一下，底下的結論句才出現。'],
+  [OpenInCodex, 'Codex 的安裝和登入沿用第一篇的課前準備。Windows 打開 PowerShell 或 Windows Terminal，Mac 打開「終端機」。輸入 cd 和一個空格，再把「三國人物知識庫」資料夾從檔案總管或 Finder 拖進終端機，路徑會自己貼上，按 Enter。接著輸入 codex：第一次會出現三個英文畫面，選法和第一篇第 11 頁一樣：登入選 Sign in with ChatGPT；問 Do you trust the contents of this directory? 選 Yes, continue；之後要改檔時問 Would you like to make the following edits?，看過差異再選 Yes, proceed。要停在「三國人物知識庫」這一層，因為 Codex 只看你所在的資料夾。提示詞請整段複製、一次貼上，最後才按 Enter；一行一行打的話，每按一次 Enter 就先送出一行。按一下看回覆：請它列出 .md 檔，卡片要有 12 張，另外會看到 整理/練習提示詞.md；原文/ 是 .txt，不在清單裡。右邊是示意，實際文字會不同。 頁面只留三個短句，上面的細節口頭講。'],
+  [AskAgent, '這就是 RAG 的練習：把已經有的筆記放進輸入，AI 才不會亂編，也找得回原文。投影片只放三格重點，完整提示詞在 整理/練習提示詞.md「查筆記練習」，整段貼上。按一下出現預期路線：先讀〈曹操〉，再核對〈赤壁之戰〉這張關係卡，最後回答並附兩個檔名。2026-10 實跑時，Codex 回答赤壁之戰，並列出 人物/曹操.md 與 關係/赤壁之戰.md 各寫了什麼。看 Agent 有沒有沒查到就憑印象補細節。題目限定「依這盒筆記」。 頁面上方是三格膠囊，右邊的「練習提示詞」標籤提醒大家：完整提示詞在 Obsidian 的 整理/練習提示詞.md，整段複製、一次貼上。'],
+  [AgentAnswer, '先看 Agent 的回答三句話和最後的檔名。按一下，右邊出現兩張卡，三條線依序畫出：第一句對到〈曹操〉的「在赤壁之戰被孫權麾下的周瑜火燒戰船」，第二句對到〈赤壁之戰〉的「周瑜下令火攻，曹軍連在一起的戰船燒成一片」，第三句對到「曹操大敗」。最後一下是提醒：回答範圍是今天的 12 張筆記，不代表曹操一生只參與赤壁一場戰役。'],
+  [CheckAnswer, '像改考卷。先看第一個檢查，再按兩次看後兩個：出處，回答提到的檔案真的存在嗎；範圍，有沒有多寫筆記沒寫的細節；誠實，資料不夠時有沒有說找不到。RAG 能減少瞎掰，但不保證正確。 最後再按一下，底下的結論句才出現。'],
   [Section3, '這一章是連續三個練習，像帶實習生。練習一先把原本 12 張卡的關係圖存下來；練習二請 Agent 照小說回目新增 4 張卡；練習三用同一套畫法重畫，加上時間線，比一比知識庫長大後多了哪些路。'],
-  [Practice1, '像整理房間前先拍照。投影片只放重點：範圍、產出、限制三格，跟第一篇同一個格式；完整提示詞請打開 ZIP 裡的 prompts.md，複製「練習一」整段。這張圖是等一下比較的基準，只畫人物卡和關係卡，先不畫勢力卡；所以不要把還沒有卡的諸葛亮、周瑜畫成已存在的點。純文字圖可以直接貼在 Markdown 的程式碼區塊。存好後在 Obsidian 打開，核對每條線都對得到原卡上的連結。'],
-  [Practice2, '只新增四張，不讓它無限生成。Agent 第一次要寫檔時，Codex 會問能不能寫入：先看過它列的差異，確認沒問題再選允許；看不懂就先拒絕、請它再說明一次。資料只給 原文/ 資料夾裡的三份節選：第 37、38 回三顧茅廬，第 46 回草船借箭，所以不用上網，每個人跑出來的來源也一樣。完整提示詞在 prompts.md「練習二」。新卡放進人物／和關係／資料夾，跟原本的卡同一套分類。請 Agent 先列出新增檔案和差異，大家確認來源、人物和連結後才寫入。原本 12 張保持原樣；新卡連出去接到舊卡，舊卡從反向連結就找得到新卡。節選來源：https://zh.wikisource.org/wiki/三國演義/第037回 、https://zh.wikisource.org/wiki/三國演義/第038回 、https://zh.wikisource.org/wiki/三國演義/第046回'],
-  [Practice3, '用練習一同一套畫法，前後才比得出差別。完整提示詞在 prompts.md「練習三」。時間線照小說回目排：桃園結義第 1 回、煮酒論英雄第 21 回、三顧茅廬第 37–38 回、草船借箭第 46 回、赤壁第 49–50 回。這是小說的敘事順序，不是歷史年份。想做成網頁的同學，prompts.md 最後有一段課後加分。'],
-  [GrowthCompare, '這頁是概念示意，不是 Agent 的實際輸出。先看擴充前的五位人物和三張關係卡；按一下，新增的三顧茅廬、諸葛亮、草船借箭、周瑜從劉備往下長出去，像植物長新枝。請大家指出一條擴充前走不到、擴充後走得到的路，再打開時間線核對先後。'],
-  [CheckAgentWork, '像驗收裝潢。第一列先出現，再按兩次看後兩列：數量，原本 12 張還在、新的 4 張有回目和節選檔名；連結，前後兩張圖畫法一樣、每條新連結點得開；順序，時間線照回目排，沒寫成西元年。最後再看一件事：草船借箭和赤壁之戰有沒有被硬寫成同一件事。可以在 Obsidian 點連結，也可以直接打開 Markdown 看來源網址。'],
+  [Practice1, '像整理房間前先拍照。投影片只放三格重點，完整提示詞在 整理/練習提示詞.md「練習一」。規則的重點是：線只看關係卡最後「參與人物」那一行。卡片正文會順帶提到很多人，例如〈桃園結義〉提到後來的曹操；2026-10 實跑時，沒有這條規則，Codex 畫出 45 條路徑，連「桃園結義 → 曹操」都算進去。純文字圖放在程式碼區塊裡，裡面的 [[連結]] 在 Obsidian 點不開，所以圖下方另外附一份連結清單，點那裡。檔案存到 整理/，開頭不加 dg-publish。按一下看實跑結果節選：加了這條規則後，Codex 畫出 14 條線，正好是三張關係卡「參與人物」兩兩配對。 頁面上方是三格膠囊，右邊的「練習提示詞」標籤提醒大家：完整提示詞在 Obsidian 的 整理/練習提示詞.md，整段複製、一次貼上。 投影片的預覽是實跑節選；灰框是程式碼區塊，裡面的連結點不開，要點右邊的連結清單。'],
+  [Practice2, '只新增四張，不讓它無限生成。事實只取自 原文/ 的三份節選：第 37、38 回三顧茅廬，第 46 回草船借箭，不用上網，每個人的來源都一樣；可以讀舊卡，把新卡接上劉備、關羽、張飛、曹操。節選裡找不到根據的事和關係，先不要寫進卡；寫入前，請它把找不到出處的句子列出來給你看，你決定刪掉還是保留。關係卡最後一行比照舊卡寫「參與人物」，只列已經有卡的人；魯肅這類還沒有卡的人寫在正文就好，不然網站上會出現點不開的連結。完整提示詞在 整理/練習提示詞.md「練習二」。2026-10 實跑時，Codex 先列出差異、等確認才寫入，四張新卡都沒有 dg-publish，還主動說明「節選沒有交代周瑜與劉備的直接往來」，所以沒有把他們連在一起。如果 Codex 問 Would you like to make the following edits?，看過差異再選 Yes, proceed；有些設定不會問，寫完就回 Obsidian 打開新卡看。看不懂就先拒絕，請它再說明一次。節選來源：https://zh.wikisource.org/wiki/三國演義/第037回 、https://zh.wikisource.org/wiki/三國演義/第038回 、https://zh.wikisource.org/wiki/三國演義/第046回 頁面上方是三格膠囊，右邊的「練習提示詞」標籤提醒大家：完整提示詞在 Obsidian 的 整理/練習提示詞.md，整段複製、一次貼上。 頁面是三拍：原文三份節選，Agent 先給差異預覽；你點頭；卡片盒多 4 張。'],
+  [Practice3, '用練習一同一套畫法，前後才比得出差別。完整提示詞在 整理/練習提示詞.md「練習三」，兩個新檔都存到 整理/。時間線照小說回目排：桃園結義第 1 回、煮酒論英雄第 21 回、三顧茅廬第 37–38 回、草船借箭第 46 回、赤壁第 49–50 回；實跑時 Codex 還把第 43 回列為赤壁的前奏，可以保留。這是小說的敘事順序，不是歷史年份。按一下看預期的圖和時間線。想做成網頁的同學，練習提示詞最後有一段課後加分。 頁面上方是三格膠囊，右邊的「練習提示詞」標籤提醒大家：完整提示詞在 Obsidian 的 整理/練習提示詞.md，整段複製、一次貼上。'],
+  [GrowthCompare, '這頁照實跑的結果畫（2026-10 用 Codex 跑過一次練習二）。先看擴充前的五位人物和三張關係卡；按一下，新增的三顧茅廬、諸葛亮、草船借箭、周瑜接出去，像植物長新枝。實跑時 Agent 也把三顧茅廬連到關羽、張飛，把草船借箭連到曹操，因為節選裡他們真的在場；每個人跑出來可能略有不同，對照節選決定留不留。另外，舊卡沒有連回新卡，從〈劉備〉點不到〈三顧茅廬〉，要從新卡或導覽頁走進去。最後再按一下，才說出多了哪一條路。'],
+  [CheckAgentWork, '像驗收裝潢。第一列先出現，再按三次看後三列：數量，原本 12 張還在、新的 4 張有回目和節選檔名；連結，前後兩張圖畫法一樣、每條新連結點得開，圖的連結要用下方的連結清單點，程式碼區塊裡的點不開；順序，時間線照回目排，沒寫成西元年；公開，新卡、圖、時間線最上面的屬性裡不能有 dg-publish，否則下一章會被一起發布。最後一下：草船借箭和赤壁之戰有沒有被硬寫成同一件事。 頁面是四張圖示卡：數量、連結、回目、dg-publish；細節在這裡講。'],
   [Section4, '上一章做出了新卡、兩版關係圖和一份時間線。卡已經有了，這一章不再畫圖，而是做一張首頁：讓第一次來的讀者知道從哪裡開始，也找得回來源卡。'],
-  [KnowledgeLayers, '像圖書館。先看書架：來源卡，入口 1 張、人物 5 張加新 2 張、勢力 3 張、關係 3 張加新 2 張，一張一個主題，留著出處。按一下是牆上的地圖：關係圖和時間線，地圖上的每個點，都是書架上的一張卡。地圖只負責指路，要查證還是走到那張卡。這個分法參考 llm-wiki 的 Raw Sources 和 The Wiki 兩層：https://github.com/Ar9av/obsidian-wiki/blob/main/.skills/llm-wiki/SKILL.md'],
-  [TwoWays, '像找教室，可以看平面圖，也可以照課表。中間是〈三顧茅廬〉這張來源卡。按一下，從關係圖走：劉備 → 三顧茅廬 → 諸葛亮。再按一下，從時間線走：它在第 21 回之後、第 46 回草船借箭之前。兩條路最後都回到同一張卡和小說回目。'],
-  [HomePagePractice, '這是導覽頁，不是第三張圖；完整提示詞在 prompts.md「導覽頁練習」。像校門口的導覽圖，只告訴讀者可以往哪兩個方向走。做完請大家實際點兩條路，確認關係圖、時間線、人物卡、關係卡都互相找得到；來源回目寫在關係卡裡。練習二沒做完的話，就用原本 12 張卡做一個短一點的導覽頁，並標出缺的地方。'],
-  [Section5, '從這裡開始，內容會公開到網路上。先決定哪些卡可以分享，再設定網站、發布，請同學驗收；Git 的手動操作放在課後選修。'],
-  [PublishFlow, '像寄出作品集，按三次沿著箭頭走：Obsidian 寫稿；Digital Garden 只收打勾的卡，沒勾的草稿留在電腦裡；GitHub 存一份公開版本；Vercel 變成網址。官方入門流程就是 Obsidian 外掛、GitHub 範本 repo、Vercel 部署。官方也說，連到的筆記不會自動跟著發布。來源：https://docs.forestry.md/getting-started/01-getting-started/ 提醒：這一章要用 GitHub 和 Vercel 帳號，請課前先註冊好；Vercel 可以直接用 GitHub 帳號登入。'],
-  [InstallPlugin, '像在手機裝 App，按三次依序圈出：左下角齒輪進設定，點「第三方外掛程式」；若還在受限模式，照畫面按鈕關掉，再按社群外掛程式的「瀏覽」；搜尋 Digital Garden，安裝、啟用。提醒大家這是裝在目前這個筆記庫。介面名稱依 Obsidian 官方繁中翻譯，版本不同可能略有差異。官方說明：https://obsidian.md/help/community-plugins ；Digital Garden 入門：https://docs.forestry.md/getting-started/01-getting-started/'],
-  [DeploySite, '先登入 GitHub 和 Vercel，到投影片下方的官方入口，按 Deploy to Vercel。按一下：Vercel 會出現 Create Git Repository，Git Scope 選你的 GitHub 帳號，Repository Name 自己取（例如 my-garden），按 Create；還沒登入的話，會先請你用 GitHub 登入。再按一下：等一兩分鐘部署完成，看到 Congratulations 和網址。最後一下：把 repo 名稱和網址記下來，後面兩頁都會用到。這個網站 repo 和電腦裡的 Obsidian 筆記庫是兩個地方。Vercel 畫面是示意，版本不同可能略有差異。來源：https://docs.forestry.md/getting-started/01-getting-started/'],
-  [CreateToken, '這一步最容易卡住，慢慢來。token 像一把備用鑰匙，讓外掛能把公開的筆記寫進你的網站 repo。1：右上頭像 → Settings → 左側最下面 Developer settings → Personal access tokens → Fine-grained tokens → Generate new token；也可以直接打開 github.com/settings/personal-access-tokens/new。Token name 隨便取，例如 digital-garden。2：Repository access 選 Only select repositories，只勾剛才建的網站 repo。3：Repository permissions 裡，Contents 和 Pull requests 都改成 Read and write，Metadata 會自動變成唯讀。4：按 Generate token，馬上複製，它只顯示這一次。官方入門頁也提供一般 token 的連結，fine-grained 比較安全。GitHub 畫面是示意，按鈕位置依版本可能不同。來源：https://docs.forestry.md/advanced/fine-grained-access-token/'],
-  [ConnectGitHub, '把上一頁複製的 token 交給外掛。回 Obsidian → 設定 → Digital Garden，依序填：GitHub repo name 填網站 repo 的名稱，GitHub Username 填你的帳號，GitHub token 貼上剛才的 token。左邊的門提醒大家：這把鑰匙只開網站 repo，其他 repo 打不開；權限是 Contents 讀寫、Pull requests 讀寫、Metadata 唯讀。token 只貼在外掛設定，不要貼進筆記或投影片。來源：https://docs.forestry.md/getting-started/01-getting-started/ 、https://docs.forestry.md/advanced/fine-grained-access-token/'],
-  [PublishScope, '像交作業前貼標籤。左邊是教材原有的 12 張，都已勾 dg-publish，〈三國演義〉另外勾了 dg-home 當首頁。也可以不用指令，直接在筆記的屬性勾 dg-publish。按一下出現右邊：練習二、三和知識庫練習新做的卡、圖、時間線、導覽頁，預設都不會公開。要公開的話，逐篇核對內容和來源，再打開那一篇，按 Ctrl／Cmd + P 執行 Digital Garden: Add publish flag，或直接在屬性勾 dg-publish。連到的卡不會自動一起發布。來源：https://docs.forestry.md/getting-started/01-getting-started/'],
-  [PublishCommand, '確認過公開範圍後，按 Ctrl／Cmd + P，搜尋 garden publish，選第二行 Publish All Notes Marked for Publish，今天只用這個。第一行 Publish Active Note 只發布正在看的那一篇，之後只改一篇時再用。發布後等一兩分鐘，打開 Vercel 網址看更新。網站沒更新的話：再等一下；到 Vercel 的專案頁看最新一次部署是不是成功；確認那一篇真的有勾 dg-publish，再發布一次。來源：https://docs.forestry.md/getting-started/02-commands/'],
-  [CheckSite, '回到開場看過的那條路，自己走一遍。像跑接力，按三次一站一站交棒：入口點得到人物嗎？人物點得到關係卡嗎？最後一棒故意示範斷掉：打不開的那一頁，先檢查它有沒有勾 dg-publish，勾好重新發布再走一次。連到的筆記不會自動發布。來源：https://docs.forestry.md/getting-started/01-getting-started/'],
-  [FullPractice, '不必再抄人物資料，用範例卡和核對過的關係卡完成驗收。第一步先出現：選一條人物 → 關係 → 人物的路線，例如曹操 → 赤壁之戰 → 孫權。按一下：請 Agent 解釋這段關係，你回來源卡核對。再按一下：發布，把網址給同學，請他從入口走完三層。最後一下是完成條件：同學走得通，而且每一頁都有根據。'],
+  [TwoWays, '這頁把「來源卡和導覽頁」和「兩種找法」併在一起。導覽頁像館內地圖。中間是〈三顧茅廬〉這張來源卡。按一下，從關係圖走：劉備 → 三顧茅廬 → 諸葛亮。再按一下，從時間線走：它在第 21 回之後、第 46 回草船借箭之前。兩條路最後都回到同一張卡和小說回目；地圖只負責指路，查證要回到卡。最後再按一下，底下的結論句才出現。 這個分法參考 llm-wiki 的 Raw Sources 和 The Wiki 兩層：https://github.com/Ar9av/obsidian-wiki/blob/main/.skills/llm-wiki/SKILL.md'],
+  [HomePagePractice, '這是導覽頁，不是第三張圖；完整提示詞在 整理/練習提示詞.md「導覽頁練習」，存成 整理/知識庫導覽.md，不加 dg-publish。做完第二步請大家自己動手：打開〈三國演義〉，在最後一行打 [[知識庫導覽]]。網站首頁是〈三國演義〉，少了這行，讀者在網站上走不到導覽頁；舊卡也沒有連回新卡，所以導覽頁是走進新卡的入口。按一下看預期的導覽頁。練習二沒做完的話，就用原本 12 張卡做一個短一點的導覽頁。 頁面上方是三格膠囊，右邊的「練習提示詞」標籤提醒大家：完整提示詞在 Obsidian 的 整理/練習提示詞.md，整段複製、一次貼上。'],
+  [Section5, '從這裡開始，內容會公開到網路上。先分清楚兩個地方：Obsidian 儲存庫是你電腦裡的筆記庫；GitHub repo 是雲端放網站檔案的倉庫，兩個不是同一個。先決定哪些卡可以分享，再設定網站、發布，請同學驗收；Git 的手動操作放在課後選修。'],
+  [PublishFlow, '像寄出作品集，按三次沿著箭頭走：Obsidian 寫稿；Digital Garden 只收打勾的卡，沒勾的草稿留在電腦裡；GitHub 存一份公開版本；Vercel 變成網址。官方入門流程就是 Obsidian 外掛、GitHub 範本 repo、Vercel 部署。官方也說，連到的筆記不會自動跟著發布。來源：https://docs.forestry.md/getting-started/01-getting-started/ 提醒：這一章要用 GitHub 和 Vercel 帳號，請課前先註冊好；Vercel 可以直接用 GitHub 帳號登入。 最後再按一下，底下的結論句才出現。 時間備案：第五章對新手很趕。來不及的話，講師先示範一次部署和 token，學員課後照頁面做完；課堂上只做勾選和發布。'],
+  [InstallPlugin, '像在手機裝 App，按三次依序圈出：左下角齒輪進設定，點「第三方外掛程式」；若還在受限模式，照畫面按鈕關掉，再按社群外掛程式的「瀏覽」；搜尋 Digital Garden，安裝、啟用。提醒大家這是裝在目前這個筆記庫。介面名稱依 Obsidian 官方繁中翻譯，版本不同可能略有差異。官方說明：https://obsidian.md/help/community-plugins ；Digital Garden 入門：https://docs.forestry.md/getting-started/01-getting-started/ 完成檢查：「已安裝外掛程式」裡看得到 Digital Garden，開關是開的。這張是依繁中介面整理的示意。'],
+  [DeploySite, '先登入 GitHub 和 Vercel，到投影片下方的官方入口，按 Deploy to Vercel。按一下：Vercel 會出現 Create Git Repository，Git Scope 選你的 GitHub 帳號，Repository Name 自己取（例如 my-garden），按 Create；還沒登入的話，會先請你用 GitHub 登入。再按一下：等一兩分鐘部署完成，看到 Congratulations 和網址。最後一下：把 repo 名稱和網址記下來，後面兩頁都會用到。這個網站 repo 和電腦裡的 Obsidian 筆記庫是兩個地方。Vercel 畫面是示意，版本不同可能略有差異。來源：https://docs.forestry.md/getting-started/01-getting-started/ 時間備案：部署卡住超過 5 分鐘，先跳過，課後再做。'],
+  [CreateToken, '這一步最容易卡住，慢慢來。token 像一把備用鑰匙，讓外掛能把公開的筆記寫進你的網站 repo。1：登入 GitHub，直接打開 github.com/settings/personal-access-tokens/new；也可以從右上頭像 → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token 走進去。Token name 隨便取，例如 digital-garden。2：Expiration 預設 30 天，改成 90 天；到期後發布會失敗，回同一頁找到這把 token 按 Regenerate，再把新的貼進外掛。3：Repository access 選 Only select repositories，只勾剛才建的網站 repo。4：Contents 和 Pull requests 改成 Read and write，Metadata 會自動唯讀。5：按 Generate token，馬上複製，它只顯示這一次。GitHub 畫面是示意，按鈕位置依版本可能不同。來源：https://docs.forestry.md/advanced/fine-grained-access-token/ 頁面上只留五個短步驟，到期和 Regenerate 的說明在這裡講。'],
+  [ConnectGitHub, '把上一頁複製的 token 交給外掛。回 Obsidian → 設定 → 左側最下面的 Digital Garden → GitHub Authentication，依序填三格。GitHub repo name 只填 repo 的名字，例如 my-garden，不要加帳號，也不要貼網址；上一頁畫面上的「你的帳號/my-garden」是 GitHub 的顯示方式，這裡不要照抄。GitHub Username 填你的帳號，GitHub token 貼上剛才的 token。左邊的門提醒大家：這把鑰匙只開網站 repo。token 只貼在外掛設定，不要貼進筆記或投影片。來源：https://docs.forestry.md/getting-started/01-getting-started/ 頁面上的 repo name 只寫「只填 my-garden」，口頭補一句：不要加帳號，也不要貼網址。'],
+  [PublishScope, '像交作業前貼標籤。左邊是教材原有的 12 張，都已勾 dg-publish，〈三國演義〉另外勾了 dg-home 當首頁。按一下出現右邊：今天新做的卡、圖、時間線、導覽頁，預設都沒有 dg-publish，所以不會公開；練習提示詞也有提醒 Agent 不要加。要公開的話，逐篇核對內容和來源，再打開那一篇，按 Ctrl／Cmd + P 執行 Digital Garden: Add publish flag；也可以直接在筆記的屬性勾 dg-publish。〈三國演義〉加了 [[知識庫導覽]] 那一行，所以它也要重新發布。連到的卡不會自動一起發布。來源：https://docs.forestry.md/getting-started/01-getting-started/ 頁面上只留「要公開：Add publish flag」，完整操作口頭講。'],
+  [PublishCommand, '確認過公開範圍後，按 Ctrl／Cmd + P，搜尋 garden publish，選第二行 Publish All Notes Marked for Publish，今天只用這個。第一行 Publish Active Note 只發布正在看的那一篇，之後只改一篇時再用。發布後等一兩分鐘，打開 Vercel 網址看更新。網站沒更新的話：再等一下；到 Vercel 的專案頁看最新一次部署是不是成功；確認那一篇真的有勾 dg-publish，再發布一次。來源：https://docs.forestry.md/getting-started/02-commands/ 第一行 Publish Active Note 頁面上不標，口頭帶過即可。網站沒更新的話，照頁面上那行：等兩分鐘、看 Vercel 部署、查 dg-publish。'],
+  [CheckSite, '回到開場看過的那條路，自己走一遍。像跑接力，按三次一站一站交棒：入口點得到人物嗎？人物點得到關係卡嗎？最後一棒故意示範斷掉：打不開的那一頁，先檢查它有沒有勾 dg-publish，勾好重新發布再走一次。連到的筆記不會自動發布。來源：https://docs.forestry.md/getting-started/01-getting-started/ 最後再按一下，底下的結論句才出現。'],
+  [FullPractice, '這次驗收的是大家今天自己做出來的卡。第一步：請 Agent 說明〈三顧茅廬〉和〈草船借箭〉每一句出自哪一份節選，提示詞在 整理/練習提示詞.md「完整練習」，找不到根據的句子，先刪掉再發布。按一下：替 4 張新卡和〈知識庫導覽〉執行 Add publish flag，再 Publish All Notes Marked for Publish。再按一下：把網址給同學，請他從首頁點〈知識庫導覽〉，再走三顧茅廬 → 諸葛亮 → 草船借箭 → 周瑜。最後一下是完成條件：同學走得到周瑜，而且每一頁都有根據。 頁面上只寫短句，完整路線口頭講：首頁 → 知識庫導覽 → 三顧茅廬 → 諸葛亮 → 草船借箭 → 周瑜。'],
   [Recap, '五章走一圈。最後按一下出現問題，請大家回答：為什麼同一張劉備卡，能同時出現在結義和煮酒兩條路上？答案是關係卡讓連結有理由，來源卡讓回答查得到。'],
   [Appendix, '主線到上一頁結束。下面是兩段獨立的進階材料：llm-wiki Skills 和 Git 手動操作，依大家的經驗或課後時間選讀。'],
   [LlmWiki, '課後選修，主線練習不用裝新工具。pip 需要先裝好 Python 3。Skill 是給 Agent 的做事說明，像一本固定的 SOP。這頁用命令列安裝，<筆記庫路徑> 要換成完整路徑。setup 會把 Skills 連到多個 Agent 的設定資料夾，也會寫入使用者設定；doctor 用來檢查。裝好後在 Codex 打開筆記庫，說「set up my wiki」。完整說明：https://github.com/Ar9av/obsidian-wiki/blob/main/docs/installation.md'],
-  [WikiSkills, '課後選修。在 Codex 輸入 $ 可以叫出已安裝的 Skill。先示範一個具體請求：用 $wiki-query 問「劉備與曹操在哪段故事同場？」，再核對它引用的人物卡；另外兩個帶過就好。$wiki-lint 除了斷掉的連結和孤立頁，也會找過時、矛盾或缺 frontmatter 的頁面。完整清單：https://github.com/Ar9av/obsidian-wiki/blob/main/docs/skills.md'],
-  [GitBasics, '課後選修，主線已經發布完，這裡拆開看幕後。像拍照存檔：commit 記下一個版本；按一下，push 把版本寄到 GitHub；再按一下，Vercel 收到新版就重做網站。Digital Garden 外掛是透過 GitHub 的 API 直接建立新版本，所以等於替你做了前兩步。來源：https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository 、https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository'],
+  [WikiSkills, '課後選修。在 Codex 輸入 $ 可以叫出已安裝的 Skill。先示範一個具體請求：用 $wiki-query 問「劉備與曹操在哪段故事同場？」，再核對它引用的人物卡；另外兩個帶過就好。$wiki-lint 除了斷掉的連結和孤立頁，也會找過時、矛盾或缺 frontmatter 的頁面。完整清單：https://github.com/Ar9av/obsidian-wiki/blob/main/docs/skills.md 先試一個：用 $wiki-query 問「劉備與曹操在哪段故事同場？」，再核對它引用的卡。'],
+  [GitBasics, '課後選修，主線已經發布完，這裡拆開看幕後。像拍照存檔：commit 記下一個版本；按一下，push 把版本寄到 GitHub；再按一下，Vercel 收到新版就重做網站。Digital Garden 外掛是透過 GitHub 的 API 直接建立新版本，所以等於替你做了前兩步。來源：https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository 、https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository 最後再按一下，底下的結論句才出現。'],
   [CloneRepo, '課後選修。複製的是自己在 Vercel 部署時建立的網站 repo，不是 Obsidian 筆記庫，也不是外掛原始碼。角括號要換成實際網址和資料夾名稱。圖片來源：https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository （GitHub Docs，CC BY 4.0）'],
-  [CommitPush, '課後選修。先改網站 repo 的 README，再照順序執行 status、add、commit、push，右邊是每個指令的白話。README 的字不會變成公開筆記內容；筆記還是從 Obsidian 的 Digital Garden 外掛發布。push 完可以在 GitHub 看到新版本，再看 Vercel 有沒有部署完成。'],
+  [CommitPush, '課後選修。先改網站 repo 的 README，再照順序執行 status、add、commit、push，右邊是每個指令的白話。README 的字不會變成公開筆記內容；筆記還是從 Obsidian 的 Digital Garden 外掛發布。push 完可以在 GitHub 看到新版本，再看 Vercel 有沒有部署完成。 README 的字不會變成公開筆記；筆記仍從 Digital Garden 外掛發布。'],
 ]);
 
 export const notes: (string | undefined)[] = deck.map(page => NOTES.get(page));
