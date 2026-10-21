@@ -144,7 +144,7 @@ const display = 'var(--osd-font-display)';
 // ---------- Frame ----------
 
 const Title = ({ children }: { children: ReactNode }) => (
-  <h1 style={{ fontFamily: '"Libre Baskerville", Georgia, "Times New Roman", serif', fontSize: 132, fontWeight: 400, lineHeight: 1.17, letterSpacing: '-0.035em', maxWidth: 1500, margin: 0, color: ink, whiteSpace: 'pre-line' }}>{children}</h1>
+  <h1 style={{ fontFamily: '"Libre Baskerville", Georgia, "Times New Roman", serif', fontSize: 132, fontWeight: 400, lineHeight: 1.17, letterSpacing: '-0.035em', maxWidth: 'none', margin: 0, color: ink, whiteSpace: 'pre-line', minWidth: '0px', minHeight: '0px', maxHeight: 'none', flexShrink: '0', flexGrow: '0', flexBasis: 'auto', width: '1261.01px', height: '154.44px', translate: '0px 0px' }}>{children}</h1>
 );
 
 const Footer = () => {
@@ -446,7 +446,7 @@ const CardRow = ({ x, y, w = 300, name, on }: { x: number; y: number; w?: number
 const Cover: Page = () => (
   <Shell top={174}>
     <In i={0}><Eyebrow>AI WORKSHOP 04｜發布成網站</Eyebrow></In>
-    <In i={1} style={{ marginTop: 62 }}><Title>{'把三國知識庫\n發布成網站'}</Title></In>
+    <In i={1} style={{ marginTop: 62 }}><Title>{'把知識庫發布成網站'}</Title></In>
     <In i={2} style={{ marginTop: 40, fontSize: 35, color: muted }}>從 Obsidian 到一個公開網址</In>
     <In i={3} style={{ width: 160, height: 5, background: amber, marginTop: 72 }}><span /></In>
     <div style={{ position: 'absolute', right: 144, bottom: 170 }}>

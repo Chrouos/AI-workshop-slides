@@ -212,7 +212,8 @@ const Shell = ({ children, top = 112, chapter, enterChapter = false }: { childre
 // The page's main picture: fills the space between the heading and the footer.
 const Fit = ({ z = 1, children }: { z?: number; children: ReactNode }) => (
   <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: 24 }}>
-    <div style={{ zoom: z }}>{children}</div>
+    <div style={{ zoom: z }}>
+      {/* @slide-comment id="c-fa004a8e" ts="2026-10-20T13:18:00.665Z" text="eyJub3RlIjoi6YCZ5LiA5aGK55qE5ouG5q2l6amfIOWPr-S7peWcqOaLhueahOe0sOS4gOm7nuiuk-S6uuimuuW-l-S7luecn-eahOacieWcqOaLhiJ9" */}{children}</div>
   </div>
 );
 
@@ -397,7 +398,8 @@ const Figure = ({ w = 1632, h, label, children }: { w?: number; h: number; label
 );
 
 const Stage = ({ w = 1632, h, children }: { w?: number; h: number; children: ReactNode }) => (
-  <div style={{ position: 'relative', width: w, height: h }}>{children}</div>
+  <div style={{ position: 'relative', width: w, height: h }}>
+    {/* @slide-comment id="c-9bc3d71e" ts="2026-10-20T13:17:28.317Z" text="eyJub3RlIjoi6YCZ5LiA5q6155qEIGFuaW1hdGlvbiDlhKrljJblj6_ku6XkuIDlsaTkuIDlsaTnmoTmhJ_oproifQ" */}{children}</div>
 );
 
 const Layer = ({ w = 1632, h, label, children }: { w?: number; h: number; label?: string; children: ReactNode }) => (
@@ -683,7 +685,7 @@ const Evolution: Page = () => (
             <rect x="0" y="250" width="1632" height="250" fill={blueSoft} opacity="0.5" />
             <text x="28" y="296" fontSize="28" fontWeight="600" fill={blue}>補救方法</text>
             <g className="aw1-build" style={buildDelay(0)}><MapNode x={420} y={340} kind="think" label="Thinking" sub="CoT 列步驟" tone="blue" /></g>
-            <g className="aw1-build" style={buildDelay(1)}><MapNode x={730} y={340} kind="calc" label="用工具" sub="像按計算機" tone="blue" /></g>
+            <g className="aw1-build" style={buildDelay(1)}><MapNode x={730} y={340} kind="calc" label="用工具" sub="Tool Calling" tone="blue" /></g>
             <g className="aw1-build" style={buildDelay(2)}><MapNode x={1040} y={340} kind="search" label="Web Search" sub="查資料 RAG" tone="blue" /></g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={500} label="Agent：把工具串起來做事">
@@ -1041,28 +1043,18 @@ const WhyHallucinate: Page = () => (
   </Shell>
 );
 
-const CotStep = ({ x, n, text }: { x: number; n: number; text: string }) => (
-  <g>
-    <rect x={x} y={70} width={300} height={130} rx="10" fill={blueSoft} stroke={blue} strokeWidth="2" />
-    <circle cx={x + 34} cy={70} r="24" fill={blue} />
-    <text x={x + 34} y={79} textAnchor="middle" fontSize="26" fontWeight="600" fill="#FFFFFF">{n}</text>
-    <text x={x + 150} y={148} textAnchor="middle" fontSize="30" fontFamily={mono} fill={ink}>{text}</text>
-  </g>
-);
-
-// Two interlocking rings between steps: the "chain" in chain of thought.
-const ChainRing = ({ x }: { x: number }) => (
-  <g fill="none" stroke={blue} strokeWidth="4">
-    <rect x={x - 20} y={126} width="24" height="18" rx="9" />
-    <rect x={x - 4} y={126} width="24" height="18" rx="9" />
-  </g>
-);
-
-const QuestionCard = ({ children }: { children: ReactNode }) => (
+const QuestionCard = ({ children, right }: { children: ReactNode; right?: ReactNode }) => (
   <In i={0} style={{ display: 'flex', alignItems: 'center', gap: 20, background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `6px solid ${amber}`, padding: '18px 30px', marginTop: 28 }}>
     <svg viewBox="0 0 48 48" style={{ width: 44, height: 44, flexShrink: 0 }} aria-hidden="true"><AskMark x={24} y={24} r={22} /></svg>
     <span style={{ fontSize: 34 }}>{children}</span>
+    {right ? <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 18 }}>{right}</span> : null}
   </In>
+);
+
+const LegendKey = ({ color, children }: { color: string; children: ReactNode }) => (
+  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 25, color, fontWeight: 600 }}>
+    <span style={{ width: 22, height: 22, background: color, display: 'inline-block' }} />{children}
+  </span>
 );
 
 const FlowBox = ({ x, y, w, label, tone = 'plain' }: { x: number; y: number; w: number; label: string; tone?: 'plain' | 'step' | 'ok' | 'bad' }) => {
@@ -1088,25 +1080,27 @@ const CotWhat: Page = () => (
     <Eyebrow>解法一｜Thinking 背後的做法</Eyebrow>
     <Heading>思維鏈（Chain of Thought, CoT）是什麼</Heading>
     <Lead>像考試用草稿紙：先寫過程，再寫答案</Lead>
-    <QuestionCard>直接寫答案，和先寫過程，差在哪？</QuestionCard>
+    <QuestionCard>雞兔同籠：35 個頭、94 隻腳。直接答和先寫過程差在哪？</QuestionCard>
     <Fit>
       <Stage h={330}>
         <Steps>
-          <Step duration={STEP_MS}><Layer h={330} label="上：題目直接跳到答案，要一次猜出整個數。下：題目、步驟一、步驟二、步驟三、答案，一環扣一環">
+          <Step duration={STEP_MS}><Layer h={330} label="上：從題目直接跳到答案，猜雞 20、兔 15（示意）。下：題目、題型、公式、套數字、計算、答案，一環扣一環">
             <text x="0" y="62" fontSize="30" fontWeight="600" fill={warn}>直接寫答案</text>
-            <FlowBox x={230} y={20} w={170} label="題目" />
-            <g fill="none" stroke={warn} strokeWidth="4" strokeDasharray="12 9"><path d="M404 50 C700 -30 1000 -30 1296 50" /></g>
-            <polygon points="1300,56 1282,46 1290,62" fill={warn} />
-            <text x="850" y="40" textAnchor="middle" fontSize="27" fontWeight="600" fill={warn}>一次猜出整個數</text>
-            <FlowBox x={1306} y={20} w={190} label="答案？" tone="bad" />
+            <FlowBox x={230} y={20} w={150} label="題目" />
+            <g fill="none" stroke={warn} strokeWidth="4" strokeDasharray="12 9"><path d="M384 50 C620 -30 960 -30 1196 50" /></g>
+            <polygon points="1200,56 1182,46 1190,62" fill={warn} />
+            <text x="790" y="40" textAnchor="middle" fontSize="27" fontWeight="600" fill={warn}>一下子猜出答案</text>
+            <FlowBox x={1206} y={20} w={300} label="雞 20、兔 15？" tone="bad" />
+            <text x="1520" y="66" fontSize="24" fill={quiet}>示意</text>
             <text x="0" y="212" fontSize="30" fontWeight="600" fill={blue}>先寫過程</text>
             <g className="aw1-build" style={buildDelay(1)}>
-              <FlowBox x={230} y={170} w={170} label="題目" />
-              <LinkRings x={436} y={208} /><FlowBox x={470} y={170} w={170} label="步驟 1" tone="step" />
-              <LinkRings x={676} y={208} /><FlowBox x={710} y={170} w={170} label="步驟 2" tone="step" />
-              <LinkRings x={916} y={208} /><FlowBox x={950} y={170} w={170} label="步驟 3" tone="step" />
-              <MapArrow x1={1130} x2={1296} y={208} hot />
-              <FlowBox x={1306} y={170} w={190} label="答案" tone="ok" />
+              <FlowBox x={230} y={170} w={150} label="題目" />
+              <LinkRings x={404} y={208} /><FlowBox x={424} y={170} w={150} label="題型" tone="step" />
+              <LinkRings x={598} y={208} /><FlowBox x={618} y={170} w={150} label="公式" tone="step" />
+              <LinkRings x={792} y={208} /><FlowBox x={812} y={170} w={150} label="套數字" tone="step" />
+              <LinkRings x={986} y={208} /><FlowBox x={1006} y={170} w={150} label="計算" tone="step" />
+              <MapArrow x1={1160} x2={1200} y={208} hot />
+              <FlowBox x={1206} y={170} w={300} label="答案" tone="ok" />
             </g>
             <g className="aw1-build" style={buildDelay(3)}>
               <text x="230" y="306" fontSize="28" fill={muted}>思維（想）＋ 鏈（一環扣一環）＝ 一步接一步的推理過程</text>
@@ -1144,22 +1138,22 @@ const CotWhy: Page = () => (
     <Fit>
       <Steps>
         <Step duration={STEP_MS}>
-          <Figure h={230} label="沒寫步驟：前文只有題目，下一個字就得是整個答案。寫了步驟：175、8309、175＋8309＝ 都變成前文，下一個字只要接 8484">
+          <Figure h={230} label="沒寫步驟：前文只有題目，下一步就得猜出答案。寫了步驟：x+y=35、2x+4y=94、2y= 都變成前文，下一步只要接 24">
             <text x="0" y="44" fontSize="28" fontWeight="600" fill={warn}>沒寫步驟</text>
-            <StripTile x={180} y={0} w={330} label="2+4+…+356＝" />
-            <MapArrow x1={520} x2={1110} y={34} />
-            <StripTile x={1120} y={0} w={190} label="8484？" tone="bad" />
-            <text x="1330" y="44" fontSize="27" fill={warn}>一步跳到答案</text>
+            <StripTile x={180} y={0} w={270} label="35頭 94腳＝" />
+            <MapArrow x1={460} x2={1110} y={34} />
+            <StripTile x={1120} y={0} w={240} label="雞20 兔15？" tone="bad" />
+            <text x="1380" y="44" fontSize="27" fill={warn}>一步跳到答案</text>
             <text x="0" y="194" fontSize="28" fontWeight="600" fill={blue}>寫了步驟</text>
-            <path d="M520 128 V116 H1100 V128" fill="none" stroke={blue} strokeWidth="3" />
-            <text x="810" y="104" textAnchor="middle" fontSize="27" fontWeight="600" fill={blue}>寫下來的步驟，也變成前文</text>
-            <StripTile x={180} y={150} w={330} label="2+4+…+356＝" />
-            <StripTile x={520} y={150} w={130} label="175" tone="step" />
-            <StripTile x={660} y={150} w={150} label="8309" tone="step" />
-            <StripTile x={820} y={150} w={280} label="175＋8309＝" tone="step" />
+            <path d="M460 128 V116 H1100 V128" fill="none" stroke={blue} strokeWidth="3" />
+            <text x="780" y="104" textAnchor="middle" fontSize="27" fontWeight="600" fill={blue}>寫下來的步驟，也變成前文</text>
+            <StripTile x={180} y={150} w={270} label="35頭 94腳" />
+            <StripTile x={460} y={150} w={200} label="x+y=35" tone="step" />
+            <StripTile x={670} y={150} w={230} label="2x+4y=94" tone="step" />
+            <StripTile x={910} y={150} w={190} label="2y=" tone="step" />
             <MapArrow x1={1104} x2={1112} y={184} hot />
-            <StripTile x={1120} y={150} w={190} label="8484" tone="ok" />
-            <text x="1330" y="194" fontSize="27" fill={okGreen}>小小一步，好猜</text>
+            <StripTile x={1120} y={150} w={240} label="24" tone="ok" />
+            <text x="1380" y="194" fontSize="27" fill={okGreen}>小小一步，好猜</text>
           </Figure>
         </Step>
       </Steps>
@@ -1167,7 +1161,7 @@ const CotWhy: Page = () => (
         <Steps>
           <Step duration={STEP_MS}><WayChip n={1}>提示詞加「請一步一步想」</WayChip></Step>
           <Step duration={STEP_MS}><WayChip n={2}>給一題有步驟的範例</WayChip></Step>
-          <Step duration={STEP_MS}><WayChip n={3}>Thinking 模型自己先想</WayChip></Step>
+          <Step duration={STEP_MS}><WayChip n={3}>Thinking 模型：自動先做 CoT</WayChip></Step>
         </Steps>
       </div>
       <Steps>
@@ -1178,91 +1172,58 @@ const CotWhy: Page = () => (
   </Shell>
 );
 
+// One reasoning step of the worked example: number, what the step is, what it wrote.
+const CotCard = ({ n, label, children, tone = 'step', tag }: { n: number; label: string; children: ReactNode; tone?: 'step' | 'tool' | 'ok'; tag?: string }) => {
+  const c = tone === 'ok' ? okGreen : tone === 'tool' ? amber : blue;
+  const soft = tone === 'ok' ? sage : tone === 'tool' ? amberSoft : blueSoft;
+  return (
+    <div style={{ background: soft, borderLeft: `6px solid ${c}`, padding: '10px 20px 12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <span style={{ width: 40, height: 40, borderRadius: 20, background: c, color: '#FFFFFF', display: 'grid', placeItems: 'center', fontSize: 24, fontWeight: 600 }}>{n}</span>
+        <span style={{ fontSize: 30, fontWeight: 600, color: c }}>{label}</span>
+        {tag ? <span style={{ marginLeft: 'auto', fontSize: 24, fontWeight: 600, color: c, border: `2px solid ${c}`, padding: '2px 12px', borderRadius: 18 }}>{tag}</span> : null}
+      </div>
+      <div style={{ marginTop: 4, marginLeft: 54 }}>{children}</div>
+    </div>
+  );
+};
+
+const Eq = ({ children }: { children: ReactNode }) => <span style={{ fontFamily: mono, fontSize: 30 }}>{children}</span>;
+
 const CotPage: Page = () => (
   <Shell chapter={1}>
-    <Eyebrow>CoT 實例｜同一題長加法</Eyebrow>
-    <Heading>用 CoT 算這題長加法</Heading>
+    <Eyebrow>例子｜Codex 實際輸出 2026-10-18</Eyebrow>
+    <Heading>例子：雞兔同籠，CoT 加工具</Heading>
+    <QuestionCard right={<><LegendKey color={blue}>CoT</LegendKey><LegendKey color={amber}>Tool Calling</LegendKey></>}>籠子裡有 35 個頭、94 隻腳，雞和兔各幾隻？</QuestionCard>
     <Fit>
-      <Stage h={250}>
-        <Steps>
-          <Layer h={250} label="題目：一長串加法">
-            <InG i={0}>
-              <rect x="0" y="70" width="250" height="130" fill="#FFFFFF" stroke={ink} strokeWidth="2" />
-              <text x="125" y="122" textAnchor="middle" fontSize="28" fontFamily={mono} fill={ink}>2+4+…</text>
-              <text x="125" y="166" textAnchor="middle" fontSize="28" fontFamily={mono} fill={ink}>+356＝？</text>
-              <text x="125" y="44" textAnchor="middle" fontSize="26" fontWeight="600" fill={quiet}>題目</text>
-            </InG>
-          </Layer>
-          <Step duration={STEP_MS}><Layer h={250} label="寫出三個中間步驟：小的數相加 175，7953 加 356 是 8309，兩個相加 8484">
-            <text x="830" y="30" textAnchor="middle" fontSize="26" fontWeight="600" fill={blue}>中間步驟，一步一步寫出來</text>
-            <g className="aw1-build" style={buildDelay(0)}><MapArrow x1={262} x2={318} y={135} /><CotStep x={330} n={1} text="小的數＝175" /></g>
-            <g className="aw1-build" style={buildDelay(1)}><ChainRing x={655} /><CotStep x={680} n={2} text="7953＋356＝8309" /></g>
-            <g className="aw1-build" style={buildDelay(2)}><ChainRing x={1005} /><CotStep x={1030} n={3} text="175＋8309" /></g>
-          </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={250} label="答案 8484">
-            <MapArrow x1={1342} x2={1398} y={135} hot />
-            <rect x="1410" y="70" width="222" height="130" fill={sage} stroke={okGreen} strokeWidth="2" />
-            <text x="1521" y="156" textAnchor="middle" fontSize="56" fontFamily={display} fill={ink}>8484</text>
-            <text x="1521" y="44" textAnchor="middle" fontSize="26" fontWeight="600" fill={okGreen}>答案</text>
-          </Layer></Step>
-        </Steps>
-      </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={44}>每一步都很小，所以不容易跳錯</Takeaway></Step></Steps>
-    </Fit>
-  </Shell>
-);
-
-const ThinkChip = ({ x, n, text }: { x: number; n: number; text: string }) => (
-  <g>
-    <rect x={x} y={40} width={290} height={96} fill={blueSoft} stroke={blue} strokeWidth="2" />
-    <circle cx={x + 42} cy={88} r="22" fill={blue} />
-    <text x={x + 42} y={97} textAnchor="middle" fontSize="25" fontWeight="600" fill="#FFFFFF">{n}</text>
-    <text x={x + 80} y={99} fontSize="31" fill={ink}>{text}</text>
-  </g>
-);
-
-const RowLabel = ({ title, sub, color }: { title: string; sub: string; color: string }) => (
-  <div>
-    <div style={{ fontSize: 36, fontWeight: 600, color }}>{title}</div>
-    <div style={{ fontSize: 26, color: muted, marginTop: 6 }}>{sub}</div>
-  </div>
-);
-
-const Thinking: Page = () => (
-  <Shell chapter={1}>
-    <Eyebrow>Thinking 前後比一比</Eyebrow>
-    <Heading>直接回答和 Thinking 的差別</Heading>
-    <Fit>
-      <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', columnGap: 40, rowGap: 36, alignItems: 'center' }}>
-        <In i={0}><RowLabel title="直接回答" sub="不准它算" color={warn} /></In>
-        <In i={1}>
-          <Crop src={guess8460} alt="ChatGPT 被要求不可以偷偷計算，回答：我不算，純猜：8460" iw={1794} ih={456} crop={[130, 40, 1570, 300]} width={1180} />
-          <Caption>ChatGPT 實際畫面｜2026 年 9 月｜要求「不可以偷偷計算」</Caption>
-        </In>
-        <Steps>
-          <Step duration={STEP_MS}><RowLabel title="Thinking" sub="先想一下" color={blue} /></Step>
-          <Step duration={STEP_MS}>
-            <Figure w={1180} h={170} label="拆成幾小段、一段一段加、再驗算一次，得到 8484">
-              <g className="aw1-build" style={buildDelay(0)}><ThinkChip x={0} n={1} text="拆成幾小段" /></g>
-              <g className="aw1-build" style={buildDelay(1)}><ThinkChip x={310} n={2} text="一段一段加" /></g>
-              <g className="aw1-build" style={buildDelay(2)}><ThinkChip x={620} n={3} text="再驗算一次" /></g>
-              <g className="aw1-build" style={buildDelay(3)}>
-                <MapArrow x1={918} x2={962} y={88} hot />
-                <rect x="970" y="40" width="210" height="96" fill={sage} stroke={okGreen} strokeWidth="2" />
-                <text x="1060" y="108" textAnchor="middle" fontSize="54" fontFamily={display} fill={ink}>8484</text>
-                <OkDot x={1160} y={42} r={22} />
-              </g>
-            </Figure>
-          </Step>
-        </Steps>
+      <div style={{ display: 'grid', gridTemplateColumns: '760px 1fr', gap: 28, alignItems: 'start' }}>
+        <div style={{ display: 'grid', gap: 14 }}>
+          <Steps>
+            <Step duration={STEP_MS}><CotCard n={1} label="判斷：這是二元一次方程式" tag="CoT"><span style={{ fontSize: 27 }}>「雞兔同籠」題型</span></CotCard></Step>
+            <Step duration={STEP_MS}><CotCard n={2} label="想公式" tag="CoT"><Eq>x+y=35　2x+4y=94</Eq><span style={{ fontSize: 24, color: muted, marginLeft: 18 }}>x＝雞、y＝兔</span></CotCard></Step>
+            <Step duration={STEP_MS}><CotCard n={3} label="套數字" tag="CoT"><Eq>2x+2y=70 → 2y=24 → y=12，x=23</Eq></CotCard></Step>
+          </Steps>
+        </div>
+        <div style={{ display: 'grid', gap: 14 }}>
+          <Steps>
+            <Step duration={STEP_MS}>
+              <CotCard n={4} label="按計算機（程式）" tone="tool" tag="Tool Calling">
+                <div style={{ background: term, color: '#F5F5F4', fontFamily: mono, fontSize: 24, lineHeight: 1.5, padding: '10px 14px', whiteSpace: 'pre' }}>
+                  <span style={{ color: '#E9B650' }}>{"python3 -c 'heads=35; feet=94;\n rabbits=(feet-2*heads)//2;\n chickens=heads-rabbits;\n print(chickens, rabbits)'\n"}</span>
+                  <span style={{ fontSize: 32, fontWeight: 700, outline: '3px solid #E9B650', outlineOffset: 2 }}>23 12</span>
+                </div>
+              </CotCard>
+            </Step>
+            <Step duration={STEP_MS}>
+              <CotCard n={5} label="答案" tone="ok">
+                <div style={{ fontFamily: display, fontSize: 42 }}>雞 23 隻，兔 12 隻</div>
+                <div style={{ fontSize: 26, color: okGreen, fontWeight: 600 }}>驗算：23×2＋12×4＝94 ✓</div>
+              </CotCard>
+            </Step>
+          </Steps>
+        </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginTop: 30 }}>
-        <Steps>
-          <Step duration={STEP_MS}><span style={{ display: 'inline-block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: '10px 22px', fontSize: 28 }}><strong style={{ color: blue }}>CoT</strong>＝方法：把步驟寫出來</span></Step>
-          <Step duration={STEP_MS}><span style={{ display: 'inline-block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: '10px 22px', fontSize: 28 }}><strong style={{ color: blue }}>Thinking</strong>＝產品功能：自動先做 CoT</span></Step>
-        </Steps>
-      </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>步驟還是它心算的，要核對；算術交給工具</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>先想清楚步驟（CoT），計算交給工具（Tool Calling）</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1277,9 +1238,10 @@ const CalcKey = ({ x, y, label, hot = false }: { x: number; y: number; label: st
 
 const ToolCalc: Page = () => (
   <Shell chapter={1}>
-    <Eyebrow>使用工具｜寫一行程式來算</Eyebrow>
-    <Heading>用工具：像按計算機</Heading>
+    <Eyebrow>CoT 會想，但算術還是心算 → 交給工具算</Eyebrow>
+    <Heading>用工具（Tool Calling）：像按計算機</Heading>
     <Lead>像把算式輸入計算機，按下「＝」</Lead>
+    <In i={0} style={{ marginTop: 14, fontSize: 28 }}><strong style={{ color: amber }}>Tool Calling（工具呼叫）</strong>：模型寫一行程式或呼叫工具，讓工具算出結果</In>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: 40, alignItems: 'center' }}>
         <div>
@@ -1323,12 +1285,12 @@ const ToolCalc: Page = () => (
 );
 
 // One way to answer the long sum: what it is like, what it got, how much to trust it.
-const WayCard = ({ kind, name, like, result, verdict, why, tone }: { kind: IconKind; name: string; like: string; result: string; verdict: string; why?: string; tone: 'bad' | 'mid' | 'good' }) => {
+const WayCard = ({ kind, name, like, result, verdict, why, tone, shot }: { kind: IconKind; name: string; like: string; result: string; verdict: string; why?: string; tone: 'bad' | 'mid' | 'good'; shot?: ReactNode }) => {
   const c = tone === 'bad' ? warn : tone === 'mid' ? blue : okGreen;
   const soft = tone === 'bad' ? warnSoft : tone === 'mid' ? blueSoft : sage;
   return (
     <div style={{ background: soft, borderTop: `6px solid ${c}`, padding: '28px 30px 32px', height: '100%', boxSizing: 'border-box', display: 'grid', justifyItems: 'center', alignContent: 'start', gap: 16, textAlign: 'center' }}>
-      <Icon kind={kind} size={72} color={c} />
+      {shot ?? <Icon kind={kind} size={72} color={c} />}
       <div style={{ fontSize: 38, fontWeight: 600 }}>{name}</div>
       <div style={{ fontSize: 30, background: '#FFFFFF', padding: '6px 20px', borderRadius: 24 }}>＝{like}</div>
       <div style={{ fontFamily: display, fontSize: 96, lineHeight: 1.1, color: c }}>{result}</div>
@@ -1345,9 +1307,9 @@ const ToolCompare: Page = () => (
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, alignItems: 'stretch' }}>
         <Steps>
-          <WayCard kind="dice" name="直接回答" like="猜" result="8460" verdict="✗ 錯，每次還不一樣" why="憑感覺猜" tone="bad" />
-          <Step duration={STEP_MS}><WayCard kind="think" name="Thinking" like="心算、列步驟" result="8484" verdict="可能錯，步驟要核對" why="還是心算" tone="mid" /></Step>
-          <Step duration={STEP_MS}><WayCard kind="calc" name="用工具" like="按計算機" result="8484" verdict="✓ 每次都一樣" why="可以重跑，也看得到算式" tone="good" /></Step>
+          <WayCard kind="dice" name="直接回答" like="猜" result="8460" verdict="✗ 錯，每次還不一樣" why="ChatGPT 實際畫面｜不准它算" tone="bad" shot={<Crop src={guess8460} alt="ChatGPT 被要求不可以偷偷計算，回答：我不算，純猜：8460" iw={1794} ih={456} crop={[130, 40, 1570, 300]} width={440} />} />
+          <Step duration={STEP_MS}><WayCard kind="think" name="CoT（Thinking）" like="心算、列步驟" result="8484" verdict="可能錯，步驟要核對" why="還是心算" tone="mid" /></Step>
+          <Step duration={STEP_MS}><WayCard kind="calc" name="Tool Calling" like="按計算機" result="8484" verdict="✓ 每次都一樣" why="可以重跑，也看得到算式" tone="good" /></Step>
         </Steps>
       </div>
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={44}>要算得準，就讓它按計算機</Takeaway></Step></Steps>
@@ -1359,7 +1321,7 @@ const WebSearch: Page = () => (
   <Shell chapter={1}>
     <Eyebrow>Web Search＝另一種工具</Eyebrow>
     <Heading>Web Search 會先上網找資料</Heading>
-    <Lead>搜尋也是工具：計算機幫它算，搜尋幫它查</Lead>
+    <Lead>搜尋也是 Tool Calling：計算機幫它算，搜尋幫它查</Lead>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1100px 1fr', gap: 56, alignItems: 'center' }}>
         <div>
@@ -2993,7 +2955,7 @@ export const meta: SlideMeta = {
 const deck: Page[] = [
   Cover, SpeakerIntro, CourseMap, Agenda,
   Section1, Evolution, NextWordGame, ProbTable, OneByOne, SameQuestion, Randomness,
-  WhatIsHallucination, RealHallucination, WhyHallucinate, CotWhat, CotWhy, CotPage, Thinking, ToolCalc, ToolCompare, WebSearch, RagR, RagA, RagG, OpenBookPage, RagMiniPractice, AgentPage,
+  WhatIsHallucination, RealHallucination, WhyHallucinate, CotWhat, CotWhy, ToolCalc, ToolCompare, CotPage, WebSearch, RagR, RagA, RagG, OpenBookPage, RagMiniPractice, AgentPage,
   Section2, ChatVsCodex, SameTaskTwoWays, Practice1NoSearch, Practice1Search, Practice1Check,
   Section3, InstallNode, CheckVersion, InstallCodex, FirstRun,
   Section4, StartScreen, SessionDesk, StatusPage, UsageToken, MemoryLayers, AgentsFile,
@@ -3026,7 +2988,7 @@ const NOTES = new Map<Page, string>([
   [Evolution, `10:30–11:30。
 先看這一章的地圖，分上下兩層。
 上層是模型的限制：它只會猜下一個字；猜，所以有隨機性；猜錯了也說得很肯定，這叫幻覺。
-按一下：下層是三種補救方法。Thinking，背後的做法叫 CoT 思考鏈，先列步驟；用工具，算數學就寫程式去算，像按計算機；Web Search，先查資料再回答，這就是 RAG。三種可以一起用，不是一個接一個。
+按一下：下層是三種補救方法。Thinking，背後的做法叫 CoT 思考鏈，先列步驟；用工具，英文叫 Tool Calling，算數學就寫程式去算，像按計算機；Web Search，先查資料再回答，這就是 RAG。三種可以一起用，不是一個接一個。
 按一下：Agent 把這些工具串起來，幫你把一件事做完。今天要用的 Codex 就是 Agent。
 最後一下：三個限制，三種補救。接下來一個一個拆開看。`],
   [NextWordGame, `11:30–12:30。
@@ -3073,44 +3035,43 @@ AI 幻覺，英文 Hallucination。像考試硬掰的學生：沒讀過，但寫
 最後一下：所以要請它先想、用工具，或給它資料。接下來幾頁就是這幾種補救。`],
   [CotWhat, `19:30–21:00。
 解法一：Thinking。它背後的做法有個名字，叫思維鏈，英文 Chain of Thought，簡稱 CoT。像考試用草稿紙：先把過程寫出來，再寫答案。
-先問大家：同一題，叫它直接寫答案，和叫它先寫過程，差在哪？
-按一下：上面這排是直接寫答案：從題目一下跳到答案，等於要它一次猜出整個數字。下面這排是先寫過程：題目、步驟 1、步驟 2、步驟 3，再到答案，一環扣一環。名字本身就在說這件事：思維是「想」，鏈是「一環扣一環」，合起來就是一步接一步的推理過程。
-最後一下：一句話定義：CoT 就是讓模型在回答前，先把中間的推理步驟一步一步寫出來。`],
+先看題目：雞兔同籠，籠子裡有 35 個頭、94 隻腳。直接寫答案，和先寫過程，差在哪？
+按一下：上面這排是直接寫答案：從題目一下子跳到「雞 20、兔 15」，這是示意的猜測，而且是錯的。下面這排是先寫過程：先判斷題型、想公式、把數字套進去、計算，最後才是答案，一環扣一環。名字本身就在說這件事：思維是「想」，鏈是「一環扣一環」，合起來就是一步接一步的推理過程。
+最後一下：一句話定義：CoT 就是讓模型在回答前，先把中間的推理步驟一步一步寫出來。
+可以順帶一提：雞兔同籠是很老的題目，最早見於《孫子算經》。`],
   [CotWhy, `21:00–23:00。
 這頁是重點。先問：前面說它只會猜下一個字，寫步驟為什麼會有用？
-按一下：回到猜下一個字。上面沒寫步驟：前文只有題目，它要猜的下一個字就直接是整個答案，跳得很遠。下面寫了步驟：它自己寫下的 175、8309、「175＋8309＝」，全部變成前文；它下一次猜字時，會連這些一起讀。所以最後只要從「175＋8309＝」接出「8484」，這一步很小，好猜。每一步都是一個好猜的小步。
+按一下：回到猜下一個字。上面沒寫步驟：前文只有「35 頭 94 腳」，它要猜的下一步就直接是答案，跳得很遠，很容易猜錯。下面寫了步驟：它自己寫下的「x＋y＝35」「2x＋4y＝94」「2y＝」，全部變成前文；它下一次猜字時，會連這些一起讀。所以接下來只要接出「24」，這一步很小，好猜。每一步都是一個好猜的小步。
 接下來三下，是 CoT 出現的三種方式：
 按一下：一、在提示詞加一句「請一步一步想」，叫 zero-shot CoT。來源：Kojima et al. 2022, Large Language Models are Zero-Shot Reasoners, https://arxiv.org/abs/2205.11916
 按一下：二、先給它一題有步驟的範例，它就會照樣寫步驟，叫 few-shot CoT。來源：Wei et al. 2022, Chain-of-Thought Prompting Elicits Reasoning in Large Language Models, https://arxiv.org/abs/2201.11903
-按一下：三、現在的 Thinking、推理模型（像 ChatGPT 的 Thinking、OpenAI 的 o 系列）會在回答前自動這樣做，你可能會看到「已思考 N 秒」，不用自己提醒。
-按一下：限制：步驟也是它自己寫的，寫錯一步，後面就跟著錯；算術還是在心算。這就帶到解法二：給它工具。
-最後一下：先寫草稿再作答，比較不會跳錯。`],
-  [CotPage, `23:00–24:00。
-用剛剛的長加法看一次完整的 CoT。先看題目。
-按一下：三個中間步驟：小的數加起來是 175；7953 加 356 是 8309；再把兩個加起來。
-按一下：答案 8484。每一步都很小，所以不容易跳錯。`],
-  [Thinking, `24:00–25:00。
-同一題，比一下前後。上面是 2026 年 9 月 ChatGPT 的真實畫面：我故意要求它「不可以偷偷計算」，它就老實說「我不算，純猜：8460」，還是錯的。
-按一下：換成 Thinking，它先想一下。
-按一下：拆成幾小段、一段一段加、最後再驗算，得到 8484，對了。
-按一下：分清楚兩個詞。CoT 是方法：把步驟寫出來。
-按一下：Thinking、推理模式是產品功能：回答前自動先做一次 CoT。
-最後一下：步驟還是它自己心算的，可能錯，要核對；算術這種事，交給工具。下一頁就給它一台計算機。`],
-  [ToolCalc, `25:00–27:00。
-解法二：用工具。這類題目，現在的 AI 不在腦中硬算，而是在背後寫一行程式去算，就像把算式輸入計算機、按下等號。
-先看題目，同一串加法。
+按一下：三、Thinking、推理模型（像 ChatGPT 的 Thinking、OpenAI 的 o 系列）是產品功能：回答前會自動先做一次 CoT，你可能會看到「已思考 N 秒」。分清楚：CoT 是方法，Thinking 是幫你自動做這個方法的功能。
+按一下：限制：步驟也是它自己寫的，寫錯一步，後面就跟著錯；算術還是在心算。
+最後一下：先寫草稿再作答，比較不會跳錯。但算術還是心算，所以下一頁給它一台計算機。`],
+  [CotPage, `26:00–28:00。
+例子：雞兔同籠，把剛剛兩個概念串起來。藍色是 CoT（想步驟），橘色是 Tool Calling（工具算），右上角是圖例。用 Codex 實際跑一次。2026-10-18 在講師電腦上，codex-cli 0.154.0、模型 gpt-5.6-luna。提示詞：「雞兔同籠：籠子裡有 35 個頭、94 隻腳。雞和兔各有幾隻？請一步一步寫出你的想法：先判斷這是什麼題型、列出算式，最後的計算請用程式算。」
+先看題目。
+按一下：第 ① 步，判斷題型，這是 CoT。它說：「這是『雞兔同籠』題型，也就是用二元一次方程式解題。」
+按一下：第 ② 步，想公式。設雞 x 隻、每隻 2 隻腳，兔 y 隻、每隻 4 隻腳：x＋y＝35，2x＋4y＝94。
+按一下：第 ③ 步，套數字。第一式乘 2 得到 2x＋2y＝70，和第二式相減，2y＝24，所以兔 y＝12，雞 35－12＝23。
+按一下：第 ④ 步，按計算機，這就是 Tool Calling。它真的執行了一行 Python，印出「23 12」。原始紀錄裡同一行指令還順便讀了講師電腦上一個無關的外掛說明檔，另有幾行 macOS 系統警告，畫面上都刪掉了，只留 Python 的部分。
+按一下：第 ⑤ 步，答案：雞 23 隻，兔 12 隻。自己驗算：23×2＋12×4＝46＋48＝94，對。
+最後一下：先想清楚步驟，這是 CoT；計算交給工具，這是 Tool Calling。兩個一起用，答案又清楚又準。下一頁換另一種工具：搜尋。`],
+  [ToolCalc, `23:00–25:00。
+解法二：用工具，英文叫 Tool Calling，工具呼叫。CoT 會想，但算術還是在心算；所以現在的 AI 遇到計算，不在腦中硬算，而是寫一行程式、或呼叫一個工具，讓工具算出結果，就像把算式輸入計算機、按下等號。畫面上那行就是定義：模型寫一行程式或呼叫工具，讓工具算出結果。
+先看題目，一長串加法。
 按一下：計算機。寫程式算，就是把數字輸進去、按「＝」。
 按一下：這是 Codex 的實際輸出，2026-10-18 在講師電腦上跑的，codex-cli 0.154.0、模型 gpt-5.6-luna。提示詞是：「2 + 4 + 7 + 9 + 23 + 1 + 5 + 7 + 2 + 5 + 74 + 2 + 7953 + 34 + 356 = ? 請用程式算出來，告訴我答案。」它執行了一行 Python：print(sum([...]))，2.8 秒得到 8484，最後回答「用 Python 程式計算結果是：8484」。原始紀錄裡還有幾行 macOS xcodebuild 和沙盒的系統警告，和題目無關，畫面上刪掉了。
 ChatGPT 也會這樣做：它有寫程式的工具，畫面上可能會出現「已分析」或一段程式碼，就是它去按計算機了。
 最後一下：算出來的，不是猜出來的。計算機每次都給同一個答案，這裡就沒有隨機性的問題。`],
-  [ToolCompare, `27:00–28:00。
+  [ToolCompare, `25:00–26:00。
 同一題長加法，三種做法排在一起。
-直接回答等於用猜的：8460，錯，而且每次問可能都不一樣。
-按一下：Thinking 等於心算、列步驟：這次得到 8484，但步驟是它自己寫的，可能錯，所以還是要核對，不能當成一定對。
-按一下：用工具等於按計算機：8484，每次都一樣。為什麼比較可信？可以重跑一次看結果一不一樣，也看得到它輸入了什麼算式，數字有沒有抄錯。
-最後一下：要算得準，就讓它按計算機。下一頁換一種工具：搜尋。`],
+左邊是直接回答，等於用猜的。卡片上方是 2026 年 9 月 ChatGPT 的真實畫面：我故意要求它「不可以偷偷計算」，它就老實說「我不算，純猜：8460」。錯，而且每次問可能都不一樣。
+按一下：CoT，也就是 Thinking，等於心算、列步驟：這次得到 8484，但步驟是它自己寫的，可能錯，所以還是要核對，不能當成一定對。
+按一下：Tool Calling 等於按計算機：8484，每次都一樣。為什麼比較可信？可以重跑一次看結果一不一樣，也看得到它輸入了什麼算式，數字有沒有抄錯。
+最後一下：要算得準，就讓它按計算機。下一頁用一個例子，把 CoT 和 Tool Calling 串起來：雞兔同籠。`],
   [WebSearch, `28:00–29:30。
-解法三：搜尋也是一種工具。計算機幫它算，搜尋幫它查。這是 ChatGPT 的實際畫面：問「最近的台灣新聞」，它先顯示「正在搜尋 2 個網站」，標 1 的地方：中央社和路透社。
+解法三：搜尋也是一種工具，一樣是 Tool Calling。計算機幫它算，搜尋幫它查。這是 ChatGPT 的實際畫面：問「最近的台灣新聞」，它先顯示「正在搜尋 2 個網站」，標 1 的地方：中央社和路透社。
 按一下：回答裡附了來源標籤，像這裡的「中央社 CNA」，點得開、查得到。
 最後一下：先查資料再回答，這個做法有個名字叫 RAG。在這一課，搜尋找到的網頁內容，就是 RAG 裡「檢索來的資料」；第五章換成資料夾裡的原文。接下來拆成三步：R、A、G。`],
   [RagR, `29:30–31:00。
