@@ -1,0 +1,47 @@
+diff --git a/dist/config-hT1o6Jct.js b/dist/config-hT1o6Jct.js
+--- a/dist/config-hT1o6Jct.js
++++ b/dist/config-hT1o6Jct.js
+@@ -594,7 +594,23 @@
+ function buildTextContentSplices(element, value, prevText) {
+ 	const parts = collectTextRangeParts(element);
+ 	const current = textRangeContent(parts);
+-	if (!textMatchesExpected(current, prevText)) return { error: "no text candidate matches the current value" };
++	if (!textMatchesExpected(current, prevText)) {
++		const diff = textDiff(prevText, value);
++		const matches = [];
++		for (const part of parts) {
++			if (!("raw" in part)) continue;
++			let at = prevText.indexOf(part.current);
++			while (at !== -1) {
++				if (diff.start >= at && diff.end <= at + part.current.length) {
++					const start = diff.start - at;
++					const end = diff.end - at;
++					matches.push(textLeafSplice(part, `${part.current.slice(0, start)}${diff.value}${part.current.slice(end)}`));
++				}
++				at = prevText.indexOf(part.current, at + 1);
++			}
++		}
++		return matches.length === 1 ? matches : { error: "cannot safely edit computed or repeated text; edit its source expression" };
++	}
+ 	const diff = textDiff(current, value);
+ 	if (diff.start === diff.end && diff.value === "") return [];
+ 	return buildTextRangeReplaceSplices(parts, diff.start, diff.end, diff.value);
+@@ -979,12 +995,17 @@
+ 	}
+ 	for (const op of ops) {
+ 		if (op.kind !== "set-text") continue;
+-		if (op.prevText !== void 0 && (op.value.includes("\n") || op.prevText.includes("\n"))) {
++		if (op.prevText !== void 0) {
+ 			const richResult = buildTextContentSplices(element, op.value, op.prevText);
+ 			if (!("error" in richResult)) {
+ 				splices.push(...richResult);
+ 				continue;
+ 			}
++			if (collectTextRangeParts(element).length > 0) return {
++				ok: false,
++				status: 422,
++				error: richResult.error
++			};
+ 		}
+ 		const result = buildTextSplice(ast, element, op.value, op.prevText);
+ 		if ("error" in result) {

@@ -4,13 +4,16 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@open-slide/core@2.0.1': 6ddd01b17e9a25315fcf169c889b5e77e34410fca778b975fe67d0c6d2c11e46
+
 importers:
 
   .:
     dependencies:
       '@open-slide/core':
         specifier: ^2.0.1
-        version: 2.0.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(jiti@2.7.0)
+        version: 2.0.1(patch_hash=6ddd01b17e9a25315fcf169c889b5e77e34410fca778b975fe67d0c6d2c11e46)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(jiti@2.7.0)
       react:
         specifier: ^19.2.8
         version: 19.3.0
@@ -2480,7 +2483,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.3
 
-  '@open-slide/core@2.0.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(jiti@2.7.0)':
+  '@open-slide/core@2.0.1(patch_hash=6ddd01b17e9a25315fcf169c889b5e77e34410fca778b975fe67d0c6d2c11e46)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(jiti@2.7.0)':
     dependencies:
       '@babel/parser': 7.29.9
       '@babel/types': 7.29.8
