@@ -184,7 +184,7 @@ Session 就像這一次協作的工作桌：你可以在裡面補充背景、提
 
 ```bash
 # 進入課程提供的練習專案
-$ cd examples/teacher-learning-lab
+$ cd examples/aw-01-lab
 
 # 啟動 Codex
 $ codex
@@ -195,12 +195,10 @@ $ codex
 ```markdown
 先不要修改檔案，請閱讀這個資料夾，告訴我：
 1. 這個練習專案的用途
-2. 每個檔案適合放什麼內容
-3. 我可以如何開始一篇學習筆記
+2. 每個檔案或資料夾放了什麼
+3. 我可以從哪個練習開始
 請先提出理解與建議，不要直接寫入檔案。
 ```
-
-![教師學習練習場的第一個任務範例](assets/course-1-ai-basics/codex-cli-learning-task.png)
 
 這個任務要觀察 Agent 的工作順序：**先讀取 → 形成理解 → 回報 → 等待下一步**。先不要修改檔案，才能看清楚「我要求 AI 做什麼」以及「AI 實際做了什麼」。
 
@@ -353,130 +351,17 @@ Memory 是 Codex 在工作過程中保留的「上下文資訊」。
 - **Token**：模型讀取與產生文字的基本單位，不完全等於中文字數或英文單字數。
 - **Memory**：可延續的偏好或背景資訊，讓 AI 不需要每次都從零開始理解你。
 
-## 給師培生的練習專案：讓 Agent 讀懂專業筆記
+## 練習專案：aw-01-lab
 
-本課提供一個只含 Markdown 檔案的練習專案：[teacher-learning-lab](../examples/teacher-learning-lab/)。整個練習不需要寫程式，適合正在修習教育心理學、教育社會學與教育哲學等課程的師培生。
+本課的練習資料夾是 [aw-01-lab](../examples/aw-01-lab/)，也可以直接下載 [aw-01-lab.zip](../examples/aw-01-lab.zip)。裡面只有文字檔，不需要寫程式：
 
-這次練習會用六份教育專業筆記，帶你掌握不同理論的核心概念、概念之間的關係，以及需要進一步查證的地方。請讓 Agent 先掃描全部筆記，再選一份用 ASCII 整理，最後用 Skill 畫成知識圖。
+- `原文/`：《三國演義》第 1 回到第 21 回全文，一回一個檔案，取自維基文庫（公有領域）。
+- `回目.md`：21 回的回目清單，方便查哪一回講什麼。
+- `prompts.md`：練習要貼的提示詞，練習 1 貼給 ChatGPT，練習 2 貼給 Codex。
 
-六份筆記包括：
+練習 2 請 Codex 只看資料夾裡的原文，寫出前 21 回的大綱，每段附上出處，最後自己回原文抽查。完整步驟和提示詞在 [prompts.md](../examples/aw-01-lab/prompts.md)。
 
-- 認知負荷理論
-- 近側發展區與鷹架
-- 布魯姆教育目標分類學
-- 杜威的經驗教育
-- 隱性課程
-- 文化資本
-
-這次練習會產生三類成果，分別放在：
-
-- `notes/`：六份原始專業筆記
-- `outputs/`：第二個練習產生的 ASCII 知識結構
-- `diagrams/`：第三個練習產生的 HTML、SVG 或 PNG 圖檔
-
-### 三個任務
-
-#### 任務 1：讓 Codex 看懂專案
-
-```markdown
-先不要修改任何檔案。
-
-請閱讀這個練習專案，告訴我：
-1. 這個專案是做什麼的？
-2. notes/ 裡有哪六份專業筆記？
-3. 請依照教育心理學、教育哲學、教育社會學或教學設計分類。
-4. 哪兩份筆記最適合放在一起比較？為什麼？
-5. 三個練習的順序與關係是什麼？
-```
-
-接著輸入：
-
-```markdown
-請閱讀 notes/ 裡的六份專業筆記。
-
-請整理成一張表：
-- 筆記名稱
-- 所屬領域
-- 核心問題
-- 3 個專有名詞
-- 一個教育情境
-- 一個常見誤解
-
-先不要修改任何檔案。
-```
-
-#### 任務 2：嘗試畫出 ASCII 知識點
-
-```markdown
-請再次閱讀 notes/cognitive-load-theory.md。
-
-請用 ASCII 樹狀結構或箭頭，整理這份筆記的知識點，包含：
-1. 中心問題
-2. 核心概念
-3. 專有名詞
-4. 概念之間的關係
-5. 教育情境
-6. 常見誤解
-
-不要加入原筆記沒有提到的事實。
-先把 ASCII 草稿顯示給我，等我確認後再寫入：
-outputs/cognitive-load-theory-ascii.md
-```
-
-確認內容後：
-
-```markdown
-請把剛才確認過的 ASCII 知識結構寫入：
-outputs/cognitive-load-theory-ascii.md
-
-只保存 ASCII 結構與必要的簡短說明，不要改寫原本的專業筆記。
-```
-
-#### 任務 3：使用 Skill 畫出筆記
-
-先安裝 [diagram-design](https://github.com/cathrynlavery/diagram-design) skill：
-
-```bash
-# 加入 diagram-design 的 Plugin Marketplace
-$ codex plugin marketplace add cathrynlavery/diagram-design
-
-# 安裝 diagram-design plugin
-$ codex plugin add diagram-design@diagram-design
-```
-
-重新開啟 Codex Session 後輸入：
-
-```markdown
-請閱讀：
-- notes/cognitive-load-theory.md
-- outputs/cognitive-load-theory-ascii.md
-
-請使用 diagram-design skill，把這份專業知識筆記畫成一張適合初學者理解的知識圖。
-
-要求：
-- 先判斷這份筆記適合使用哪一種圖
-- 保留中心問題、主要概念與概念之間的關係
-- 不要加入筆記中沒有提到的事實
-- 先提出圖的設計，再開始產生圖
-- 將最後的圖檔保存到 diagrams/
-```
-
-這三個任務會讓 AI 依序掃描、比較與整理筆記，最後畫出概念之間的關係：**先掃描、再比較、再整理，最後視覺化**。
-
-![同一份筆記的三種成果](assets/course-1-ai-basics/learning-output-preview.svg)
-
-圖片說明：同一份專業筆記會先保留原始內容，再整理成 ASCII 知識結構，最後產生視覺化知識圖。
-
-### 師培生的專業筆記理解流程
-
-`閱讀專業筆記 → 用自己的話理解 → ASCII 整理知識點 → 使用 Skill 產生知識圖 → 回頭檢查是否忠於原文`
-
-最後，請你反思四件事：
-
-- 我是否真的理解這份專業筆記，而不是只看過一遍？
-- ASCII 結構是否保留了原筆記的重點？
-- 最後的圖是否讓沒有背景知識的人更容易理解？
-- 哪些地方仍然需要回到課本、論文或教師說明確認？
+`確認資料夾（/status）→ 把規則寫進 AGENTS.md → 照原文寫大綱 → 回原文核對`
 
 ## 如何更有效率地使用 Token
 
