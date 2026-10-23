@@ -69,7 +69,7 @@ ls
 列出你現在可以使用的 skills 名稱，每個一行，附一句用途。不要讀或修改任何檔案。
 ```
 
-看結果：清單裡有 `diagram-design:diagram-design` 和 `eli5`。清單比投影片短是正常的。
+看結果：清單裡有 `diagram-design:diagram-design`（也可能只寫 `diagram-design`）和 `eli5`。清單比投影片短是正常的。
 
 ## 練習 2-1：用 diagram-design 畫關係圖
 

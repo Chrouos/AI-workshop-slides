@@ -11,11 +11,12 @@ import chibiTop from './assets/chibi-top.png';
 import chibiParticipants from './assets/chibi-participants.png';
 import taoyuanGraph from './assets/liubei-taoyuan-graph.png';
 import taoyuanLine from './assets/liubei-taoyuan-line.png';
-import outlineCh1 from './assets/outline-ch1.png';
+import outlineCh1 from './assets/outline-ch1-sample.png';
 import liubeiCard from './assets/liubei-card.png';
-import backlinksPane from './assets/backlinks-pane.png';
+import backlinksPane from './assets/backlinks-pane-sample.png';
 import ownCard from './assets/own-card-sanying.png';
 import vaultGraph from './assets/vault-graph.png';
+import vaultGraphCards from './assets/vault-graph-cards.png';
 import promptsQr from './assets/prompts-qr.svg';
 
 export const design: DesignSystem = {
@@ -625,8 +626,8 @@ const LastLesson: Page = () => (
             <div style={{ height: 52, display: 'flex', alignItems: 'center', padding: '0 26px', background: '#30343A', fontFamily: mono, fontSize: 23, color: '#BCC3CC' }}>三國演義大綱.md（第一堂實跑，節選）</div>
             <div style={{ padding: '24px 30px 28px' }}>
               <MdLine head>## 第 1 回 宴桃園豪傑三結義　斬黃巾英雄首立功</MdLine>
-              <MdLine><RawLinks text="……[[劉備]]在涿縣遇到[[張飛]]、[[關羽]]，" /></MdLine>
-              <MdLine>三人在桃園結義，招募鄉勇後擊敗黃巾……</MdLine>
+              <MdLine><RawLinks text="……[[劉備]]、[[關羽]]、[[張飛]]在桃園祭告天地，" /></MdLine>
+              <MdLine>結為兄弟，並招募鄉勇討賊……</MdLine>
               <MdLine dim>出處：原文/第001回.txt</MdLine>
               <MdLine dim>……（一共 21 回）</MdLine>
             </div>
@@ -1300,10 +1301,10 @@ const MergeOutline: Page = () => (
   </Shell>
 );
 
-// Stacked: the outline excerpt drawn 1500 px wide (1.04× native, text ~25 px), then the card it
+// Stacked: the outline excerpt drawn 1500 px wide (1.01× native, text ~32 px), then the card it
 // opens shown as two enlarged crops (its title and first line) so both read on a projector.
 const CL_W = 1500;
-const CL_LINK_X = Math.round(CL_W * 0.963); // centre of 劉備 at the end of line 1
+const CL_LINK_X = Math.round(CL_W * 0.576); // centre of 劉備 on line 1 (sample outline, 1480 × 192 capture)
 
 const ClickLiubei: Page = () => (
   <Shell chapter={2} source={'Obsidian 說明：內部連結 obsidian.md/help/links'}>
@@ -1311,8 +1312,8 @@ const ClickLiubei: Page = () => (
     <Heading>點大綱的劉備，跳到人物卡</Heading>
     <Fit>
       <In i={0}>
-        <Screenshot src={outlineCh1} aspect={1440 / 230} width={CL_W} caption="整理/三國演義大綱，第 1 回｜實際畫面" alt="大綱第 1 回裡的劉備是深紫色連結">
-          <RegionMark n={1} i={2} x={94} y={38} w={4.6} h={17} badge="above" drop={14} />
+        <Screenshot src={outlineCh1} aspect={1480 / 192} width={CL_W} caption="整理/三國演義大綱，第 1 回｜2026-10-24 擷取（Obsidian 1.14.5）" alt="大綱第 1 回裡的劉備是深紫色連結">
+          <RegionMark n={1} i={2} x={54.9} y={10} w={5.3} h={29} badge="above" drop={14} />
         </Screenshot>
       </In>
       {/* One click: the arrow draws down from 劉備, then the card it opens lands. */}
@@ -1320,8 +1321,8 @@ const ClickLiubei: Page = () => (
         <Steps>
           <Step duration={STEP_MS}>
             <svg viewBox="0 0 1632 240" style={{ position: 'absolute', left: 0, top: -59, width: 1632, height: 240, overflow: 'visible' }} aria-hidden="true">
-              <g fill="none" stroke={amber} strokeWidth="4"><StepPath d={`M${CL_LINK_X} 4 V144 H1262`} /></g>
-              <g className="aw2-build" style={buildDelay(4)}><polygon points="1246,144 1264,134 1264,154" fill={amber} /></g>
+              <g fill="none" stroke={amber} strokeWidth="4"><StepPath d={`M${CL_LINK_X} 4 V44`} /></g>
+              <g className="aw2-build" style={buildDelay(4)}><polygon points={`${CL_LINK_X - 12},42 ${CL_LINK_X + 12},42 ${CL_LINK_X},58`} fill={amber} /></g>
             </svg>
             <div className="aw2-build" style={{ ...buildDelay(4), position: 'absolute', left: 0, top: 0 }}>
               <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, boxShadow: '0 10px 30px rgba(28,25,23,0.08)', padding: '14px 14px 14px', display: 'grid', gap: 10 }}>
@@ -1353,7 +1354,7 @@ const BacklinksReal: Page = () => (
     <Fit>
       <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '500px 1fr', gap: 120, alignItems: 'center', justifyContent: 'center' }}>
         <In i={0}>
-          <Screenshot src={backlinksPane} aspect={600 / 750} width={500} caption="劉備卡右側的反向連結｜實際畫面" alt="劉備卡的反向連結面板：已連結本筆記的檔案 41，三國演義 4，三國演義大綱 24" />
+          <Screenshot src={backlinksPane} aspect={600 / 750} width={500} caption="2026-10-24 擷取（Obsidian 1.14.5）" alt="劉備卡的反向連結面板：已連結本筆記的檔案 36，三國演義 4，三國演義大綱 19" />
         </In>
         <div>
           <div style={{ fontSize: 30, color: muted, marginBottom: 6 }}>劉備被提到幾處（不是卡片張數）</div>
@@ -1361,11 +1362,11 @@ const BacklinksReal: Page = () => (
           {/* Each click lands a number and the spot in the panel it comes from (pinned over the 500 × 625 screenshot). */}
           <Steps>
             <Step duration={STEP_MS}>
-              <BigCount label="合併後" value="41 處" tone="ok" />
+              <BigCount label="合併後" value="36 處" tone="ok" />
               <Pin style={{ left: 0, top: 0, width: 500, height: 625 }}><StepMark n={1} x={4} y={2.5} w={93} h={8} badge="right" /></Pin>
             </Step>
             <Step duration={STEP_MS}>
-              <BigCount label="來自大綱" value="24 處" tone="amber" />
+              <BigCount label="來自大綱" value="19 處" tone="amber" />
               <Pin style={{ left: 0, top: 0, width: 500, height: 625 }}><StepMark n={2} x={4} y={84} w={93} h={8} badge="right" /></Pin>
             </Step>
           </Steps>
@@ -1391,9 +1392,9 @@ const CountChip = ({ value, tone }: { value: string; tone: 'deep' | 'pale' }) =>
   <span style={{ display: 'inline-block', fontFamily: display, fontSize: 56, lineHeight: 1, color: tone === 'deep' ? link : amber }}>{value}</span>
 );
 
-// Outline excerpt (第 1 回) drawn 1500 px wide; k = 1500 / 1440.
+// Outline excerpt (第 1 回, sample outline, 1480 × 192 capture) drawn 1500 px wide; k = 1500 / 1480.
 const GR_LEFT = 66;
-const GR_TOP = 64;
+const GR_TOP = 90;
 
 const GrayReal: Page = () => (
   <Shell chapter={2} source={'Obsidian 說明：內部連結 obsidian.md/help/links'}>
@@ -1402,26 +1403,26 @@ const GrayReal: Page = () => (
     <Fit>
       <div style={{ position: 'relative', width: 1632, height: 600 }}>
         <In i={0} style={{ position: 'absolute', left: GR_LEFT, top: GR_TOP }}>
-          <Screenshot src={outlineCh1} aspect={1440 / 230} width={1500} alt="大綱第 1 回：劉備、張飛、關羽是深紫色連結，張角、張寶、張梁、董卓是淡紫色連結" />
+          <Screenshot src={outlineCh1} aspect={1480 / 192} width={1500} alt="大綱第 1 回：劉備、關羽、張飛、桃園結義、曹操是深紫色連結，張角、董卓是淡紫色連結" />
         </In>
         <div style={{ position: 'absolute', left: GR_LEFT, top: 352, fontSize: 34 }}>哪些名字已經有卡？</div>
         <Steps>
           <Step duration={STEP_MS}>
             <div style={{ position: 'absolute', inset: 0 }}>
-              <PxMark x={GR_LEFT + 1381} y={GR_TOP + 84} w={80} h={48} n={1} badge="above" drop={22} />
-              <div style={{ position: 'absolute', left: GR_LEFT, top: 412, width: 1200 }}><LinkKind n={1} word="劉備" pale={false} title="深紫：已經有卡，點了會打開" sub="例：劉備、關羽、張飛、曹操" /></div>
+              <PxMark x={GR_LEFT + 823} y={GR_TOP + 24} w={81} h={48} n={1} badge="above" drop={22} />
+              <div style={{ position: 'absolute', left: GR_LEFT, top: 412, width: 1200 }}><LinkKind n={1} word="劉備" pale={false} title="深紫：已經有卡，點了會打開" sub="例：劉備、關羽、張飛、曹操、桃園結義" /></div>
             </div>
           </Step>
           <Step duration={STEP_MS}>
             <div style={{ position: 'absolute', inset: 0 }}>
-              <PxMark x={GR_LEFT + 1350} y={GR_TOP + 133} w={78} h={48} n={2} badge="below" drop={70} />
+              <PxMark x={GR_LEFT + 304} y={GR_TOP + 121} w={81} h={48} n={2} badge="below" drop={40} />
               <div style={{ position: 'absolute', left: GR_LEFT, top: 508, width: 1200 }}><LinkKind n={2} word="董卓" pale title="淡紫：還沒有卡，點了會新增空白卡" sub="例：張角、董卓、呂布……" /></div>
             </div>
           </Step>
           <Step duration={STEP_MS}>
             <div style={{ position: 'absolute', inset: 0 }}>
-              <div style={{ position: 'absolute', right: 66, top: 420 }}><CountChip value="4 個" tone="deep" /></div>
-              <div style={{ position: 'absolute', right: 66, top: 516 }}><CountChip value="70 個" tone="pale" /></div>
+              <div style={{ position: 'absolute', right: 66, top: 420 }}><CountChip value="6 個" tone="deep" /></div>
+              <div style={{ position: 'absolute', right: 66, top: 516 }}><CountChip value="40 個" tone="pale" /></div>
             </div>
           </Step>
         </Steps>
@@ -1432,7 +1433,7 @@ const GrayReal: Page = () => (
 
 // One bar of how often a not-yet-carded name shows up in the outline. On the live page the
 // bars grow from zero in order (i), right after the list lands.
-const NameBar = ({ name, n, i, max = 32 }: { name: string; n: number; i: number; max?: number }) => {
+const NameBar = ({ name, n, i, max = 29 }: { name: string; n: number; i: number; max?: number }) => {
   const live = useIsActivePage();
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 70px', alignItems: 'center', gap: 16, height: 56 }}>
@@ -1462,18 +1463,18 @@ const GrayDecide: Page = () => (
         <In i={0}>
           <SmallLabel>大綱裡出現最多次、還沒有卡的人</SmallLabel>
           <div style={{ marginTop: 18 }}>
-            <NameBar name="呂布" n={32} i={0} />
-            <NameBar name="董卓" n={15} i={1} />
-            <NameBar name="袁術" n={11} i={2} />
-            <NameBar name="李傕" n={9} i={3} />
-            <NameBar name="郭汜" n={7} i={4} />
-            <NameBar name="袁紹" n={7} i={5} />
+            <NameBar name="呂布" n={29} i={0} />
+            <NameBar name="董卓" n={19} i={1} />
+            <NameBar name="袁術" n={6} i={2} />
+            <NameBar name="袁紹" n={6} i={3} />
+            <NameBar name="李傕" n={6} i={4} />
+            <NameBar name="孫堅" n={6} i={5} />
           </div>
         </In>
         <div style={{ display: 'grid', gap: 22 }}>
           <Steps>
             <Step duration={STEP_MS}><Decision n={1} when="先數次數" then="搜尋「呂布」" eg={<>Cmd+Shift+F（Windows 是 Ctrl+Shift+F）</>} /></Step>
-            <Step duration={STEP_MS}><Decision n={2} when="常出現、原文夠寫" then="記下來，第三堂補卡" eg="例：呂布 32 次，第 5、19 回都有他" /></Step>
+            <Step duration={STEP_MS}><Decision n={2} when="常出現、原文夠寫" then="記下來，第三堂補卡" eg="例：呂布 29 次，第 5、19 回都有他" /></Step>
             <Step duration={STEP_MS}><Decision n={3} when="只出現一兩次" then="先留著" eg="淡色不會壞，之後再補" /></Step>
           </Steps>
         </div>
@@ -2260,22 +2261,35 @@ const PointsLines: Page = () => (
   </Shell>
 );
 
-// The whole graph (1600 × 1393) is too small to read at slide size, so it stays as an overview
-// with markers; each click also opens a zoomed crop of the marked region beside it.
-const GV_W = 640; // overview width; image is 557 px tall
+// The whole graph (3984 × 2807, one Obsidian session) is too small to read at slide size, so it
+// stays as an overview with markers; each click also opens a zoomed crop of the marked region
+// beside it. Panels 1–2 crop the overview itself. Panel 3 crops a second capture of the same layout,
+// taken zoomed out (graph labels grow slower than the layout, so the cards' names read larger there);
+// `mark` places that crop on the overview. All panels draw labels at about 24 px.
+const GV_W = 640; // overview width; image is 451 px tall
+const GV_NAT_W = 3984;
+const GV_NAT_H = 2807;
 const GV_ZOOM_W = 932;
 const GV_ZOOM_H = 520;
-type GvZoom = { n: number; title: string; x: number; y: number; scale: number; alt: string };
+type GvZoom = {
+  n: number; title: string; x: number; y: number; scale: number; alt: string; badge: Badge;
+  img?: { src: string; natW: number; natH: number }; mark?: { x: number; y: number; w: number; h: number };
+};
 const GV_ZOOMS: GvZoom[] = [
-  { n: 1, title: '大圓：三國演義大綱', x: 529, y: 407, scale: 1.7, alt: '放大：中間的大圓三國演義大綱，四周的線都連到它' },
-  { n: 2, title: '淡色小點：還沒有卡', x: 290, y: 100, scale: 1.7, alt: '放大：淡色小點，例如李肅、臧霸、陳登、華雄，都還沒有卡' },
-  { n: 3, title: '右下一群：講師的卡', x: 854, y: 970, scale: 1.25, alt: '放大：曹操、孫權、劉備、張飛、關羽、赤壁之戰、煮酒論英雄等講師的卡，彼此連得很密' },
+  { n: 1, title: '大圓：三國演義大綱', x: 1566, y: 808, scale: 0.92, badge: 'right', alt: '放大：中間的大圓三國演義大綱，四周的線都連到它' },
+  { n: 2, title: '淡色小點：還沒有卡', x: 1520, y: 30, scale: 0.92, badge: 'right', alt: '放大：淡色小點，例如夏侯惇、陶謙、韓胤、孫堅、李傕、貂蟬、嚴白虎，都還沒有卡' },
+  {
+    n: 3, title: '右下一群：講師的卡', x: 50, y: 51, scale: 1.55, badge: 'below',
+    img: { src: vaultGraphCards, natW: 700, natH: 435 }, mark: { x: 2362, y: 1396, w: 1622, h: 906 },
+    alt: '放大：劉備、曹操、張飛、孫權、曹魏、蜀漢、赤壁之戰、煮酒論英雄等講師的卡，彼此連得很密',
+  },
 ];
 
 // A marker over the overview for one zoom region, in % of the image.
-const GvMark = ({ z }: { z: GvZoom }) => (
-  <StepMark n={z.n} badge={z.n === 1 ? 'right' : 'left'} x={(z.x / 1600) * 100} y={(z.y / 1393) * 100} w={(GV_ZOOM_W / z.scale / 1600) * 100} h={(GV_ZOOM_H / z.scale / 1393) * 100} />
-);
+const GvMark = ({ z }: { z: GvZoom }) => {
+  const m = z.mark ?? { x: z.x, y: z.y, w: GV_ZOOM_W / z.scale, h: GV_ZOOM_H / z.scale };
+  return <StepMark n={z.n} badge={z.badge} x={(m.x / GV_NAT_W) * 100} y={(m.y / GV_NAT_H) * 100} w={(m.w / GV_NAT_W) * 100} h={(m.h / GV_NAT_H) * 100} />;
+};
 
 const GraphView: Page = () => (
   <Shell chapter={4} source={'Obsidian 說明：關聯圖 obsidian.md/help/plugins/graph'}>
@@ -2284,18 +2298,18 @@ const GraphView: Page = () => (
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: `${GV_W}px 1fr`, gap: 56 }}>
         <In i={0}>
-          <Screenshot src={vaultGraph} aspect={1600 / 1393} width={GV_W} caption="合併大綱後的關聯圖｜實際畫面" alt="關聯圖：中間的大點是三國演義大綱，四周一圈淡色小點是還沒有卡的人，右下一群深色點是講師的卡" />
+          <Screenshot src={vaultGraph} aspect={GV_NAT_W / GV_NAT_H} width={GV_W} caption="合併大綱後的關聯圖｜實際畫面" alt="關聯圖：中間的大點是三國演義大綱，四周一圈淡色小點是還沒有卡的人，右下一群深色點是講師的卡" />
         </In>
         {/* Each click: a marker on the overview, and that region enlarged here (later panels cover earlier ones). */}
         <div style={{ position: 'relative', height: 590 }}>
           <Steps>
             {GV_ZOOMS.map(z => (
               <Step key={z.n} duration={STEP_MS}>
-                <Pin style={{ left: -(GV_W + 56), top: 0, width: GV_W, height: Math.round(GV_W * 1393 / 1600) }}><GvMark z={z} /></Pin>
+                <Pin style={{ left: -(GV_W + 56), top: 0, width: GV_W, height: Math.round(GV_W * GV_NAT_H / GV_NAT_W) }}><GvMark z={z} /></Pin>
                 <Pin style={{ left: 0, top: 0, width: GV_ZOOM_W + 4, height: 590, background: 'var(--osd-bg)' }}>
                   <Callout n={z.n} title={z.title} />
                   <div style={{ marginTop: 18, border: '2px solid #E9B650', background: '#FFFFFF', boxSizing: 'border-box', width: GV_ZOOM_W + 4, height: GV_ZOOM_H + 4 }}>
-                    <Crop src={vaultGraph} natW={1600} natH={1393} x={z.x} y={z.y} w={GV_ZOOM_W / z.scale} h={GV_ZOOM_H / z.scale} scale={z.scale} alt={z.alt} />
+                    <Crop src={z.img?.src ?? vaultGraph} natW={z.img?.natW ?? GV_NAT_W} natH={z.img?.natH ?? GV_NAT_H} x={z.x} y={z.y} w={GV_ZOOM_W / z.scale} h={GV_ZOOM_H / z.scale} scale={z.scale} alt={z.alt} />
                   </div>
                 </Pin>
               </Step>
@@ -2542,6 +2556,11 @@ const NextSkills: Page = () => (
         </Steps>
       </Stage>
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>同一座筆記庫，下一堂會多出圖和時間軸</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}>
+        <div style={{ marginTop: 22, textAlign: 'center', fontSize: 30, color: muted }}>
+          <strong style={{ color: ink }}>課前：</strong>終端機打 <span style={{ fontFamily: mono, background: surface, border: `1px solid ${rule}`, padding: '2px 12px' }}>git --version</span>，看到版本號就好
+        </div>
+      </Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2671,7 +2690,7 @@ const NOTES = new Map<Page, string>([
 先看上一堂的成果。左邊是講師用 Codex 實際跑出來的 三國演義大綱.md：一回一段，人名都寫成 [[劉備]] 這種連結，每段最後一行是出處。
 先問大家：這些 [[ ]] 現在連到哪？按一下：哪裡都還沒連到。大綱是單獨一個檔案，旁邊沒有劉備卡，所以劉備是淡色的連結，點下去只會新增一張空白卡。
 最後一下：大綱有連結了，但還沒接上人物卡。今天就是要把它放進筆記庫，接上講師準備的人物卡。
-補充數字（不用記）：講師這份 21 段、每段都有出處，Codex 跑了 1 分 38 秒；當時的舊提示詞讓它連回目標題裡的人名也加了 [[ ]]，現在的提示詞已經改掉。
+補充數字（不用記）：講師這份 21 段、每段都有出處，Codex 跑了 1 分 38 秒；回目標題裡沒有加 [[ ]]。這份就是 GitHub 上的範例大綱，今天的畫面和數字都用它。
 第一堂沒來、或大綱不見的同學，用講師的範例大綱：第 ${pageOf(MergeOutline)} 頁右上角有連結（examples/aw-02-lab/三國演義大綱.md），下載後一樣放進筆記庫的「整理」資料夾。練習 3 全班也用這一份對照。`],
   [TodayGoal, `05:00–08:00
 左邊是第一堂結束時的樣子：大綱是一個單獨的檔案，裡面的 [[劉備]]、[[曹操]]、[[呂布]] 都是連結，但連到空處，因為還沒有那些卡。
@@ -2698,7 +2717,7 @@ Obsidian 的「儲存庫」，英文 Vault，就是你電腦裡的一個資料�
   [GrayLink, `18:00–20:00
 連到尚未建立的筆記，叫「未解析連結」（Unresolved Link）。上面：[[劉備]] 有對應的卡，所以是深紫色，點了就打開。
 按一下：[[呂布]] 寫了連結，可是資料夾裡沒有 呂布.md，Obsidian 會把它顯示成比較淡的紫色。課綱寫「灰色」，實際畫面是淡紫色，第二章會看到真的畫面。
-按一下：點淡色連結，Obsidian 會幫你新建一張空白的 呂布.md。不想新建就先別點。
+按一下：點淡色連結，Obsidian 會幫你新建一張空白的 呂布.md。不想新建就先別點。2026-10-24 實測（Obsidian 1.10.3，Mac）：在大綱點淡色的董卓，馬上新增一張空白的 董卓.md，放在筆記庫最外層，不會放進 人物/。
 按一下：顏色淡，代表資料夾裡還沒有這張卡，不一定是打錯字。
 最後一下：投影或螢幕上分不出深淺的時候，用另一個方法確認：按 Cmd+O（Windows 是 Ctrl+O）打開快速切換，輸入名字，找不到這個檔，就是還沒有卡。`],
   [CardTypes, `20:00–22:30
@@ -2721,11 +2740,13 @@ Obsidian 的「儲存庫」，英文 Vault，就是你電腦裡的一個資料�
 按一下：按紫色的下載鈕。按一下：照畫面安裝。Windows 打開安裝檔按下一步；Mac 打開 .dmg，把 Obsidian 拖進「應用程式」。Obsidian 免費，不用註冊。上一堂結束時已經請大家先下載，裝好的人直接看下一頁。官方說明：https://obsidian.md/help/install`],
   [FirstLaunch, `33:00–36:00
 第一次打開會看到這個畫面。標 1 的地方在最下面：語言選單選「繁體中文」，介面會重新整理。
-按一下：標 2 的地方，三個選項裡，今天用第二個「開啟資料夾為儲存庫」。現在先不要按「建立新的儲存庫」，下一頁下載完教材再按。官方說明：https://obsidian.md/help/User+interface/Language+settings`],
+按一下：標 2 的地方，三個選項裡，今天用第二個「開啟資料夾為儲存庫」。現在先不要按「建立新的儲存庫」，下一頁下載完教材再按。官方說明：https://obsidian.md/help/User+interface/Language+settings
+2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：第一次打開是英文畫面，最下面選「繁體中文」，畫面當下就換成中文，不用重開。`],
   [GetVault, `36:00–41:00
 在筆電的簡報上按「在筆電上按這裡下載」。手機掃 QR code 只會存到手機，用不到。按鈕和 QR code 連到同一份 ZIP：
 ${VAULT_ZIP_URL}
 1 下載 ZIP。2 解壓縮：Windows 一定要在 ZIP 上按右鍵選「全部解壓縮」，直接雙擊只是預覽，Obsidian 打不開；解壓縮後外面可能多一層同名資料夾，往裡面點一層。Mac 雙擊就會解開。3 回到 Obsidian，按「開啟資料夾為儲存庫」，選「三國人物知識庫」這一層，不要選外層的下載資料夾。
+2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：ZIP 解出來的資料夾沒有 .obsidian，打開時不會跳「信任作者」或限制模式的視窗，直接進到空白的「新分頁」，左邊就是六個資料夾和〈三國演義〉。Obsidian 會自己在裡面建一個 .obsidian 資料夾，不用管它。Windows 未實測。
 步驟也寫在 prompts.md 的〈練習 1〉：${PROMPTS_URL}`],
   [VaultCheck, `41:00–45:00
 這是講師電腦上的實際畫面。先看左邊：打開對的資料夾，左側會看到六個資料夾：人物、勢力、原文、整理、模板、關係，最下面是入口卡〈三國演義〉。看到這樣，練習 1 就完成了。
@@ -2741,28 +2762,33 @@ ${VAULT_ZIP_URL}
 最後一下：只搬一個檔，連結自己會接上。
 補充，給好奇的同學：如果有人第一堂另外讓 Codex 寫了自己的 劉備.md，這次先不要放進來。同一個筆記庫裡有兩張都叫劉備的卡，[[劉備]] 只會連到其中一張，另一張就沒人連得到。
 第一堂沒來、或大綱不見的人：點右上角的「三國演義大綱.md」，GitHub 頁面右上角有下載鈕（Download raw file），存下來再拖進 整理/。這份就是講師的範例大綱：${SAMPLE_OUTLINE_URL}
-另外：大綱每段最後的「出處：原文/第001回.txt」，在這座筆記庫裡也找得到。原文/ 已經放了第 1 到 21 回的全文，跟第一堂的檔案一樣，不用從第一堂的資料夾複製。原文是 .txt，Obsidian 預設不顯示 .txt，左邊的 原文/ 看起來是空的；要看原文，用 Finder（Windows 是檔案總管）打開 原文/，按右鍵用「文字編輯」（Windows 是「記事本」）打開。`],
+另外：大綱每段最後的「出處：原文/第001回.txt」，在這座筆記庫裡也找得到。原文/ 已經放了第 1 到 21 回的全文，跟第一堂的檔案一樣，不用從第一堂的資料夾複製。原文是 .txt，Obsidian 預設不顯示 .txt，左邊的 原文/ 看起來是空的；要看原文，用 Finder（Windows 是檔案總管）打開 原文/，按右鍵用「文字編輯」（Windows 是「記事本」）打開。
+2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：預設設定下，原文/ 展開是空的，24 個 .txt 都在，只是不顯示。到「設定 → 檔案與連結」打開「偵測所有的副檔名」，左邊就會列出第001回、第002回……旁邊標 TXT；點下去 Obsidian 不會在自己裡面打開，而是交給 Mac 的「文字編輯」。所以上課還是直接教 Finder 打開就好。Windows 未實測。`],
   [ClickLiubei, `50:00–52:30
-左邊是講師電腦上合併後的實際畫面：整理/三國演義大綱。標 1 是第 1 回裡的劉備，深紫色，代表找得到卡。
-按一下：點它，就打開右邊這張講師的人物卡 人物/劉備。
-最後一下：大綱和人物卡接上了。請大家自己點一次，點不過去的，檢查大綱是不是放在「三國人物知識庫」裡面，而不是旁邊。`],
+上面是合併後的實際畫面：整理/三國演義大綱，用的是 GitHub 上的範例大綱，2026-10-24 在 Obsidian 1.14.5 擷取。標 1 是第 1 回裡的劉備，深紫色，代表找得到卡。
+按一下：點它，就打開下面這張講師的人物卡 人物/劉備。
+最後一下：大綱和人物卡接上了。請大家自己點一次，點不過去的，檢查大綱是不是放在「三國人物知識庫」裡面，而不是旁邊。
+2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：把下載的範例大綱放進 整理/，不用重開 Obsidian，點第 1 回的劉備就打開 人物/劉備。`],
   [BacklinksReal, `52:30–54:30
-左邊是劉備卡右側的反向連結面板，實際畫面。先說清楚這裡的數字：它算的是「劉備被提到幾處」，不是卡片有幾張。大綱放進來之前，筆記庫裡有 17 處提到劉備，放進來之後會變幾處？
-按一下，標 1：「已連結本筆記的檔案」變成 41。按一下，標 2：其中 24 處來自三國演義大綱。
-大綱一放進來，劉備卡就自動多了 24 條反向連結，大綱裡寫到劉備的每一回都列在這裡，點了就跳回大綱那一段。你沒有改劉備卡，它自己變豐富了。`],
+左邊是劉備卡右側的反向連結面板，放進範例大綱後的實際畫面（2026-10-24 擷取，Obsidian 1.14.5）。先說清楚這裡的數字：它算的是「劉備被提到幾處」，不是卡片有幾張。大綱放進來之前，筆記庫裡有 17 處提到劉備，放進來之後會變幾處？
+按一下，標 1：「已連結本筆記的檔案」變成 36。按一下，標 2：其中 19 處來自三國演義大綱。
+大綱一放進來，劉備卡就自動多了 19 條反向連結，大綱裡寫到劉備的每一回都列在這裡，點了就跳回大綱那一段。你沒有改劉備卡，它自己變豐富了。
+2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：合併前 17 處、11 張卡；放進範例大綱後 36 處，來自大綱 19 處。學生用自己的大綱，數字本來就會不一樣。`],
   [GrayReal, `54:30–57:00
-練習 2 第二步，2 分鐘：在大綱裡找淡色連結。上面是講師電腦上大綱第 1 回的實際畫面。先問大家：哪些名字已經有卡？
-按一下，標 1：劉備是深紫色，代表筆記庫裡有 劉備.md，點了會打開。關羽、張飛、曹操也一樣。
-按一下，標 2：董卓是淡紫色，代表還沒有這張卡，點了 Obsidian 會幫你新增一張空白卡。同一行的張角、張寶、張梁也是淡的。
-按一下：講師這份大綱一共連了 74 個不同的名字，深紫的只有 4 個：劉備、關羽、張飛、曹操；淡紫的有 70 個。孫權在第 1 到 21 回還沒出場，所以大綱裡沒有他。
+練習 2 第二步，2 分鐘：在大綱裡找淡色連結。上面是範例大綱第 1 回的實際畫面（2026-10-24 擷取，Obsidian 1.14.5）。先問大家：哪些名字已經有卡？
+按一下，標 1：劉備是深紫色，代表筆記庫裡有 劉備.md，點了會打開。關羽、張飛、曹操也一樣；〈桃園結義〉是講師的關係卡，所以也是深紫。
+按一下，標 2：董卓是淡紫色，代表還沒有這張卡，點了 Obsidian 會幫你新增一張空白卡。第一行的張角也是淡的。
+按一下：範例大綱一共連了 46 個不同的名字，深紫的 6 個：劉備、關羽、張飛、曹操四個人，加上〈桃園結義〉〈煮酒論英雄〉兩張關係卡；淡紫的有 40 個，例如呂布、董卓、袁紹、陳宮、李傕、郭汜。孫權在第 1 到 21 回還沒出場，所以大綱裡沒有他。
+2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：數字是從 Obsidian 的連結紀錄數的。第 5 回的「溫酒斬華雄」在範例大綱裡是黑字，沒有連結。
 每個人的大綱數字會不一樣，請大家自己捲一捲。有些人會看到第 2、3 回的回目標題裡，人名也變成連結，那是第一堂舊版提示詞的小毛病，現在的提示詞已經改掉，不影響今天的練習。`],
   [GrayDecide, `57:00–61:00
 練習 2 第三步，5 分鐘：淡色連結要補卡，還是先留著。
-左邊是講師的大綱裡出現最多次、還沒有卡的人：呂布 32 次、董卓 15 次、袁術 11 次、李傕 9 次、郭汜和袁紹各 7 次。你的大綱數字會不一樣，所以先自己數。
+左邊是範例大綱裡出現最多次、還沒有卡的人：呂布 29 次、董卓 19 次，袁術、袁紹、李傕、孫堅各 6 次。你的大綱數字會不一樣，所以先自己數。
 按一下，1：按 Cmd+Shift+F（Windows 是 Ctrl+Shift+F）打開搜尋，輸入「呂布」，看「三國演義大綱」那一列有幾處。再搜一個你在大綱裡看到的淡色名字。
 按一下，2：常出現、而且原文夠寫一張卡的，記下來。判斷看兩件事：出現幾次，和原文有沒有足夠的段落寫出一張有根據的卡。呂布第 5 回三英戰呂布、第 19 回白門樓都有完整的故事，是好人選；今天先不寫，第三堂用 Skill 照原文補。
 按一下，3：只出現一兩次的，先留著。淡色連結不會壞，之後補卡就自動變深色。
-做完的標準：你說得出自己大綱裡呂布出現幾處，也替一個淡色名字決定好「補卡」或「先留著」。`],
+做完的標準：你說得出自己大綱裡呂布出現幾處，也替一個淡色名字決定好「補卡」或「先留著」。
+2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：Cmd+Shift+F 搜「呂布」，用 GitHub 上下載的範例大綱是「29 項結果」，只有「三國演義大綱」一個檔，連回目標題裡的呂布也算進去；講師的人物卡都沒寫到呂布，預設下原文 .txt 也不在搜尋結果裡。左邊其他人的次數也是在範例大綱裡數的，含回目標題。`],
   [Practice2Card, `61:00–70:00
 練習 2 最後一步，9 分鐘：自己寫一張關係卡。條件在上面三個框：定位，從大綱挑一回；期望輸出，照模板寫；限制，原文沒寫的不寫。至少連到兩位有卡的人物。步驟和可以挑的事件都在 prompts.md 的〈練習 2（寫卡）〉：${PROMPTS_URL}
 左邊是講師照模板寫的〈三英戰呂布〉，取材第 5 回，是 Obsidian 實際畫面的節選。模板在筆記庫的 模板/關係卡模板.md，一張卡至少要有這幾樣：最上面的「回目」（原文有寫年份才填「年份」）、用完整句子寫的內容、「參與人物」、最後一行「出處」。
@@ -2771,7 +2797,8 @@ ${VAULT_ZIP_URL}
 按一下，3：填上回目，例如 5；最後一行寫出處，例如「出處：原文/第005回.txt」。
 請挑範例以外的事件，不要寫三英戰呂布和白門樓：第三堂會請 Codex 新增這兩張關係卡，自己手寫的同名卡會撞名。可以挑：第 5 回〈溫酒斬華雄〉，連到關羽、曹操；第 16 回〈轅門射戟〉，連到劉備、關羽、張飛（原文「關、張隨往」，呂布寫純文字）；第 20 回〈許田打圍〉，連到曹操、劉備、關羽（原文第 20 回寫了曹操和天子在許田打獵，雲長想殺曹操，玄德搖頭制止）。
 不確定細節就查原文。原文是 .txt，Obsidian 預設不顯示，請用 Finder（Windows 是檔案總管）打開筆記庫的 原文/，那一回按右鍵，用「文字編輯」（Windows 是「記事本」）打開。
-寫完怎麼知道成功：打開你連到的人物卡，例如〈關羽〉，右邊的反向連結裡會出現你的新卡。你自己那張卡的反向連結是空的，這是正常的，因為還沒有別的檔連到它；練習 4 最後會把它連回大綱。`],
+寫完怎麼知道成功：打開你連到的人物卡，例如〈關羽〉，右邊的反向連結裡會出現你的新卡。你自己那張卡的反向連結是空的，這是正常的，因為還沒有別的檔連到它；練習 4 最後會把它連回大綱。
+2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：在「關係」按右鍵選「新增筆記」，會先出現「未命名」，標題已經選好，直接打「許田打圍」按 Enter 就改好名字。照模板寫完、連到曹操、劉備、關羽後，〈關羽〉的反向連結馬上多一列「許田打圍 2」；〈許田打圍〉自己的反向連結是 0，寫著「沒有反向連結。」。注意：新打開的筆記庫，右邊欄預設是收起來的，要按右上角的側欄按鈕打開，第一個分頁就是「反向連結」；或看右下角狀態列的「N 個反向連結」。`],
   [Section3, `70:00–70:30
 第三章是今天的重點：在筆記庫裡做 RAG。第一堂講過，Web Search 是 RAG，資料從網路來；今天資料從自己的筆記庫來。`],
   [RagIdea, `70:30–73:00
@@ -2861,9 +2888,9 @@ RAG 的限制一：筆記沒寫的，它找不到。上面是實跑的提示詞�
 按一下：顏色規則。綠線：原文有寫。橘色虛線加問號：原文沒寫，要回去查。今天剩下的頁面都照這個規則。
 最後一下：每條線都說得出出處。`],
   [GraphView, `99:00–100:00
-Obsidian 內建的 Graph View 叫「關聯圖」：按左側工具列的關聯圖圖示，或按 Ctrl+G（Mac 是 Cmd+G）。這是講師電腦上合併大綱後的實際畫面。
-按一下，標 1：中間的大圓是三國演義大綱，連出去最多線；右邊是那一塊放大的樣子。按一下，標 2：四周一圈淡色小點，就是剛才那 70 個還沒有卡的名字。按一下，標 3：右下一群深色點，是講師的人物、勢力、關係卡，彼此連得很密。
-大綱和講師的卡之間，只靠劉備、關羽、張飛、曹操這幾條線接著。等一下補連結，這兩群會接得更緊。`],
+Obsidian 內建的 Graph View 叫「關聯圖」：按左側工具列的關聯圖圖示，或按 Ctrl+G（Mac 是 Cmd+G）。這是用課堂發的筆記庫和大綱合併後的實際畫面，你的圖排法會不一樣，但三群點都看得到。
+按一下，標 1：中間的大圓是三國演義大綱，連出去最多線；右邊是那一塊放大的樣子。按一下，標 2：四周一圈淡色小點，就是剛才那 40 個還沒有卡的名字。按一下，標 3：右下一群深色點，是講師的人物、勢力、關係卡，彼此連得很密。
+大綱和講師的卡之間，只靠劉備、關羽、張飛、曹操、桃園結義、煮酒論英雄這六條線接著。等一下補連結，這兩群會接得更緊。`],
   [LocalGraph, `100:00–101:00
 圖譜中的一條線，專有名詞叫「邊」（Edge）。整張關聯圖太密，換個方式看：只看一條線。左邊是劉備的局部關聯圖，實際畫面放大；打開劉備卡，在右上角「⋯」選單或命令選擇器（Ctrl/Cmd+P）找「局部關聯圖」。橘色那條是講師加的標示，就是劉備到〈桃園結義〉的線。
 先問：這條線是哪來的？按一下：劉備卡裡有一句「三人越談越投合，隔天就在張飛莊後的桃園立誓，留下著名的 [[桃園結義]]」，框起來的就是那個連結。
@@ -2892,17 +2919,19 @@ Obsidian 內建的 Graph View 叫「關聯圖」：按左側工具列的關聯�
   [AddLinksBack, `111:00–115:00
 練習 4 最後一步：把你在練習 2 寫的關係卡，連回大綱。範例大綱第 5 回寫的是黑字「溫酒斬華雄」，所以大綱和〈溫酒斬華雄〉這張卡沒接上。上面是示意，照 Obsidian 的顏色畫：紫色是有卡的連結，淡紫是還沒有卡，框起來的是黑字。
 按一下：在大綱裡改成 [[溫酒斬華雄]]，換成你那張卡的名字，就變成紫色連結。寫〈轅門射戟〉的，第 16 回「呂布在轅門射戟」改成「呂布在[[轅門射戟]]」。寫〈許田打圍〉的，範例大綱第 20 回寫的是「許田打獵」，字不一樣，就在那一段最後加上「（[[許田打圍]]）」。用第一堂舊版提示詞寫的大綱，「煮酒論英雄」「桃園結義」可能也是黑字，一起補。
-最後一下：補上 [[ ]]，大綱就接到你的關係卡。打開你的關係卡，反向連結裡多了「三國演義大綱」；回去看關聯圖，大綱和講師那群卡之間也多了一條線。`],
+最後一下：補上 [[ ]]，大綱就接到你的關係卡。打開你的關係卡，反向連結裡多了「三國演義大綱」；回去看關聯圖，大綱和講師那群卡之間也多了一條線。
+2026-10-24 實測（Obsidian 1.10.3，Mac）：在範例大綱第 20 回那段最後加上「（[[許田打圍]]）」，〈許田打圍〉的反向連結就出現「三國演義大綱」。關聯圖那條線沒有另外實測。`],
   [Recap, `115:00–118:00
 回顧四件事。一，筆記庫就是一個資料夾，Obsidian 和 Codex 讀同一份。二，大綱放進整理資料夾，[[劉備]] 接上講師的人物卡，淡色連結先數次數，再決定補卡還是先留著。三，RAG：先查筆記再回答，要求附檔名，用三件事核對：檔案在嗎、原句在嗎、有沒有多寫。四，知識圖譜是點和線，每條線都要找得到原句，找不到就刪。
 最後一下：筆記寫得清楚、連得好，AI 才答得準。`],
   [NextSkills, `118:00–120:00
 下一堂講 Skill。Skill 就是一份寫好的做事說明，像食譜：照著做，每次的做法都一樣。
 第一步，把 Skill 裝進 Codex。
-按一下：第二步，用 Skill 做事。今天會預告兩個：diagram-design 畫關係圖，第一次用它會先問你要哪種樣式，選 1；eli5 把卡片改寫成好讀的版本。
+按一下：第二步，用 Skill 做事。今天會預告兩個：diagram-design 畫關係圖，第一次用它會先問你要哪種樣式，選「保留預設樣式」；eli5 把卡片改寫成好讀的版本。
 按一下：第三步，大家自己寫一個 Skill，用它把三國的事件排成時間軸。
-最後一下：同一座筆記庫，下一堂會多出圖和時間軸，今天的筆記庫請留著。
-課前請大家先註冊 GitHub 和 Vercel，第四堂發布網站要用，避免現場一起註冊卡在 email 驗證。`],
+按一下：同一座筆記庫，下一堂會多出圖和時間軸，今天的筆記庫請留著。
+最後一下：課前作業。安裝 Skill 會用到 git，請回家先打開終端機（Windows 是 PowerShell），輸入 git --version，看到 git version 2 開頭的版本號就可以了。沒有的話，Mac 輸入 xcode-select --install 並按「安裝」，要下載幾分鐘；Windows 到 https://git-scm.com/download/win 下載安裝，選項都用預設，裝完把 PowerShell 關掉重開再試一次。
+另外請先註冊 GitHub 和 Vercel，第四堂發布網站要用，避免現場一起註冊卡在 email 驗證。`],
   [ReferencesRag, `（課後自讀，上課不講。）
 第 3 章用到的論文。arXiv 編號可以直接打 arxiv.org/abs/編號 打開。
 RAG、附出處：

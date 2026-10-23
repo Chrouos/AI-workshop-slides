@@ -2071,7 +2071,7 @@ const FirstRun: Page = () => (
         <Steps>
           <FirstRunCard when="1｜登入" screen="Choose how you want to use Codex." pick="Sign in with ChatGPT" />
           <Step duration={STEP_MS}><FirstRunCard when="2｜信任資料夾" screen="Do you trust the contents of this directory?" pick="Yes, continue" /></Step>
-          <Step duration={STEP_MS}><FirstRunCard when="3｜寫檔前" screen="Would you like to make the following edits?" pick="Yes, proceed" /></Step>
+          <Step duration={STEP_MS}><FirstRunCard when="3｜改資料夾外的檔" screen="Would you like to make the following edits?" pick="Yes, proceed" /></Step>
         </Steps>
       </div>
       <Steps><Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}><StatusLine ok size={30}>登入成功：瀏覽器說已登入，終端機出現 Codex 輸入列</StatusLine></div></Step></Steps>
@@ -2508,13 +2508,13 @@ const OutlinePrompt: Page = () => (
               <rect x="714" y="230" width="100" height="12" fill={sage} />
             </FlowStation>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={360} label="你說可以，選 Yes, proceed，存成三國演義大綱.md">
+          <Step duration={STEP_MS}><Layer h={360} label="你說可以，它直接存成三國演義大綱.md">
             <MapArrow x1={904} x2={1002} y={200} hot />
             <FlowStation x={1120} label="你說「可以」">
               <rect x="1016" y="120" width="208" height="64" rx="32" fill={amberSoft} />
               <text x="1120" y="163" textAnchor="middle" fontSize="30" fill={ink}>可以，存檔</text>
               <rect x="1016" y="206" width="208" height="60" fill={sage} stroke={okGreen} strokeWidth="2" />
-              <text x="1120" y="246" textAnchor="middle" fontSize="25" fontFamily={mono} fontWeight="700" fill={ink}>Yes, proceed</text>
+              <text x="1120" y="246" textAnchor="middle" fontSize="28" fontWeight="700" fill={ink}>直接存檔</text>
             </FlowStation>
             <MapArrow x1={1238} x2={1336} y={200} hot />
             <FlowStation x={1470} label="三國演義大綱.md">
@@ -3344,7 +3344,8 @@ ChatGPT 是對話框：你問一句，它回一段話，適合發想、請它解
 第四步：輸入 codex。第一次打開會看到三個英文畫面（畫面為示意，文字是 Codex 0.154 的原文）。
 第一個是登入，選 Sign in with ChatGPT，會開瀏覽器讓你登入。Plus、Pro、Business、Enterprise 方案含 Codex 用量；其他方案請看最後的附錄備案。
 按一下：第二個問你信不信任這個資料夾，確認是你要的資料夾，選 Yes, continue。
-按一下：第三個是它要做事之前問你。先看它要做什麼，再選 Yes, proceed。權限是 Workspace 時，改這個資料夾裡的檔案通常不會問，直接就寫好了；沒有跳出確認畫面也是正常的。
+按一下：第三個是它要改資料夾外面的檔案時問你。先看它要改哪個檔，再選 Yes, proceed。權限是 Workspace 時，改這個資料夾裡的檔案不會問，直接就寫好了；今天的練習都在資料夾裡，多半看不到這個畫面。
+2026-10-24 實測（Codex 0.154.0 互動介面，Mac）：在全新的資料夾打 codex，帳號已登入，所以沒看到登入畫面。先跳出「✨ Update available!」，選項是 1. Update now、2. Skip、3. Skip until next version，這是有新版才會出現，上課選 2. Skip 就好；接著是信任畫面，原文「Do you trust the contents of this directory?」，選項 1. Yes, continue、2. No, quit。寫 AGENTS.md 和三國演義大綱.md 都沒有跳確認畫面，直接寫好；請它在上一層資料夾建檔，才跳出「Would you like to make the following edits?」，選項是 1. Yes, proceed (y)、2. Yes, and don't ask again for these files (a)、3. No, and tell Codex what to do differently (esc)。
 最後一下：登入成功的樣子：瀏覽器顯示已經登入，可以關掉；回到終端機，看到 Codex 的輸入列（› 後面可以打字）。`],
   [Section4, `73:00–73:30。
 第四章：看懂 Codex。四個東西：啟動畫面、Session、/status、Memory。`],
@@ -3361,6 +3362,7 @@ Session 是一次工作階段，像一張工作桌。你交代的任務、它讀
 這頁我示範，大家先看就好；練習 2-1 進到練習資料夾以後，再自己打一次。在 Codex 輸入 /status，畫面上的欄位很多，今天只看一行。
 按一下：Directory，它在哪個資料夾工作。結尾要是你的練習資料夾，例如 aw-01-lab。它讀檔、存檔都在這裡，資料夾錯了，後面全部白做。
 按一下：其他欄位先知道就好：Model 是用哪個模型；Permissions 是能不能改你的檔案，Workspace 代表它能直接改這個資料夾裡的檔案，要動到資料夾外面才會先問你（依 Codex 文件）；Session 是這張工作桌的編號。最下面兩行是額度，下一頁講。
+2026-10-24 實測（Codex 0.154.0 互動介面，Mac）：/status 由上到下是 Model、Model provider、Directory、Permissions、Agents.md、Account、Collaboration mode、Session，最下面是 5h limit 和 Weekly limit 兩行。預設設定下 Permissions 顯示「Workspace (Ask for approval)」；還沒有 AGENTS.md 時，Agents.md 那行是 <none>。講師自己的電腦改過設定，會顯示「Workspace (Approve for me)」，不要照講師的抄。Account 那行會露出 email，投影時注意。
 最後一下：動手前，先看 Directory 對不對。練習 2 第一件事就是做這個。`],
   [UsageToken, `81:00–84:00。
 兩個容易混的詞，像手機方案：月租額度，和你用掉的流量。
@@ -3397,7 +3399,8 @@ AGENTS.md 長什麼樣子？它就放在練習資料夾最上層，內容是幾�
 規則最後那句「最後一行寫出處」是故意加的：它憑記憶答題不會寫這行，所以看得出新的 Session 有沒有讀到規則。
 按一下：輸入 /new，換一張新桌子，再問「劉備第一次出場在第幾回？」。最後一行是「出處：原文/第001回.txt」這種格式，就代表新的 Session 讀了規則。
 按一下：對照題，問「諸葛亮第一次出場在第幾回？」。前 21 回他還沒出場，只有第 9 回一首詩提到「諸葛隆中臥」。照規則，它要說原文/ 裡找不到，不能憑記憶報回數。
-講師實測（2026-10-24，codex exec，gpt-5.6-luna）：有 AGENTS.md 時，劉備那題答「第一回」，最後一行是「出處：原文/第001回.txt」；諸葛亮那題答「原文/裡找不到諸葛亮第一次出場的回數；僅在第九回詩句中提到『諸葛隆中臥』」。同一個資料夾拿掉 AGENTS.md 再問，它直接答「第三十七回」。
+2026-10-24 實測（Codex 0.154.0 互動介面，Mac，gpt-5.6-luna）：貼上規則後沒有跳確認畫面，畫面直接出現「Added AGENTS.md (+5 -0)」。輸入 /new 後問劉備，答「劉備第一次出場在第一回，文中以「姓劉，名備，字玄德」介紹。」，最後一行「出處：原文/第001回.txt」；再問諸葛亮，答「原文／裡找不到諸葛亮正式出場；只在第九回詩句中提到「諸葛隆中臥」。」，最後一行「出處：原文/第009回.txt」。找不到也照樣附出處，是規則寫了「每次回答」的關係。
+另外用 codex exec 試過（同一天）：同一個資料夾拿掉 AGENTS.md 再問諸葛亮，它直接答「第三十七回」。
 如果沒生效，打 /quit 關掉，再打 codex 重開一次。`],
   [OutlinePrompt, `101:00–106:00（練習 5 分鐘，Codex 跑約 1 分半）。
 練習 2-3，今天的主菜。從 prompts.md 複製完整提示詞：
@@ -3416,7 +3419,8 @@ AGENTS.md 長什麼樣子？它就放在練習資料夾最上層，內容是幾�
 
 流程：Codex 先讀完 21 個檔。
 按一下：它會先把草稿給你看。
-按一下：你回「可以，存檔」。有跳出確認畫面就選 Yes, proceed；沒跳出，就是它直接寫好了。資料夾裡會多一個三國演義大綱.md。
+按一下：你回「可以，存檔」，它就直接寫進資料夾，不會再跳確認畫面。資料夾裡會多一個三國演義大綱.md。
+2026-10-24 實測（Codex 0.154.0 互動介面，Mac，gpt-5.6-luna）：它讀完 21 回，先把 21 段草稿貼在畫面上，最後一句是「如果內容可以，請回覆「可以」，我再建立 三國演義大綱.md。」，這時資料夾裡還沒有檔案。回「可以」之後，畫面出現「Added 三國演義大綱.md (+125 -0)」，沒有跳確認畫面；檔案 21 段，標題沒有連結。這次草稿裡的人名沒加 [[ ]]，存進檔案時才加上，所以看草稿時不用急著糾正，存好後打開檔案看就好。
 按一下：完成的樣子：資料夾裡出現三國演義大綱.md，打開看每段最後都有出處。
 按一下：最低完成：時間不夠的話，先把提示詞裡的「第 1 回到第 21 回」改成「第 1 回到第 2 回」，做出兩段並附出處；做完再請它擴到 21 回。
 講師實測大約 1 分 38 秒寫完，這只是讓大家知道要等多久，快慢和寫得好不好無關。等的時候可以看它讀了哪些檔。

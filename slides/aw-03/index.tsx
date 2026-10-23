@@ -2095,7 +2095,7 @@ const SaveSkill: Page = () => (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12, background: sage, border: `2px solid ${okGreen}`, padding: '10px 22px', fontSize: 30 }}><Icon kind="ok" size={36} color={okGreen} />看到 <Path size={30}>sanguo-timeline</Path></span>
           </div>
         </div></Step>
-        <Step duration={STEP_MS}><Takeaway marginTop={26}>放好後重開 Codex，它才看得到</Takeaway></Step>
+        <Step duration={STEP_MS}><Takeaway marginTop={26}>清單看到 sanguo-timeline，才算放好</Takeaway></Step>
       </Steps>
     </Fit>
   </Shell>
@@ -2603,6 +2603,7 @@ git 裝不起來的同學：eli5 是 MIT 授權，講師在 examples/aw-03-lab/e
 然後打 codex，貼上 prompts.md 練習 1-4 這句：列出你現在可以使用的 skills 名稱，每個一行，附一句用途。不要讀或修改任何檔案。
 按一下：這是講師電腦的實際輸出，中間省略了一些。找兩行：diagram-design:diagram-design 和 eli5。外掛裡的 Skill，名稱前面會多一段外掛名，冒號前是外掛、冒號後是 Skill。
 按一下：兩個都在，就裝好了。講師電腦裝了比較多 Skill，你的清單會短一點，這是正常的。
+2026-10-24 實測（Codex 0.154.0 互動介面，Mac，gpt-5.6-luna）：在筆記庫的複本打 codex，先跳出信任畫面（Yes, continue），再貼這句。清單裡有 eli5，但 diagram-design 這次只寫成「diagram-design」，沒有前面那段外掛名。兩種寫法都算有裝好。
 最後一下：清單只證明裝好了；能不能真的用，下一章實際跑一次才知道。剩下的時間，幫旁邊的同學確認。`],
   [Section3, `50:00–50:15。第三章：用 Skill 做好讀的筆記。兩個練習：用 diagram-design 把關係卡畫成圖，用 eli5 把劉備卡改成國中生版。做完都要回卡片核對。`],
   [DiagramRun, `50:15–55:00。練習 2 共 20 分鐘。Codex 還開在筆記庫裡，直接貼上 prompts.md 練習 2-1，跟畫面上這段一樣。
@@ -2677,7 +2678,8 @@ name 只能用小寫英文、數字和連字號，所以叫 sanguo-timeline，�
 為什麼不自己存檔？Skill 要放在筆記庫的 .agents/skills/ 裡。.agents 開頭有一個點，是隱藏資料夾：Mac 的 Finder 不讓你建點開頭的資料夾，Obsidian 也看不到它。交給 Codex 建，最不容易出錯。
 按一下：第二步，它會建出 三國人物知識庫/.agents/skills/sanguo-timeline/SKILL.md。資料夾名稱要和 SKILL.md 裡的 name 一樣，都叫 sanguo-timeline。講師 10-24 實測，Codex 照抄建好了，只在最後一行多加了一個句號，不影響。
 按一下：第三步，重開後確認：在 Codex 裡打 /quit，再打 codex，問「列出你現在可以使用的 skills…」，清單裡看到 sanguo-timeline 就對了。沒看到，先輸入 /status，確認 Directory 的結尾是三國人物知識庫。另外也可以放在個人的 ~/.agents/skills/，所有專案都能用，eli5 就裝在那裡；今天用筆記庫的位置。
-最後一下：放好後重開 Codex，它才看得到。`],
+2026-10-24 實測（Codex 0.154.0 互動介面，Mac，gpt-5.6-luna）：在同一個 Session 建好 SKILL.md 後，不重開直接問清單，sanguo-timeline 已經在裡面；接著說「請使用 sanguo-timeline skill，排出三國時間軸。」，它也讀了 SKILL.md、寫出 整理/時間軸.md。/quit 重開後再問，一樣看得到。所以重開不是必要的，我們還是請大家重開，因為新的 Session 比較乾淨，也順便確認下次打開 Codex 還找得到。
+最後一下：清單裡看到 sanguo-timeline，才算放好。`],
   [RunTimeline, `92:00–95:00。練習 4 共 20 分鐘，先跑第一次。步驟：Codex 剛建好 SKILL.md；輸入 /quit，再打 codex 重開；貼上 prompts.md 練習 4-2：「請使用 sanguo-timeline skill，排出三國時間軸。」；寫檔前如果問 Yes，看過再按；最後在 Obsidian 打開 整理/時間軸.md。
 按一下：這是講師實測的紀錄。Codex 說「我會使用 sanguo-timeline skill」，接著用 sed 讀進我們寫的 SKILL.md，這次讀的是筆記庫裡的 .agents/skills；最後回報「依回目由小到大排列，共 6 張關係卡」。你第二堂自己寫過關係卡的話，會多幾列，正常。
 提醒：講師第一次是在補卡之前跑的，只排出 3 列；所以練習 3 要先做完。`],
