@@ -274,6 +274,31 @@ mkdir -Force $HOME\.agents\skills\eli5; curl.exe -L -o $HOME\.agents\skills\eli5
 - `範例/關係/` 的三張卡：練習 3 沒做出來，把這三個檔案拖進筆記庫的 `關係/`（拖檔案，不要拖整個資料夾，Mac 會問要不要取代，按下去舊卡就不見了）。
 - `範例/整理/劉備-國中生版.md`：練習 2-3 的 eli5 改寫。
 - `範例/整理/時間軸.md`、`範例/整理/時間軸-劉備.md`：練習 4 補過規則後的結果。
-- `範例/sanguo-timeline-修好版/SKILL.md`：加過兩條規則和第 4 步的 SKILL.md。
+- `範例/sanguo-timeline-修好版/SKILL.md`：加過兩條規則和第 4 步的 SKILL.md。它要放進 `.agents/` 這個隱藏資料夾，拖不進去，請 Codex 寫。整段貼上：
+
+```text
+把 .agents/skills/sanguo-timeline/SKILL.md 的內容整個換成下面這段，一字不改；資料夾沒有就建立。只改這個檔，不要改其他檔案。
+
+---
+name: sanguo-timeline
+description: 把三國筆記庫的卡片依回目排成時間軸。使用者說「三國時間軸」「排時間軸」時使用。
+---
+# 三國時間軸
+
+## 步驟
+1. 讀 關係/ 每張卡的 回目、年份、參與人物
+2. 依回目由小到大排；沒有回目的卡，最後列出來
+3. 寫入 整理/時間軸.md
+4. 使用者指定人物時，只留下參與人物有他的事件
+
+## 輸出格式
+- 一段 HTML，每件事一列：回目、年份、事件、人物
+- HTML 裡的人名用純文字，不加 [[ ]]
+- 表格下方列出每一列的來源卡。
+- 年份照卡片抄，卡片沒寫就留空白，不要寫「未標註」或「—」
+- 來源卡只寫檔名純文字，不做連結，不用 <a href>，也不用 [[ ]]
+```
+
+寫好後輸入 `/quit`，再打 `codex` 重開，Skill 才會換成新版。
 
 第二堂缺課、沒有筆記庫的人：下載講師的筆記庫 https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-vault/%E4%B8%89%E5%9C%8B%E4%BA%BA%E7%89%A9%E7%9F%A5%E8%AD%98%E5%BA%AB.zip ，解壓縮後用 Obsidian 打開，就能從練習 1 開始做。
