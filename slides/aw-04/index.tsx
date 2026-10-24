@@ -181,9 +181,9 @@ const PROMPTS_URL = 'https://github.com/Chrouos/AI-workshop-slides/blob/main/exa
 const LAB_URL = 'https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-lab/README.md';
 
 // Top-right on a practice page: where to copy this practice's steps and prompts.
-const PromptsCopy = ({ step }: { step: string }) => (
+const PromptsCopy = ({ step, section }: { step?: string; section?: string }) => (
   <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', top: 176, right: 144, display: 'flex', alignItems: 'center', gap: 18, color: muted, textDecoration: 'none' }}>
-    <span style={{ textAlign: 'right', fontSize: 24, lineHeight: 1.4 }}>複製步驟和網址<br /><strong style={{ color: amber, fontFamily: mono }}>prompts.md</strong> 練習 {step}</span>
+    <span style={{ textAlign: 'right', fontSize: 24, lineHeight: 1.4 }}>複製步驟和網址<br /><strong style={{ color: amber, fontFamily: mono }}>prompts.md</strong> {section ?? `練習 ${step}`}</span>
     <img src={promptsQr} alt="prompts.md 的 QR code" style={{ width: 120, height: 120, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 5 }} />
   </a>
 );
@@ -441,8 +441,8 @@ const BrowserFrame = ({ x, y, w, h, url }: { x: number; y: number; w: number; h:
     <rect x={x} y={y} width={w} height={h} fill="#FFFFFF" stroke={rule} strokeWidth="2" />
     <rect x={x} y={y} width={w} height="52" fill="#ECEAE8" />
     <circle cx={x + 26} cy={y + 26} r="7" fill="#D87771" /><circle cx={x + 48} cy={y + 26} r="7" fill="#E4BB62" /><circle cx={x + 70} cy={y + 26} r="7" fill="#81B984" />
-    <rect x={x + 96} y={y + 10} width={w - 120} height="32" rx="16" fill="#FFFFFF" />
-    <text x={x + 116} y={y + 34} fontSize="22" fontFamily={mono} fill={muted}>{url}</text>
+    <rect x={x + 88} y={y + 8} width={w - 96} height="36" rx="18" fill="#FFFFFF" />
+    <text x={x + 102} y={y + 34.5} fontSize="24" fontFamily={mono} fill={muted}>{url}</text>
   </g>
 );
 
@@ -496,7 +496,7 @@ const LessonStop = ({ x, n, kind, name, file, hot = false }: { x: number; n: num
 const LessonRecap: Page = () => (
   <Shell>
     <Eyebrow>回顧</Eyebrow>
-    <Heading>前三堂做出的東西</Heading>
+    <Heading>課程回顧：前三堂成果</Heading>
     <Fit>
       <Stage h={390}>
         <Steps>
@@ -595,10 +595,10 @@ const Agenda: Page = () => (
         <span /><SmallLabel>章節</SmallLabel><SmallLabel>結束時你會</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
       </div>
       <AgendaRow i={0} n={1} kind="globe" result="說得出網址怎麼來" time="10–30 分" page={Section1} />
-      <AgendaRow i={1} n={2} kind="repo" result="有一個 vercel.app 網址" time="30–50 分" page={Section2} />
-      <AgendaRow i={2} n={3} kind="key" result="外掛連上 GitHub" time="50–68 分" page={Section3} />
-      <AgendaRow i={3} n={4} kind="timeline" result="時間軸卡上網站" time="68–95 分" page={Section4} />
-      <AgendaRow i={4} n={5} kind="user" result="同學走得到你的卡" time="95–120 分" page={Section5} />
+      <AgendaRow i={1} n={2} kind="repo" result="網址驗收過關" time="30–40 分" page={Section2} />
+      <AgendaRow i={2} n={3} kind="key" result="外掛連上 GitHub" time="40–63 分" page={Section3} />
+      <AgendaRow i={3} n={4} kind="timeline" result="時間軸卡上網站" time="63–93 分" page={Section4} />
+      <AgendaRow i={4} n={5} kind="user" result="同學走得到你的卡" time="93–120 分" page={Section5} />
     </Fit>
   </Shell>
 );
@@ -729,7 +729,7 @@ const ThreePlaces: Page = () => (
           </Layer>
           <Step duration={STEP_MS}><Layer h={440} label="GitHub：網站的 repo，存勾選的卡和網站程式">
             <MapArrow x1={506} x2={562} y={220} hot draw />
-            <text x="534" y="196" textAnchor="middle" fontSize="22" fontWeight="600" fill={link}>按發布</text>
+            <text x="534" y="194" textAnchor="middle" fontSize="24" fontWeight="600" fill={link}>按發布</text>
             <Build><PlacePanel x={566} kind="repo" kicker="倉庫" name="GitHub" foot="勾選的卡＋網站程式" tint={surface} stroke={faint}>
               <text x="596" y="160" fontSize="27" fontFamily={mono} fill={ink}>my-garden/</text>
               <text x="620" y="208" fontSize="25" fontFamily={mono} fill={muted}>src/site/notes/</text>
@@ -740,7 +740,7 @@ const ThreePlaces: Page = () => (
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={440} label="Vercel：做好的網頁和網址，所有人都看得到">
             <MapArrow x1={1072} x2={1128} y={220} hot draw />
-            <text x="1100" y="196" textAnchor="middle" fontSize="22" fontWeight="600" fill={okGreen}>自動</text>
+            <text x="1100" y="194" textAnchor="middle" fontSize="24" fontWeight="600" fill={okGreen}>自動</text>
             <Build><PlacePanel x={1132} kind="globe" kicker="店面" name="Vercel" foot="做好的網頁，誰都看得到" tint={sage} stroke={okGreen}>
               <BrowserFrame x={1160} y={128} w={444} h={232} url="….vercel.app" />
               <text x="1186" y="226" fontSize="32" fontWeight="600" fill={ink}>劉備</text>
@@ -835,7 +835,7 @@ const LaneBox = ({ x, y, kind, label, tone }: { x: number; y: number; kind: Icon
 
 const CiCd: Page = () => (
   <Shell chapter={1} source={'Fowler 2024, Continuous Integration martinfowler.com/articles/continuousIntegration.html'}>
-    <Eyebrow>CI/CD＝持續整合／持續部署</Eyebrow>
+    <Eyebrow>自動化部署</Eyebrow>
     <Heading>持續整合與持續部署（CI/CD）</Heading>
     <Lead>按發布後，自動建置並更新網站</Lead>
     <Fit>
@@ -917,7 +917,7 @@ const UpdateTimeline: Page = () => (
 
 const BuildStep: Page = () => (
   <Shell chapter={1} source={'Digital Garden 模板 github.com/oleeskild/digitalgarden；Eleventy 文件 11ty.dev/docs'}>
-    <Eyebrow>建置（Build）</Eyebrow>
+    <Eyebrow>原始檔 → 網頁</Eyebrow>
     <Heading>靜態網站建置（Build）</Heading>
     <Lead>把 Markdown 筆記轉成瀏覽器能讀的網頁</Lead>
     <Fit>
@@ -1006,42 +1006,63 @@ const PublishFilter: Page = () => (
 
 // ---------- 02 建立網站 ----------
 
-const Section2: Page = () => <SectionPage chapter={2} label="02 / 部署" lead="用模板在 GitHub 建 repo，交給 Vercel 上架" />;
+const Section2: Page = () => <SectionPage chapter={2} label="02 / 部署" lead="驗收課前作業：網站已經在 Vercel 上線" />;
+
+// An outline over the picture that marks the spot a checklist line talks about. It is
+// positioned against the nearest `position: relative` box around the <Steps>.
+const Spot = ({ box }: { box: [number, number, number, number] }) => (
+  <div style={{ position: 'absolute', left: box[0], top: box[1], width: box[2], height: box[3], border: '4px solid #E9B650', boxSizing: 'border-box' }} />
+);
 
 const GitHubAccount: Page = () => (
   <Shell chapter={2} source={'GitHub Docs docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github'}>
-    <Eyebrow>回顧上週作業</Eyebrow>
-    <Heading>課前作業：GitHub 帳號</Heading>
+    <Eyebrow>回顧上週作業｜畫面示意</Eyebrow>
+    <Heading>課前作業：GitHub 與 Vercel</Heading>
     <Fit>
-      <div style={{ display: 'grid', gridTemplateColumns: '720px 1fr', gap: 72, alignItems: 'center' }}>
+      <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '720px 1fr', gap: 72, alignItems: 'start' }}>
         <In i={0}>
-          <Figure w={720} h={440} label="GitHub 個人頁示意：大頭貼、帳號名稱、Repositories">
-            <rect x="0" y="0" width="720" height="436" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
-            <rect x="0" y="0" width="720" height="56" fill="#24292F" />
-            <text x="26" y="37" fontSize="24" fontFamily={mono} fill="#FFFFFF">github.com/你的帳號</text>
-            <circle cx="150" cy="200" r="86" fill={surface} stroke={rule} strokeWidth="2" />
-            <SvgIcon kind="user" x={150} y={200} size={110} color={faint} />
-            <text x="280" y="188" fontSize="42" fontWeight="600" fill={ink}>你的帳號</text>
-            <text x="280" y="232" fontSize="25" fill={quiet}>Username</text>
-            <line x1="40" y1="318" x2="680" y2="318" stroke={rule} strokeWidth="2" />
-            <text x="40" y="372" fontSize="27" fill={ink}>Repositories</text>
-            <SvgChip x={232} y={344} w={60} h={40} label="0" size={24} fill={raised} />
+          <Figure w={720} h={440} label="GitHub 個人頁示意：帳號名稱、課前建好的 my-garden、token 頁；下面是 Vercel 的 Continue with GitHub 登入">
+            <rect x="0" y="0" width="720" height="256" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+            <rect x="0" y="0" width="720" height="52" fill="#24292F" />
+            <text x="24" y="35" fontSize="24" fontFamily={mono} fill="#FFFFFF">github.com/你的帳號</text>
+            <circle cx="88" cy="132" r="54" fill={surface} stroke={rule} strokeWidth="2" />
+            <SvgIcon kind="user" x={88} y={132} size={70} color={faint} />
+            <text x="172" y="130" fontSize="40" fontWeight="600" fill={ink}>你的帳號</text>
+            <text x="172" y="168" fontSize="24" fill={quiet}>Username</text>
+            <text x="456" y="102" fontSize="24" fill={quiet}>Repositories</text>
+            <SvgIcon kind="repo" x={474} y={140} size={34} color={muted} />
+            <text x="500" y="150" fontSize="26" fontFamily={mono} fill={ink}>my-garden</text>
+            <line x1="24" y1="198" x2="696" y2="198" stroke={rule} strokeWidth="2" />
+            <SvgIcon kind="key" x={46} y={228} size={34} color={amber} />
+            <text x="76" y="237" fontSize="25" fill={ink}>token 頁：會再要你輸入密碼</text>
+            <rect x="0" y="284" width="720" height="156" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+            <rect x="0" y="284" width="720" height="48" fill="#111111" />
+            <text x="24" y="317" fontSize="24" fill="#FFFFFF">▲ Vercel｜Log in</text>
+            <rect x="32" y="354" width="400" height="62" rx="8" fill="#24292F" />
+            <text x="232" y="394" textAnchor="middle" fontSize="26" fontWeight="600" fill="#FFFFFF">Continue with GitHub</text>
+            <text x="456" y="394" fontSize="25" fill={muted}>不用另記密碼</text>
           </Figure>
-          <Caption>示意圖</Caption>
         </In>
-        <div>
+        <div style={{ paddingTop: 8 }}>
           <Steps>
-            <div style={{ fontSize: 34, fontWeight: 600, marginBottom: 30 }}>上週作業完成了嗎？</div>
-            <Step duration={STEP_MS}><div style={{ marginBottom: 22 }}><StatusLine ok size={32}>點過驗證信</StatusLine></div></Step>
-            <Step duration={STEP_MS}><div style={{ marginBottom: 22 }}><StatusLine ok size={32}>登得進 github.com</StatusLine></div></Step>
-            <Step duration={STEP_MS}><div style={{ marginBottom: 22 }}><StatusLine ok size={32}>記下 Username</StatusLine></div></Step>
-            <Step duration={STEP_MS}><div style={{ marginBottom: 22 }}><StatusLine ok size={32}>打得開 token 頁（會再問密碼）</StatusLine></div></Step>
-            <Step duration={STEP_MS}><div><StatusLine ok size={32}>Vercel 用 GitHub 登入</StatusLine></div></Step>
+            <div style={{ fontSize: 34, fontWeight: 600, marginBottom: 34 }}>上週作業完成了嗎？</div>
+            <Step duration={STEP_MS}><>
+              <div style={{ marginBottom: 28 }}><StatusLine ok size={32}>登得進 GitHub，記下 Username</StatusLine></div>
+              <Spot box={[158, 86, 268, 98]} />
+            </></Step>
+            <Step duration={STEP_MS}><>
+              <div style={{ marginBottom: 28 }}><StatusLine ok size={32}>打得開 token 頁（會再問密碼）</StatusLine></div>
+              <Spot box={[16, 204, 400, 50]} />
+            </></Step>
+            <Step duration={STEP_MS}><>
+              <div><StatusLine ok size={32}>Vercel 用 GitHub 登入</StatusLine></div>
+              <Spot box={[24, 346, 416, 78]} />
+            </></Step>
           </Steps>
         </div>
       </div>
       <Steps><Step duration={STEP_MS}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 48, fontSize: 26, whiteSpace: 'nowrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 44, fontSize: 26, whiteSpace: 'nowrap' }}>
           <span style={{ fontWeight: 600, color: amber }}>還沒註冊：</span>
           <CatchChip>github.com 註冊，約 5 分</CatchChip><span style={{ color: faint }}>→</span>
           <CatchChip>收驗證信</CatchChip><span style={{ color: faint }}>→</span>
@@ -1131,7 +1152,7 @@ const WizardPane = ({ x, w, n, title, children }: { x: number; w: number; n: num
 
 const DeploySite: Page = () => (
   <Shell chapter={2} source={'Digital Garden 入門（Deploy to Vercel）docs.forestry.md/getting-started/01-getting-started'}>
-    <Eyebrow>官方入門頁＋Vercel｜畫面示意</Eyebrow>
+    <Eyebrow>回顧課前作業｜畫面示意</Eyebrow>
     <Heading>用模板部署網站</Heading>
     <Fit>
       <Stage h={440}>
@@ -1188,29 +1209,27 @@ const FlowArrow = ({ i }: { i: number }) => <In i={i} style={{ color: faint, fon
 
 const Practice1: Page = () => (
   <Shell chapter={2} source={'Digital Garden 入門（Deploy to Vercel）docs.forestry.md/getting-started/01-getting-started'}>
-    <PracticeEyebrow time="13 分鐘">練習 1｜部署</PracticeEyebrow>
-    <Heading>練習（部署）：建立自己的網站</Heading>
-    <PromptsCopy step="1" />
+    <PracticeEyebrow time="3 分鐘">練習 1｜驗收課前作業</PracticeEyebrow>
+    <Heading>練習（驗收）：打開自己的網站</Heading>
+    <PromptsCopy section="課前作業" />
     <PillRow>
-      <Pill tag="定位">官方模板</Pill>
-      <Pill tag="期望輸出">打得開的網站</Pill>
-      <Pill tag="限制">卡 5 分鐘就舉手</Pill>
+      <Pill tag="定位">課前部署的網站</Pill>
+      <Pill tag="期望輸出">打得開模板首頁</Pill>
+      <Pill tag="限制">沒做就兩人一組</Pill>
     </PillRow>
     <Fit>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 16 }}>
-        <FlowStep i={1} n={1} w={330} kind="user" label="登入兩個帳號" sub="GitHub、Vercel" />
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 24 }}>
+        <FlowStep i={1} n={1} w={420} kind="globe" label="打開你的網址" sub="課前抄下的 vercel.app" />
         <FlowArrow i={2} />
-        <FlowStep i={3} n={2} w={330} kind="upload" label="按 Deploy" sub="Deploy to Vercel" />
+        <FlowStep i={3} n={2} w={420} kind="browser" label="看到模板首頁" sub="不是錯誤頁" />
         <FlowArrow i={4} />
-        <FlowStep i={5} n={3} w={330} kind="repo" label="取名 my-garden" sub="按 Create" />
-        <FlowArrow i={6} />
-        <FlowStep i={7} n={4} w={330} kind="globe" label="打開網址" sub="看到模板首頁" />
+        <FlowStep i={5} n={3} w={420} kind="repo" label="記下 repo 名稱" sub="例 my-garden，第三章要填" />
       </div>
       <Steps>
         <Step duration={STEP_MS}>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 40, marginTop: 56 }}>
-            <div style={{ background: sage, padding: '16px 30px' }}><StatusLine ok size={32}>網址打得開模板首頁：完成</StatusLine></div>
-            <div style={{ background: warnSoft, padding: '16px 30px' }}><StatusLine ok={false} size={32}>只拿到網址，還不算</StatusLine></div>
+            <div style={{ background: sage, padding: '16px 30px' }}><StatusLine ok size={32}>打得開模板首頁：過關</StatusLine></div>
+            <div style={{ background: warnSoft, padding: '16px 30px' }}><StatusLine ok={false} size={32}>沒做或打不開：兩人一組補</StatusLine></div>
           </div>
         </Step>
       </Steps>
@@ -1283,7 +1302,7 @@ const InstallPlugin: Page = () => (
       <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1000px 1fr', gap: 48 }}>
         <In i={0} style={{ height: 470, border: `1px solid ${rule}`, background: '#FFFFFF', display: 'grid', gridTemplateColumns: '300px 1fr', boxShadow: '0 10px 30px rgba(28,25,23,0.08)' }}>
           <div style={{ background: surface, borderRight: `1px solid ${rule}`, paddingTop: 18 }}>
-            <div style={{ padding: '0 22px 10px', fontSize: 22, color: quiet }}>設定</div>
+            <div style={{ padding: '0 22px 10px', fontSize: 24, color: quiet }}>設定</div>
             <SetRow>一般</SetRow><SetRow>編輯器</SetRow><SetRow>檔案與連結</SetRow><SetRow>外觀</SetRow><SetRow>快捷鍵</SetRow><SetRow>核心外掛程式</SetRow><SetRow hot>第三方外掛程式</SetRow>
           </div>
           <div style={{ padding: '28px 34px', display: 'grid', alignContent: 'start', gap: 24 }}>
@@ -1300,9 +1319,9 @@ const InstallPlugin: Page = () => (
         </In>
         <div style={{ display: 'grid', alignContent: 'start', gap: 34, paddingTop: 10 }}>
           <Steps>
-            <Step duration={STEP_MS}><TourStep n={1} title="第三方外掛" box={[4, 374, 296, 56]} badge="right" /></Step>
-            <Step duration={STEP_MS}><TourStep n={2} title="按「瀏覽」" box={[860, 92, 132, 60]} badge="right" /></Step>
-            <Step duration={STEP_MS}><TourStep n={3} title="安裝、啟用" detail="作者 Ole Eskild Steensen" box={[316, 200, 668, 170]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={1} title="第三方外掛" box={[2, 383, 298, 58]} badge="right" /></Step>
+            <Step duration={STEP_MS}><TourStep n={2} title="按「瀏覽」" box={[866, 100, 105, 66]} badge="right" /></Step>
+            <Step duration={STEP_MS}><TourStep n={3} title="安裝、啟用" detail="作者 Ole Eskild Steensen" box={[328, 178, 643, 176]} /></Step>
           </Steps>
         </div>
       </div>
@@ -1328,7 +1347,7 @@ const CreateToken: Page = () => (
           <Figure w={900} h={560} label="GitHub 建立 fine-grained token 的表單示意：Token name、Expiration 90 天、Only select repositories、兩個權限 Read and write、Generate token">
             <rect x="0" y="0" width="900" height="556" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
             <rect x="0" y="0" width="900" height="54" fill="#24292F" />
-            <text x="24" y="36" fontSize="23" fontFamily={mono} fill="#FFFFFF">github.com/settings/personal-access-tokens/new</text>
+            <text x="24" y="36" fontSize="24" fontFamily={mono} fill="#FFFFFF">github.com/settings/personal-access-tokens/new</text>
             <FormRow y={110} label="Token name"><rect x="330" y="80" width="420" height="44" fill="#FFFFFF" stroke={faint} strokeWidth="2" /><text x="344" y="111" fontSize="25" fontFamily={mono} fill={ink}>digital-garden</text></FormRow>
             <FormRow y={172} label="Expiration"><rect x="330" y="142" width="240" height="44" fill={linkSoft} stroke={link} strokeWidth="2" /><text x="344" y="173" fontSize="25" fill={ink}>90 days ▾</text><text x="590" y="173" fontSize="24" fill={quiet}>預設 30 天</text></FormRow>
             <FormRow y={236} label="Repository access">
@@ -1370,7 +1389,8 @@ const NoPlace = ({ y, label }: { y: number; label: string }) => (
 const TokenSafety: Page = () => (
   <Shell chapter={3} source={'GitHub Docs〈Managing your personal access tokens〉docs.github.com/en/authentication'}>
     <Eyebrow>token 的保管</Eyebrow>
-    <Heading>token 要像密碼一樣收好</Heading>
+    <Heading>token 的保管與到期</Heading>
+    <Lead>像密碼一樣收好，只放一個地方</Lead>
     <Fit>
       <Stage h={440}>
         <Steps>
@@ -1413,25 +1433,25 @@ const ConnectGitHub: Page = () => (
     <Heading>把 token 填進外掛</Heading>
     <Fit>
       <div style={{ position: 'relative' }}>
-        <In i={0} style={{ position: 'relative', width: 1240, margin: '0 auto' }}>
-          <Screenshot src={dgSettings} aspect={1680 / 500} width={1240} caption="Digital Garden 外掛設定（實際畫面）" alt="Digital Garden 外掛設定中的 GitHub repo name、Username、token 欄位" />
+        <In i={0} style={{ position: 'relative', width: 1320, margin: '0 auto' }}>
+          <Screenshot src={dgSettings} aspect={1680 / 500} width={1320} caption="Digital Garden 外掛設定（實際畫面）" alt="Digital Garden 外掛設定中的 GitHub repo name、Username、token 欄位" />
         </In>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, marginTop: 40 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, marginTop: 28 }}>
           <Steps>
-            <Step duration={STEP_MS}><TourStep n={1} title="repo name" detail="只填 my-garden" box={[1100, 116, 254, 56]} at={[1398, 144]} /></Step>
-            <Step duration={STEP_MS}><TourStep n={2} title="Username" detail="你的 GitHub 帳號" box={[1100, 209, 254, 56]} at={[1398, 236]} /></Step>
-            <Step duration={STEP_MS}><TourStep n={3} title="token" detail="貼上剛才複製的那串" box={[1100, 301, 254, 56]} at={[1398, 328]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={1} title="repo name" detail="只填 my-garden" box={[1118, 123, 270, 60]} at={[1436, 153]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={2} title="Username" detail="你的 GitHub 帳號" box={[1118, 222, 270, 60]} at={[1436, 251]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={3} title="token" detail="貼上剛才複製的那串" box={[1118, 320, 270, 60]} at={[1436, 349]} /></Step>
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}>填好還不算，發布一張才知道連上沒</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>填好還不算，發布一張才知道連上沒</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
 
 const Practice2: Page = () => (
   <Shell chapter={3} source={'Digital Garden 指令 docs.forestry.md/getting-started/02-commands'}>
-    <PracticeEyebrow time="8 分鐘">練習 2｜連接</PracticeEyebrow>
+    <PracticeEyebrow time="13 分鐘">練習 2｜連接</PracticeEyebrow>
     <Heading>練習（token）：連上 GitHub</Heading>
     <PromptsCopy step="2" />
     <PillRow>
@@ -1528,8 +1548,8 @@ const FrontmatterCheck: Page = () => (
           </Layer>
           <Step duration={STEP_MS}><Layer h={470} label="改寫版連 dg-publish: true 也一起抄過去">
             <Build>
-              <rect x="1030" y="128" width="330" height="50" fill="none" stroke={warn} strokeWidth="4" />
-              <text x="1380" y="162" fontSize="27" fontWeight="600" fill={warn}>連這行也抄了</text>
+              <rect x="1030" y="122" width="330" height="48" fill="none" stroke={warn} strokeWidth="4" />
+              <text x="1380" y="156" fontSize="27" fontWeight="600" fill={warn}>連這行也抄了</text>
             </Build>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={470} label="發布後，網站上會多一張劉備">
@@ -1552,9 +1572,9 @@ const FrontmatterCheck: Page = () => (
           <Step duration={STEP_MS}><Layer h={470} label="反過來：時間軸.md 沒有這行，要公開就自己加上">
             <Build>
               <rect x="404" y="320" width="400" height="130" fill={amberSoft} stroke={amber} strokeWidth="2" />
-              <text x="428" y="364" fontSize="27" fontWeight="600" fill={ink}>時間軸.md 少這行</text>
-              <text x="428" y="408" fontSize="25" fontFamily={mono} fill={amber}>+ dg-publish: true</text>
-              <text x="428" y="438" fontSize="22" fill={muted}>Skill 產出沒有開頭三行</text>
+              <text x="428" y="360" fontSize="27" fontWeight="600" fill={ink}>時間軸.md 少這行</text>
+              <text x="428" y="400" fontSize="25" fontFamily={mono} fill={amber}>+ dg-publish: true</text>
+              <text x="428" y="436" fontSize="24" fill={muted}>Skill 產出沒有開頭三行</text>
             </Build>
           </Layer></Step>
         </Steps>
@@ -1618,9 +1638,9 @@ const Signpost = ({ y, label, links }: { y: number; label: string; links: string
 const NavPage: Page = () => (
   <Shell chapter={4} source={'Obsidian 說明：內部連結 obsidian.md/help/links'}>
     <Eyebrow>讓讀者從首頁走進來</Eyebrow>
-    <Heading>做一張導覽頁</Heading>
+    <Heading>建立知識庫導覽頁</Heading>
     <Fit>
-      <div style={{ display: 'grid', gridTemplateColumns: '780px 1fr', gap: 60, alignItems: 'start' }}>
+      <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '780px 1fr', gap: 60, alignItems: 'start' }}>
         <In i={0}>
           <Figure w={780} h={450} label="整理/知識庫導覽.md：開頭有 dg-publish，下面三個路標連到時間軸、人物、事件">
             <DocShape x={0} y={0} w={780} h={440} />
@@ -1645,9 +1665,9 @@ const NavPage: Page = () => (
           <div style={{ marginTop: 30 }}>
             <Steps>
               <div style={{ fontSize: 30, fontWeight: 600, marginBottom: 18 }}>發布前對一次</div>
-              <Step duration={STEP_MS}><div style={{ marginBottom: 14 }}><StatusLine ok size={30}>導覽頁有 dg-publish: true</StatusLine></div></Step>
-              <Step duration={STEP_MS}><div style={{ marginBottom: 14 }}><StatusLine ok size={30}>首頁連到 [[知識庫導覽]]</StatusLine></div></Step>
-              <Step duration={STEP_MS}><div style={{ marginBottom: 14 }}><StatusLine ok size={30}>連到的卡都有 dg-publish</StatusLine></div></Step>
+              <Step duration={STEP_MS}><><div style={{ marginBottom: 14 }}><StatusLine ok size={30}>導覽頁有 dg-publish: true</StatusLine></div><Spot box={[18, 90, 272, 40]} /></></Step>
+              <Step duration={STEP_MS}><><div style={{ marginBottom: 14 }}><StatusLine ok size={30}>首頁連到 [[知識庫導覽]]</StatusLine></div><Spot box={[852, 56, 316, 66]} /></></Step>
+              <Step duration={STEP_MS}><><div style={{ marginBottom: 14 }}><StatusLine ok size={30}>連到的卡都有 dg-publish</StatusLine></div><Spot box={[238, 144, 530, 254]} /></></Step>
               <Step duration={STEP_MS}><div><StatusLine ok size={30}>國中生版沒公開（除非你要）</StatusLine></div></Step>
             </Steps>
           </div>
@@ -1661,7 +1681,7 @@ const NavPage: Page = () => (
 const PublishCommand: Page = () => (
   <Shell chapter={4} source={'Digital Garden 指令 docs.forestry.md/getting-started/02-commands'}>
     <Eyebrow>發布｜Digital Garden 2.96.0</Eyebrow>
-    <Heading>用命令面板發布</Heading>
+    <Heading>命令面板（Command Palette）</Heading>
     <Lead>Ctrl／Cmd + P，搜尋 garden publish</Lead>
     <Fit>
       <div style={{ position: 'relative', width: 1300, margin: '0 auto' }}>
@@ -1705,13 +1725,13 @@ const HtmlTest: Page = () => (
 
 // One way of writing a link inside the timeline's HTML: first the code on a neutral card
 // (verdict = undefined), then, on the next click, the same card tinted by its verdict.
-const HtmlCode = ({ x, lines, ok }: { x: number; lines: [string, string, string]; ok?: boolean }) => {
+const HtmlCode = ({ x, label, lines, ok }: { x: number; label: string; lines: [string, string, string]; ok?: boolean }) => {
   const tone = ok === undefined ? faint : ok ? okGreen : warn;
   return (
     <g>
       <rect x={x} y="0" width="520" height="430" fill={ok === undefined ? surface : ok ? sage : warnSoft} />
       <rect x={x} y="0" width="520" height="5" fill={tone} />
-      <text x={x + 26} y="50" fontSize="25" fontWeight="600" fill={ok === undefined ? muted : tone}>寫在 HTML 裡</text>
+      <text x={x + 26} y="50" fontSize="25" fontWeight="600" fill={ok === undefined ? muted : tone}>{label}</text>
       <rect x={x + 26} y="70" width="468" height="130" fill={term} />
       <text x={x + 44} y="116" fontSize="24" fontFamily={mono} fill="#BCC3CC">{lines[0]}</text>
       <text x={x + 44} y="152" fontSize="24" fontFamily={mono} fill="#F5F5F4">{lines[1]}</text>
@@ -1739,29 +1759,30 @@ const HtmlResult = ({ x, ok, shows, note, linkLike = false }: { x: number; ok: b
 const HtmlLinks: Page = () => (
   <Shell chapter={4} source={'CommonMark Spec 0.31.2〈HTML blocks〉spec.commonmark.org/0.31.2/#html-blocks'}>
     <Eyebrow>時間軸 Skill 的寫法</Eyebrow>
-    <Heading>HTML 裡的連結，網站上會失效</Heading>
+    <Heading>HTML 區塊裡的連結</Heading>
+    <Lead>同一個連結三種寫法，網站上各長怎樣？</Lead>
     <Fit>
       <Stage h={430}>
         <Steps>
           <Layer h={430} label="第一種寫法：HTML 裡寫 [[劉備]]">
-            <InG i={0}><HtmlCode x={0} lines={['<div class="ev">', '  [[劉備]] 桃園結義', '</div>']} /></InG>
+            <InG i={0}><HtmlCode x={0} label="寫法 1：[[ ]] 連結" lines={['<div class="ev">', '  [[劉備]] 桃園結義', '</div>']} /></InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={430} still label="網站上原樣顯示兩對中括號，點不了">
-            <HtmlCode x={0} ok={false} lines={['<div class="ev">', '  [[劉備]] 桃園結義', '</div>']} />
+            <HtmlCode x={0} label="寫法 1：[[ ]] 連結" ok={false} lines={['<div class="ev">', '  [[劉備]] 桃園結義', '</div>']} />
             <HtmlResult x={0} ok={false} shows="[[劉備]] 桃園結義" note="原樣顯示，點不了" />
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={430} label="第二種寫法：連到 .md 檔的 a 標籤">
-            <Build><HtmlCode x={556} lines={['<a href="../關係/', '  桃園結義.md">', '…</a>']} /></Build>
+            <Build><HtmlCode x={556} label="寫法 2：連到 .md" lines={['<a href="../關係/', '  桃園結義.md">', '…</a>']} /></Build>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={430} still label="網站上看起來像連結，點下去是 404">
-            <HtmlCode x={556} ok={false} lines={['<a href="../關係/', '  桃園結義.md">', '…</a>']} />
+            <HtmlCode x={556} label="寫法 2：連到 .md" ok={false} lines={['<a href="../關係/', '  桃園結義.md">', '…</a>']} />
             <HtmlResult x={556} ok={false} shows="關係/桃園結義.md" note="點下去 404" linkLike />
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={430} label="第三種寫法：純文字">
-            <Build><HtmlCode x={1112} lines={['<li>', '  第 1 回：關係/桃園結義', '</li>']} /></Build>
+            <Build><HtmlCode x={1112} label="寫法 3：純文字" lines={['<li>', '  第 1 回：關係/桃園結義', '</li>']} /></Build>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={430} still label="網站上乾淨顯示，不會壞">
-            <HtmlCode x={1112} ok lines={['<li>', '  第 1 回：關係/桃園結義', '</li>']} />
+            <HtmlCode x={1112} label="寫法 3：純文字" ok lines={['<li>', '  第 1 回：關係/桃園結義', '</li>']} />
             <HtmlResult x={1112} ok shows="第 1 回：關係/桃園結義" note="乾淨，不會壞" />
           </Layer></Step>
         </Steps>
@@ -1825,7 +1846,7 @@ const ExtraFolder: Page = () => (
 
 const Practice3: Page = () => (
   <Shell chapter={4} source={'Digital Garden 指令 docs.forestry.md/getting-started/02-commands'}>
-    <PracticeEyebrow time="13 分鐘">練習 3｜發布</PracticeEyebrow>
+    <PracticeEyebrow time="16 分鐘">練習 3｜發布</PracticeEyebrow>
     <Heading>練習（dg-publish）：發布時間軸卡</Heading>
     <PromptsCopy step="3" />
     <PillRow>
@@ -1871,7 +1892,8 @@ const RelayStop = ({ x, y = 130, name, state }: { x: number; y?: number; name: s
 const CheckSite: Page = () => (
   <Shell chapter={5}>
     <Eyebrow>網站驗收</Eyebrow>
-    <Heading>從首頁一路點下去</Heading>
+    <Heading>網站驗收：連結走查</Heading>
+    <Lead>像接力賽，每一棒都要點得過去</Lead>
     <Fit>
       <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '20px 0' }}>
         <Stage h={380}>
@@ -1921,7 +1943,7 @@ const PersonBadge = ({ x, label, tint, stroke }: { x: number; label: string; tin
 
 const Practice4: Page = () => (
   <Shell chapter={5}>
-    <PracticeEyebrow time="10 分鐘">練習 4｜互相驗收</PracticeEyebrow>
+    <PracticeEyebrow time="12 分鐘">練習 4｜互相驗收</PracticeEyebrow>
     <Heading>練習（驗收）：同學從首頁找到新卡</Heading>
     <PromptsCopy step="4" />
     <PillRow>
@@ -2000,7 +2022,7 @@ const StatusChip = ({ x, y, w, label, color }: { x: number; y: number; w: number
 const NotUpdated: Page = () => (
   <Shell chapter={5} source={'Vercel 文件〈Managing Deployments〉vercel.com/docs/deployments/managing-deployments'}>
     <Eyebrow>常見問題｜右邊畫面為示意</Eyebrow>
-    <Heading>網站沒更新時的四個檢查</Heading>
+    <Heading>部署疑難排解：四個檢查</Heading>
     <Fit>
       <Stage h={520}>
         <Steps>
@@ -2417,8 +2439,8 @@ const NOTES = new Map<Page, string>([
 從導覽頁有兩條路：上面那條到〈時間軸〉，看事件的先後順序；它是一張表格，第三堂的 Skill 讓人名寫成純文字，所以表格裡的人名不能點。下面那條直接到〈劉備〉〈桃園結義〉這些人物、事件卡。
 按一下：這就是今天的路線，首頁 → 導覽頁 → 時間軸、人物、事件。第五章大家會照這條路互相驗收。`],
   [Agenda, `07:30–10:00
-五章、四個練習。第一章 20 分鐘講概念：網站是什麼、檔案放哪、為什麼推上去就會自己更新。第二章做出網址。第三章讓 Obsidian 連上 GitHub。第四章挑卡發布，包括第三堂的時間軸卡。第五章互相驗收，再看 Git 和下一步。
-最容易卡的是第二、三章的帳號和 token，助教會在教室後面。上週作業是先註冊 GitHub、Vercel，等一下第 ${pageOf(GitHubAccount)} 頁會檢查。`],
+五章、四個練習。第一章 20 分鐘講概念：網站是什麼、檔案放哪、為什麼推上去就會自己更新。第二章驗收課前作業：上週回家已經用模板部署好網站，現場只打開網址確認，沒做的人兩人一組補。第三章讓 Obsidian 連上 GitHub。第四章挑卡發布，包括第三堂的時間軸卡。第五章互相驗收，再看 Git 和下一步。
+最容易卡的是第二、三章的帳號和 token，助教會在教室後面。上週作業是註冊 GitHub、Vercel，部署好自己的網站，再打開一次 token 頁，等一下第 ${pageOf(GitHubAccount)} 頁和第 ${pageOf(Practice1)} 頁會檢查。省下的 10 分鐘分給練習 2（多 5 分）、練習 3（多 3 分）、練習 4（多 2 分）。`],
   [Section1, `10:00–10:30
 第一章先不動手。把「筆記怎麼變成網址」講清楚，後面每一步按下去，你才知道東西跑到哪裡。`],
   [WebsiteIs, `10:30–13:00
@@ -2468,50 +2490,52 @@ const NOTES = new Map<Page, string>([
 最後一下：dg-publish 只是選卡，按發布才會上去。反過來說，勾了又按了發布，就是全世界看得到，私人的東西不要勾。第四章會教怎麼勾、怎麼檢查。
 來源：https://docs.forestry.md/getting-started/01-getting-started/`],
   [Section2, `30:00–30:30
-第二章動手。按一個按鈕，GitHub 上多一個 repo，Vercel 上多一個網址。`],
+第二章驗收課前作業。上週回家已經按過 Deploy to Vercel：GitHub 上多一個 repo，Vercel 上多一個網址。這一章先把帳號和網站對一次，再快速回顧部署流程，沒做的人等一下照這個補。`],
   [GitHubAccount, `30:30–32:00
-上週的作業是先註冊 GitHub 和 Vercel，因為現場一起註冊，常常卡在 email 驗證信。
-左邊是 GitHub 個人頁的示意。先問大家：都完成了嗎？
-按一下：驗證信的連結點過了。按一下：登得進 github.com。按一下：記下自己的 Username，等一下填外掛會用到，它是網址 github.com/ 後面那一段，不是 email。按一下：打得開 https://github.com/settings/personal-access-tokens/new ，看得到建 token 的表單。GitHub 常在這裡要你再輸入一次密碼或驗證碼，有時還會要你設定雙重驗證（2FA），忘了密碼的人現在就去重設，不要等到第三章。按一下：Vercel 選 Continue with GitHub，用 GitHub 帳號登入，不用另外記密碼。Vercel 如果要驗證手機或 email，照畫面做完；講師沒遇到，這一點未實測。
-最後一下：還沒註冊的人，照下面這條補，網址都在 prompts.md 的「課前檢查」，在筆電上點：
+上週的課前作業是註冊 GitHub 和 Vercel、部署好網站、打開一次 token 頁，因為現場一起註冊，常常卡在 email 驗證信和密碼確認。網站的部分第 ${pageOf(Practice1)} 頁再驗收。
+左邊上面是 GitHub 個人頁的示意，下面是 Vercel 的登入頁。先問大家：都完成了嗎？
+按一下：驗證信點過、登得進 github.com，也記下自己的 Username，框起來的就是它。等一下填外掛會用到，它是網址 github.com/ 後面那一段，不是 email。課前部署過的人，Repositories 底下已經有 my-garden。
+按一下：打得開 https://github.com/settings/personal-access-tokens/new ，看得到建 token 的表單。GitHub 常在這裡要你再輸入一次密碼或驗證碼，有時還會要你設定雙重驗證（2FA），忘了密碼的人現在就去重設，不要等到第三章。
+按一下：Vercel 選 Continue with GitHub，用 GitHub 帳號登入，不用另外記密碼。Vercel 如果要驗證手機或 email，照畫面做完；講師沒遇到，這一點未實測。
+最後一下：還沒註冊的人，照下面這條補，網址都在 prompts.md 的「課前作業」，在筆電上點：
 1. 到 https://github.com/signup 註冊，大約 5 分鐘。
 2. 收 email 驗證信，點連結。信有時要等幾分鐘，也看一下垃圾郵件匣。
 3. 到 https://vercel.com/signup ，選 Continue with GitHub。
-等信的這段時間，先坐到鄰座旁邊，兩人一組跟著做練習 1，信到了再自己做一次。助教會協助。`],
+等信的這段時間，先坐到已經過關的鄰座旁邊，兩人一組用他的網站往下做，信到了再補自己的。助教會協助。`],
   [Division, `32:00–34:00
 這兩個服務常被搞混，用倉庫和店面來分。
 左邊 GitHub 是倉庫：收貨、記帳。每次修改都留一版，第 1 版建立網站、第 2 版改首頁、第 3 版加了〈時間軸〉，哪一版改了什麼都查得到。
 按一下：右邊 Vercel 是店面。它看到 GitHub 有新版，就拿最新那一版去建置，換上新網頁，給你一個網址。
 最後一下：GitHub 有新版，Vercel 就重做網站。兩邊都免費方案就夠用。`],
   [DeploySite, `34:00–37:00
-先示範一次，大家先看，下一頁再一起做。畫面是示意，Vercel 改版時按鈕位置可能不同。
+這是上週課前作業的流程，快速回顧一次：做過的人對一下自己按了什麼，沒做的人等一下照這個補。畫面是示意，Vercel 改版時按鈕位置可能不同。
 第一步：打開 Digital Garden 官方入門頁 https://docs.forestry.md/getting-started/01-getting-started/ ，找到 Deploy to Vercel 按鈕。
 按一下：Vercel 出現 Create Git Repository。Git Scope 選你的 GitHub 帳號，Repository Name 自己取，建議就用 my-garden，按 Create。還沒登入的話會先請你用 GitHub 登入。
 按一下：等一到兩分鐘，看到 Congratulations 和一個網址。點那個網址打開看看。
 最後一下：打得開模板首頁，才算部署好。只看到網址還不夠，有時網址出來了，打開卻是錯誤頁。成功的話，把 repo 名稱和網址抄下來，第三章會用到。`],
-  [Practice1, `37:00–50:00
-練習 1，13 分鐘：建立自己的網站。這不是 AI 練習，三格只是提醒：用官方模板、做出打得開的網站、卡住 5 分鐘就舉手。步驟和網址在右上角的 prompts.md 練習 1，在筆電上點開複製：${PROMPTS_URL}
-1. 先在瀏覽器登入 GitHub 和 Vercel。
-2. 打開 Digital Garden 官方入門頁，按 Deploy to Vercel：https://docs.forestry.md/getting-started/01-getting-started/
-3. Repository Name 填 my-garden，按 Create。名稱重複就改成 my-garden-2。GitHub 問要不要讓 Vercel 存取 repo，選允許。
-4. 等部署完成，打開網址。
-按一下：網址打開是 Digital Garden 模板的首頁，才算完成。只拿到網址還不算，一定要打開看。把 repo 名稱和網址抄下來。
-卡住了：等超過 5 分鐘還在跑、或出現 Error，請助教看 Vercel 專案的 Deployments。還是做不出來，就和鄰座兩人一組，用鄰座的帳號和電腦一起做完練習 2 到 4，自己的網站課後再補。不要只坐著看，token、發布、驗收都要親手按過一次。`],
-  [Section3, `50:00–50:30
+  [Practice1, `37:00–40:00
+練習 1，3 分鐘：驗收課前作業。部署已經改成回家做，現場不再全班重做一次。三格只是提醒：看的是課前部署的網站、要打得開模板首頁、沒做的人兩人一組補。
+1. 打開你課前抄下的網址，就是那個 ….vercel.app。
+2. 看到 Digital Garden 模板的首頁才算過關。只拿到網址、打開卻是錯誤頁，不算。
+3. 記下 repo 名稱，例如 my-garden，第三章填外掛要用。忘了的話，到 github.com 你的帳號底下看 Repositories。
+按一下：過關的舉手，講師數一下人數。
+沒做、或打不開的人：和已經過關的鄰座兩人一組。照 prompts.md 最上面的「課前作業」，在自己的筆電補部署，網址在這裡：${PROMPTS_URL} 。建置要等一兩分鐘，等的時候先跟鄰座一起看第三章。練習 2 多了 5 分鐘緩衝，就是留給補部署的人；練習 2 開始時自己的網站還沒好，就用鄰座的帳號和電腦做完練習 2 到 4，自己的網站課後再補。不要只坐著看，token、發布、驗收都要親手按過一次。
+部署出現 Error、或等超過 5 分鐘還在跑，請助教看 Vercel 專案的 Deployments。`],
+  [Section3, `40:00–40:30
 網站已經有了，但現在是空的模板。這一章讓 Obsidian 有權限把卡寫進 my-garden。`],
-  [TokenDoors, `50:30–52:00
+  [TokenDoors, `40:30–42:00
 外掛要把卡寫進你的 GitHub repo，GitHub 得先知道它是你派來的。這就是 token，中文叫存取權杖。像給快遞一把鑰匙，只開你家信箱，不開大門。
 第一個畫面：Obsidian 裡的 Digital Garden 外掛，手上拿著 token。
 按一下：GitHub 上你可能有好幾個 repo。
 按一下：這把 token 只打得開 my-garden，其他 repo 打不開。這叫 fine-grained token，權限切得很細，萬一外流，損失也只限這一個 repo。
 最後一下：沒有 token，外掛進不了 repo，發布會失敗。`],
-  [InstallPlugin, `52:00–54:00
+  [InstallPlugin, `42:00–44:00
 大家跟著做。左下角齒輪進設定。畫面是依繁中介面整理的示意，版本不同可能略有差異。
 按一下：左邊點「第三方外掛程式」。如果看到受限模式，按「關閉」。
 按一下：社群外掛程式那一列，按「瀏覽」。
 按一下：搜尋 Digital Garden，認明作者是 Ole Eskild Steensen，名字相近的外掛不要裝錯。按安裝，裝好再按啟用。
 外掛是裝在目前這個儲存庫，請確認你打開的是三國人物知識庫。官方說明：https://obsidian.md/help/community-plugins`],
-  [CreateToken, `54:00–57:00
+  [CreateToken, `44:00–47:00
 這一步最容易卡，慢慢來。GitHub 的畫面常改版，所以投影片不教按哪裡，教你確認哪五件事。左邊的表單是示意。
 打開 https://github.com/settings/personal-access-tokens/new 。也可以從右上頭像 → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token 走進去。Token name 取一個認得出來的名字，例如 digital-garden。
 按一下：1，Repository access 選 Only select repositories，只勾你的網站那一個 repo，例如 my-garden。萬一 token 外流，別人也只碰得到這個 repo。
@@ -2520,20 +2544,20 @@ const NOTES = new Map<Page, string>([
 按一下：4，Expiration 要有到期日。預設 30 天，建議改 90 天；到期後發布會失敗，回同一頁按 Regenerate，再把新的貼進外掛。
 按一下：5，按 Generate token，馬上複製。這串字只顯示這一次，關掉頁面就看不到了。
 來源：https://github.com/oleeskild/obsidian-digital-garden （README 的 fine-grained token 設定：Contents 與 Pull requests 都要 Read and write）、https://docs.forestry.md/advanced/fine-grained-access-token/`],
-  [TokenSafety, `57:00–58:30
+  [TokenSafety, `47:00–48:30
 剛複製的那串字，等於 my-garden 的鑰匙，要當密碼看待。fine-grained token 開頭通常是 github_pat_。
 按一下：它只該放在一個地方，外掛設定的 GitHub token 欄位。
 按一下：不要貼進筆記（筆記勾了 dg-publish 就公開了），不要出現在截圖或投影片，不要丟到 LINE 群組或 Email 問人。
 按一下：90 天到期後發布會失敗。回 GitHub 同一頁，找到這把 token 按 Regenerate，再把新的貼進外掛。
 最後一下：萬一外流，到 GitHub 的 token 列表按 Delete，重建一把就好。`],
-  [ConnectGitHub, `58:30–60:00
+  [ConnectGitHub, `48:30–50:00
 回 Obsidian → 設定 → 左側最下面的 Digital Garden，看到 GitHub Authentication 這三格。這是外掛的實際畫面。
 按一下：1，GitHub repo name 只填名字，例如 my-garden。不要加帳號，也不要貼網址。
 按一下：2，GitHub Username 填你的帳號，就是 github.com/ 後面那段。
 按一下：3，GitHub token 貼上剛才複製的那串。填好就會自動存，不用按儲存。
 最後一下：填好還不算。三格裡打錯一個字，畫面看起來一樣。要知道有沒有連上，就真的發布一張卡試試，下一頁的練習就做這件事。`],
-  [Practice2, `60:00–68:00
-練習 2，8 分鐘。剛才跟著做完的人，檢查一遍；沒跟上的現在補。token 頁的網址很長，不要照投影幕打，打開 prompts.md 練習 2 直接點。
+  [Practice2, `50:00–63:00
+練習 2，13 分鐘。練習 1 改成課前作業，省下來的 10 分鐘有 5 分鐘放在這裡：剛才跟著做完的人檢查一遍，沒跟上的、剛補完網站的現在補。token 頁的網址很長，不要照投影幕打，打開 prompts.md 練習 2 直接點。
 1. 安裝並啟用 Digital Garden 外掛，作者是 Ole Eskild Steensen。
 2. 建 fine-grained token：https://github.com/settings/personal-access-tokens/new ，只選 my-garden、Contents 和 Pull requests 讀寫、有到期日。GitHub 要你再輸入密碼或驗證碼，是正常的。
 3. 在外掛填三格：repo name、Username、token。
@@ -2541,26 +2565,26 @@ const NOTES = new Map<Page, string>([
 按一下：等一兩分鐘，打開你的網址。首頁從模板的預設頁變成〈三國演義〉，就代表連上了。上面的人名連結現在點不開是正常的，那些卡還沒發布，第四章再處理。
 沒變的話：先等兩分鐘；再回頭查三格，最常見的是 repo name 多打了帳號，或 token 少開了 Contents。
 用鄰座帳號一起做的人：token、三格都在鄰座的電腦上做，兩個人輪流按。`],
-  [Section4, `68:00–68:30
+  [Section4, `63:00–63:30
 第四章挑卡發布。先學怎麼看開頭三行，再把首頁、導覽頁、時間軸卡一起發布。`],
-  [PublishSwitch, `68:30–70:00
+  [PublishSwitch, `63:30–65:00
 左邊是 Obsidian 屬性面板的實際畫面：dg-publish 旁邊有個勾選框，打勾就是要公開。
 按一下：切換到原始碼模式看，就是檔案最上面三行：兩條 --- 中間夾著 dg-publish: true。這三行叫 frontmatter，也叫屬性。
 最後一下：打勾和寫 true，是同一件事。
 另一個方法：打開那張卡，Ctrl／Cmd + P，執行 Digital Garden: Add publish flag，它會幫你加上這行。`],
-  [FrontmatterCheck, `70:00–72:30
+  [FrontmatterCheck, `65:00–67:30
 這是第三堂實測時發生的事。我們用 eli5 把 人物/劉備.md 改寫成國中生看得懂的版本，存成 劉備-國中生版.md。內容是對的。
 按一下：但它把開頭的 dg-publish: true 也一起抄了過去。
 按一下：結果是一發布，網站上會多一張〈劉備-國中生版〉，和原本的〈劉備〉並排，讀者會搞不清楚哪張才對。
 按一下：如果有 dg-publish、又不想公開，就刪掉那行，或在屬性取消勾選。第三堂的 eli5 提示詞現在最後一句是「新檔不要加 dg-publish。」，所以你的國中生版可能本來就沒有這行；講師實測那次是舊提示詞，才會抄過去。
 按一下：反過來的情況也有。第三堂時間軸 Skill 實跑產出的 時間軸.md，開頭完全沒有屬性，直接就是 <table>。它不會被發布；要公開的話，在最上面自己加三行：---、dg-publish: true、---，或打開它執行 Add publish flag。
 最後一下：新卡發布前，先看開頭三行。多了要刪，少了要補。`],
-  [HomeFlag, `72:30–74:00
+  [HomeFlag, `67:30–69:00
 網站打開的第一頁是哪一張？由 dg-home 決定。
 左邊是〈三國演義〉的開頭：除了 dg-publish，還多一行 dg-home: true。講師的教材已經加好了。
 按一下：打開網址，最後面是一個斜線，也就是網站的第一頁，顯示的就是〈三國演義〉。
 最後一下：整個網站只放一張 dg-home。兩張都有的話，首頁會不確定是哪一張。`],
-  [NavPage, `74:00–76:30
+  [NavPage, `69:00–71:30
 第一次來的讀者不知道從哪開始，所以做一張導覽頁。這也是整個網站的路口：時間軸是一張表格，人名不能點，要點人物、事件，都從這裡走。
 左邊是 整理/知識庫導覽.md：開頭有 dg-publish: true，下面三個路標。時間連到 [[時間軸]]，人物連到每張人物卡，事件連到每張關係卡。導覽頁是一般的 Markdown 筆記，這些 [[連結]] 在網站上都點得開。下面那行橘色字：〈三英戰呂布〉先不放，留給練習 4 當新卡。導覽頁可以自己手打，也可以請 Codex 做，提示詞在 prompts.md 練習 3。
 右上：再打開〈三國演義〉，在最後一行加 [[知識庫導覽]]。首頁連得到導覽頁，讀者才走得進來。
@@ -2570,19 +2594,19 @@ const NOTES = new Map<Page, string>([
 按一下：導覽頁連到的每張卡都要有 dg-publish。連到的卡不會自動一起發布，少勾一張，網站上那個連結就點不開。講師的 12 張範例卡本來就勾好了；沒勾的通常是第三堂新增的〈白門樓〉〈草船借箭〉、你第二堂自己寫的卡，還有沒加開頭三行的時間軸。一張張打開太慢，練習 3 會請 Codex 只列清單，你再打開核對。不想公開的卡，就把它從導覽頁拿掉。
 按一下：〈劉備-國中生版〉沒有公開，除非你本來就想公開它。
 最後一下：要點人物、事件，都從導覽頁走。`],
-  [PublishCommand, `76:30–78:00
+  [PublishCommand, `71:30–73:00
 勾好之後，按 Ctrl／Cmd + P，搜尋 garden publish。這是 Digital Garden 2.96.0 命令面板的實際畫面，裁切放大了前兩行。
 按一下：第一行 Publish Active Note，只發布你現在打開的這一張，而且這張要有 dg-publish。練習 2 試發布〈三國演義〉用的就是它。
 按一下：第二行 Publish All Notes Marked for Publish，一次發布所有勾了 dg-publish 的卡。
 最後一下：練習 3 要一次送出導覽頁、時間軸和好幾張卡，所以用第二行。之後只改一張卡，用第一行就好。發布完等一兩分鐘再看網址。
 來源：https://docs.forestry.md/getting-started/02-commands/`],
-  [HtmlTest, `78:00–80:30
+  [HtmlTest, `73:00–75:30
 這是第三堂時間軸 Skill 實際跑出來的 時間軸.md：一個 HTML 表格，第 1 回到第 49 回共六件事，人物欄寫純文字，下面一段「來源卡」列出每件事出自哪張關係卡。我把它放進自己的 Digital Garden 模板，在電腦上建置成網站，這是實際畫面。先說清楚：這是本機建置，還沒透過 Obsidian 外掛發布到線上驗證，等一下大家發布後請一起確認。2026-10-24 重跑第三堂流程，排出的時間軸一樣是六件事、來源卡純文字（就是 aw-04-lab 第三堂完成版裡那份），但這次沒有重做本機建置，線上發布也還是未實測。
 按一下：1，表格照常顯示。模板預設就允許筆記裡寫 HTML（markdown-it 的 html: true），所以第三堂讓 Skill 產出 HTML 沒有問題。
 按一下：2，人物欄都是純文字，沒有 [[ ]] 殘留。這是我們在 SKILL.md 裡要求的。
 按一下：3，問題在下面的來源卡。Skill 把它寫成 <a href="../關係/桃園結義.md">，在網站上點下去是 404，找不到頁面。原因是網站上的網址不是 .md 檔名，建置時會換成另一種網址。
 第三堂的 SKILL.md 已經補了一條規則：「- 來源卡只寫檔名純文字，不做連結」。用舊版 Skill 產出的同學，重跑一次，或手動把那幾個 <a> 拿掉。`],
-  [HtmlLinks, `80:30–82:00
+  [HtmlLinks, `75:30–77:00
 把剛才的問題整理成三種寫法。回想第 ${pageOf(BuildStep)} 頁：[[連結]] 是建置時轉換的，但它只轉換一般的 Markdown 文字，HTML 區塊裡的東西會原封不動送出去。
 第一種：在 HTML 裡寫 [[劉備]]。網站上會變成什麼樣子？
 按一下：原樣顯示兩對中括號，點不了。這是講師另一張測試卡的本機建置結果。
@@ -2600,8 +2624,8 @@ eleventyConfig.addPassthroughCopy({ "extra": "extra" });
 講師的網站就是加了這一行，本機測試才看得到 iframe。
 按一下：再新增一張筆記，例如〈三國關係圖〉，內文放一行 <iframe src="/extra/sanguo-map.html" width="100%" height="600"></iframe>，勾 dg-publish 發布。網站上就會嵌進整張圖。
 最後一下：外掛只送筆記，.html 要自己放。這是講師網站的本機測試結果，還沒在線上驗證。`],
-  [Practice3, `82:00–95:00
-練習 3，13 分鐘：做導覽頁，把時間軸卡和導覽頁連到的卡一起發布。兩段提示詞都在 prompts.md 練習 3，在筆電上複製：${PROMPTS_URL}
+  [Practice3, `77:00–93:00
+練習 3，16 分鐘（多給的 3 分鐘來自課前作業省下的時間，給 Codex 預覽、核對清單用）：做導覽頁，把時間軸卡和導覽頁連到的卡一起發布。兩段提示詞都在 prompts.md 練習 3，在筆電上複製：${PROMPTS_URL}
 第三堂缺課、或手上沒有 時間軸.md、三英戰呂布.md 的人，先下載第三堂完成版，照 README 拖進筆記庫：${LAB_URL}
 1. 做導覽頁：在三國人物知識庫資料夾打開 Codex，貼上：
 「請在 整理/ 新增 知識庫導覽.md。分成時間、人物、事件三段：時間那段只放 [[時間軸]]；人物那段用 [[連結]] 列出 人物/ 裡的每張卡；事件那段用 [[連結]] 列出 關係/ 裡的每張卡，但先不要放〈三英戰呂布〉，練習 4 再加。只連到已有的卡，不要新增卡片，也不要改別的檔案。開頭加上 dg-publish: true。寫入前先給我看。」
@@ -2615,22 +2639,22 @@ eleventyConfig.addPassthroughCopy({ "extra": "extra" });
 講師實跑（2026-10-24，Codex 0.154.0，在範例筆記庫的副本上跑）：導覽頁的預覽確實沒放三英戰呂布，回「可以」才寫入；清單標出〈白門樓〉〈草船借箭〉沒有 dg-publish，其他都有，也沒改到任何檔案。每個人的清單會不一樣，例如第二堂自己寫的卡、還沒加開頭三行的時間軸。
 時間軸裡的人名是純文字、點不了，這是對的。如果時間軸裡出現 [[ ]]，或點了會 404 的來源卡連結，回第三堂的 SKILL.md 補規則，再產生一次。`],
 
-  [Section5, `95:00–95:30
+  [Section5, `93:00–93:30
 最後一章：先請同學驗收你的網站，再看 Git 和接下來可以做什麼。`],
-  [CheckSite, `95:30–97:30
+  [CheckSite, `93:30–95:30
 驗收的方法像跑接力，每一棒都要交得出去。路線和開場那頁一樣：首頁 → 導覽頁，再分兩條，一條到時間軸，一條到導覽頁上的卡。
 按一下：首頁點得到導覽頁嗎？
 按一下：導覽頁點得到時間軸嗎？打開時間軸，人名是純文字、點不了，這是對的，不是壞掉；要點人物，回導覽頁走。
 按一下：最後一棒故意示範斷掉：從導覽頁點〈白門樓〉打不開，網站給的是 404。〈白門樓〉是第三堂新增的卡，當時規定新卡不加 dg-publish，所以它還沒勾；也可能是勾了還沒發布。講師的 12 張範例卡本來就勾好了，斷掉的多半是第三堂的新卡，或你第二堂自己寫的卡。連到的卡不會自動發布。
 最後一下：補勾之後，再發布一次，等兩分鐘重新走。`],
-  [Practice4, `97:30–107:00
-練習 4，10 分鐘：互相驗收。兩人一組。步驟在 prompts.md 練習 4。
+  [Practice4, `95:30–107:30
+練習 4，12 分鐘（多 2 分鐘給修好再走一次）：互相驗收。兩人一組。步驟在 prompts.md 練習 4。
 1. 公開〈三英戰呂布〉：練習 3 故意沒把它放進導覽頁，它也還沒有 dg-publish。打開它，執行 Digital Garden: Add publish flag；在導覽頁的事件那段加上 [[三英戰呂布]]；再執行 Publish All Notes Marked for Publish。
 按一下：2. 找網址：Vercel → 你的 my-garden 專案 → Domains，複製最短的那個 ….vercel.app。不要拿 Deployments 清單裡那串比較長的網址：照 Vercel 文件，Standard Protection 會讓那種網址要先登入 Vercel，同學打開只會看到登入頁。新專案是不是預設開著，講師沒在教室實測過。傳之前，自己先開無痕視窗（Chrome、Edge：Ctrl＋Shift＋N；Mac：Cmd＋Shift＋N）貼上，從首頁點到〈三英戰呂布〉。再把網址傳給同學，用 LINE 或寫在紙上都可以。
 按一下：3. 同學在自己的電腦開無痕視窗，貼上你的網址。一定要看同學自己打開的公開網址，不要看講師的螢幕，也不要用你自己的電腦，你的瀏覽器可能留著舊的畫面。只能從首頁開始點：首頁 → 導覽頁 → 三英戰呂布，不能直接打卡片的網址。
 按一下：4. 回報結果：走到了就打勾；走不到，說卡在哪一頁、看到什麼（404、連結不見、要求登入）。你回去查那一頁的 dg-publish 和連結，修好再發布，請同學再走一次。
 做完交換角色。最後請一兩組分享斷在哪裡，通常是三英戰呂布沒勾（404）、導覽頁改了沒重新發布（連結不在），或傳到要登入的網址。`],
-  [NotUpdated, `107:00–110:00
+  [NotUpdated, `107:30–110:00
 大家剛才最常遇到的：發布了，網站卻沒變。照順序查四個地方，右邊的畫面都是示意，實際畫面依版本略有不同。
 1. 有沒有按發布？勾了 dg-publish 不會自己送出。Obsidian 按 Ctrl／Cmd + P，搜尋 garden publish。
 按一下：2. GitHub 有沒有新 commit？打開 github.com/你的帳號/my-garden，看最上面「最新一筆」的時間。時間對得上剛才按發布，就是收到了；還停在很久以前，回到第 1 步，或查外掛三格。

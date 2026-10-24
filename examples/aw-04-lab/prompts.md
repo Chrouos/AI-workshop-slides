@@ -4,25 +4,33 @@
 
 框上面那行「定位｜期望輸出｜限制」是簡報上的三格重點，不用貼。
 
-## 課前檢查（上課前做完）
+## 課前作業（第四堂上課前做完，約 20 分鐘）
 
-1. 到 https://github.com/signup 註冊 GitHub，點 email 裡的驗證連結。信有時要等幾分鐘，也看一下垃圾郵件匣。
-2. 登入 GitHub，打開 https://github.com/settings/personal-access-tokens/new 。看得到建立 token 的表單就好，先不用建。GitHub 要你再輸入一次密碼、驗證碼，或要你設定雙重驗證（2FA），照畫面做完；上課建 token 時也會再問一次。
-3. 到 https://vercel.com/signup ，選 Continue with GitHub。Vercel 要你驗證手機或 email，就照畫面做完（講師沒遇到，未實測）。
-4. 用 Obsidian 打開三國人物知識庫，確認 `整理/時間軸.md` 和 `關係/三英戰呂布.md` 都在。少了的話，下載 [第三堂完成版.zip](第三堂完成版.zip)，照 [README](README.md) 放進去。
+上課不再全班一起部署，請在家先做好。每一步都在瀏覽器裡完成，不用裝任何程式。
 
-## 練習 1（部署）：建立自己的網站
+1. 註冊 GitHub：到 https://github.com/signup 註冊，點 email 裡的驗證連結。信有時要等幾分鐘，也看一下垃圾郵件匣。
+2. 註冊 Vercel：到 https://vercel.com/signup ，選 Continue with GitHub。Vercel 要你驗證手機或 email，就照畫面做完（講師沒遇到，未實測）。
+3. 部署網站：打開 Digital Garden 官方入門頁，按 Deploy to Vercel：https://docs.forestry.md/getting-started/01-getting-started/
+   - Git Scope 選你的 GitHub 帳號，Repository Name 填 my-garden，按 Create。名稱重複就改成 my-garden-2。
+   - GitHub 問要不要讓 Vercel 存取 repo，選允許。
+   - 等一兩分鐘，看到 Congratulations 和一個網址。
+4. 打開網址：點那個網址，要看到 Digital Garden 模板的首頁。把網址和 repo 名稱抄下來，上課要用。
+5. 打開一次 token 頁：登入 GitHub，打開 https://github.com/settings/personal-access-tokens/new 。看得到建立 token 的表單就好，先不用建。GitHub 要你再輸入一次密碼、驗證碼，或要你設定雙重驗證（2FA），照畫面做完；上課建 token 時還會再問一次，忘了密碼的人現在就重設。
+6. 用 Obsidian 打開三國人物知識庫，確認 `整理/時間軸.md` 和 `關係/三英戰呂布.md` 都在。少了的話，下載 [第三堂完成版.zip](第三堂完成版.zip)，照 [README](README.md) 放進去。
 
-定位：官方模板｜期望輸出：打得開的網站｜限制：卡 5 分鐘就舉手
+做完的樣子：手上有一個 `….vercel.app` 網址，打開是 Digital Garden 模板的首頁（不是錯誤頁）；記得 repo 名稱；token 頁打得開。只拿到網址、沒打開看過，不算做完。
 
-1. 先在瀏覽器登入 GitHub 和 Vercel。
-2. 打開 Digital Garden 官方入門頁，按 Deploy to Vercel：https://docs.forestry.md/getting-started/01-getting-started/
-3. Repository Name 填 my-garden，按 Create。名稱重複就改成 my-garden-2。GitHub 問要不要讓 Vercel 存取 repo，選允許。
-4. 等部署完成，打開網址。
+卡住怎麼辦：停在哪一步、看到什麼畫面，截圖帶來上課（截圖裡不要有 token）。上課第一個練習就是驗收這份作業，沒做完的人會和做好的同學兩人一組，現場補做；補不完就先用同學的帳號做後面的練習，自己的網站課後再補。部署出現 Error、或等超過 5 分鐘還在跑，到 Vercel 專案的 Deployments 點最上面那一筆，把錯誤訊息截圖帶來。
 
-看結果：網址打開是 Digital Garden 模板的首頁。只拿到網址還不算，一定要打開看。把 repo 名稱和網址抄下來。
+## 練習 1（驗收）：打開自己的網站
 
-卡住了：等超過 5 分鐘還在跑、或出現 Error，請助教看 Vercel 專案的 Deployments。還是做不出來，就和鄰座兩人一組，用鄰座的帳號和電腦一起做完練習 2 到 4，自己的網站課後再補。
+定位：課前部署的網站｜期望輸出：打得開模板首頁｜限制：沒做就兩人一組
+
+1. 打開你課前抄下的網址，就是那個 `….vercel.app`。
+2. 看到 Digital Garden 模板的首頁才算過關。
+3. 記下 repo 名稱，例如 my-garden，練習 2 填外掛要用。忘了的話，到 github.com 你的帳號底下看 Repositories。
+
+沒做、或打不開：和已經過關的鄰座兩人一組，照上面的「課前作業」第 1 到 4 步在自己的筆電補部署，建置時先跟鄰座一起往下聽。練習 2 開始時自己的網站還沒好，就用鄰座的帳號和電腦做完練習 2 到 4，自己的網站課後再補。
 
 ## 練習 2（token）：連上 GitHub
 
@@ -91,5 +99,5 @@ token 只放在外掛裡，不貼進筆記、截圖或群組。
 - GitHub 註冊：https://github.com/signup
 - Vercel 註冊：https://vercel.com/signup
 - 第三堂完成版：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-lab/README.md
-- 講師的三國筆記庫：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-02-vault/三國人物知識庫.zip
+- 講師的三國筆記庫（點了直接下載）：https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-vault/%E4%B8%89%E5%9C%8B%E4%BA%BA%E7%89%A9%E7%9F%A5%E8%AD%98%E5%BA%AB.zip
 - 所有教材總表：https://github.com/Chrouos/AI-workshop-slides/tree/main/examples
