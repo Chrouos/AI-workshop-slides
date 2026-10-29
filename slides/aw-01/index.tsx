@@ -2155,7 +2155,7 @@ const SessionDesk: Page = () => (
             <rect x="0" y="10" width="940" height="380" fill="#FFFFFF" stroke={ink} strokeWidth="2" />
             <text x="32" y="62" fontSize="32" fontWeight="600" fill={ink}>Session 1</text>
             <InG i={0}><DeskCard x={32} y={92} kind="chat" label={<tspan>{"你的任務"}</tspan>} eg={<tspan>{"寫第 1 回大綱"}</tspan>} /></InG>
-            <InG i={1}><DeskCard x={488} y={92} kind="doc" label={<tspan>{"讀過的檔案"}</tspan>} eg={<tspan>{"原文/第001回.txt"}</tspan>} /></InG>
+            <InG i={1}><DeskCard x={488} y={92} kind="doc" label={<tspan>{"讀過的檔案"}</tspan>} eg={<tspan>{"原文/第001回.md"}</tspan>} /></InG>
             <InG i={2}><DeskCard x={32} y={236} kind="ok" label={<tspan>{"Codex 的回答"}</tspan>} eg={<tspan>{"一段大綱草稿"}</tspan>} /></InG>
             <InG i={3}><DeskCard x={488} y={236} kind="search" label={<tspan>{"你的追問"}</tspan>} eg={<tspan>{"「剛剛那段改短」"}</tspan>} /></InG>
           </Layer>
@@ -2552,8 +2552,8 @@ const RulePractice: Page = () => (
               <AskDesk y={0} title={<tspan>{"② /new 開新 Session，再問"}</tspan>} h={146}>
                 <text x="692" y="110" fontSize="28" fontFamily={mono} fill="#E9B650">› 劉備第一次出場在第幾回？</text>
                 <text x="692" y="150" fontSize="28" fontFamily={mono} fill="#F5F5F4">第一回。</text>
-                <rect x="682" y="166" width="400" height="44" fill="none" stroke="#8DD4A0" strokeWidth="3" />
-                <text x="692" y="198" fontSize="28" fontFamily={mono} fill="#8DD4A0">出處：原文/第001回.txt</text>
+                <rect x="682" y="166" width="384" height="44" fill="none" stroke="#8DD4A0" strokeWidth="3" />
+                <text x="692" y="198" fontSize="28" fontFamily={mono} fill="#8DD4A0">出處：原文/第001回.md</text>
               </AskDesk>
             </g>
             <g fill="none" stroke={okGreen} strokeWidth="4"><StepPath d="M470 255 C560 255 580 188 680 188" i={1} /></g>
@@ -2674,10 +2674,10 @@ const OutlineResult: Page = () => (
             <div style={{ fontSize: 36, fontWeight: 600 }}># 三國演義大綱</div>
             <div style={{ fontSize: 30, fontWeight: 600, marginTop: 10 }}>## 第 1 回 宴桃園豪傑三結義　斬黃巾英雄首立功</div>
             <div><span>……</span><L><span>[[劉備]]</span></L><span>在涿縣遇到</span><L><span>[[張飛]]</span></L><span>、</span><L><span>[[關羽]]</span></L><span>，三人在桃園結義……</span></div>
-            <div style={{ color: okGreen, fontWeight: 600 }}><Ring n={2} inline><span>出處：原文/第001回.txt</span></Ring></div>
+            <div style={{ color: okGreen, fontWeight: 600 }}><Ring n={2} inline><span>出處：原文/第001回.md</span></Ring></div>
             <div style={{ fontSize: 30, fontWeight: 600, marginTop: 14 }}><span>## 第 2 回 </span><Ring n={3} inline><L><span>[[張飛]]</span></L><span>怒鞭督郵　</span><L><span>[[何進]]</span></L><span>謀誅宦豎</span></Ring></div>
             <div><span>……督郵索賄陷害</span><L><span>[[劉備]]</span></L><span>，</span><L><span>[[張飛]]</span></L><span>怒鞭督郵，三人棄官離去……</span></div>
-            <div style={{ color: okGreen, fontWeight: 600 }}><Ring n={2} inline><span>出處：原文/第002回.txt</span></Ring></div>
+            <div style={{ color: okGreen, fontWeight: 600 }}><Ring n={2} inline><span>出處：原文/第002回.md</span></Ring></div>
             <div style={{ color: quiet, marginTop: 10 }}>⋮　第 3–21 回，同樣格式</div>
           </div>
         </In>
@@ -2722,12 +2722,12 @@ const CheckSource: Page = () => (
               <text x="32" y="246" fontSize="30" fill="#F5F5F4">「我有一計，可殺車冑：</text>
               <text x="32" y="290" fontSize="30" fill="#F5F5F4">乘夜扮作曹軍到徐州，</text>
               <text x="32" y="334" fontSize="30" fill="#F5F5F4">引車冑出迎，襲而殺之。」</text>
-              <text x="32" y="380" fontSize="25" fontFamily={mono} fill="#9AA3AD">出處：原文/第021回.txt</text>
+              <text x="32" y="380" fontSize="25" fontFamily={mono} fill="#9AA3AD">出處：原文/第021回.md</text>
             </g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={400} label="用文字編輯或記事本打開原文第 021 回，Cmd 或 Ctrl+F 搜尋可殺車冑，找到同一句">
             <rect x="880" y="0" width="752" height="400" fill={surface} stroke={rule} strokeWidth="2" />
-            <text x="910" y="52" fontSize="26" fontFamily={mono} fontWeight="600" fill={muted}>原文/第021回.txt</text>
+            <text x="910" y="52" fontSize="26" fontFamily={mono} fontWeight="600" fill={muted}>原文/第021回.md</text>
             <rect x="1300" y="18" width="310" height="50" fill="#FFFFFF" stroke={okGreen} strokeWidth="2" />
             <SvgIcon kind="search" x={1330} y={43} size={30} color={okGreen} />
             <text x="1356" y="53" fontSize="27" fontWeight="600" fill={ink}>可殺車冑</text>
@@ -3091,17 +3091,16 @@ const MapChip = ({ codex, oc }: { codex: ReactNode; oc: ReactNode }) => (
 );
 
 const OpencodeSteps: Page = () => (
-  <Shell source={<span>{'opencode 文件 opencode.ai/docs/zen、opencode.ai/docs/tui'}</span>}>
-    <Eyebrow><span>附錄｜備案 A｜opencode-ai 1.19.3 實測</span></Eyebrow>
+  <Shell source={<span>{'opencode 安裝 opencode.ai；文件 opencode.ai/docs/zen、opencode.ai/docs/tui'}</span>}>
+    <Eyebrow><span>附錄｜備案 A｜opencode 1.19.3 實測</span></Eyebrow>
     <Heading><span>備案 A：opencode＋免費模型</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '880px 1fr', gap: 56, alignItems: 'center' }}>
         <In i={0}>
-          <CmdRow n={<span>{1}</span>} cmd={<span>{"node -v"}</span>} note={<span>{"若沒有，先到 nodejs.org 裝 LTS"}</span>} />
-          <CmdRow n={<span>{2}</span>} cmd={<span>{"npm install -g opencode-ai"}</span>} note={<span>{"Mac、Windows 同一行"}</span>} />
-          <CmdRow n={<span>{3}</span>} cmd={<span>{"cd 練習資料夾 → opencode"}</span>} note={<span>{"不用登入"}</span>} />
-          <CmdRow n={<span>{4}</span>} cmd={<span>{"/models"}</span>} note={<span>{"挑一個免費模型"}</span>} />
-          <CmdRow n={<span>{5}</span>} cmd={<span>{"貼上 prompts.md 的提示詞"}</span>} note={<span>{"和 Codex 練習一樣"}</span>} />
+          <CmdRow n={<span>{1}</span>} cmd={<span style={{ fontSize: 26 }}>{"curl -fsSL https://opencode.ai/v2/install | bash"}</span>} note={<span>{"官方安裝，不需要 Node.js；Windows 在 WSL 裡跑"}</span>} />
+          <CmdRow n={<span>{2}</span>} cmd={<span>{"cd 練習資料夾 → opencode"}</span>} note={<span>{"不用登入"}</span>} />
+          <CmdRow n={<span>{3}</span>} cmd={<span>{"/models"}</span>} note={<span>{"挑一個免費模型"}</span>} />
+          <CmdRow n={<span>{4}</span>} cmd={<span>{"貼上 prompts.md 的提示詞"}</span>} note={<span>{"和 Codex 練習一樣"}</span>} />
         </In>
         <div>
           <Steps>
@@ -3698,7 +3697,7 @@ Codex 裝好了，先把等一下要用的練習資料夾下載下來，Codex �
 按一下：directory，Codex 在哪個資料夾工作，讀檔、存檔都從這裡開始。這張圖是講師的另一個練習資料夾，你的會不一樣。
 按一下：下面有「›」的那一列，是打字的地方，中文直接打，按 Enter 送出。`],
   [SessionDesk, `75:30–78:00。
-/status 裡有一行 Session，現在來講它是什麼。Session 是一次工作階段，像一張工作桌。你交代的任務（例如寫第 1 回大綱）、Codex 讀過的檔案（原文/第001回.txt）、Codex 的回答、你的追問，都在同一張桌上，所以你說「剛剛那段改短」，Codex 知道你指哪段。
+/status 裡有一行 Session，現在來講它是什麼。Session 是一次工作階段，像一張工作桌。你交代的任務（例如寫第 1 回大綱）、Codex 讀過的檔案（原文/第001回.md）、Codex 的回答、你的追問，都在同一張桌上，所以你說「剛剛那段改短」，Codex 知道你指哪段。
 按一下：輸入 /new 會換一張新桌子，新的桌子是空的，前面講過的 Codex 都看不到。這時候說「剛剛那段改短」，Codex 不知道是哪段。
 最後一下：同一件事，留在同一個 Session 做完；換一件事，就開新的。下一頁接著看：換了 Session，你交代過的規則要怎麼留下來。`],
   [StatusPage, `69:30–72:30。
@@ -3731,17 +3730,17 @@ AGENTS.md 長什麼樣子？AGENTS.md 放在練習資料夾最上層，內容是
 按一下：Directory 結尾是 Codex_練習，就可以開始了。開了 Codex 才發現不對，打 /quit 離開，再重新 cd。`],
   [AgentsByHand, `87:30–92:30（練習 5 分鐘）。
 練習 2-2 第 1 步：自己建 AGENTS.md。上一章說過，AGENTS.md 是普通文字檔，所以用電腦內建的文字編輯器就能寫。Codex 先開著沒關係。
-規則從 prompts.md 的「練習 2-2」複製，三行：回答問題時，只根據 原文/ 資料夾裡的文字；找不到就說「原文/ 裡找不到」；每次回答的最後一行寫「出處：原文/第00N回.txt」。
+規則從 prompts.md 的「練習 2-2」複製，三行：回答問題時，只根據 原文/ 資料夾裡的文字；找不到就說「原文/ 裡找不到」；每次回答的最後一行寫「出處：原文/第00N回.md」。
 Mac 用「文字編輯」：按 command＋空白鍵，打 textedit 打開，按「新增文件」。先到選單「格式 → 製作純文字」，這步很重要，不然存出來是 rtf，Codex 讀不懂。貼上規則，按 command＋S，檔名打 AGENTS.md，位置選 Codex_練習。跳出「要使用 .md 還是 .txt」，選「使用 .md」。
 Windows 用「記事本」：按 Windows 鍵打「記事本」打開，貼上規則，選「檔案 → 另存新檔」，位置選 Codex_練習，存檔類型改成「所有檔案」，檔名打 AGENTS.md，編碼用 UTF-8，按存檔。存檔類型沒改的話，會存成 AGENTS.md.txt。
 按一下：檔名要剛好是 AGENTS.md，大寫，副檔名是 .md。存成 AGENTS.md.txt 或 AGENTS.rtf，Codex 都不會讀。Windows 預設會把副檔名藏起來，看不出來的話，用終端機打 ls 確認（Codex 開著時，先開另一個終端機視窗再 cd 進去）。`],
   [RulePractice, `92:30–96:30（練習 4 分鐘）。
 練習 2-2 第 2 步。這頁延續第 ${pageOf(MemoryLayers)} 頁的比喻：AGENTS.md 是貼在牆上的公告，/new 是換一張新桌子。我們來驗證：開新 Session 後，Codex 還會不會照 AGENTS.md 的規則回答。
 規則最後那句「最後一行寫出處」是故意加的：Codex 憑記憶答題不會寫這行，所以看得出新的 Session 有沒有讀到規則。
-按一下：回到 Codex，輸入 /new，換一張新桌子，再問「劉備第一次出場在第幾回？」。最後一行是「出處：原文/第001回.txt」這種格式，就代表新的 Session 讀了規則。
+按一下：回到 Codex，輸入 /new，換一張新桌子，再問「劉備第一次出場在第幾回？」。最後一行是「出處：原文/第001回.md」這種格式，就代表新的 Session 讀了規則。
 按一下：對照題，問「諸葛亮第一次出場在第幾回？」。前 21 回他還沒出場，只有第 9 回一首詩提到「諸葛隆中臥」。照規則，Codex 要說原文/ 裡找不到，不能憑記憶報回數。右下角那行是對照：同一個資料夾拿掉 AGENTS.md 再問，Codex 直接答「第三十七回」，那是模型憑記憶說的，原文/ 裡沒有。
 最後一下：開新 Session，Codex 仍照 AGENTS.md 的規則回答。重要的規則寫進 AGENTS.md，不要只在聊天裡講。
-2026-10-24 實測（Codex 0.154.0 互動介面，Mac，gpt-5.6-luna）：當時是請 Codex 寫 AGENTS.md，內容和這三行一樣。輸入 /new 後問劉備，答「劉備第一次出場在第一回，文中以「姓劉，名備，字玄德」介紹。」，最後一行「出處：原文/第001回.txt」；再問諸葛亮，答「原文／裡找不到諸葛亮正式出場；只在第九回詩句中提到「諸葛隆中臥」。」，最後一行「出處：原文/第009回.txt」。找不到也照樣附出處，是規則寫了「每次回答」的關係。自己用文字編輯器建的檔案，Codex 讀法一樣；這個版本講師還沒在課堂流程實跑過。
+2026-10-24 實測（Codex 0.154.0 互動介面，Mac，gpt-5.6-luna）：當時是請 Codex 寫 AGENTS.md，內容和這三行一樣。輸入 /new 後問劉備，答「劉備第一次出場在第一回，文中以「姓劉，名備，字玄德」介紹。」，最後一行「出處：原文/第001回.md」；再問諸葛亮，答「原文／裡找不到諸葛亮正式出場；只在第九回詩句中提到「諸葛隆中臥」。」，最後一行「出處：原文/第009回.md」。找不到也照樣附出處，是規則寫了「每次回答」的關係。自己用文字編輯器建的檔案，Codex 讀法一樣；這個版本講師還沒在課堂流程實跑過。
 另外用 codex exec 試過（同一天）：同一個資料夾拿掉 AGENTS.md 再問諸葛亮，它直接答「第三十七回」。
 如果沒生效：先打 /quit 關掉，再打 codex 重開一次；還是不行，回去檢查檔名是不是剛好 AGENTS.md、有沒有存在 Codex_練習 裡。`],
   [OutlinePrompt, `96:30–101:30（練習 5 分鐘，Codex 跑約 1 分半）。
@@ -3754,7 +3753,7 @@ Windows 用「記事本」：按 Windows 鍵打「記事本」打開，貼上規
 每段寫 2 到 3 句，說這一回發生了什麼事。
 內文的人名都寫成 Obsidian 連結，例如 [[劉備]]；標題裡的人名不用加連結。
 事件名稱如果第二堂的筆記庫已經有卡，也寫成連結：[[桃園結義]]、[[煮酒論英雄]]。
-每段最後一行寫「出處：原文/第00N回.txt」。
+每段最後一行寫「出處：原文/第00N回.md」。
 【限制】
 只能用原文裡的內容，原文沒寫的事情不要加。
 寫入檔案前，先給我看內容，等我說可以再寫。
@@ -3777,7 +3776,7 @@ Windows：Codex 在 Windows 讀這些中文檔會不會變亂碼，講師沒有�
   [CheckSource, `103:30–107:30（練習 4 分鐘）。
 練習 2-4：核對大綱。先請 Codex 指出根據，貼上 prompts.md 的「練習 2-4」：三國演義大綱.md 第 N 回那段的第二句，根據原文哪一句？引用原句。N 換成你想查的回數。這裡用講師範例的第 21 回當例子，第二句是「劉備奉命出兵截擊袁術後脫離曹操，關羽又設計斬殺徐州刺史車冑，重新占據徐州」。
 按一下：Codex 引用了原句，例如「我有一計，可殺車冑：乘夜扮作曹軍到徐州，引車冑出迎，襲而殺之。」並寫出處。這是講師實測（2026-10-24，codex exec 對範例大綱），Codex 還多引了一句「術若投紹，必從徐州過……」。
-按一下：自己查。打開 原文/第021回.txt：Mac 按右鍵，選「打開方式」再選「文字編輯」；Windows 按右鍵，選「開啟檔案」再選「記事本」。按 Cmd+F 或 Ctrl+F，貼上引用句裡的四、五個字，例如「可殺車冑」。找得到，這句就有根據；找不到，回 Codex 說「原文/第021回.txt 裡找不到這句，請重新確認」。
+按一下：自己查。打開 原文/第021回.md：Mac 按右鍵，選「打開方式」再選「文字編輯」；Windows 按右鍵，選「開啟檔案」再選「記事本」。按 Cmd+F 或 Ctrl+F，貼上引用句裡的四、五個字，例如「可殺車冑」。找得到，這句就有根據；找不到，回 Codex 說「原文/第021回.md 裡找不到這句，請重新確認」。
 按一下：再看標題。把大綱那段的標題，和 回目.md 第 21 回比一比。講師舊版的大綱就是在這裡出錯：「張翼德」被改成 [[張飛]]。
 最後一下：搜得到原句，還要確認原句支持摘要的每件事。搜得到，只證明這句原文真的存在。第二句講了四件事：截擊袁術、脫離曹操、斬殺車冑、占據徐州。這句引文只講到關羽獻計，車冑有沒有真的被殺，要往下讀原文才確認得了。人物、因果、先後都對，標題也和回目一字不差，這段才算核對過。抽查兩段對了，只代表這兩段；整份還是要分段核對，例如每次五回。回到自己的資料核對，是 RAG 的最後一步。
 時間不夠就先做一段，有時間再做第二段。`],
@@ -3829,7 +3828,6 @@ Web Search、RAG、Agent：
 - AGENTS.md：https://developers.openai.com/codex/guides/agents-md 、https://agents.md
 - Codex CLI 安裝方式（含獨立安裝）：https://learn.chatgpt.com/docs/codex/cli
 - Codex 原始碼：https://github.com/openai/codex
-- Node.js 下載：https://nodejs.org/en/download
 - 《三國演義》原文：https://zh.wikisource.org/wiki/三國演義`],
   [NoPlan, `附錄（備用，不計入 120 分鐘）。這頁是「沒有方案」備案的入口，每張卡右邊寫了該看第幾頁。安裝裝不起來、找不到 codex 指令，看第 ${pageOf(InstallCompare)}–${pageOf(InstallErrors)} 頁。
 沒有含 Codex 的 ChatGPT 方案，還是有三條路可以練習，照順序試。
@@ -3839,16 +3837,15 @@ Web Search、RAG、Agent：
 最後一下：先走 A，不行再試 B；C 只拿來示範。
 講師電腦實測：opencode-ai 1.19.3、codex-cli 0.154.0、Ollama 0.40.3。`],
   [OpencodeSteps, `附錄（備用）。備案 A：opencode 加免費模型。
-五步，都在終端機打：
-1. 這個備案使用 npm，所以需要另外安裝 Node.js。若尚未安裝，先到 https://nodejs.org/en/download 下載並安裝 LTS 版，重開終端機，再用 node -v 確認版本。這是備案的準備，Codex 獨立安裝不需要。
-2. npm install -g opencode-ai，Mac 和 Windows 同一行。裝完可以打 opencode --version 確認。
-3. cd 進練習資料夾，打 opencode，不用登入。
-4. 輸入 /models，選一個免費模型。
-5. 從 prompts.md 貼上提示詞，和 Codex 的練習一樣。
+四步，都在終端機打：
+1. 安裝 opencode：貼上官網的 curl -fsSL https://opencode.ai/v2/install | bash，按 Enter。這個安裝程式直接下載 opencode 本體，和 Codex 的獨立安裝一樣，不需要 Node.js。裝完把終端機關掉重開，打 opencode --version 確認。講師當時實測的 1.19.3 是用 npm 裝的，這行是官網目前的安裝方式，講師還沒用它重跑。
+2. cd 進練習資料夾，打 opencode，不用登入。
+3. 輸入 /models，選一個免費模型。
+4. 從 prompts.md 貼上提示詞，和 Codex 的練習一樣。
 按一下：/models 的清單（畫面為示意）。沒登入時 opencode models 就會列出免費模型，例如 deepseek-v4.1-flash-free、glm-5.3-flash-free、big-pickle（預設）。推薦 DeepSeek V4.1 Flash Free 或 GLM-5.3 Flash Free；依官方文件，這兩個不會拿提示詞去訓練，Big Pickle、LL Alpha、MiMo 可能會（文件說明，講師未驗證）。預設的 Big Pickle 寫大綱也對，但花了 148 秒。
 按一下：和 Codex 的對照。opencode 沒有 /status，模型名稱直接顯示在畫面上，用 /models 換模型；/new 開新 Session、/sessions 看舊的；/init 會建立 AGENTS.md（以上依文件）。講師實測：opencode 會讀 AGENTS.md，寫一條「最後一行寫——小助教」，它有照做；沒有 AGENTS.md 時會改讀 CLAUDE.md。
-Windows：官方文件建議用 WSL，講師沒有在原生 Windows 上測過。
-來源：免費模型與隱私 https://opencode.ai/docs/zen/ 、指令 https://opencode.ai/docs/tui/ 、AGENTS.md https://opencode.ai/docs/rules/ 、Windows 用 WSL https://opencode.ai/docs/windows-wsl/`],
+Windows：這行是 bash 指令，PowerShell 不能直接跑。官方文件建議先裝 WSL，在 WSL 的終端機裡跑同一行；講師沒有在 Windows 上測過。
+來源：安裝 https://opencode.ai/ 、免費模型與隱私 https://opencode.ai/docs/zen/ 、指令 https://opencode.ai/docs/tui/ 、AGENTS.md https://opencode.ai/docs/rules/ 、Windows 用 WSL https://opencode.ai/docs/windows-wsl/`],
   [OpencodeRun, `附錄（備用）。講師電腦 2026-10-17 實測，在 aw-01-lab 的複本裡跑。
 指令：opencode run -m opencode/deepseek-v4.1-flash-free "列出這個資料夾的檔案，然後建立 hello.md，內容是：你好"
 按一下：它先執行 ls -la 看資料夾。

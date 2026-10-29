@@ -8,3 +8,7 @@ examples/aw-01-lab/Codex_練習/AGENTS.md
 examples/aw-01-lab/Codex_練習/三國演義大綱.md
 # Interrupted copy/convert temp files
 *.sb-*
+
+# Obsidian plugins installed while testing the sample vault (may hold publish keys)
+examples/**/.obsidian/plugins/
+examples/**/.obsidian/community-plugins.json

@@ -1,61 +1,74 @@
 # 第四堂：發布成網站
 
 這頁在筆電打開，網址和提示詞整段複製，不用照投影片打字。簡報網址：https://chrouos.github.io/AI-workshop-slides
-這堂的檔案都在 [aw-04-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip) 裡：這份 prompts.md、`第三堂完成版/`（缺課補上用）、`參考結果/`（講師的導覽頁範例）。
+這堂只用這份 prompts.md，筆記庫就是你前三堂一路做下來的「三國人物知識庫」。
 
 框上面那行「定位｜期望輸出｜限制」是簡報上的三格重點，不用貼。
 
-## 課前作業（第四堂上課前做完，約 20 分鐘）
+## 課前作業（第四堂上課前做完）
 
-上課不再全班一起部署，請在家先做好。每一步都在瀏覽器裡完成，不用裝任何程式。
+請在家先註冊好 Forestry.md。它是 Digital Garden 外掛作者推出的代管服務：幫你把筆記建置成網站、給你一個網址，不用另外申請 GitHub、Vercel，也不用建 token。
 
-1. 註冊 GitHub：到 https://github.com/signup 註冊，點 email 裡的驗證連結。信有時要等幾分鐘，也看一下垃圾郵件匣。
-2. 註冊 Vercel：到 https://vercel.com/signup ，選 Continue with GitHub。Vercel 要你驗證手機或 email，就照畫面做完（講師沒遇到，未實測）。
-3. 部署網站：打開 Digital Garden 官方入門頁，按 Deploy to Vercel：https://docs.forestry.md/getting-started/01-getting-started/
-   - Git Scope 選你的 GitHub 帳號，Repository Name 填 my-garden，按 Create。名稱重複就改成 my-garden-2。
-   - GitHub 問要不要讓 Vercel 存取 repo，選允許。
-   - 等一兩分鐘，看到 Congratulations 和一個網址。
-4. 打開網址：點那個網址，要看到 Digital Garden 模板的首頁。把網址和 repo 名稱抄下來，上課要用。
-5. 打開一次 token 頁：登入 GitHub，打開 https://github.com/settings/personal-access-tokens/new 。看得到建立 token 的表單就好，先不用建。GitHub 要你再輸入一次密碼、驗證碼，或要你設定雙重驗證（2FA），照畫面做完；上課建 token 時還會再問一次，忘了密碼的人現在就重設。
-6. 用 Obsidian 打開三國人物知識庫，確認 `整理/時間軸.md` 和 `關係/三英戰呂布.md` 都在。少了的話，下載 [aw-04-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip)，照 [README](README.md) 把裡面「第三堂完成版」的檔案放進去。
+1. 打開 https://forestry.md ，按 Sign up 註冊。用 email 和密碼，或按 GitHub 用 GitHub 帳號登入，都可以。
+2. 登入後看到 Plant new garden：Garden name 會先幫你取一個名字（例如 green-elm），下面會顯示網址 `名字.forestry.md`。想換名字就改，再按 Plant。
+3. 等它種好，畫面出現 Your garden is live 和你的網址。點網址打開看看，把網址抄下來，上課要用。
+4. 用 Obsidian 打開三國人物知識庫，確認第三堂做的 `整理/時間軸.md` 和 `關係/三英戰呂布.md` 都在。少了的話不用急，上課練習 3-1 會告訴你從哪裡補上講師的版本。
 
-做完的樣子：手上有一個 `….vercel.app` 網址，打開是 Digital Garden 模板的首頁（不是錯誤頁）；記得 repo 名稱；token 頁打得開。只拿到網址、沒打開看過，不算做完。
+做完的樣子：手上有一個 `名字.forestry.md` 網址，打得開。
 
-卡住怎麼辦：停在哪一步、看到什麼畫面，截圖帶來上課（截圖裡不要有 token）。上課第一個練習就是驗收這份作業，沒做完的人會和做好的同學兩人一組，現場補做；補不完就先用同學的帳號做後面的練習，自己的網站課後再補。部署出現 Error、或等超過 5 分鐘還在跑，到 Vercel 專案的 Deployments 點最上面那一筆，把錯誤訊息截圖帶來。
+免費方案（2026-10-30 講師帳號顯示）：一個網站、每月 30 次發布、100 MB 空間，上課和平常寫卡都夠用。
 
-## 練習 1（驗收）：打開自己的網站
+卡住怎麼辦：停在哪一步、看到什麼畫面，截圖帶來上課。上課第一個練習就是驗收這份作業，沒做完的人現場補，註冊和 Plant 都在瀏覽器裡完成。
 
-定位：課前部署的網站｜期望輸出：打得開模板首頁｜限制：沒做就兩人一組
+## 練習 1（驗收）：打開自己的網址
 
-1. 打開你課前抄下的網址，就是那個 `….vercel.app`。
-2. 看到 Digital Garden 模板的首頁才算過關。
-3. 記下 repo 名稱，例如 my-garden，練習 2 填外掛要用。忘了的話，到 github.com 你的帳號底下看 Repositories。
+定位：自己的花園｜期望輸出：打得開網址｜限制：一人一座
 
-沒做、或打不開：和已經過關的鄰座兩人一組，照上面的「課前作業」第 1 到 4 步在自己的筆電補部署，建置時先跟鄰座一起往下聽。練習 2 開始時自己的網站還沒好，就用鄰座的帳號和電腦做完練習 2 到 4，自己的網站課後再補。
+1. 登入 Forestry.md。還沒有花園的人，照上面「課前作業」第 1 到 3 步現場做。
+2. 打開你的網址 `名字.forestry.md`，看得到網頁就過關。
+3. 網址忘了：Forestry 儀表板最上面 Your garden is live 下面那行就是，按 Copy address 可以複製。
 
-## 練習 2（token）：連上 GitHub
+## 練習 2（連接）：連上 Forestry
 
-定位：今天的儲存庫｜期望輸出：首頁變三國演義｜限制：token 不外流
+定位：今天的儲存庫｜期望輸出：首頁變三國演義｜限制：Garden Key 不外流
 
-1. 在三國人物知識庫裡裝外掛：設定 →「第三方外掛程式」→ 看到受限模式就按「關閉」→ 社群外掛程式按「瀏覽」→ 搜尋 Digital Garden，作者是 Ole Eskild Steensen → 安裝 → 啟用。
-2. 打開 https://github.com/settings/personal-access-tokens/new 建 fine-grained token。GitHub 要你再輸入密碼或驗證碼，是正常的。
-   - Token name：digital-garden
-   - Expiration：90 days
-   - Repository access：Only select repositories，只勾 my-garden
-   - Permissions：Contents 和 Pull requests 都改成 Read and write
-   - 按 Generate token，馬上複製。這串字只顯示這一次。
-3. Obsidian → 設定 → Digital Garden，填三格：GitHub repo name 只填 my-garden，GitHub Username 填 github.com/ 後面那段，GitHub token 貼剛才複製的那串。
-4. 試發布一張：打開〈三國演義〉，按 Ctrl／Cmd + P，搜尋 garden publish，選 Publish Active Note。
+1. 在三國人物知識庫裡裝外掛：設定 →「第三方外掛程式」→ 按「離開受限模式」→ 社群外掛程式按「瀏覽」→ 搜尋 Digital Garden，作者是 oleeskild → 安裝 → 啟用。
+2. 設定 → 左下的 Digital Garden → Publish to 選 **Forestry.md**。
+3. 到 Forestry 儀表板右邊的 Garden Key，按 Reveal Garden Key，複製那串字；回 Obsidian 貼進 Garden Key 欄位，按 Connect。看到 Connected to 你的花園名稱，就連上了。連上後外掛會請你選首頁，選〈三國演義〉。
+4. **把 Simple note URLs 關掉**：在同一頁往下捲到 Publishing，找到 Simple note URLs，把開關關掉。我們的卡名都是中文，這個開關開著，每張卡的網址會變成一樣，網站會建置失敗。
+5. 試發布：按 Ctrl／Cmd + P，搜尋 garden publish，選 Publish All Notes Marked for Publish。
 
-看結果：等一兩分鐘，打開你的網址。首頁從模板的預設頁變成〈三國演義〉，就代表連上了。上面的人名連結現在點不開是正常的，那些卡還沒發布。
+看結果：回 Forestry 儀表板看 Publish history，最上面那一筆從 Building 變成 Published（講師實測約半分鐘），再打開你的網址，首頁變成〈三國演義〉就成功了。
 
-沒變的話：先等兩分鐘；再回頭查三格，最常見的是 repo name 多打了帳號，或 token 少開了 Contents。
+出現 Failed：點右邊箭頭展開看錯誤訊息。看到 DuplicatePermalink，就是第 4 步的 Simple note URLs 沒關：關掉後再發布一次。講師 2026-10-30 實跑，第一次就是這樣失敗兩次，關掉後才成功。
 
-token 只放在外掛裡，不貼進筆記、截圖或群組。
+Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛設定，不貼進筆記、截圖或群組；不小心外流，到 Forestry 儀表板按 Regenerate Garden Key 換一把新的。
 
-## 練習 3（dg-publish）：發布時間軸卡
+## 小練習：改一句，再發布一次（也是休息時間）
 
-定位：時間軸＋導覽頁｜期望輸出：導覽頁走得通｜限制：先查開頭三行
+定位：〈三國演義〉｜期望輸出：網站上看到那句｜限制：只改一句
+
+1. 打開〈三國演義〉，在最後加一句你自己的話，例如「這是我的三國筆記」。
+2. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish。
+3. 回 Forestry 儀表板看 Publish history，等最上面那一筆變成 Published（講師實測約半分鐘）。
+4. 重新整理你的網址，看那句有沒有出現。沒變的話，先等半分鐘再整理。
+
+## 練習 3-1（dg-publish）：讓時間軸卡上線
+
+定位：整理/時間軸.md｜期望輸出：網站看得到時間軸｜限制：先查開頭三行
+
+1. 打開 `整理/時間軸.md`，看開頭三行。第三堂 Skill 產出的時間軸，開頭沒有屬性，直接就是一段 HTML。
+2. 沒有 `dg-publish: true` 的話，Ctrl／Cmd + P，執行 Digital Garden: Add publish flag。
+3. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish，等 Publish history 變成 Published。
+4. 打開你的網址，後面接 `/整理/時間軸/`。
+
+筆記庫裡沒有 `整理/時間軸.md`，或沒有第三堂新增的三張卡（第三堂沒做完）：講師的成品在線上 [aw-03-sample-output/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output)，把 `練習4/時間軸.md` 放進筆記庫的 `整理/`，`練習3/關係/` 的三張卡放進 `關係/`。拖檔案，不要拖整個資料夾。
+
+看結果：看到橫向時間軸就過關。網站的內文欄比較窄，一開始只看得到前三件，用觸控板往右滑，或拖動時間軸下方的捲軸，就看得到其他事件。出現 404，就是那張還沒勾，或勾了還沒發布。
+
+## 練習 3-2（導覽頁）：讓讀者點得到每張卡
+
+定位：知識庫導覽｜期望輸出：導覽頁連結點得開｜限制：先查開頭三行
 
 1. 做導覽頁。在三國人物知識庫資料夾打開 Codex，貼上：
 
@@ -63,7 +76,7 @@ token 只放在外掛裡，不貼進筆記、截圖或群組。
 請在 整理/ 新增 知識庫導覽.md。分成時間、人物、事件三段：時間那段只放 [[時間軸]]；人物那段用 [[連結]] 列出 人物/ 裡的每張卡；事件那段用 [[連結]] 列出 關係/ 裡的每張卡，但先不要放〈三英戰呂布〉，練習 4 再加。只連到已有的卡，不要新增卡片，也不要改別的檔案。開頭加上 dg-publish: true。寫入前先給我看。
 ```
 
-   看過預覽：事件那段沒有三英戰呂布，也沒有筆記庫裡找不到的卡，再回「可以」。Codex 做不出來，就用講師的 [參考結果/整理/知識庫導覽.md](參考結果/整理/知識庫導覽.md)。
+   看過預覽：事件那段沒有三英戰呂布，也沒有筆記庫裡找不到的卡，再回「可以」。講師做的導覽頁放在線上，可以對照：[aw-04-sample-output/知識庫導覽.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-sample-output/%E7%9F%A5%E8%AD%98%E5%BA%AB%E5%B0%8E%E8%A6%BD.md)。
 
 2. 打開〈三國演義〉，在最後一行加 `[[知識庫導覽]]`。
 3. 找出還沒勾的卡。在同一個 Codex 貼上：
@@ -74,31 +87,29 @@ token 只放在外掛裡，不貼進筆記、截圖或群組。
 
    拿清單去核對：打開標「沒有」的卡，看開頭三行，確定 Codex 沒看錯。要公開的，打開那張卡按 Ctrl／Cmd + P，執行 Digital Garden: Add publish flag；不想公開的，回導覽頁把那個連結刪掉。
 
-4. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish，等兩分鐘再打開網址。
+4. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish，等 Publish history 變成 Published 再打開網址。
 
-看結果：從首頁點〈知識庫導覽〉，再點〈時間軸〉，一路走得通；導覽頁上每個連結都點得開，包括你剛補勾的卡。講師實跑時，清單標出〈白門樓〉〈草船借箭〉沒有 dg-publish；你的清單可能不一樣，例如第二堂自己寫的卡、還沒加開頭三行的時間軸。
+看結果：從首頁點〈知識庫導覽〉，再點〈時間軸〉和每張卡，一路走得通；導覽頁上每個連結都點得開，包括你剛補勾的卡。講師實跑時，清單標出〈白門樓〉〈草船借箭〉沒有 dg-publish；你的清單可能不一樣，例如第二堂自己寫的卡。
 
-點了出現 404，就是那張還沒勾、或勾了還沒發布。時間軸裡的人名是純文字、點不了，這是對的；時間軸裡出現 `[[ ]]`，或點了會 404 的來源卡連結，回第三堂的 SKILL.md 補規則，再產生一次。
+點了出現 404，就是那張還沒勾、或勾了還沒發布。時間軸裡的事件名稱是純文字、點不了，這是對的；時間軸裡出現 `[[ ]]`，或點了會 404 的來源卡連結，回第三堂的 SKILL.md 補規則，再產生一次。
 
 ## 練習 4（驗收）：同學從首頁找到新卡
 
 定位：一張新卡｜期望輸出：同學走得到｜限制：無痕視窗、從首頁
 
 1. 公開〈三英戰呂布〉：打開它，執行 Digital Garden: Add publish flag；在導覽頁的事件那段加上 `[[三英戰呂布]]`；再執行 Publish All Notes Marked for Publish。
-2. 找網址：Vercel → 你的 my-garden 專案 → Domains，複製最短的那個 `….vercel.app`。不要拿 Deployments 清單裡那串比較長的網址；照 Vercel 文件，Standard Protection 會讓那種網址要先登入 Vercel（講師沒在教室實測過）。
+2. 找網址：Forestry 儀表板最上面 Your garden is live 下面那行，按 Copy address 複製。
 3. 自己先開無痕視窗（Chrome、Edge：Ctrl＋Shift＋N；Mac：Cmd＋Shift＋N），貼上網址，從首頁點到〈三英戰呂布〉。
 4. 把網址傳給同學，用 LINE 或寫在紙上都可以。同學在自己的電腦開無痕視窗，只能從首頁開始點：首頁 → 知識庫導覽 → 三英戰呂布，不能直接打卡片的網址。
-5. 回報：走到了就打勾；走不到，說卡在哪一頁、看到什麼（404、連結不見、要求登入）。你回去查那一頁的 dg-publish 和連結，修好再發布，請同學再走一次。做完交換角色。
+5. 回報：走到了就打勾；走不到，說卡在哪一頁、看到什麼（404、連結不見）。你回去查那一頁的 dg-publish 和連結，修好再發布，請同學再走一次。做完交換角色。
 
-看結果：走不到常見三種：〈三英戰呂布〉沒勾 dg-publish，點了是 404；導覽頁改了沒重新發布，連結不在；傳到要登入的網址，看到 Vercel 登入頁。
+看結果：走不到常見兩種：〈三英戰呂布〉沒勾 dg-publish，點了是 404；導覽頁改了沒重新發布，連結不在。
 
 ## 網址
 
 - 簡報：https://chrouos.github.io/AI-workshop-slides
-- Digital Garden 官方入門頁（Deploy to Vercel）：https://docs.forestry.md/getting-started/01-getting-started/
-- 建 GitHub token：https://github.com/settings/personal-access-tokens/new
-- GitHub 註冊：https://github.com/signup
-- Vercel 註冊：https://vercel.com/signup
-- 第三堂完成版：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-lab/README.md
-- 講師的三國筆記庫（第二堂的 aw-02-lab.zip，點了直接下載）：https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip
+- Forestry.md（註冊、Plant 花園、Garden Key、Publish history）：https://forestry.md
+- Digital Garden 外掛：https://github.com/oleeskild/obsidian-digital-garden
+- 講師的範例網站（三國筆記庫）：https://glowing-clearing.forestry.md/
+- 練習 3-2 導覽頁的講師範例：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-sample-output/%E7%9F%A5%E8%AD%98%E5%BA%AB%E5%B0%8E%E8%A6%BD.md
 - 所有教材總表：https://github.com/Chrouos/AI-workshop-slides/tree/main/examples

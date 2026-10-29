@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>三國時間軸</title>
+  <style>
+    :root { --paper:#f8f5ed; --ink:#302b25; --muted:#786c59; --line:#a68a5c; --accent:#9d412f; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100svh; background:var(--paper); color:var(--ink); font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif; }
+    main { max-width:1800px; margin:auto; padding:clamp(28px,6vw,88px) clamp(20px,5vw,80px); }
+    header { border-top:3px solid var(--ink); padding-top:24px; }
+    h1 { margin:0 0 14px; font-family:"Noto Serif TC","Songti TC",serif; font-size:clamp(32px,4vw,52px); font-weight:600; letter-spacing:.12em; }
+    p { margin:0; color:var(--muted); line-height:1.9; font-size:14px; }
+    .viewer { margin-top:42px; border:1px solid #ded5c4; border-radius:12px; background:#fffdf7; overflow:hidden; }
+    .scroll { overflow-x:auto; overscroll-behavior-x:contain; touch-action:pan-y pinch-zoom; cursor:grab; scrollbar-color:var(--line) #eee7d9; scrollbar-width:auto; user-select:none; -webkit-user-select:none; }
+    .scroll.dragging { cursor:grabbing; }
+    .scroll:focus-visible { outline:3px solid var(--accent); outline-offset:-4px; }
+    .timeline { display:grid; grid-template-columns:repeat(6,1fr); position:relative; list-style:none; margin:0; padding:80px 40px 76px; width:100%; min-width:1560px; }
+    .timeline::before { content:""; position:absolute; height:2px; top:156px; left:calc(40px + (100% - 80px)/12); right:calc(40px + (100% - 80px)/12); background:var(--line); }
+    .event { position:relative; display:grid; grid-template-rows:76px 30px auto; justify-items:center; text-align:center; }
+    .name { margin:0; font-family:"Noto Serif TC","Songti TC",serif; font-size:24px; font-weight:600; line-height:1.5; letter-spacing:.04em; white-space:nowrap; }
+    .dot { position:relative; top:-7px; width:16px; height:16px; border:4px solid #fffdf7; border-radius:50%; background:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+    .details { display:flex; flex-direction:column; gap:9px; line-height:1.5; font-size:16px; color:var(--muted); }
+    .year { font-size:14px; }
+    footer { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 24px; margin-top:18px; }
+    footer p { font-size:12px; }
+    @media (max-width:600px) { .viewer { margin-top:28px; } .timeline { padding-top:64px; padding-bottom:64px; } .timeline::before { top:140px; } }
+    @media print { main { padding:20px; } .scroll { overflow:visible; } .timeline { min-width:0; padding-left:0; padding-right:0; } .timeline::before { left:8.333%; right:8.333%; } .name { font-size:14px; } .details { font-size:12px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>三國時間軸</h1>
+      <p id="instructions">依《三國演義》回目排列。按住時間軸左右拖曳，或用觸控板、下方捲軸查看完整時間軸。</p>
+    </header>
+    <section class="viewer" aria-label="三國事件時間軸">
+      <div class="scroll" tabindex="0" role="region" aria-label="可左右拖曳的時間軸" aria-describedby="instructions keyboard-help">
+        <ol class="timeline">
+          <li class="event"><h2 class="name">桃園結義</h2><span class="dot" aria-hidden="true"></span><div class="details"><span class="chapter">第 1 回</span><span class="year">中平元年</span></div></li>
+          <li class="event"><h2 class="name">三英戰呂布</h2><span class="dot" aria-hidden="true"></span><div class="details"><span class="chapter">第 5 回</span></div></li>
+          <li class="event"><h2 class="name">白門樓</h2><span class="dot" aria-hidden="true"></span><div class="details"><span class="chapter">第 19 回</span></div></li>
+          <li class="event"><h2 class="name">煮酒論英雄</h2><span class="dot" aria-hidden="true"></span><div class="details"><span class="chapter">第 21 回</span></div></li>
+          <li class="event"><h2 class="name">草船借箭</h2><span class="dot" aria-hidden="true"></span><div class="details"><span class="chapter">第 46 回</span></div></li>
+          <li class="event"><h2 class="name">赤壁之戰</h2><span class="dot" aria-hidden="true"></span><div class="details"><span class="chapter">第 49 回</span></div></li>
+        </ol>
+      </div>
+    </section>
+    <footer>
+      <p>資料來源：整理/時間軸.md</p>
+      <p id="keyboard-help">鍵盤操作：← → 移動，Home / End 前往起點／終點。</p>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const scroller = document.querySelector('.scroll');
+      let drag = null;
+      scroller.addEventListener('pointerdown', event => {
+        if (!event.isPrimary || event.button !== 0) return;
+        drag = { id:event.pointerId, x:event.clientX, scroll:scroller.scrollLeft };
+        scroller.setPointerCapture(event.pointerId);
+        scroller.classList.add('dragging');
+        scroller.focus({ preventScroll:true });
+      });
+      scroller.addEventListener('pointermove', event => {
+        if (!drag || drag.id !== event.pointerId) return;
+        scroller.scrollLeft = drag.scroll + drag.x - event.clientX;
+      });
+      const stop = event => {
+        if (!drag || drag.id !== event.pointerId) return;
+        drag = null;
+        scroller.classList.remove('dragging');
+        if (scroller.hasPointerCapture(event.pointerId)) scroller.releasePointerCapture(event.pointerId);
+      };
+      ['pointerup','pointercancel','lostpointercapture'].forEach(type => scroller.addEventListener(type, stop));
+      scroller.addEventListener('keydown', event => {
+        const positions = { ArrowLeft:scroller.scrollLeft - 240, ArrowRight:scroller.scrollLeft + 240, Home:0, End:scroller.scrollWidth };
+        if (!Object.hasOwn(positions, event.key)) return;
+        event.preventDefault();
+        scroller.scrollLeft = positions[event.key];
+      });
+    })();
+  </script>
+</body>
+</html>

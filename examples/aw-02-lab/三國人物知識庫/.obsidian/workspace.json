@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "關係/煮酒論英雄.md",
+                "file": "三國演義.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "煮酒論英雄"
+              "title": "三國演義"
             }
           }
         ]
@@ -185,12 +185,29 @@
       "daily-notes:開啟今天的每日筆記": false,
       "templates:插入模板": false,
       "command-palette:開啟命令面板": false,
-      "bases:建立新的 base": false
+      "bases:建立新的 base": false,
+      "digitalgarden:Digital Garden Publication Center": false
     }
   },
-  "active": "da91c77b43f8476d",
+  "active": "b0287f57ac80e415",
   "lastOpenFiles": [
+    "原文/第046回.md",
+    "原文/第038回.md",
+    "原文/第037回.md",
+    "原文",
+    "勢力/蜀漢.md",
+    "勢力/東吳.md",
+    "三國演義.md",
     "整理/說明.md",
+    "勢力/曹魏.md",
+    "人物/關羽.md",
+    "人物/張飛.md",
+    "人物/孫權.md",
+    "人物/劉備.md",
+    "關係/煮酒論英雄.md",
+    "模板/關係卡模板.md",
+    "關係/赤壁之戰.md",
+    "關係/桃園結義.md",
     "整理",
     "原文/第021回.txt",
     "原文/第020回.txt",
@@ -199,12 +216,6 @@
     "原文/第017回.txt",
     "原文/第016回.txt",
     "原文/第015回.txt",
-    "原文/第014回.txt",
-    "原文/第013回.txt",
-    "模板/關係卡模板.md",
-    "關係/桃園結義.md",
-    "整理/練習提示詞.md",
-    "人物/劉備.md",
-    "三國演義.md"
+    "整理/練習提示詞.md"
   ]
 }

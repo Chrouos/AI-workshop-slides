@@ -1,45 +1,12 @@
 # 第四堂：發布成網站
 
-整包下載：[aw-04-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip)。Codex 一樣開在你自己的「三國人物知識庫」，這個資料夾只是教材。
+整包下載：[aw-04-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip)。這堂只用一份 prompts.md，筆記庫就是你前三堂一路做下來的「三國人物知識庫」。
 
 ```text
 aw-04-lab/
-├── prompts.md        課前作業和四個練習
-├── 第三堂完成版/      第三堂缺課、或 Codex 沒跑出來的人用
-└── 參考結果/
-    └── 整理/知識庫導覽.md   練習 3 導覽頁的講師範例
+└── prompts.md        課前作業、五個練習的步驟和網址
 ```
 
-- [prompts.md](prompts.md)：最上面是**課前作業**（註冊 GitHub、Vercel，部署好網站，打開一次 token 頁），第四堂上課前請先做完。後面是四個練習的步驟、提示詞和要打的網址。請在筆電打開，整段複製，不用照投影片打字。
-- [第三堂完成版/](第三堂完成版/)：第三堂的成品。放進筆記庫就能接著做第四堂。
-- [參考結果/整理/知識庫導覽.md](參考結果/整理/知識庫導覽.md)：練習 3 導覽頁的講師範例。Codex 做不出來時才用。
-
-## 第三堂完成版裡有什麼
-
-```text
-第三堂完成版/
-├── 關係/
-│   ├── 三英戰呂布.md
-│   ├── 白門樓.md
-│   └── 草船借箭.md
-└── 整理/
-    └── 時間軸.md
-```
-
-- 三張關係卡是講師用第三堂練習 3 的提示詞請 Codex 寫的（2026-10-24 實跑），內容都對照過 `原文/第005回.txt`、`原文/第019回.txt`、`原文/第046回節選.txt`。開頭照第三堂的規則沒有 `dg-publish`，所以還不會被發布。
-- Codex 那次把回目寫成「第五回」，講師改成數字 `5`、`19`、`46`，和舊卡的寫法一樣，時間軸才排得對。你自己跑出來的卡如果也這樣，改成數字就好。
-- `時間軸.md` 是用第三堂修好的 sanguo-timeline Skill 排出來的：6 件事，第 1、5、19、21、46、49 回。人名和來源卡都是純文字。開頭已經加好 `dg-publish: true`。
-
-## 怎麼放進筆記庫
-
-1. 下載 `aw-04-lab.zip`，解壓縮。Windows 要在 ZIP 上按右鍵選「全部解壓縮」。
-2. 打開 `aw-04-lab/第三堂完成版/關係` 資料夾，選取裡面的三個檔案，拖進筆記庫的 `關係/` 資料夾。
-3. 打開 `aw-04-lab/第三堂完成版/整理` 資料夾，把 `時間軸.md` 拖進筆記庫的 `整理/`。
-
-**拖檔案，不要拖整個資料夾。** Mac 的 Finder 把同名資料夾拖過去時，會問要不要「取代」，按下去會把筆記庫裡原本的 `關係/` 整個換掉，舊卡就不見了。
-
-筆記庫裡已經有同名的卡（例如你自己做過三英戰呂布），就留著你自己的，不用覆蓋。
-
-放好後在 Obsidian 左邊看得到這四張卡，就可以開始做練習。
-
-沒有筆記庫的人，先下載第二堂的 [aw-02-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip)，用 Obsidian 打開裡面的「三國人物知識庫」，再照上面放進第三堂完成版。
+- [prompts.md](prompts.md)：最上面是**課前作業**（註冊 Forestry.md、種一座花園），第四堂上課前請先做完。後面是練習的步驟、提示詞和網址。請在筆電打開，整段複製，不用照投影片打字。
+- 練習 3-2 導覽頁的講師範例放在線上，想對照再看：[aw-04-sample-output/知識庫導覽.md](../aw-04-sample-output/知識庫導覽.md)。
+- 講師的範例網站：https://glowing-clearing.forestry.md/

@@ -18,31 +18,30 @@
 - 簡報：[aw-02](https://chrouos.github.io/AI-workshop-slides/s/aw-02/)
 - 下載：[aw-02-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip)，這堂的東西都在裡面：
   - `三國人物知識庫/`：講師的三國筆記庫，用 Obsidian 開啟這個資料夾，Codex 也開在這裡。第三、四堂都接著用這一個筆記庫
-  - `參考結果/`：範例大綱（第一堂沒做完的人練習 2 用）、全班一起核對的講師實跑結果
   - `prompts.md`：[線上看](aw-02-lab/prompts.md)
-- 說明：[aw-02-lab/README.md](aw-02-lab/README.md)，含筆記庫裡每張卡的介紹
+- 另外要用第一堂的 `aw-01-lab/Codex_練習/`：`原文/` 和自己寫的大綱，練習 2 搬進筆記庫
+- 說明：[aw-02-lab/README.md](aw-02-lab/README.md)，含筆記庫裡每張卡的介紹（只放在 GitHub，不在 ZIP 裡）
+- 練習 3 第 1 輪全班核對的回答，和附錄進階討論用的講師實跑結果：[aw-02-sample-output/](aw-02-sample-output/README.md)
 
 ## 第三堂：Skills
 
 - 簡報：[aw-03](https://chrouos.github.io/AI-workshop-slides/s/aw-03/)
 - 下載：[aw-03-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-03-lab.zip)，Codex 一樣開在自己的「三國人物知識庫」，這包只是教材：
-  - `prompts.md`：[線上看](aw-03-lab/prompts.md)，含 git 裝不起來時的備用做法
-  - `eli5/`：git 裝不起來時的備用 Skill
-  - `sanguo-timeline-骨架/`：時間軸 Skill 的骨架和說明
-  - `參考結果/`：講師實跑的成品（關係圖、三張新關係卡、時間軸、修好的 Skill），中途卡住可以直接拿來用
-- 第二堂缺課：先下載上面第二堂的 aw-02-lab.zip，用裡面的「三國人物知識庫」
+  - `prompts.md`：[線上看](aw-03-lab/prompts.md)，含 Skill 裝不起來時的備用做法
+  - `sanguo-timeline/`：練習 4 的時間軸 Skill 骨架，用 `npx skills add` 裝進筆記庫
+- 講師每個練習的實跑成品：[aw-03-sample-output/](aw-03-sample-output/README.md)
 
 ## 第四堂：發布到網站
 
 - 簡報：[aw-04](https://chrouos.github.io/AI-workshop-slides/s/aw-04/)
-- 下載：[aw-04-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip)，Codex 一樣開在自己的「三國人物知識庫」：
-  - `prompts.md`：[線上看](aw-04-lab/prompts.md)，最上面是課前作業，第四堂上課前要先做完
-  - `第三堂完成版/`：第三堂的成品。第三堂缺課或沒做完的人，照 [aw-04-lab/README.md](aw-04-lab/README.md) 放進筆記庫，就能接著做第四堂
-  - `參考結果/整理/知識庫導覽.md`：練習 3 導覽頁的講師範例
+- 下載：[aw-04-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip)，只有一份 prompts.md：
+  - `prompts.md`：[線上看](aw-04-lab/prompts.md)，最上面是課前作業（註冊 Forestry.md、種一座花園），第四堂上課前要先做完
+- 練習 3-2 導覽頁的講師範例：[aw-04-sample-output/](aw-04-sample-output/README.md)
+- 講師的範例網站：https://glowing-clearing.forestry.md/
 
 ## 給講師：改了教材之後
 
-每堂一個 ZIP，從同名資料夾打包：`aw-01-lab/`、`aw-02-lab/`、`aw-03-lab/`、`aw-04-lab/`。改了裡面的檔案，記得重新打包再推上 GitHub。學生打開 Codex 的資料夾（`aw-01-lab/Codex_練習/`、`aw-02-lab/三國人物知識庫/`）只放 Codex 要讀的東西，提示詞和參考結果都放在外層；打包時也會略過講師自己試跑留下的 AGENTS.md、三國演義大綱.md 和影片：
+每堂一個 ZIP，從同名資料夾打包：`aw-01-lab/`、`aw-02-lab/`、`aw-03-lab/`、`aw-04-lab/`。改了裡面的檔案，記得重新打包再推上 GitHub。學生打開 Codex 的資料夾（`aw-01-lab/Codex_練習/`、`aw-02-lab/三國人物知識庫/`）只放 Codex 要讀的東西，提示詞放在外層，講師的實跑成品放在 `aw-0N-sample-output/`，不打包；打包時也會略過講師自己試跑留下的 AGENTS.md、三國演義大綱.md 和影片：
 
 ```text
 python3 scripts/pack-examples.py          # 只重包內容有變的 ZIP

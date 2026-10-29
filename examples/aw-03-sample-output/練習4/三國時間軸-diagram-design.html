@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三國時間軸</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Geist:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    :root { color-scheme: light; --paper: #f5f5f5; --ink: #2d3142; --muted: #4f5d75; --accent: #bf4520; --rule: rgba(45,49,66,.12); }
+    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px 24px; background: var(--paper); color: var(--ink); font-family: 'Geist','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif; }
+    main { width: 100%; max-width: 1200px; min-width: 0; }
+    h1 { margin: 0 0 16px; font-family: 'Instrument Serif','Noto Serif TC','Songti TC',serif; font-size: 28px; font-weight: 400; }
+    p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    .diagram-container { margin-top: 32px; width: 100%; overflow-x: auto; overscroll-behavior-x: contain; touch-action: pan-y; cursor: grab; user-select: none; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); scrollbar-color: var(--muted) #ececec; scrollbar-width: auto; }
+    .diagram-container.dragging { cursor: grabbing; }
+    .diagram-container:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    svg { display: block; width: 100%; min-width: 1440px; font-family: 'Geist','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif; }
+    .event-name { fill: var(--ink); font-size: 16px; font-weight: 600; text-anchor: middle; }
+    .event-meta { fill: var(--muted); font-size: 12px; font-weight: 400; text-anchor: middle; }
+    .hint { margin-top: 16px; font-size: 12px; }
+    @media (max-width: 600px) { body { padding: 32px 16px; } }
+    @media print { body { display: block; padding: 0; } .diagram-container { overflow-x: visible; } svg { min-width: 0; } .hint { display: none; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>三國時間軸</h1>
+    <p>依《三國演義》回目排列</p>
+    <div class="diagram-container" tabindex="0" role="region" aria-label="可左右拖曳的三國時間軸" aria-describedby="timeline-hint">
+      <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="三國時間軸-title 三國時間軸-desc">
+        <title id="三國時間軸-title">三國時間軸</title>
+        <desc id="三國時間軸-desc">桃園結義、三英戰呂布、白門樓、煮酒論英雄、草船借箭、赤壁之戰依回目順序排列，桃園結義標示中平元年。</desc>
+        <rect width="1440" height="320" fill="#f5f5f5"/>
+        <line x1="64" y1="144" x2="1376" y2="144" stroke="#4f5d75" stroke-width="1"/>
+        <g class="event" data-chapter="第 1 回">
+          <circle cx="120" cy="144" r="4" fill="#2d3142"/>
+          <text class="event-name" x="120" y="112">桃園結義</text>
+          <text class="event-meta" x="120" y="180">第 1 回</text>
+          <text class="event-meta" x="120" y="208">中平元年</text>
+        </g>
+        <g class="event" data-chapter="第 5 回">
+          <circle cx="360" cy="144" r="4" fill="#2d3142"/>
+          <text class="event-name" x="360" y="112">三英戰呂布</text>
+          <text class="event-meta" x="360" y="180">第 5 回</text>
+        </g>
+        <g class="event" data-chapter="第 19 回">
+          <circle cx="600" cy="144" r="4" fill="#2d3142"/>
+          <text class="event-name" x="600" y="112">白門樓</text>
+          <text class="event-meta" x="600" y="180">第 19 回</text>
+        </g>
+        <g class="event" data-chapter="第 21 回">
+          <circle cx="840" cy="144" r="4" fill="#2d3142"/>
+          <text class="event-name" x="840" y="112">煮酒論英雄</text>
+          <text class="event-meta" x="840" y="180">第 21 回</text>
+        </g>
+        <g class="event" data-chapter="第 46 回">
+          <circle cx="1080" cy="144" r="4" fill="#2d3142"/>
+          <text class="event-name" x="1080" y="112">草船借箭</text>
+          <text class="event-meta" x="1080" y="180">第 46 回</text>
+        </g>
+        <g class="event" data-chapter="第 49 回">
+          <circle cx="1320" cy="144" r="4" fill="#2d3142"/>
+          <text class="event-name" x="1320" y="112">赤壁之戰</text>
+          <text class="event-meta" x="1320" y="180">第 49 回</text>
+        </g>
+      </svg>
+    </div>
+    <p class="hint" id="timeline-hint">按住時間軸左右拖曳，或使用觸控板、下方捲軸。鍵盤可用 ← → 捲動，Home / End 移至起點或終點。事件依回目順序等距排列。</p>
+  </main>
+  <script>
+    (() => {
+      const scroller = document.querySelector('.diagram-container');
+      let drag = null;
+      scroller.addEventListener('pointerdown', event => {
+        if (!event.isPrimary || event.button !== 0) return;
+        // Leave native scrollbar interactions to the browser.
+        if (event.clientY >= scroller.getBoundingClientRect().top + scroller.clientHeight) return;
+        drag = { id: event.pointerId, x: event.clientX, scroll: scroller.scrollLeft };
+        scroller.setPointerCapture(event.pointerId);
+        scroller.classList.add('dragging');
+        scroller.focus({ preventScroll: true });
+        if (event.pointerType === 'mouse') event.preventDefault();
+      });
+      scroller.addEventListener('pointermove', event => {
+        if (!drag || event.pointerId !== drag.id) return;
+        scroller.scrollLeft = drag.scroll + drag.x - event.clientX;
+      });
+      function stop(event) {
+        if (!drag || event.pointerId !== drag.id) return;
+        drag = null;
+        scroller.classList.remove('dragging');
+        if (scroller.hasPointerCapture(event.pointerId)) scroller.releasePointerCapture(event.pointerId);
+      }
+      ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => scroller.addEventListener(type, stop));
+      scroller.addEventListener('keydown', event => {
+        const position = { ArrowLeft: scroller.scrollLeft - 240, ArrowRight: scroller.scrollLeft + 240, Home: 0, End: scroller.scrollWidth };
+        if (!Object.prototype.hasOwnProperty.call(position, event.key)) return;
+        event.preventDefault();
+        scroller.scrollLeft = position[event.key];
+      });
+    })();
+  </script>
+</body>
+</html>

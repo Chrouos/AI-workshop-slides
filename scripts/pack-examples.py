@@ -19,11 +19,15 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'examples'
 PACKS = [
     # Students write their own AGENTS.md and outline in Codex_練習; instructor test runs and videos stay out.
     ('aw-01-lab.zip', 'aw-01-lab', 'aw-01-lab', {'AGENTS.md', '三國演義大綱.md', '*.mov', '*.mp4'}),
-    ('aw-02-lab.zip', 'aw-02-lab', 'aw-02-lab', {'.obsidian'}),
-    ('aw-03-lab.zip', 'aw-03-lab', 'aw-03-lab', set()),
-    ('aw-04-lab.zip', 'aw-04-lab', 'aw-04-lab', set()),
+    # aw-02: README.md stays on GitHub only; students need just the vault and prompts.md.
+    ('aw-02-lab.zip', 'aw-02-lab', 'aw-02-lab', {'.obsidian', 'README.md'}),
+    # Students only need the prompts and the skeleton; the README is for browsing on GitHub.
+    ('aw-03-lab.zip', 'aw-03-lab', 'aw-03-lab', {'README.md'}),
+    # The README is the GitHub landing page; students only download prompts.md.
+    ('aw-04-lab.zip', 'aw-04-lab', 'aw-04-lab', {'README.md'}),
 ]
-SKIP = {'.DS_Store', 'Thumbs.db'}
+# .gitkeep only keeps empty folders in git; the ZIP stores those folders as directory entries instead.
+SKIP = {'.DS_Store', 'Thumbs.db', '.gitkeep'}
 STAMP = (2026, 1, 1, 0, 0, 0)
 
 nfc = lambda s: unicodedata.normalize('NFC', s)
@@ -44,6 +48,9 @@ def folder_entries(src, top, exclude):
             rel = os.path.relpath(path, src).replace(os.sep, '/')
             with open(path, 'rb') as f:
                 out[nfc(f'{top}/{rel}')] = f.read()
+        if not dirnames and not any(n not in SKIP and not excluded(n, exclude) for n in filenames):
+            rel = os.path.relpath(dirpath, src).replace(os.sep, '/')
+            out[nfc(f'{top}/{rel}/')] = b''
     return out
 
 
@@ -52,7 +59,7 @@ def zip_entries(path):
         return None
     with zipfile.ZipFile(path) as z:
         return {nfc(i.filename): z.read(i) for i in z.infolist()
-                if not i.is_dir() and '__MACOSX' not in i.filename
+                if '__MACOSX' not in i.filename
                 and os.path.basename(i.filename) not in SKIP}
 
 
@@ -61,7 +68,7 @@ def write_zip(path, entries):
         for name in sorted(entries):
             info = zipfile.ZipInfo(name, STAMP)
             info.compress_type = zipfile.ZIP_DEFLATED
-            info.external_attr = 0o644 << 16
+            info.external_attr = (0o40755 << 16) | 0x10 if name.endswith('/') else 0o644 << 16
             z.writestr(info, entries[name])
 
 
