@@ -652,7 +652,7 @@ const LastLesson: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={56}>大綱有連結了，但還沒接上人物卡</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={56}>大綱裡有連結，但還沒有對應的人物卡</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -660,7 +660,7 @@ const LastLesson: Page = () => (
 const TodayGoal: Page = () => (
   <Shell>
     <Eyebrow>今天的成品</Eyebrow>
-    <Heading>大綱放進筆記庫，接上人物卡</Heading>
+    <Heading>大綱放進筆記庫，連到人物卡</Heading>
     <Fit>
       <Stage h={480}>
         <Steps>
@@ -674,7 +674,7 @@ const TodayGoal: Page = () => (
               <SvgChip x={80} y={150} w={220} h={50} label="[[劉備]]" color={linkFaint} stroke={linkFaint} size={28} font={mono} />
               <SvgChip x={80} y={220} w={220} h={50} label="[[曹操]]" color={linkFaint} stroke={linkFaint} size={28} font={mono} />
               <SvgChip x={80} y={290} w={220} h={50} label="[[呂布]]" color={linkFaint} stroke={linkFaint} size={28} font={mono} />
-              <text x="190" y="456" textAnchor="middle" fontSize="27" fill={muted}>連結指向空處</text>
+              <text x="190" y="456" textAnchor="middle" fontSize="27" fill={muted}>連到的卡還不存在</text>
             </InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={480} label="今天結束時：大綱在筆記庫的整理資料夾，連到劉備、關羽、張飛、曹操的人物卡，人物再連到關係卡">
@@ -741,7 +741,7 @@ const Agenda: Page = () => (
         <span /><SmallLabel>章節</SmallLabel><SmallLabel>結束時你會</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
       </div>
       <AgendaRow i={0} n={1} kind="folder" result="打開三國筆記庫（練習 1）" time="10–45 分" page={Section1} />
-      <AgendaRow i={1} n={2} kind="link" result="大綱接上人物卡（練習 2）" time="45–70 分" page={Section2} />
+      <AgendaRow i={1} n={2} kind="link" result="大綱連到人物卡（練習 2）" time="45–70 分" page={Section2} />
       <AgendaRow i={2} n={3} kind="search" result="核對 AI 的回答（練習 3）" time="70–97 分" page={Section3} />
       <AgendaRow i={3} n={4} kind="graph" result="核對過的關係圖（練習 4）" time="97–120 分" page={Section4} />
     </Fit>
@@ -792,18 +792,31 @@ const SectionPage = ({ chapter, label, lead }: { chapter: Chapter; label: string
 
 const Section1: Page = () => <SectionPage chapter={1} label="01 / OBSIDIAN" lead="筆記庫、連結，和三種卡片" />;
 
-const FileTile = ({ x, y, name, hot = false }: { x: number; y: number; name: string; hot?: boolean }) => (
+// One .md file inside a folder column: a small page glyph and the file name.
+const FileRow = ({ x, y, name }: { x: number; y: number; name: string }) => (
   <g>
-    <DocShape x={x} y={y} w={96} h={60} fill={hot ? amberSoft : '#FFFFFF'} stroke={hot ? amber : rule} />
-    <text x={x + 48} y={y + 40} textAnchor="middle" fontSize="25" fill={ink}>{name}</text>
+    <path d={`M${x} ${y} H${x + 14} L${x + 20} ${y + 6} V${y + 24} H${x} Z`} fill="#FFFFFF" stroke={faint} strokeWidth="2" strokeLinejoin="round" />
+    <text x={x + 34} y={y + 21} fontSize="26" fill={ink}>{name}<tspan fill={quiet}>.md</tspan></text>
   </g>
 );
 
-const Drawer = ({ x, y, w, label, count }: { x: number; y: number; w: number; label: string; count: string }) => (
+// A sub-folder of the vault, drawn as a column: folder name and count on top, its files listed below.
+const VaultColumn = ({ x, w, label, count, children }: { x: number; w: number; label: string; count: string; children: ReactNode }) => (
   <g>
-    <Folder x={x} y={y} w={w} h={56} />
-    <text x={x + 22} y={y + 46} fontSize="28" fontWeight="600" fill={ink}>{label}/</text>
-    <text x={x + w - 18} y={y + 46} textAnchor="end" fontSize="24" fill={amber}>{count}</text>
+    <rect x={x} y={196} width={w} height={276} fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+    <Folder x={x + 20} y={214} w={38} h={30} />
+    <text x={x + 70} y={240} fontSize="28" fontWeight="600" fill={ink}>{label}/</text>
+    <text x={x + w - 18} y={240} textAnchor="end" fontSize="26" fontWeight="600" fill={amber}>{count}</text>
+    <line x1={x} y1={260} x2={x + w} y2={260} stroke={rule} strokeWidth="2" />
+    {children}
+  </g>
+);
+
+// A secondary folder named in passing: quiet outline, no contents shown.
+const QuietFolder = ({ x, label }: { x: number; label: string }) => (
+  <g>
+    <Folder x={x} y={118} w={34} h={28} fill={raised} stroke={faint} />
+    <text x={x + 46} y={143} fontSize="26" fill={quiet}>{label}/</text>
   </g>
 );
 
@@ -815,24 +828,7 @@ const VaultFolder: Page = () => (
     <Fit>
       <Stage h={490}>
         <Steps>
-          <Layer h={490} label="三國人物知識庫資料夾：入口卡三國演義.md，人物 5 張、勢力 3 張、關係 3 張；另有原文（第 1 到 21 回全文和三份節選）和整理資料夾">
-            <InG i={0}>
-              <Folder x={436} y={0} w={760} h={486} fill="#FBF7F2" stroke={amber} sw={3} />
-              <text x={466} y={62} fontSize="32" fontWeight="600" fill={ink}>三國人物知識庫/</text>
-              <text x={1166} y={62} textAnchor="end" fontSize="26" fill={amber}>12 張卡＝11＋入口 1</text>
-            </InG>
-            <InG i={1}>
-              <DocShape x={466} y={88} w={130} h={54} fill={amberSoft} stroke={amber} /><text x={521} y={124} textAnchor="middle" fontSize="24" fill={ink}>三國演義</text>
-              <rect x="612" y="88" width="314" height="54" fill="#FFFFFF" stroke={faint} strokeWidth="2" strokeDasharray="8 6" /><text x={769} y={124} textAnchor="middle" fontSize="24" fill={quiet}>原文/：第 1–21 回＋節選</text>
-              <rect x="942" y="88" width="224" height="54" fill="#FFFFFF" stroke={faint} strokeWidth="2" strokeDasharray="8 6" /><text x={1054} y={124} textAnchor="middle" fontSize="24" fill={quiet}>整理/：練習產出</text>
-            </InG>
-            <InG i={2}><Drawer x={466} y={166} w={700} label="人物" count="5 張" />
-              <FileTile x={490} y={238} name="劉備" /><FileTile x={624} y={238} name="關羽" /><FileTile x={758} y={238} name="張飛" /><FileTile x={892} y={238} name="曹操" /><FileTile x={1026} y={238} name="孫權" /></InG>
-            <InG i={3}><Drawer x={466} y={322} w={330} label="勢力" count="3 張" /><Drawer x={836} y={322} w={330} label="關係" count="3 張" />
-              <FileTile x={478} y={394} name="蜀漢" /><FileTile x={583} y={394} name="曹魏" /><FileTile x={688} y={394} name="東吳" />
-              <FileTile x={848} y={394} name="桃園" /><FileTile x={953} y={394} name="煮酒" /><FileTile x={1058} y={394} name="赤壁" /></InG>
-          </Layer>
-          <Step duration={STEP_MS}><Layer h={490} label="Obsidian 打開這個資料夾來寫筆記">
+          <Step duration={STEP_MS}><Layer h={490} label="Obsidian 打開這個資料夾來寫筆記。三國人物知識庫資料夾：入口卡三國演義.md；人物、勢力、關係三個資料夾，各放 5、3、3 張卡；另有原文（第 1 到 21 回全文和三份節選）和整理（練習產出）兩個資料夾">
             <g className="aw2-build" style={buildDelay(0)}>
               <rect x="0" y="148" width="360" height="190" fill={linkSoft} stroke={link} strokeWidth="2" />
               <text x="28" y="198" fontSize="28" fontWeight="600" fill={link}>Obsidian</text>
@@ -840,6 +836,41 @@ const VaultFolder: Page = () => (
               <text x="28" y="308" fontSize="25" fill={muted}>看到的就是這些檔案</text>
             </g>
             <g className="aw2-build" style={buildDelay(1)}><MapArrow x1={366} x2={428} y={243} color={link} hot /></g>
+            <g className="aw2-build" style={buildDelay(2)}>
+              <Folder x={436} y={0} w={760} h={486} fill="#FBF7F2" stroke={amber} sw={3} />
+              <text x={466} y={66} fontSize="32" fontWeight="600" fill={ink}>三國人物知識庫/</text>
+              <text x={1166} y={66} textAnchor="end" fontSize="26" fill={amber}>共 12 張卡</text>
+              <line x1={466} y1={90} x2={1166} y2={90} stroke={rule} strokeWidth="2" />
+            </g>
+            <g className="aw2-build" style={buildDelay(3)}>
+              <DocShape x={466} y={106} w={330} h={56} fill={amberSoft} stroke={amber} />
+              <text x={490} y={144} fontSize="28" fontWeight="600" fill={ink}>三國演義<tspan dx="14" fontSize="24" fontWeight="400" fill={amber}>入口卡</tspan></text>
+              <QuietFolder x={900} label="原文" />
+              <QuietFolder x={1040} label="整理" />
+            </g>
+            <g className="aw2-build" style={buildDelay(4)}>
+              <VaultColumn x={466} w={200} label="人物" count="5">
+                <FileRow x={490} y={278} name="劉備" />
+                <FileRow x={490} y={316} name="關羽" />
+                <FileRow x={490} y={354} name="張飛" />
+                <FileRow x={490} y={392} name="曹操" />
+                <FileRow x={490} y={430} name="孫權" />
+              </VaultColumn>
+            </g>
+            <g className="aw2-build" style={buildDelay(5)}>
+              <VaultColumn x={686} w={200} label="勢力" count="3">
+                <FileRow x={710} y={278} name="蜀漢" />
+                <FileRow x={710} y={316} name="曹魏" />
+                <FileRow x={710} y={354} name="東吳" />
+              </VaultColumn>
+            </g>
+            <g className="aw2-build" style={buildDelay(6)}>
+              <VaultColumn x={906} w={260} label="關係" count="3">
+                <FileRow x={930} y={278} name="桃園結義" />
+                <FileRow x={930} y={316} name="煮酒論英雄" />
+                <FileRow x={930} y={354} name="赤壁之戰" />
+              </VaultColumn>
+            </g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={490} label="Codex 讀同一個資料夾，不用上傳">
             <g className="aw2-build" style={buildDelay(1)}><BackArrow x1={1266} x2={1204} y={243} color={okGreen} /></g>
@@ -892,7 +923,7 @@ const WikiLink: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>人名打在 [[ ]] 裡，就連到那張卡</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>卡名放進 [[ ]]，就建立一條內部連結</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -908,9 +939,9 @@ const BacklinkRow = ({ y, name, n }: { y: number; name: string; n: string }) => 
 
 const Backlinks: Page = () => (
   <Shell chapter={1} source={'Obsidian 說明：反向連結 obsidian.md/help/plugins/backlinks'}>
-    <Eyebrow>雙向連結的另一頭</Eyebrow>
+    <Eyebrow>從被連結的卡往回看</Eyebrow>
     <Heading>反向連結（Backlinks）</Heading>
-    <Lead>像反查通訊錄：誰的名單裡有你</Lead>
+    <Lead>像書末索引：列出提到這個名字的頁</Lead>
     <Fit>
       <Stage h={450}>
         <Steps>
@@ -937,7 +968,7 @@ const Backlinks: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>誰連到劉備，Obsidian 會自己列出來</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>Obsidian 自動列出所有連到〈劉備〉的卡</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -983,7 +1014,7 @@ const GrayLink: Page = () => (
         </Steps>
       </Stage>
       <Steps>
-        <Step duration={STEP_MS}><Takeaway marginTop={24}>顏色淡，代表資料夾裡還沒有這張卡</Takeaway></Step>
+        <Step duration={STEP_MS}><Takeaway marginTop={24}>淡色連結：指向的卡還沒建立</Takeaway></Step>
         <Step duration={STEP_MS}><div style={{ textAlign: 'center', fontSize: 28, color: muted, marginTop: 14 }}>分不出深淺？按 <Path size={28}>Cmd/Ctrl + O</Path> 搜尋名字，找不到就是還沒有卡</div></Step>
       </Steps>
     </Fit>
@@ -1028,7 +1059,7 @@ const CardTypes: Page = () => (
       </Stage>
       <Steps>
         <Step duration={STEP_MS}><div style={{ textAlign: 'center', fontSize: 32, marginTop: 18 }}>人物 5＋勢力 3＋關係 3＝<strong>11 張</strong>，加入口卡〈三國演義〉＝<strong>12 張</strong></div></Step>
-        <Step duration={STEP_MS}><Takeaway marginTop={18}>人物之間，靠關係卡接起來</Takeaway></Step>
+        <Step duration={STEP_MS}><Takeaway marginTop={18}>人物之間發生的事，寫成關係卡</Takeaway></Step>
       </Steps>
     </Fit>
   </Shell>
@@ -1046,7 +1077,7 @@ const StoryLinks = ({ story, paths }: { story: 0 | 1 | 2; paths: string[] }) => 
 const StoryMap: Page = () => (
   <Shell chapter={1} source={'維基文庫《三國演義》第 1、21、49–50 回 zh.wikisource.org/wiki/三國演義'}>
     <Eyebrow>先看今天的例子</Eyebrow>
-    <Heading>人物卡靠關係卡連起來</Heading>
+    <Heading>人物卡透過關係卡相連</Heading>
     <Fit>
       <div style={{ background: '#FFFFFF', border: `1px solid ${rule}` }}>
         <Stage h={440}>
@@ -1075,7 +1106,7 @@ const StoryMap: Page = () => (
           </Steps>
         </Stage>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway>劉備、曹操各接兩段故事</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway>劉備、曹操各連到兩張關係卡</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1128,7 +1159,7 @@ const LinkWalk: Page = () => (
           </Steps>
         </Stage>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}>走得過去，也走得回來：這就是雙向連結</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}>點連結往下讀，看反向連結找回來源</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1264,7 +1295,7 @@ const VaultCheck: Page = () => (
 
 // ---------- 02 把大綱放進筆記庫 ----------
 
-const Section2: Page = () => <SectionPage chapter={2} label="02 / 合併" lead="第一堂的大綱，接上講師的人物卡" />;
+const Section2: Page = () => <SectionPage chapter={2} label="02 / 合併" lead="第一堂的大綱，連到講師的人物卡" />;
 
 const MergeOutline: Page = () => (
   <Shell chapter={2} source={'Obsidian 說明：內部連結 obsidian.md/help/links'}>
@@ -1316,7 +1347,7 @@ const MergeOutline: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>只搬一個檔，連結自己會接上</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>只搬一個檔，Obsidian 依卡名自動對上連結</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1354,7 +1385,7 @@ const ClickLiubei: Page = () => (
           </Step>
         </Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>大綱和人物卡接上了</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>大綱的 [[劉備]] 現在會打開人物卡</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1641,7 +1672,7 @@ const RagIdea: Page = () => (
               <DownArrowSvg x={816} y1={262} y2={296} color={link} />
               <rect x="736" y="300" width="160" height="58" fill={link} />
               <text x="816" y="339" textAnchor="middle" fontSize="30" fontWeight="600" fill="#FFFFFF">模型</text>
-              <text x="816" y="392" textAnchor="middle" fontSize="24" fill={muted}>題目多了依據</text>
+              <text x="816" y="392" textAnchor="middle" fontSize="24" fill={muted}>問題附上筆記</text>
             </g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={440} label="G 生成：回答赤壁之戰，並附上兩個檔名">
@@ -1662,7 +1693,7 @@ const RagIdea: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>模型沒變，只是先看了筆記</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>模型不變，變的是輸入多了筆記</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1727,7 +1758,7 @@ const AskWithFiles: Page = () => (
           </div>
         </div>
       </In>
-      <Steps><Step duration={STEP_MS}><Takeaway>附了檔名和原句，才查得回去</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway>附上檔名和原句，回答才能查證</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1785,7 +1816,7 @@ const RStep: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>它讀的是搜到的句子，不是整張卡</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>Codex 讀的是搜尋命中的句子，不是整張卡</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1842,7 +1873,7 @@ const AStep: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>問題加上筆記，模型才有根據</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>模型依據的是問題加上檢索到的筆記</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1894,7 +1925,7 @@ const GStep: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}>檔名加一句原句，一找就到</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}>有檔名和原句，就能回筆記核對</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1919,35 +1950,67 @@ const PromptQuote = ({ children, minHeight = 120 }: { children: ReactNode; minHe
   <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `6px solid ${amber}`, padding: '12px 20px', fontSize: 27, lineHeight: 1.5, marginBottom: 16, minHeight, boxSizing: 'border-box' }}>{children}</div>
 );
 
+// What the model did between the prompt and the answer: an arrow, then the route taken.
+const RouteLine = ({ ok, children }: { ok: boolean; children: ReactNode }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 26, color: ok ? okGreen : quiet, fontWeight: 600, margin: '0 0 14px 6px' }}>
+    <svg viewBox="0 0 30 36" style={{ width: 24, height: 30, flexShrink: 0 }} aria-hidden="true">
+      <path d="M15 2 V28 M6 20 L15 32 L24 20" fill="none" stroke={ok ? okGreen : faint} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+    <span>{children}</span>
+  </div>
+);
+
+// One cited source inside the RAG answer: file name, then the card line it quotes.
+const CiteLine = ({ file, quote }: { file: string; quote: string }) => (
+  <div style={{ display: 'flex', gap: 14, alignItems: 'baseline', fontSize: 24, lineHeight: 1.5, marginTop: 6 }}>
+    <span style={{ fontFamily: mono, color: okGreen, fontWeight: 600, whiteSpace: 'nowrap' }}>{file}</span>
+    <span style={{ color: muted }}>{quote}</span>
+  </div>
+);
+
+// One extra rule the RAG prompt adds on top of the bare question.
+const AddedRule = ({ children }: { children: ReactNode }) => (
+  <span style={{ background: amberSoft, color: amber, fontSize: 24, fontWeight: 600, padding: '4px 14px', borderRadius: 20, whiteSpace: 'nowrap' }}>＋{children}</span>
+);
+
 const WithWithout: Page = () => (
   <Shell chapter={3} source={'Shuster et al. 2021, Retrieval Augmentation Reduces Hallucination in Conversation, arXiv:2104.07567'}>
     <Eyebrow>同一題，問兩次｜實跑</Eyebrow>
     <Heading>有 RAG 和沒有 RAG 的回答</Heading>
     <Fit>
-      {/* Input first: both prompts show on arrival; the answers land on clicks, left then right. */}
+      {/* Input first: both prompts show on arrival; route + answer land on clicks, left then right. */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
-        <AnswerPanel title="沒有筆記" sub="在空資料夾問" tone="plain">
-          <PromptQuote>曹操參與哪場戰役？</PromptQuote>
+        <AnswerPanel title="沒有 RAG" sub="空資料夾，直接問" tone="plain">
+          <PromptQuote minHeight={112}>曹操參與哪場戰役？</PromptQuote>
           <Steps>
             <Step duration={STEP_MS}>
-              <AnswerBox>官渡之戰（200年）、赤壁之戰（208年）<br />濮陽、下邳、潼關之戰等</AnswerBox>
-              <StatusLine ok={false}>沒有檔名，查不回去</StatusLine>
+              <RouteLine ok={false}>沒有資料可查，憑模型記憶回答</RouteLine>
+              <AnswerBox>官渡之戰（200年）、赤壁之戰（208年）、濮陽、下邳、潼關之戰等</AnswerBox>
+              <StatusLine ok={false}>說不出根據哪份資料</StatusLine>
             </Step>
           </Steps>
         </AnswerPanel>
-        <AnswerPanel title="有筆記" sub="在筆記庫問" tone="ok">
-          <PromptQuote>依這座筆記庫，曹操參與哪場戰役？只根據 .md 卡片回答，每個說法附上檔名和一句卡片原句；筆記沒寫的就說找不到，不要自己補。</PromptQuote>
+        <AnswerPanel title="有 RAG" sub="在筆記庫，先查再答" tone="ok">
+          <PromptQuote minHeight={112}>
+            依這座筆記庫，曹操參與哪場戰役？
+            <div style={{ display: 'flex', gap: 10, marginTop: 8 }}><AddedRule>只看卡片</AddedRule><AddedRule>附檔名和原句</AddedRule><AddedRule>沒寫就說找不到</AddedRule></div>
+          </PromptQuote>
           <Steps>
             <Step duration={STEP_MS}>
-              <AnswerBox>赤壁之戰<br /><span style={{ fontFamily: mono, fontSize: 25, color: okGreen }}>人物/曹操.md、關係/赤壁之戰.md＋原句</span></AnswerBox>
-              <StatusLine ok>每一句都查得到</StatusLine>
+              <RouteLine ok>先搜尋筆記庫，找到 2 張卡，照卡片回答</RouteLine>
+              <AnswerBox>
+                赤壁之戰
+                <CiteLine file="人物/曹操.md" quote="「…在赤壁之戰被孫權麾下的周瑜火燒戰船」" />
+                <CiteLine file="關係/赤壁之戰.md" quote="「參與人物：孫權、曹操、劉備…」" />
+                <div style={{ fontSize: 24, color: quiet, marginTop: 6 }}>其他戰役：筆記裡找不到</div>
+              </AnswerBox>
+              <StatusLine ok>每一句都能打開卡片核對</StatusLine>
             </Step>
           </Steps>
         </AnswerPanel>
       </div>
-      <div style={{ marginTop: 20, textAlign: 'center', fontSize: 26, color: quiet }}>兩次問法不同：右邊多了範圍、檔名和原句的要求</div>
       <Steps>
-        <Step duration={STEP_MS}><div style={{ marginTop: 10, textAlign: 'center', fontSize: 32, color: amber, fontWeight: 600 }}>「官渡之戰」：筆記庫裡一個字都沒有</div></Step>
+        <Step duration={STEP_MS}><div style={{ marginTop: 26, textAlign: 'center', fontSize: 34, color: amber, fontWeight: 600 }}>左邊的「官渡之戰」來自模型記憶，筆記裡沒有</div></Step>
       </Steps>
     </Fit>
   </Shell>
@@ -1996,7 +2059,7 @@ const LinksHelp: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>答案有檔名，連結讓它有路可回</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>檔名指出出處，連結帶你回到相關的卡</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2005,7 +2068,7 @@ const LimitMissing: Page = () => (
   <Shell chapter={3} source={'Barnett et al. 2024, Seven Failure Points When Engineering a RAG System, arXiv:2401.05856'}>
     <Eyebrow>RAG 的限制 1｜實跑</Eyebrow>
     <Heading>缺少內容（Missing Content）</Heading>
-    <Lead>筆記沒寫的，它找不到</Lead>
+    <Lead>筆記沒寫的內容，檢索不到</Lead>
     <In i={0} style={{ marginTop: 26 }}><PromptQuote minHeight={0}>官渡之戰是誰打贏的？請只根據這個筆記庫裡的 .md 卡片回答，附上檔名；筆記沒寫的就說找不到，不要自己補。</PromptQuote></In>
     <Fit>
       <Stage h={310}>
@@ -2030,7 +2093,7 @@ const LimitMissing: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>說「找不到」，是好的回答</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>筆記沒寫時，正確的回答是「找不到」</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2043,7 +2106,7 @@ const LimitMiss: Page = () => (
   <Shell chapter={3} source={'Barnett et al. 2024, arXiv:2401.05856；Liu et al. 2023, Lost in the Middle, arXiv:2307.03172'}>
     <Eyebrow>RAG 的限制 2｜實跑</Eyebrow>
     <Heading>檢索遺漏</Heading>
-    <Lead>資料一多，它也會看漏</Lead>
+    <Lead>資料一多，檢索也會漏掉相關內容</Lead>
     <Fit>
       {/* First answer on arrival; click 1 shows what it missed; click 2 the narrower question and its answer. */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
@@ -2063,7 +2126,7 @@ const LimitMiss: Page = () => (
           </Step>
         </Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>改的是範圍：查哪個檔、哪幾回</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>縮小檢索範圍：指定檔案和回目</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2116,7 +2179,7 @@ const CheckThree: Page = () => (
           </CheckPanel></Step>
         </Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}>三件都打勾，才放心用</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}>三項都核對過，回答才能用</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2224,7 +2287,7 @@ const Practice3Ask: Page = () => (
         </Terminal>
       </In>
       <Steps>
-        <Step duration={STEP_MS}><Takeaway marginTop={32}>追問一句，就看出哪項是它自己補的</Takeaway></Step>
+        <Step duration={STEP_MS}><Takeaway marginTop={32}>要求引用原句，就看得出哪項是模型自己補的</Takeaway></Step>
         <Step duration={STEP_MS}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 20, marginTop: 30 }}>
             <span style={{ fontSize: 28, color: muted }}>有時間，自己問一題：</span>
@@ -2314,7 +2377,7 @@ const PointsLines: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>每條邊都說得出出處</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>每條邊都要有出處</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2435,23 +2498,19 @@ const AsciiAsk: Page = () => (
     <PromptsCopy step="練習 4" />
     <Fit>
       <In i={0} style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `8px solid ${amber}`, padding: '16px 32px', fontSize: 28, lineHeight: 1.5 }}>
-        <div>請把〈桃園結義〉〈煮酒論英雄〉相關的人物畫成 ASCII 關係圖。</div>
-        <div>每條線一行，格式：人物 ──關係── 人物（來源：檔名）。</div>
-        <div>只畫卡片裡寫得出原句的線，不要改任何檔案。</div>
+        <div>讀取〈桃園結義〉〈煮酒論英雄〉，用純文字畫出人物關係圖。</div>
+        <div>以人物為起點畫分支，每條關係編號並附上來源檔名。</div>
+        <div>只畫有原句支持的關係，不要修改任何檔案。</div>
       </In>
       <Steps>
         <Step duration={STEP_MS}>
           <div style={{ marginTop: 16 }}>
-            <Terminal title="講師的實跑回覆（2026-10-17，全文 9 條）" width={1632} size={24}>
-              <div className="aw2-build" style={buildDelay(0, 160)}>劉備 ──結義兄弟（劉備為兄）── 關羽（來源：關係/桃園結義.md）</div>
-              <div className="aw2-build" style={buildDelay(1, 160)}>劉備 ──結義兄弟（劉備為兄、張飛為弟）── 張飛（來源：關係/桃園結義.md）</div>
-              <div className="aw2-build" style={buildDelay(2, 160)}>關羽 ──結義兄弟（三兄弟）── 張飛（來源：關係/桃園結義.md）</div>
-              <div className="aw2-build" style={buildDelay(3, 160)}>曹操 ──請劉備青梅煮酒、共論天下英雄── 劉備（來源：關係/煮酒論英雄.md）</div>
-              <div className="aw2-build" style={buildDelay(4, 160)}>曹操 ──與劉備並稱天下英雄── 劉備（來源：關係/煮酒論英雄.md）</div>
-              <div className="aw2-build" style={buildDelay(5, 160)}>關羽 ──與張飛一同按劍守護劉備── 劉備（來源：關係/桃園結義.md）</div>
-              <div className="aw2-build" style={buildDelay(6, 160)}>張飛 ──與關羽一同按劍守護劉備── 劉備（來源：關係/桃園結義.md）</div>
-              <div className="aw2-build" style={buildDelay(7, 160)}>劉備 ──聯手── 孫權（來源：關係/煮酒論英雄.md）</div>
-              <div className="aw2-build" style={buildDelay(8, 160)}>孫權 ──對抗── 曹操（來源：關係/煮酒論英雄.md）</div>
+            <Terminal title="文字關係圖示意（節錄）" width={1632} size={30}>
+              <div>劉備</div>
+              <div>├─ [1] 結義兄弟 ── 關羽（來源：關係/桃園結義.md）</div>
+              <div>├─ [2] 結義兄弟 ── 張飛（來源：關係/桃園結義.md）</div>
+              <div>└─ [3] 共論英雄 ── 曹操（來源：關係/煮酒論英雄.md）</div>
+              <div style={{ marginTop: 16, color: '#BFC7D1' }}>每條分支都能回來源卡核對；第三堂再畫成 HTML 圖。</div>
             </Terminal>
           </div>
         </Step>
@@ -2477,7 +2536,7 @@ const CheckLines: Page = () => (
     <Heading>逐線核對關係圖</Heading>
     <div style={{ position: 'absolute', top: 176, right: 144, textAlign: 'right', fontSize: 24, lineHeight: 1.5, color: muted }}>講師的 9 條線<br /><FileLink href={CHECK4_URL}>講師的ASCII關係圖.md</FileLink></div>
     <Fit>
-      <div style={{ fontSize: 30, marginBottom: 14 }}>同一句原句撐住的線，併成一列：<strong>9 條線 → 5 列</strong></div>
+      <div style={{ fontSize: 30, marginBottom: 14 }}>出自同一句原句的線，合併成一列：<strong>9 條線 → 5 列</strong></div>
       <div style={{ borderTop: `3px solid ${rule}` }}>
         <TRow head cols={CHECK_COLS} cells={['線', '來源卡', '卡片原句', '結果']} />
         <Steps>
@@ -2516,7 +2575,7 @@ const AskBack4: Page = () => (
         </Terminal>
       </In>
       <Steps>
-        <Step duration={STEP_MS}><Takeaway marginTop={32}>它說「找到」，撐不撐得住由你判斷</Takeaway></Step>
+        <Step duration={STEP_MS}><Takeaway marginTop={32}>Codex 說「找到」，原句是否支持要自己核對</Takeaway></Step>
       </Steps>
     </Fit>
   </Shell>
@@ -2547,7 +2606,7 @@ const AddLinksBack: Page = () => (
               <div style={{ marginTop: 10 }}><OutlinePara linked /></div>
             </div>
           </Step>
-          <Step duration={STEP_MS}><Takeaway marginTop={30}>補上 [[ ]]，大綱就接到你的關係卡</Takeaway></Step>
+          <Step duration={STEP_MS}><Takeaway marginTop={30}>加上 [[ ]]，大綱就連到你的關係卡</Takeaway></Step>
         </Steps>
       </div>
     </Fit>
@@ -2570,14 +2629,14 @@ const Recap: Page = () => (
     <Eyebrow>總結</Eyebrow>
     <Heading>今天做完的四件事</Heading>
     <Fit>
-      <Figure h={290} label="四章：筆記庫是一個資料夾、大綱接上人物卡、查筆記附檔名、每條線有出處">
+      <Figure h={290} label="四章：筆記庫是一個資料夾、大綱連到人物卡、查筆記附檔名、每條線有出處">
         <g fill="none" stroke={amber} strokeWidth="4"><DrawPath i={4} d="M260 90 H1372" /></g>
         <InG i={0}><RecapStop x={204} n={1} verb="筆記庫是一個資料夾" /></InG>
-        <InG i={1}><RecapStop x={612} n={2} verb="大綱接上人物卡" /></InG>
+        <InG i={1}><RecapStop x={612} n={2} verb="大綱連到人物卡" /></InG>
         <InG i={2}><RecapStop x={1020} n={3} verb="查筆記，附檔名" /></InG>
         <InG i={3}><RecapStop x={1428} n={4} verb="每條線有出處" /></InG>
       </Figure>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={64}>筆記寫得清楚、連得好，AI 才答得準</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={64}>RAG 答得準不準，取決於筆記內容和連結</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2750,12 +2809,12 @@ function pageOf(page: Page) {
 // Speaker notes, keyed by page so they stay aligned with the deck order.
 const NOTES = new Map<Page, string>([
   [Cover, `00:00–01:00
-今天是四堂課的第二堂：Obsidian 與 RAG。上一堂大家用 Codex 寫出了《三國演義》第 1 到 21 回的大綱，今天把它放進一座三國筆記庫，跟講師準備好的人物卡接起來；接著請 Codex 先查筆記再回答，最後畫一張每條線都有出處的關係圖。
+今天是四堂課的第二堂：Obsidian 與 RAG。上一堂大家用 Codex 寫出了《三國演義》第 1 到 21 回的大綱，今天把它放進一座三國筆記庫，連到講師準備好的人物卡；接著請 Codex 先查筆記再回答，最後畫一張每條線都有出處的關係圖。
 先請大家在自己的筆電打開這份簡報：${DECK_SITE}，點第二堂。今天的下載按鈕、提示詞連結，都在筆電上點；投影的 QR code 用手機掃，只會存到手機。所有教材也列在 https://github.com/Chrouos/AI-workshop-slides/tree/main/examples 。`],
   [LastLesson, `01:00–05:00
 先看上一堂的成果。左邊是講師用 Codex 實際跑出來的 三國演義大綱.md：一回一段，人名都寫成 [[劉備]] 這種連結，每段最後一行是出處。
 先問大家：這些 [[ ]] 現在連到哪？按一下：哪裡都還沒連到。大綱是單獨一個檔案，旁邊沒有劉備卡，所以劉備是淡色的連結，點下去只會新增一張空白卡。
-最後一下：大綱有連結了，但還沒接上人物卡。今天就是要把它放進筆記庫，接上講師準備的人物卡。
+最後一下：大綱裡有連結，但還沒有對應的人物卡。今天就是要把它放進筆記庫，連到講師準備的人物卡。
 補充數字（不用記）：講師這份 21 段、每段都有出處，Codex 跑了 1 分 38 秒；回目標題裡沒有加 [[ ]]。這份就是 GitHub 上的範例大綱，今天的畫面和數字都用它。
 第一堂沒來、或大綱不見的同學，用講師的範例大綱：在 aw-02-lab 的 參考結果/ 裡（第 ${pageOf(MergeOutline)} 頁右上角也有連結），一樣拖進筆記庫的「整理」資料夾。練習 3 全班也用這一份對照。`],
   [TodayGoal, `05:00–08:00
@@ -2767,24 +2826,24 @@ const NOTES = new Map<Page, string>([
   [Section1, `10:00–10:30
 第一章：認識 Obsidian。三件事：筆記庫是什麼、連結怎麼寫、卡片分幾種。`],
   [VaultFolder, `10:30–13:00
-Obsidian 的「儲存庫」，英文 Vault，就是你電腦裡的一個資料夾。這座「三國人物知識庫」有 12 張卡：人物 5 張、勢力 3 張、關係 3 張，共 11 張，再加 1 張入口卡〈三國演義〉。另外的資料夾不算卡：原文/ 放第 1 到 21 回的全文和第 37、38、46 回節選，都是 .txt；整理/ 等一下放大綱；模板/ 放關係卡模板。.md 是純文字檔，用記事本也打得開。Obsidian 繁中介面把筆記庫叫「儲存庫」，是同一個東西。
-按一下：Obsidian 打開這個資料夾來寫，看到的就是這些檔案。
+Obsidian 的「儲存庫」，英文 Vault，就是你電腦裡的一個資料夾。Obsidian 繁中介面把筆記庫叫「儲存庫」，是同一個東西。
+按一下：Obsidian 打開一個資料夾來寫，看到的就是裡面這些檔案。這座「三國人物知識庫」有 12 張卡：人物 5 張、勢力 3 張、關係 3 張，共 11 張，再加 1 張入口卡〈三國演義〉。另外的資料夾不算卡：原文/ 放第 1 到 21 回的全文和第 37、38、46 回節選，都是 .txt；整理/ 等一下放大綱；模板/ 放關係卡模板。.md 是純文字檔，用記事本也打得開。
 按一下：Codex 讀的也是同一個資料夾，不用上傳到任何地方。
 最後一下：檔案在你的電腦裡，Codex 也讀得到。這是今天 RAG 能做的前提。官方說明：https://obsidian.md/help/data-storage`],
   [WikiLink, `13:00–15:30
 這種雙中括號格式叫 Wiki Link（Obsidian 寫作 Wikilink），是 Obsidian 內部連結的一種。左邊是你在檔案裡打的字：「拜 [[劉備]] 為兄」，人名包在兩對中括號裡。
 按一下：Obsidian 顯示時，中括號會藏起來，劉備變成紫色、有底線的字。
 按一下：點一下劉備，就打開 人物/劉備.md。打 [[ 的時候 Obsidian 會跳出選單讓你選卡名，不用整個打完。
-最後一下：人名打在 [[ ]] 裡，就連到那張卡。官方說明：https://obsidian.md/help/links`],
+最後一下：卡名放進 [[ ]]，就建立一條內部連結。官方說明：https://obsidian.md/help/links`],
   [Backlinks, `15:30–18:00
 這頁的術語是「反向連結」，英文 Backlinks：從劉備這張卡回頭看，哪些卡連到了它。中間是劉備。旁邊這幾張卡：三國演義、桃園結義、煮酒論英雄、赤壁之戰、曹操、蜀漢，內文都寫了 [[劉備]]，箭頭都指向他。
 按一下：打開劉備卡，右邊的「反向連結」面板會自動列出「已連結本筆記的檔案」。講師的筆記庫裡一共 11 張卡、17 處提到劉備：三國演義 4 處，桃園結義、煮酒論英雄、赤壁之戰各 2 處，曹操 1 處，還有孫權、張飛、關羽、蜀漢、曹魏、東吳 6 張各 1 處。這些數字是講師在筆記庫裡實際數的。
-最後一下：誰連到劉備，Obsidian 會自己列出來，你不用回頭在劉備卡裡寫。這就是「雙向」的意思：你只寫一邊，兩邊都看得到。`],
+最後一下：Obsidian 自動列出所有連到〈劉備〉的卡，你不用回頭在劉備卡裡寫。這就是「雙向」的意思：你只寫一邊，兩邊都看得到。`],
   [GrayLink, `18:00–20:00
 連到尚未建立的筆記，叫「未解析連結」（Unresolved Link）。上面：[[劉備]] 有對應的卡，所以是深紫色，點了就打開。
 按一下：[[呂布]] 寫了連結，可是資料夾裡沒有 呂布.md，Obsidian 會把它顯示成比較淡的紫色。課綱寫「灰色」，實際畫面是淡紫色，第二章會看到真的畫面。
 按一下：點淡色連結，Obsidian 會幫你新建一張空白的 呂布.md。不想新建就先別點。2026-10-24 實測（Obsidian 1.10.3，Mac）：在大綱點淡色的董卓，馬上新增一張空白的 董卓.md，放在筆記庫最外層，不會放進 人物/。
-按一下：顏色淡，代表資料夾裡還沒有這張卡，不一定是打錯字。
+按一下：淡色連結：指向的卡還沒建立，不一定是打錯字。
 最後一下：投影或螢幕上分不出深淺的時候，用另一個方法確認：按 Cmd+O（Windows 是 Ctrl+O）打開快速切換，輸入名字，找不到這個檔，就是還沒有卡。`],
   [CardTypes, `20:00–22:30
 三國筆記庫的卡分三種。最上面是入口卡〈三國演義〉，從它可以連到每一張卡。
@@ -2792,15 +2851,15 @@ Obsidian 的「儲存庫」，英文 Vault，就是你電腦裡的一個資料�
 按一下：勢力卡 3 張：蜀漢、曹魏、東吳，一張寫一方陣營。
 按一下：關係卡 3 張：桃園結義、煮酒論英雄、赤壁之戰，一張寫一件事：誰和誰、在第幾回、發生什麼事。
 按一下：算一下：三種共 11 張，加入口卡〈三國演義〉一共 12 張。原文、整理、模板這三個資料夾裡的東西不算卡。
-最後一下：人物之間，靠關係卡接起來。三張關係卡最上面已經有「回目」欄位，〈桃園結義〉還寫了年份「中平元年」；模板/ 裡有一份關係卡模板，第三堂排時間軸會用到這兩個欄位。`],
+最後一下：人物之間發生的事，寫成關係卡。三張關係卡最上面已經有「回目」欄位，〈桃園結義〉還寫了年份「中平元年」；模板/ 裡有一份關係卡模板，第三堂排時間軸會用到這兩個欄位。`],
   [StoryMap, `22:30–26:00
 上排五個人物。按一下：〈桃園結義〉接到關羽、張飛、劉備，第 1 回。按一下：〈煮酒論英雄〉接到劉備和曹操，第 21 回。按一下：〈赤壁之戰〉接到曹操和孫權，第 49 到 50 回。
-最後一下：劉備、曹操外面多一圈，各接了兩段故事。圖上只畫每段故事最核心的人；卡片正文其實連到更多人，例如〈赤壁之戰〉也連到劉備、關羽、張飛。
+最後一下：劉備、曹操外面多一圈，各連到兩張關係卡。圖上只畫每段故事最核心的人；卡片正文其實連到更多人，例如〈赤壁之戰〉也連到劉備、關羽、張飛。
 小說出處：https://zh.wikisource.org/wiki/三國演義/第001回 、https://zh.wikisource.org/wiki/三國演義/第021回 、https://zh.wikisource.org/wiki/三國演義/第049回`],
   [LinkWalk, `26:00–30:00
 沿連結讀，像坐捷運。第一站〈劉備〉，卡裡有 [[桃園結義]]。按一下：點進去，到〈桃園結義〉，這張關係卡寫著第 1 回三人結為兄弟。按一下：再點卡裡的 [[關羽]]，到下一張人物卡。
-按一下：走回來有兩種方法：按左上角的 ← 回到上一張；或在〈關羽〉打開反向連結，會看到〈桃園結義〉連到他，點它就回去。
-最後一下：走得過去，也走得回來，這就是雙向連結。等一下打開筆記庫，大家自己點點看。接下來是練習 1，裝好 Obsidian。`],
+按一下：回到上一張有兩種方法：按左上角的 ← 回到上一張；或在〈關羽〉打開反向連結，會看到〈桃園結義〉連到他，點它就回去。
+最後一下：點連結往下讀，看反向連結找回來源，這就是雙向連結。等一下打開筆記庫，大家自己點點看。接下來是練習 1，裝好 Obsidian。`],
   [DownloadObsidian, `30:00–33:00
 練習 1，四頁，一共 15 分鐘。第一步：打開 obsidian.md/download。網頁會自己判斷系統，Windows 顯示 Download for Windows，Mac 顯示 Download for macOS；沒看到就往下捲，在自己的系統那一列按 Universal。
 按一下：按紫色的下載鈕。按一下：照畫面安裝。Windows 打開安裝檔按下一步；Mac 打開 .dmg，把 Obsidian 拖進「應用程式」。Obsidian 免費，不用註冊。上一堂結束時已經請大家先下載，裝好的人直接看下一頁。官方說明：https://obsidian.md/help/install`],
@@ -2820,12 +2879,12 @@ ${VAULT_ZIP_URL}
 按一下：解法：在左下角的儲存庫名稱點一下，選「管理儲存庫」，重新「開啟資料夾為儲存庫」，這次選裡面那個「三國人物知識庫」。
 還有時間的人，打開〈桃園結義〉，點幾個紫色人名逛逛。`],
   [Section2, `45:00–45:30
-第二章：把第一堂的大綱放進筆記庫，跟講師的人物卡接起來。這一整章都是練習 2。`],
+第二章：把第一堂的大綱放進筆記庫，連到講師的人物卡。這一整章都是練習 2。`],
   [MergeOutline, `45:30–50:00
 練習 2 第一步，3 分鐘。左邊是第一堂的練習資料夾 aw-01-lab/Codex_練習，裡面有大家寫好的 三國演義大綱.md。
 按一下：只要搬這一個檔，拖進「三國人物知識庫」的「整理」資料夾。可以在檔案總管（Mac 是 Finder）裡拖，也可以直接拖到 Obsidian 左側的「整理」上。旁邊的「人物」資料夾是講師的卡，不用動。
-按一下：大綱第 1 回裡寫的是 [[劉備]]，人物資料夾裡剛好有 劉備.md，所以這個連結自己就接上了，不用改任何字。
-最後一下：只搬一個檔，連結自己會接上。
+按一下：大綱第 1 回裡寫的是 [[劉備]]，人物資料夾裡剛好有 劉備.md，所以 Obsidian 會依卡名自動對上這個連結，不用改任何字。
+最後一下：只搬一個檔，Obsidian 依卡名自動對上連結。
 補充，給好奇的同學：如果有人第一堂另外讓 Codex 寫了自己的 劉備.md，這次先不要放進來。同一個筆記庫裡有兩張都叫劉備的卡，[[劉備]] 只會連到其中一張，另一張就沒人連得到。
 第一堂沒來、或大綱不見的人：用 aw-02-lab 裡 參考結果/ 的「三國演義大綱.md」，一樣拖進 整理/。這份就是講師的範例大綱，線上也看得到：${SAMPLE_OUTLINE_URL}
 另外：大綱每段最後的「出處：原文/第001回.txt」，在這座筆記庫裡也找得到。原文/ 已經放了第 1 到 21 回的全文，跟第一堂的檔案一樣，不用從第一堂的資料夾複製。原文是 .txt，Obsidian 預設不顯示 .txt，左邊的 原文/ 看起來是空的；要看原文，用 Finder（Windows 是檔案總管）打開 原文/，按右鍵用「文字編輯」（Windows 是「記事本」）打開。
@@ -2833,18 +2892,18 @@ ${VAULT_ZIP_URL}
   [ClickLiubei, `50:00–52:30
 上面是合併後的實際畫面：整理/三國演義大綱，用的是 GitHub 上的範例大綱，2026-10-24 在 Obsidian 1.14.5 擷取。標 1 是第 1 回裡的劉備，深紫色，代表找得到卡。
 按一下：點它，就打開下面這張講師的人物卡 人物/劉備。
-最後一下：大綱和人物卡接上了。請大家自己點一次，點不過去的，檢查大綱是不是放在「三國人物知識庫」裡面，而不是旁邊。
+最後一下：大綱的 [[劉備]] 現在會打開人物卡。請大家自己點一次，點不過去的，檢查大綱是不是放在「三國人物知識庫」裡面，而不是旁邊。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：把下載的範例大綱放進 整理/，不用重開 Obsidian，點第 1 回的劉備就打開 人物/劉備。`],
   [BacklinksReal, `52:30–54:30
 左邊是劉備卡右側的反向連結面板，放進範例大綱後的實際畫面（2026-10-24 擷取，Obsidian 1.14.5）。先說清楚這裡的數字：它算的是「劉備被提到幾處」，不是卡片有幾張。大綱放進來之前，筆記庫裡有 17 處提到劉備，放進來之後會變幾處？
 按一下，標 1：「已連結本筆記的檔案」變成 36。按一下，標 2：其中 19 處來自三國演義大綱。
-大綱一放進來，劉備卡就自動多了 19 條反向連結，大綱裡寫到劉備的每一回都列在這裡，點了就跳回大綱那一段。你沒有改劉備卡，它自己變豐富了。
+大綱一放進來，劉備卡就自動多了 19 條反向連結，大綱裡寫到劉備的每一回都列在這裡，點了就跳回大綱那一段。你沒有改劉備卡，這些反向連結是 Obsidian 自動算出來的。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：合併前 17 處、11 張卡；放進範例大綱後 36 處，來自大綱 19 處。學生用自己的大綱，數字本來就會不一樣。`],
   [GrayReal, `54:30–57:00
 練習 2 第二步，2 分鐘：在大綱裡找淡色連結。上面是範例大綱第 1 回的實際畫面（2026-10-24 擷取，Obsidian 1.14.5）。先問大家：哪些名字已經有卡？
 按一下，標 1：劉備是深紫色，代表筆記庫裡有 劉備.md，點了會打開。關羽、張飛、曹操也一樣；〈桃園結義〉是講師的關係卡，所以也是深紫。
 按一下，標 2：董卓是淡紫色，代表還沒有這張卡，點了 Obsidian 會幫你新增一張空白卡。第一行的張角也是淡的。
-按一下：範例大綱一共連了 46 個不同的名字，深紫的 6 個：劉備、關羽、張飛、曹操四個人，加上〈桃園結義〉〈煮酒論英雄〉兩張關係卡；淡紫的有 40 個，例如呂布、董卓、袁紹、陳宮、李傕、郭汜。孫權在第 1 到 21 回還沒出場，所以大綱裡沒有他。
+按一下：範例大綱一共連了 46 個不同的名字，深紫的 6 個：劉備、關羽、張飛、曹操四個人，加上〈桃園結義〉〈煮酒論英雄〉兩張關係卡；淡紫的有 40 個，例如呂布、董卓、袁紹、陳宮、李傕、郭汜。大綱裡也找不到孫權，但他不是還沒出場：原文第 15 回就寫到孫策派弟弟孫權守宣城。是大綱把他省略了，這也提醒我們，摘要會漏掉人。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：數字是從 Obsidian 的連結紀錄數的。第 5 回的「溫酒斬華雄」在範例大綱裡是黑字，沒有連結。
 每個人的大綱數字會不一樣，請大家自己捲一捲。有些人會看到第 2、3 回的回目標題裡，人名也變成連結，那是第一堂舊版提示詞的小毛病，現在的提示詞已經改掉，不影響今天的練習。`],
   [GrayDecide, `57:00–61:00
@@ -2870,9 +2929,9 @@ ${VAULT_ZIP_URL}
   [RagIdea, `70:30–73:00
 RAG 是 Retrieval-Augmented Generation，檢索增強生成。三步：
 R 檢索：問「依這座筆記庫，曹操參與哪場戰役？」，先在筆記庫裡把相關的卡找出來，例如〈曹操〉和〈赤壁之戰〉。問題加上「依這座筆記庫」，是把範圍限定在我們的卡；曹操卡裡寫到的戰役是赤壁之戰。
-按一下，A 增強：把問題和找到的內容一起交給模型，題目多了依據。
+按一下，A 增強：把問題和找到的內容一起交給模型，問題附上了筆記內容。
 按一下，G 生成：照筆記回答，並附上檔名。
-最後一下：模型沒變，只是先看了筆記。接下來用 Codex 實際跑一次，三個字母各看一頁，每一頁都對照 Codex 真的做了什麼。來源：https://arxiv.org/abs/2005.11401`],
+最後一下：模型不變，變的是輸入多了筆記。接下來用 Codex 實際跑一次，三個字母各看一頁，每一頁都對照 Codex 真的做了什麼。來源：https://arxiv.org/abs/2005.11401`],
   [OpenInCodex, `73:00–76:00
 這一頁大家一起做，練習 3 的追問和練習 4 都要用。打開終端機（Windows 是 PowerShell）。打 cd 和一個空格，把「三國人物知識庫」資料夾拖進視窗，按 Enter。
 按一下：打 codex。第一次在這個資料夾開 Codex，會問你信不信任這個資料夾，選 Yes, continue，跟第一堂一樣。
@@ -2884,45 +2943,45 @@ R 檢索：問「依這座筆記庫，曹操參與哪場戰役？」，先在筆
 講師先示範，同一題貫穿整章。在 Codex 輸入這一整段，這就是講師實跑時用的提示詞：
 「依這座筆記庫，曹操參與哪場戰役？只根據 .md 卡片回答，每個說法附上檔名和一句卡片原句；筆記沒寫的就說找不到，不要自己補。」
 一次一行：第一行是問題，先把範圍說在前面。按一下：只根據 .md 卡片。按一下：附檔名，再加一句原句，等一下核對比較快。按一下：沒寫就說找不到。
-最後一下：附了檔名和原句，才查得回去。接下來三頁，是這一題在講師電腦上的實跑紀錄（2026-10-18，Codex 0.154.0，模型 gpt-5.6-luna，唯讀模式，筆記庫已經放進大綱）。`],
+最後一下：附上檔名和原句，回答才能查證。接下來三頁，是這一題在講師電腦上的實跑紀錄（2026-10-18，Codex 0.154.0，模型 gpt-5.6-luna，唯讀模式，筆記庫已經放進大綱）。`],
   [RStep, `77:00–78:30
 R，檢索。上面這行是 Codex 實際執行的搜尋指令：rg 是一個搜尋工具，意思是在所有 .md 檔裡找「曹操、戰役、戰爭、之戰、大戰」這幾個詞。在 Codex 的畫面上會顯示成「Ran ……」或「Explored」。
 按一下，第一階段，搜尋：找到 14 個檔、77 行有對到。最多的是大綱 26 行；練習提示詞 7 行，因為那時候筆記庫裡還放著練習提示詞，裡面也有曹操這題。這點值得停一下：放在筆記庫裡的任何檔案，連練習用的提示詞都會被搜到、拿來當證據，所以提示詞後來整份搬出筆記庫，核對時也要看每一句引文是從哪個檔來的；煮酒論英雄 6 行；赤壁之戰、曹操、曹魏各 5 行；其他 8 個檔一共 23 行，圖上把曹魏和這 8 個檔併成「其他 9 個檔」28 行。這份紀錄跑的是講師較早的大綱版本，你們用現在的範例大綱跑，行數和引到的句子會不一樣，這很正常；要看的是它搜了哪些檔、引文從哪裡來。
 按一下，第二階段，它有沒有再打開整張卡來讀？實跑紀錄裡沒有：搜尋完它就直接回答了，用的只是這 77 行。
-最後一下：它讀的是搜到的句子，不是整張卡。所以卡片裡的句子寫得完整、關鍵詞寫清楚，比較容易被搜到。搜尋到不等於讀過，核對時要記得這一點。`],
+最後一下：Codex 讀的是搜尋命中的句子，不是整張卡。所以卡片裡的句子寫得完整、關鍵詞寫清楚，比較容易被搜到。搜尋到不等於讀過，核對時要記得這一點。`],
   [AStep, `78:30–80:00
 A，增強。左邊是搜尋找到的句子，這裡挑 77 行裡的 4 行給大家看，前面是檔名和行號：曹操卡第 11 行、赤壁之戰卡第 13 行和第 19 行、大綱第 44 行。
 按一下：這些句子和問題放進同一份輸入，送進模型。實跑紀錄顯示這一輪輸入 44,156 個 token，裡面包含 Codex 自己的說明，不全是筆記。
 按一下：回答真正引用的，是打勾的兩句：曹操卡第 11 行，和赤壁之戰卡第 19 行的「參與人物」。
-最後一下：問題加上筆記，模型才有根據。`],
+最後一下：模型依據的是問題加上檢索到的筆記。`],
   [GStep, `80:00–82:00
 G，生成。左邊是 Codex 的實際回答，只調整了換行：「曹操參與的戰役是：赤壁之戰。」接著兩個檔名，各附一句原句：人物/曹操.md 的「第 49 至 50 回曹操率大軍南下，在 [[赤壁之戰]] 被 [[孫權]] 麾下的周瑜火燒戰船……」，關係/赤壁之戰.md 的「參與人物：[[孫權]]、[[曹操]]、[[劉備]]、[[關羽]]、[[張飛]]」。最後一句是「筆記中找不到曹操參與其他戰役的明確記載」，這句等一下限制那頁會再看。
 按一下：打開人物/曹操.md，這一句就在第 4 段。按一下：打開關係/赤壁之戰.md，最後一行就是參與人物。
-最後一下：檔名加一句原句，一找就到，這就是為什麼提示詞要它附原句。`],
+最後一下：有檔名和原句，就能回筆記核對，這就是為什麼提示詞要它附原句。`],
   [WithWithout, `82:00–84:30
-同一個問題，問兩次，都是實跑。先看兩次的提示詞原文。左邊：在一個空資料夾裡問 Codex「曹操參與哪場戰役？」，只有問題本身。右邊：在筆記庫裡問。老實說，兩次問法不一樣：右邊多了「依這座筆記庫」、附檔名和原句、找不到就說的要求。所以等一下看到的差別，一半來自筆記，一半來自問法。
-按一下：左邊的回答。它憑記憶回答：官渡之戰（200 年）、赤壁之戰（208 年）、濮陽、下邳、潼關之戰等，最後還補一句「若題目只問一場，通常答案是赤壁之戰」。沒有檔名，你沒辦法回去查。課綱說用 ChatGPT 比，也可以：在 ChatGPT 不開搜尋問同一題，結果很像。
-按一下：右邊的回答：赤壁之戰，附兩個檔名和原句，每一句都查得到。
-最後一下：左邊說的「官渡之戰」，筆記庫裡一個字都沒有。它不一定錯，官渡之戰確實有，但它不是從我們的筆記來的，查不回去。`],
+同一個問題，問兩次，都是實跑。先看兩次的提示詞。左邊：在一個空資料夾裡問 Codex「曹操參與哪場戰役？」，只有問題本身。右邊：在筆記庫裡問，而且多了三個要求，就是剛才那頁拆開看過的：只看卡片、附檔名和原句、沒寫就說找不到。老實說，兩次問法不一樣，所以等一下看到的差別，一半來自筆記，一半來自問法。
+按一下：左邊。資料夾是空的，沒東西可查，它只能憑訓練時記住的內容回答：官渡之戰（200 年）、赤壁之戰（208 年）、濮陽、下邳、潼關之戰等，最後還補一句「若題目只問一場，通常答案是赤壁之戰」。沒有檔名，你沒辦法回去查它根據什麼。課綱說用 ChatGPT 比，也可以：在 ChatGPT 不開搜尋問同一題，結果很像。
+按一下：右邊，這就是 RAG。它先搜尋筆記庫，找到曹操卡和赤壁之戰卡，再照卡片回答：赤壁之戰。後面兩行是它附的出處：人物/曹操.md 那句「在赤壁之戰被孫權麾下的周瑜火燒戰船」，關係/赤壁之戰.md 那句「參與人物：孫權、曹操、劉備……」。最後它還說，其他戰役筆記裡找不到。每一句都能打開那張卡核對。
+最後一下：左邊說的「官渡之戰」，是模型憑記憶說的，我們的筆記裡沒有。官渡之戰確實發生過，但它不是從我們的筆記來的，沒辦法用筆記查證。`],
   [LinksHelp, `84:30–86:30
 這頁講「來源追溯」，英文 Provenance：從答案往回找，它根據哪個檔案、哪段內容。連結有什麼用？先老實說：實跑時 Codex 是用搜尋找到這些句子，紀錄裡看不到它沿著 [[連結]] 一張一張點過去。連結真正幫上忙的地方，是你查證的時候。
 1：回答寫了 人物/曹操.md。按一下，2：打開它，那一句裡的「赤壁之戰」是紫色連結。按一下，3：點下去，就跳到〈赤壁之戰〉這張關係卡，最上面寫著回目 49，第一句就是「曹操收服北方後率大軍南下」。
-最後一下：答案有檔名，連結讓它有路可回。卡片連得越完整，你從一個答案查回原句、再查到相關的卡就越快。`],
+最後一下：檔名指出出處，連結帶你回到相關的卡。卡片連得越完整，你從一個答案查回原句、再查到相關的卡就越快。`],
   [LimitMissing, `86:30–88:00
-RAG 的限制一，Barnett 等人把它叫做「缺少內容」（Missing Content）：筆記沒寫的，它找不到。上面是實跑的提示詞原文：「官渡之戰是誰打贏的？請只根據這個筆記庫裡的 .md 卡片回答，附上檔名；筆記沒寫的就說找不到，不要自己補。」它搜尋「官渡、袁紹、曹操」，沒有任何卡提到官渡。
+RAG 的限制一，Barnett 等人把它叫做「缺少內容」（Missing Content）：筆記沒寫的內容，檢索不到。上面是實跑的提示詞原文：「官渡之戰是誰打贏的？請只根據這個筆記庫裡的 .md 卡片回答，附上檔名；筆記沒寫的就說找不到，不要自己補。」它搜尋「官渡、袁紹、曹操」，沒有任何卡提到官渡。
 按一下：它的回答是「找不到。筆記庫中的 .md 卡片沒有提到「官渡之戰」或其勝負。」
-最後一下：說找不到，是好的回答。剛才空資料夾那一次，它說官渡是曹操最有名的戰役；有了「找不到就說找不到」這條限制，它就不會拿記憶來補。官渡之戰在第 30 回，不在我們第 1 到 21 回的大綱裡。`],
+最後一下：筆記沒寫時，正確的回答就是「找不到」。剛才空資料夾那一次，它說官渡是曹操最有名的戰役；有了「找不到就說找不到」這條限制，它就不會拿記憶來補。官渡之戰在第 30 回，不在我們第 1 到 21 回的大綱裡。`],
   [LimitMiss, `88:00–90:00
-限制二：檢索遺漏，資料一多，它也會看漏。左邊是剛才那一題的第一次回答：赤壁之戰，還說「筆記中找不到曹操參與其他戰役的明確記載」。
+限制二：檢索遺漏，資料一多，檢索也會漏掉相關內容。左邊是剛才那一題的第一次回答：赤壁之戰，還說「筆記中找不到曹操參與其他戰役的明確記載」。
 按一下：可是 R 那一頁看到，大綱裡搜到 26 行，寫了濮陽、兗州、淯水、下邳好幾場仗，它都沒算進去。原因可能是它把問題理解成「最有名的一場」，或結果太多只挑了講師的卡。
 按一下：縮小範圍再問一次，實跑提示詞：「再查 整理/三國演義大綱.md：曹操在第 1 到 21 回參與了哪些戰役？每一項附回目和檔名；筆記沒寫的不要補。」黃色標起來的是多加的範圍。右邊這次是 2026-10-24 在範例大綱上實跑（Codex 0.154.0，gpt-5.6-luna，唯讀），它整份大綱讀完，列了 7 項，例如第 6 回滎陽、第 11 回濮陽、第 19 回下邳。同一題講師跑了三次，三次都是 7 項，但內容不一樣：有兩次把第 5 回排除，說大綱沒寫曹操上陣；有一次把第 5 回列了進去。等一下練習 3 用的就是列進去的那一次。
-最後一下：改的是範圍：查哪個檔、哪幾回。可是這 7 項也要核對，下一頁先示範怎麼核對。`],
+最後一下：縮小檢索範圍：指定檔案和回目。可是這 7 項也要核對，下一頁先示範怎麼核對。`],
   [CheckThree, `90:00–91:00
 核對回答的三件事，用剛才那份 7 項的回答示範兩列，其他留給大家。
 1 檔案在嗎：它每一項的檔名寫的是「原文/第011回.txt」這種，是從大綱的出處抄來的。筆記庫的 原文/ 裡第 1 到 21 回都在，第011回.txt 找得到，打勾。原文是 .txt，Obsidian 左邊看不到，要用 Finder 或檔案總管打開 原文/ 看。如果回答裡出現資料夾裡沒有的檔名，例如它寫成第 30 回，那就是第一個要抓的問題。
 按一下，2 原句在嗎：「濮陽與呂布交戰」，大綱第 11 回寫了「呂布在濮陽設計誘敵，使曹操中伏敗退」，打勾。
 按一下，3 有沒有多寫：「攻打呂布」，大綱第 13 回寫了「袁紹派兵助曹操攻打呂布」，回答說的大綱都寫了，打勾。沒寫的、或寫得比大綱多的，就打問號。
-最後一下：三件都打勾，才放心用。`],
+最後一下：三項都核對過，回答才能用。`],
   [Practice3, `91:00–95:00
 練習 3，4 分鐘。全班核對同一份回答：剛才那題在範例大綱上的實跑結果，一共 7 項。對照的也是同一份範例大綱，所以大家的答案可以互相比。
 請在筆電打開右邊兩個連結：先核對這份回答.md（${CHECK3_URL}）和範例大綱 三國演義大綱.md（${SAMPLE_OUTLINE_URL}）。大綱在瀏覽器裡按 Ctrl+F（Mac 是 Cmd+F）找「第 6 回」，就跳到那一回。剛才示範過第 4、5 列，請核對其他五列。
@@ -2943,34 +3002,35 @@ RAG 的限制一，Barnett 等人把它叫做「缺少內容」（Missing Conten
   [Practice3Ask, `95:00–97:00
 打了問號的那一列，不要只在心裡打叉，回頭問 Codex。提示詞在 prompts.md 的〈練習 3〉，把回數和事情換成你要問的那一列：「大綱第 5 回哪一句寫了曹操在汜水關或虎牢關上陣打仗？只根據 整理/三國演義大綱.md，引用原句；沒寫就說沒寫。」
 按一下：講師 2026-10-24 在範例大綱上實跑，它回「沒寫」，把第 5 回那句整段引出來，再說「這句沒有寫曹操在汜水關或虎牢關上陣打仗」。用自己大綱的同學，Codex 查的是你自己的大綱，回答可能不一樣，看它引的那句你同不同意。
-按一下：追問一句，就看出哪一項是它自己補的。原先的回答把它列進去，現在問原句在哪，它就承認沒寫。
+按一下：要求引用原句，就看得出哪一項是模型自己補的。原先的回答把它列進去，現在問原句在哪，它就承認沒寫。
 最後一下：有時間的人自己問一題，提示詞範本也在 prompts.md：「（你的問題）只根據 .md 卡片回答，每個說法附上檔名和一句卡片原句；筆記沒寫的就說找不到，不要自己補。」這兩題，模型的記憶比卡片多，正好看它有沒有多寫：
 「白門樓上，劉備對曹操說了什麼原話？」實測：它說找不到完整原話，只引大綱「曹操在劉備提醒丁原、董卓舊事後，下令縊死呂布」。原話在 原文/第019回.txt：「公不見丁建陽、董卓之事乎？」它如果直接說出這句，就是用記憶補的，大綱裡沒有。
-「關羽在第 1 到 21 回斬了哪些人？」實測：華雄（第 5 回）、車冑（第 21 回），並說第 1 回沒寫被斬的人名。打開 原文/第001回.txt 會看到關羽斬了程遠志：大綱沒寫，它照規則說找不到，這就是 RAG 的限制一，筆記沒寫的它找不到。`],
+「關羽在第 1 到 21 回斬了哪些人？」實測：華雄（第 5 回）、車冑（第 21 回），並說第 1 回沒寫被斬的人名。打開 原文/第001回.txt 會看到關羽斬了程遠志：大綱沒寫，它照規則說找不到，這就是 RAG 的限制一：筆記沒寫的內容，檢索不到。`],
   [Section4, `97:00–97:30
 第四章：建立知識圖譜。知識圖譜聽起來很大，其實就是點和線，重點是每條線都要說得出出處。`],
   [PointsLines, `97:30–99:00
 知識圖譜（Knowledge Graph）就是點和線。先看點，專有名詞叫節點（Node）：今天的筆記庫裡，人物是圓圈，劉備、關羽、張飛、曹操；事件是方框，桃園結義、煮酒論英雄。
-按一下：線，專有名詞叫邊（Edge）。關羽、張飛、劉備連到桃園結義；劉備、曹操連到煮酒論英雄。每一條綠線，都能在卡片裡找到一句原句撐住它。
+按一下：線，專有名詞叫邊（Edge）。關羽、張飛、劉備連到桃園結義；劉備、曹操連到煮酒論英雄。每一條綠線，都能在卡片裡找到一句原句作為依據。
 按一下：曹操連到桃園結義這條是橘色虛線加問號。卡片沒寫曹操參加結義，找不到原句，就先別畫，回卡片查。今天剩下的頁面都照這個規則：綠線有原句，橘色虛線加問號是找不到。
-最後一下：每條邊都說得出出處。`],
+最後一下：每條邊都要有出處。`],
   [GraphView, `99:00–100:00
 Obsidian 內建的 Graph View 叫「關聯圖」：按左側工具列的關聯圖圖示，或按 Ctrl+G（Mac 是 Cmd+G）。這是用課堂發的筆記庫和大綱合併後的實際畫面，你的圖排法會不一樣，但三群點都看得到。
 按一下，標 1：中間的大圓是三國演義大綱，連出去最多線；右邊是那一塊放大的樣子。按一下，標 2：四周一圈淡色小點，就是剛才那 40 個還沒有卡的名字。按一下，標 3：右下一群深色點，是講師的人物、勢力、關係卡，彼此連得很密。
-大綱和講師的卡之間，只靠劉備、關羽、張飛、曹操、桃園結義、煮酒論英雄這六條線接著。等一下補連結，這兩群會接得更緊。`],
+大綱和講師的卡之間，只靠劉備、關羽、張飛、曹操、桃園結義、煮酒論英雄這六條線接著。等一下補連結，這兩群之間的線會變多。`],
   [LocalGraph, `100:00–101:00
 圖譜中的一條線，專有名詞叫「邊」（Edge）。整張關聯圖太密，換個方式看：只看一條線。左邊是劉備的局部關聯圖，實際畫面放大；打開劉備卡，在右上角「⋯」選單或命令選擇器（Ctrl/Cmd+P）找「局部關聯圖」。橘色那條是講師加的標示，就是劉備到〈桃園結義〉的線。
 先問：這條線是哪來的？按一下：劉備卡裡有一句「三人越談越投合，隔天就在張飛莊後的桃園立誓，留下著名的 [[桃園結義]]」，框起來的就是那個連結。
 最後一下：每條線，都來自卡片裡的一個 [[連結]]。想知道一條線為什麼存在，就回卡片找那個連結和它所在的句子。`],
   [AsciiAsk, `101:00–103:00
-練習 4，四頁一共 14 分鐘。先請 Codex 畫 ASCII 關係圖，ASCII 就是純文字畫的圖。畫面上就是完整提示詞，請從 prompts.md 的〈練習 4〉複製：${PROMPTS_URL}
-三行就是三個重點：定位兩張卡、一線一行附檔名、沒原句不畫。
+練習 4，四頁一共 14 分鐘。先請 Codex 畫 ASCII 關係圖，ASCII 就是純文字畫的圖。畫面上是提示詞重點，完整提示詞請從 prompts.md 的〈練習 4〉複製：${PROMPTS_URL}
+三個重點：定位兩張卡、以人物為起點畫分支並附檔名、沒原句不畫。每條關係編號，方便核對。
 大家貼上、按 Enter，讓它跑，大約一分鐘。它跑的時候，先看講師的結果。
-按一下：講師 2026-10-17 實跑的回覆，全文 9 條線，沒有刪改。這份也放在筆電上打得開的 講師的ASCII關係圖.md（${CHECK4_URL}），下一頁全班先核對這一份；你自己跑出來的，第 ${pageOf(AskBack4)} 頁再核對。
+按一下：這是分支格式示意，從劉備看出去，可以看到關羽、張飛和曹操；每條分支旁都有來源。第三堂再用 Skill 畫成 HTML 圖，比較兩種呈現方式。
+下一頁先核對講師 2026-10-17 的舊版實跑回覆，全文 9 條線在 講師的ASCII關係圖.md（${CHECK4_URL}）；你自己跑出來的，第 ${pageOf(AskBack4)} 頁再核對。舊版是一線一行，新提示詞則要求畫分支。
 你的線數會不一樣：講師 2026-10-24 在範例筆記庫上再跑一次，只畫了 6 條，全部找得到原句。所以要練「沒原句的線」，大家先一起核對講師這份。
-補充：講師另外試過不限格式的版本，它畫成一大張框線圖，劉備出現兩次，很難核對；所以提示詞才要求一線一行。`],
+分支圖的排法和線數可能不同；核對時看編號、人物、關係和來源。`],
   [CheckLines, `103:00–107:00
-第 1 輪：全班核對講師的 9 條線。每條線打開它寫的來源卡，找一句撐得住的原句：兩個人都在句子裡，關係也寫出來。先說怎麼併：同一句原句撐住的線，併成一列，所以 9 條線變成 5 列。給大家 2 分鐘自己找，再一起按。
+第 1 輪：全班核對講師的 9 條線。每條線打開它寫的來源卡，找一句能支持它的原句：兩個人都在句子裡，關係也寫出來。先說怎麼併：出自同一句原句的線，合併成一列，所以 9 條線變成 5 列。給大家 2 分鐘自己找，再一起按。
 按一下：劉關張結義 3 條線，都靠〈桃園結義〉的「誓畢拜劉備為兄，關羽次之，張飛為弟」，打勾。
 按一下：曹操和劉備 2 條，都靠〈煮酒論英雄〉曹操說的「今天下英雄，惟使君與操耳」，打勾。
 按一下：關張守護劉備 2 條，靠〈桃園結義〉的「關、張聽說大哥被帶走，急忙衝進後園按劍守護」，打勾。
@@ -2980,17 +3040,17 @@ Obsidian 內建的 Graph View 叫「關聯圖」：按左側工具列的關聯�
   [AskBack4, `107:00–111:00
 打了問號的線，拿去追問 Codex。提示詞在 prompts.md 的〈練習 4〉第 1 輪：「下面的線，請到它寫的來源卡找出撐得住它的原句，逐條引用；找不到就說找不到，不要改任何檔案。」下面貼上打問號的兩條線。
 按一下：講師 2026-10-24 實跑的回覆。它兩條都說「找到」，引的是同一句「劉備已經站在孫權那一邊對抗曹操」；第一條還自己補了一句「原句沒有直接使用聯手一詞」。
-先問大家：這句撐得住「劉備和孫權聯手」嗎？撐得住「孫權對抗曹操」嗎？請兩位說。講師的判斷：第一條勉強，句子只說劉備站在孫權那邊，沒寫兩人怎麼聯手；第二條撐不住，對抗曹操的主詞是劉備。要留這兩條，就改用〈赤壁之戰〉寫清楚的「孫權最後決定和劉備聯手」，來源改成 關係/赤壁之戰.md。
-最後一下：它說「找到」，撐不撐得住，要你自己判斷。
-第 2 輪：核對你自己跑出來的線，方法一樣。找不到原句的，回覆 Codex：「第 N 條在 關係/＿＿.md 找不到原句，請刪掉這條，其他照原樣再列一次，不要改任何檔案。」實測提醒：講師故意說一條其實找得到原句的線（關羽、張飛按劍守護劉備）找不到，它也照刪了，沒有反駁。所以刪之前，自己要先確定真的找不到。`],
+先問大家：這句能支持「劉備和孫權聯手」嗎？能支持「孫權對抗曹操」嗎？請兩位說。講師的判斷：第一條勉強，句子只說劉備站在孫權那邊，沒寫兩人怎麼聯手；第二條不成立，對抗曹操的主詞是劉備。要留這兩條，就改用〈赤壁之戰〉寫清楚的「孫權最後決定和劉備聯手」，來源改成 關係/赤壁之戰.md。
+最後一下：Codex 說「找到」，原句是否支持，要自己核對。
+第 2 輪：核對你自己跑出來的線，方法一樣。找不到原句的，回覆 Codex：「第 N 條在 關係/＿＿.md 找不到原句，請刪掉這條，保留其他關係並重新畫成文字關係圖，不要改任何檔案。」實測提醒：講師故意說一條其實找得到原句的線（關羽、張飛按劍守護劉備）找不到，它也照刪了，沒有反駁。所以刪之前，自己要先確定真的找不到。`],
   [AddLinksBack, `111:00–115:00
-練習 4 最後一步：把你在練習 2 寫的關係卡，連回大綱。範例大綱第 5 回寫的是黑字「溫酒斬華雄」，所以大綱和〈溫酒斬華雄〉這張卡沒接上。上面是示意，照 Obsidian 的顏色畫：紫色是有卡的連結，淡紫是還沒有卡，框起來的是黑字。
+練習 4 最後一步：把你在練習 2 寫的關係卡，連回大綱。範例大綱第 5 回寫的是黑字「溫酒斬華雄」，所以大綱沒有連到〈溫酒斬華雄〉這張卡。上面是示意，照 Obsidian 的顏色畫：紫色是有卡的連結，淡紫是還沒有卡，框起來的是黑字。
 按一下：在大綱裡改成 [[溫酒斬華雄]]，換成你那張卡的名字，就變成紫色連結。寫〈轅門射戟〉的，第 16 回「呂布在轅門射戟」改成「呂布在[[轅門射戟]]」。寫〈許田打圍〉的，範例大綱第 20 回寫的是「許田打獵」，字不一樣，就在那一段最後加上「（[[許田打圍]]）」。用第一堂舊版提示詞寫的大綱，「煮酒論英雄」「桃園結義」可能也是黑字，一起補。
-最後一下：補上 [[ ]]，大綱就接到你的關係卡。打開你的關係卡，反向連結裡多了「三國演義大綱」；回去看關聯圖，大綱和講師那群卡之間也多了一條線。
+最後一下：加上 [[ ]]，大綱就連到你的關係卡。打開你的關係卡，反向連結裡多了「三國演義大綱」；回去看關聯圖，大綱和講師那群卡之間也多了一條線。
 2026-10-24 實測（Obsidian 1.10.3，Mac）：在範例大綱第 20 回那段最後加上「（[[許田打圍]]）」，〈許田打圍〉的反向連結就出現「三國演義大綱」。關聯圖那條線沒有另外實測。`],
   [Recap, `115:00–118:00
-回顧四件事。一，筆記庫就是一個資料夾，Obsidian 和 Codex 讀同一份。二，大綱放進整理資料夾，[[劉備]] 接上講師的人物卡，淡色連結先數次數，再決定補卡還是先留著。三，RAG：先查筆記再回答，要求附檔名，用三件事核對：檔案在嗎、原句在嗎、有沒有多寫。四，知識圖譜是點和線，每條線都要找得到原句，找不到就刪。
-最後一下：筆記寫得清楚、連得好，AI 才答得準。`],
+回顧四件事。一，筆記庫就是一個資料夾，Obsidian 和 Codex 讀同一份。二，大綱放進整理資料夾，[[劉備]] 連到講師的人物卡，淡色連結先數次數，再決定補卡還是先留著。三，RAG：先查筆記再回答，要求附檔名，用三件事核對：檔案在嗎、原句在嗎、有沒有多寫。四，知識圖譜是點和線，每條線都要找得到原句，找不到就刪。
+最後一下：RAG 答得準不準，取決於筆記內容和連結。`],
   [NextSkills, `118:00–120:00
 下一堂講 Skill。Skill 就是一份寫好的做事說明，像食譜：照著做，每次的做法都一樣。
 第一步，把 Skill 裝進 Codex。
@@ -3004,7 +3064,7 @@ Obsidian 內建的 Graph View 叫「關聯圖」：按左側工具列的關聯�
 RAG、附出處：
 - Lewis et al. 2020, Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks（RAG 這個名字的出處）. https://arxiv.org/abs/2005.11401
 - Shuster et al. 2021, Retrieval Augmentation Reduces Hallucination in Conversation（先查資料再答，亂編的情況變少）. https://arxiv.org/abs/2104.07567
-- Gao et al. 2023, Enabling Large Language Models to Generate Text with Citations（要求回答附出處，並檢查出處撐不撐得住）. https://arxiv.org/abs/2305.14627
+- Gao et al. 2023, Enabling Large Language Models to Generate Text with Citations（要求回答附出處，並檢查出處是否支持回答）. https://arxiv.org/abs/2305.14627
 RAG 的限制、核對：
 - Barnett et al. 2024, Seven Failure Points When Engineering a Retrieval Augmented Generation System（資料裡沒有、找到了卻沒用上等失敗點）. https://arxiv.org/abs/2401.05856
 - Liu et al. 2023, Lost in the Middle: How Language Models Use Long Contexts（資料一長，中間的內容容易被忽略）. https://arxiv.org/abs/2307.03172
