@@ -14,7 +14,7 @@ Skill 要放在三國筆記庫裡的 `.agents/skills/`：
             └── SKILL.md
 ```
 
-`.agents` 開頭是點，是隱藏資料夾：Mac 的 Finder 不讓你建點開頭的資料夾，Obsidian 也看不到它。所以課堂上不自己複製，而是請 Codex 建檔。提示詞在 [../aw-03-lab/prompts.md](../aw-03-lab/prompts.md) 的「練習 4-1」，裡面已經附上這份骨架的全文。
+`.agents` 開頭是點，是隱藏資料夾：Mac 的 Finder 不讓你建點開頭的資料夾，Obsidian 也看不到它。所以課堂上不自己複製，而是請 Codex 建檔。提示詞在 [../prompts.md](../prompts.md) 的「練習 4-1」，裡面已經附上這份骨架的全文。
 
 建好後在 Codex 輸入 `/quit`，再打 `codex` 重開，輸入「請使用 sanguo-timeline skill，排出三國時間軸。」Codex 要開在「三國人物知識庫」這個資料夾，才找得到這個 Skill。
 
@@ -44,4 +44,4 @@ Skill 要放在三國筆記庫裡的 `.agents/skills/`：
 
 重開 Codex 後輸入「請使用 sanguo-timeline skill，只排劉備的事件，存成 整理/時間軸-劉備.md」。講師實測（2026-10-18、2026-10-24 各一次）：排出 5 件，草船借箭因為參與人物沒有劉備，被拿掉。
 
-修好的版本放在 [../aw-03-lab/範例/sanguo-timeline-修好版/SKILL.md](../aw-03-lab/範例/sanguo-timeline-修好版/SKILL.md)。
+修好的版本放在 [../參考結果/sanguo-timeline-修好版/SKILL.md](../參考結果/sanguo-timeline-修好版/SKILL.md)。

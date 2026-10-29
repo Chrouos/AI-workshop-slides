@@ -1,6 +1,7 @@
 # 第三堂練習提示詞
 
 第三堂的四個練習都照這份做。請在筆電打開這一頁，整段複製，貼上再按 Enter，不用照投影片打字。
+這堂的檔案都在 [aw-03-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-03-lab.zip) 裡：這份 prompts.md、`eli5/`（備用 Skill）、`sanguo-timeline-骨架/`、`參考結果/`（講師的成品）。Codex 一樣開在你自己的「三國人物知識庫」。
 終端機：Mac 用「終端機」，Windows 用 PowerShell。
 
 ## 練習 1-1：先確認有 git
@@ -265,16 +266,16 @@ mkdir -Force $HOME\.agents\skills\eli5; curl.exe -L -o $HOME\.agents\skills\eli5
 
 裝完一樣回練習 1-4，重開 Codex 確認清單裡有 eli5。
 
-- diagram-design：沒有 git 就裝不了。練習 2-1 跟旁邊的同學一起看他的圖，或打開講師的成品 [範例/圖/三國關係圖.html](範例/圖/三國關係圖.html)（在下面的第三堂範例.zip 裡，解壓縮後用瀏覽器打開），照樣做練習 2-4 的核對。
+- diagram-design：沒有 git 就裝不了。練習 2-1 跟旁邊的同學一起看他的圖，或打開講師的成品 [參考結果/圖/三國關係圖.html](參考結果/圖/三國關係圖.html)（在 aw-03-lab.zip 裡，解壓縮後用瀏覽器打開），照樣做練習 2-4 的核對。
 
 ### 中途卡住、Codex 沒跑出來
 
-講師 2026-10-24 實跑的成品放在 [範例/](範例/)，可以直接拿來接著做。整包下載：https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-03-lab/%E7%AC%AC%E4%B8%89%E5%A0%82%E7%AF%84%E4%BE%8B.zip ，解壓縮後是「第三堂範例」資料夾：
+講師 2026-10-24 實跑的成品放在 [參考結果/](參考結果/)，可以直接拿來接著做。它在 aw-03-lab.zip 裡：https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-03-lab.zip ，解壓縮後打開 aw-03-lab 的「參考結果」資料夾：
 
-- `範例/關係/` 的三張卡：練習 3 沒做出來，把這三個檔案拖進筆記庫的 `關係/`（拖檔案，不要拖整個資料夾，Mac 會問要不要取代，按下去舊卡就不見了）。
-- `範例/整理/劉備-國中生版.md`：練習 2-3 的 eli5 改寫。
-- `範例/整理/時間軸.md`、`範例/整理/時間軸-劉備.md`：練習 4 補過規則後的結果。
-- `範例/sanguo-timeline-修好版/SKILL.md`：加過兩條規則和第 4 步的 SKILL.md。它要放進 `.agents/` 這個隱藏資料夾，拖不進去，請 Codex 寫。整段貼上：
+- `參考結果/關係/` 的三張卡：練習 3 沒做出來，把這三個檔案拖進筆記庫的 `關係/`（拖檔案，不要拖整個資料夾，Mac 會問要不要取代，按下去舊卡就不見了）。
+- `參考結果/整理/劉備-國中生版.md`：練習 2-3 的 eli5 改寫。
+- `參考結果/整理/時間軸.md`、`參考結果/整理/時間軸-劉備.md`：練習 4 補過規則後的結果。
+- `參考結果/sanguo-timeline-修好版/SKILL.md`：加過兩條規則和第 4 步的 SKILL.md。它要放進 `.agents/` 這個隱藏資料夾，拖不進去，請 Codex 寫。整段貼上：
 
 ```text
 把 .agents/skills/sanguo-timeline/SKILL.md 的內容整個換成下面這段，一字不改；資料夾沒有就建立。只改這個檔，不要改其他檔案。
@@ -301,4 +302,4 @@ description: 把三國筆記庫的卡片依回目排成時間軸。使用者說�
 
 寫好後輸入 `/quit`，再打 `codex` 重開，Skill 才會換成新版。
 
-第二堂缺課、沒有筆記庫的人：下載講師的筆記庫 https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-vault/%E4%B8%89%E5%9C%8B%E4%BA%BA%E7%89%A9%E7%9F%A5%E8%AD%98%E5%BA%AB.zip ，解壓縮後用 Obsidian 打開，就能從練習 1 開始做。
+第二堂缺課、沒有筆記庫的人：下載第二堂的 aw-02-lab.zip https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip ，解壓縮後用 Obsidian 打開裡面的「三國人物知識庫」，就能從練習 1 開始做。

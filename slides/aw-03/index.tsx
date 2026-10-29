@@ -10,7 +10,9 @@ import promptsQr from './assets/prompts-qr.svg';
 // Where students copy every prompt from (opened on their laptop, not typed off the projector).
 const PROMPTS_URL = 'https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-03-lab/prompts.md';
 const LAB_URL = 'https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-lab';
-const VAULT_ZIP_URL = 'https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-vault/%E4%B8%89%E5%9C%8B%E4%BA%BA%E7%89%A9%E7%9F%A5%E8%AD%98%E5%BA%AB.zip';
+// Lesson 2's single download; the vault is 三國人物知識庫/ inside it.
+const VAULT_ZIP_URL = 'https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip';
+const LAB_ZIP_URL = 'https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-03-lab.zip';
 const DECK_SITE = 'chrouos.github.io/AI-workshop-slides';
 
 export const design: DesignSystem = {
@@ -178,10 +180,13 @@ const PracticeEyebrow = ({ children, time }: { children: ReactNode; time: string
 
 // Top-right corner of a practice page: QR + link to the prompts file, pointing at one section.
 const PromptsCopy = ({ step }: { step: string }) => (
+  <>
   <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', top: 176, right: 144, display: 'flex', alignItems: 'center', gap: 18, color: muted, textDecoration: 'none' }}>
     <span style={{ textAlign: 'right', fontSize: 24, lineHeight: 1.4 }}>複製提示詞<br /><strong style={{ color: amber, fontFamily: mono }}>prompts.md</strong> 練習 {step}</span>
     <img src={promptsQr} alt="prompts.md 的 QR code" style={{ width: 120, height: 120, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 5 }} />
   </a>
+    <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 100, fontSize: 24, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3 }}>{PROMPTS_URL}</a>
+  </>
 );
 
 // The five chapters of the lesson. Pages inside a chapter show where we are.
@@ -623,8 +628,8 @@ const VaultRow = ({ y, x = 60, name, count, root = false }: { y: number; x?: num
 
 // Catch-up route for anyone without the vault from lesson 2: a link they can click on the laptop.
 const VaultDownload = () => (
-  <a href={VAULT_ZIP_URL} download="三國人物知識庫.zip" style={{ position: 'absolute', top: 176, right: 144, display: 'flex', alignItems: 'center', gap: 16, textDecoration: 'none', color: muted, fontSize: 24, lineHeight: 1.4, textAlign: 'right' }}>
-    <span>沒有筆記庫？<br /><strong style={{ color: amber }}>下載 三國人物知識庫.zip</strong></span>
+  <a href={VAULT_ZIP_URL} download="aw-02-lab.zip" style={{ position: 'absolute', top: 176, right: 144, display: 'flex', alignItems: 'center', gap: 16, textDecoration: 'none', color: muted, fontSize: 24, lineHeight: 1.4, textAlign: 'right' }}>
+    <span>沒有筆記庫？<br /><strong style={{ color: amber }}>下載第二堂的 aw-02-lab.zip</strong></span>
     <span style={{ width: 64, height: 64, display: 'grid', placeItems: 'center', background: amber }}><Icon kind="save" size={38} color="#FFFFFF" /></span>
   </a>
 );
@@ -2516,10 +2521,10 @@ description: 把三國筆記庫的卡片依回目排成時間軸。使用者說�
 // Speaker notes, keyed by page so they stay aligned with the deck order.
 const NOTES = new Map<Page, string>([
   [Cover, `00:00–01:00。第三堂講 Skills。前兩堂用 Codex 寫了大綱，做出三國筆記庫；今天把常做的事寫成說明書，交給 Codex 照著做。先裝兩個別人寫好的 Skill 來用，最後自己寫一個「三國時間軸」。
-請大家先在自己的筆電打開這份簡報：${DECK_SITE}。今天的提示詞都在 prompts.md，練習頁右上角的連結點下去就是，整段複製貼上，不用照投影片打字。所有教材的總表：https://github.com/Chrouos/AI-workshop-slides/tree/main/examples`],
+請大家先在自己的筆電打開這份簡報：${DECK_SITE}。今天的提示詞都在 prompts.md，練習頁右上角的連結點下去就是，整段複製貼上，不用照投影片打字。今天的教材整包在 aw-03-lab.zip：${LAB_ZIP_URL} ，裡面有 prompts.md、eli5 備用 Skill、時間軸 Skill 骨架，和卡住時用的 參考結果/。Codex 一樣開在自己的「三國人物知識庫」，不是開在 aw-03-lab。所有教材的總表：https://github.com/Chrouos/AI-workshop-slides/tree/main/examples`],
   [Review, `01:00–07:00。先回顧上一堂。左邊是筆記庫的資料夾：人物 5 張、勢力 3 張、關係 3 張；原文資料夾有第 1 到 21 回全文，加上第 37、38、46 回節選；整理資料夾裡放著第一堂寫的大綱。右邊是五位人物和三張關係卡。
 按一下：這 10 條線，都是關係卡最後一行「參與人物」寫出來的，上一堂我們請 Codex 照這個規則畫過 ASCII 關係圖。
-請大家打開自己的筆記庫，確認卡片都還在。沒帶到、或第二堂缺課的同學，在筆電上點右上角「下載 三國人物知識庫.zip」，解壓縮後用 Obsidian 打開，就能跟著做今天的練習。Windows 要在 ZIP 上按右鍵選「全部解壓縮」。下載網址：${VAULT_ZIP_URL}
+請大家打開自己的筆記庫，確認卡片都還在。沒帶到、或第二堂缺課的同學，在筆電上點右上角「下載第二堂的 aw-02-lab.zip」，解壓縮後用 Obsidian 打開裡面的「三國人物知識庫」，就能跟著做今天的練習。Windows 要在 ZIP 上按右鍵選「全部解壓縮」。下載網址：${VAULT_ZIP_URL}
 最後一下：今天用 Skill 擴充這座筆記庫、畫圖，最後排出時間軸。`],
   [Agenda, `07:00–10:00。今天五章、四個練習。中間那欄是必做，每個人都要完成：看懂一份 SKILL.md、裝好兩個 Skill、畫一張關係圖並改寫一張卡、照原文新增三張卡、自己的 sanguo-timeline 跑出一次結果。第四章的三張卡都要做，第五章的時間軸會用到。右邊是選做，時間夠再做：標籤疊到就請它修、只排劉備的事件。進度落後的同學，先顧必做那一欄。第一章講 Skill 是什麼，花的時間最多，後面都靠它。最後 8 分鐘預告第四堂；第四堂前請先註冊 GitHub 和 Vercel。`],
   [Section1, `10:00–10:30。第一章：什麼是 Skill。先講為什麼需要它，再打開一份真的 SKILL.md，最後和 Prompt、AGENTS.md、MCP 比一比。`],
@@ -2650,7 +2655,7 @@ git 裝不起來的同學：eli5 是 MIT 授權，講師在 examples/aw-03-lab/e
 按一下：回「可以」，它寫好三張卡：年份都留空，沒加 dg-publish，舊卡沒動。
 按一下：這是實際寫出來的三英戰呂布，回目 5、年份空白，最後一行是出處。回目要是數字；講師另一次重跑寫成「第五回」，遇到就自己改成 5。
 按一下：注意參與人物那行：劉備、關羽、張飛有卡，所以加了連結；呂布沒有卡，就寫純文字，照我們的規則做了。
-舊的三張關係卡已經有回目了。如果你用的是更早下載的筆記庫，舊卡沒有回目，prompts.md 練習 3-1 下面有補回目的提示詞，實測可行。真的跑不出來的同學，examples/aw-03-lab/範例/關係/ 有講師跑好的三張卡，把三個檔案拖進筆記庫的 關係/。想加官渡之戰的同學，要先下載第 30 回原文：https://zh.wikisource.org/wiki/三國演義/第030回`],
+舊的三張關係卡已經有回目了。如果你用的是更早下載的筆記庫，舊卡沒有回目，prompts.md 練習 3-1 下面有補回目的提示詞，實測可行。真的跑不出來的同學，aw-03-lab.zip 的 參考結果/關係/ 有講師跑好的三張卡，把三個檔案拖進筆記庫的 關係/。想加官渡之戰的同學，要先下載第 30 回原文：https://zh.wikisource.org/wiki/三國演義/第030回`],
   [YearCheck, `81:00–85:00。剛剛的卡，年份照規則應該是空的。可是這三件事，Codex 很可能「知道」年份：白門樓在很多資料裡寫成建安三年，三英戰呂布常放在初平元年。它要是憑記憶填進去，就是幻覺：原文沒有，它卻寫了。
 按一下：講師在三份原文裡搜過：第 5 回搜「初平」、第 19 回和第 46 回節選搜「建安」，都是 0 筆。所以照規則，年份留空才對。
 按一下：打開你的三張卡看年份。空白，就對了。有填，就在 Finder（Windows 是檔案總管）雙擊那一回的 .txt，會用「文字編輯」或記事本打開，按 Cmd+F 或 Ctrl+F，搜它填的年號。搜不到，就把年份刪掉。講師 10-24 重跑，三張都留空；你們的不一定。

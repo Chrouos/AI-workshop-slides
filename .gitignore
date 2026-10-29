@@ -1,3 +1,10 @@
 node_modules
 dist
 .DS_Store
+
+# Instructor-only files in the student lab folders (kept out of git and the ZIPs)
+examples/**/*.mov
+examples/aw-01-lab/Codex_練習/AGENTS.md
+examples/aw-01-lab/Codex_練習/三國演義大綱.md
+# Interrupted copy/convert temp files
+*.sb-*

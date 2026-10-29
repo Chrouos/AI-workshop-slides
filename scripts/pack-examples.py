@@ -7,6 +7,7 @@
 Entries are NFC-normalised, sorted, and stamped with a fixed date, so an
 unchanged folder never produces a new ZIP in git.
 """
+import fnmatch
 import os
 import sys
 import unicodedata
@@ -14,12 +15,13 @@ import zipfile
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'examples')
 
-# (zip path, source folder, top folder name inside the ZIP, excluded names)
+# (zip path, source folder, top folder name inside the ZIP, excluded names or glob patterns)
 PACKS = [
-    ('aw-01-lab.zip', 'aw-01-lab', 'aw-01-lab', set()),
-    ('aw-02-vault/三國人物知識庫.zip', 'aw-02-vault/三國人物知識庫', '三國人物知識庫', {'.obsidian'}),
-    ('aw-03-lab/第三堂範例.zip', 'aw-03-lab/範例', '第三堂範例', set()),
-    ('aw-04-lab/第三堂完成版.zip', 'aw-04-lab/第三堂完成版', '第三堂完成版', set()),
+    # Students write their own AGENTS.md and outline in Codex_練習; instructor test runs and videos stay out.
+    ('aw-01-lab.zip', 'aw-01-lab', 'aw-01-lab', {'AGENTS.md', '三國演義大綱.md', '*.mov', '*.mp4'}),
+    ('aw-02-lab.zip', 'aw-02-lab', 'aw-02-lab', {'.obsidian'}),
+    ('aw-03-lab.zip', 'aw-03-lab', 'aw-03-lab', set()),
+    ('aw-04-lab.zip', 'aw-04-lab', 'aw-04-lab', set()),
 ]
 SKIP = {'.DS_Store', 'Thumbs.db'}
 STAMP = (2026, 1, 1, 0, 0, 0)
@@ -27,12 +29,16 @@ STAMP = (2026, 1, 1, 0, 0, 0)
 nfc = lambda s: unicodedata.normalize('NFC', s)
 
 
+def excluded(name, patterns):
+    return any(fnmatch.fnmatch(name, p) for p in patterns)
+
+
 def folder_entries(src, top, exclude):
     out = {}
     for dirpath, dirnames, filenames in os.walk(src):
-        dirnames[:] = [d for d in dirnames if d not in exclude]
+        dirnames[:] = [d for d in dirnames if not excluded(d, exclude)]
         for name in filenames:
-            if name in SKIP or name in exclude:
+            if name in SKIP or excluded(name, exclude):
                 continue
             path = os.path.join(dirpath, name)
             rel = os.path.relpath(path, src).replace(os.sep, '/')

@@ -3,7 +3,7 @@ import { Step, Steps, useIsActivePage, useSlidePageNumber } from '@open-slide/co
 import type { CSSProperties, ReactNode } from 'react';
 import downloadPage from './assets/download-crop.png';
 import firstLaunch from './assets/obsidian-first-launch.png';
-import vaultQr from './assets/three-kingdoms-vault-qr.png';
+import vaultQr from './assets/lab-zip-qr.svg';
 import treeOk from './assets/tree-ok.png';
 import treeWrong from './assets/tree-wrong.png';
 import caocaoLine from './assets/caocao-chibi-line.png';
@@ -155,14 +155,15 @@ const warn = '#9B4A3C';
 const term = '#1F2226';
 const mono = '"Source Code Pro", Consolas, Menlo, monospace';
 const display = 'var(--osd-font-display)';
-const VAULT_ZIP_URL = 'https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-vault/%E4%B8%89%E5%9C%8B%E4%BA%BA%E7%89%A9%E7%9F%A5%E8%AD%98%E5%BA%AB.zip';
+// One download for the lesson: the vault (三國人物知識庫/), 參考結果/ and prompts.md.
+const VAULT_ZIP_URL = 'https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip';
 const DECK_SITE = 'chrouos.github.io/AI-workshop-slides';
 const GH = 'https://github.com/Chrouos/AI-workshop-slides/blob/main/examples';
 const PROMPTS_URL = `${GH}/aw-02-lab/prompts.md`;
 // The frozen sample outline: for students who missed lesson 1, and the shared reference of practice 3.
-const SAMPLE_OUTLINE_URL = `${GH}/aw-02-lab/%E4%B8%89%E5%9C%8B%E6%BC%94%E7%BE%A9%E5%A4%A7%E7%B6%B1.md`;
-const CHECK3_URL = `${GH}/aw-02-check/%E5%85%88%E6%A0%B8%E5%B0%8D%E9%80%99%E4%BB%BD%E5%9B%9E%E7%AD%94.md`;
-const CHECK4_URL = `${GH}/aw-02-check/%E8%AC%9B%E5%B8%AB%E7%9A%84ASCII%E9%97%9C%E4%BF%82%E5%9C%96.md`;
+const SAMPLE_OUTLINE_URL = `${GH}/aw-02-lab/%E5%8F%83%E8%80%83%E7%B5%90%E6%9E%9C/%E4%B8%89%E5%9C%8B%E6%BC%94%E7%BE%A9%E5%A4%A7%E7%B6%B1.md`;
+const CHECK3_URL = `${GH}/aw-02-lab/%E5%8F%83%E8%80%83%E7%B5%90%E6%9E%9C/%E5%85%88%E6%A0%B8%E5%B0%8D%E9%80%99%E4%BB%BD%E5%9B%9E%E7%AD%94.md`;
+const CHECK4_URL = `${GH}/aw-02-lab/%E5%8F%83%E8%80%83%E7%B5%90%E6%9E%9C/%E8%AC%9B%E5%B8%AB%E7%9A%84ASCII%E9%97%9C%E4%BF%82%E5%9C%96.md`;
 
 // ---------- Frame ----------
 
@@ -198,10 +199,13 @@ const PracticeEyebrow = ({ children, time }: { children: ReactNode; time: string
 // Prompts are copied from aw-02-lab/prompts.md on GitHub (outside the vault, so Codex never reads them).
 // Sits top right, under the chapter route bar.
 const PromptsCopy = ({ step }: { step: string }) => (
+  <>
   <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', top: 168, right: 144, display: 'flex', alignItems: 'center', gap: 18, color: muted, textDecoration: 'none' }}>
     <span style={{ textAlign: 'right', fontSize: 24, lineHeight: 1.4 }}>複製提示詞<br /><strong style={{ color: amber, fontFamily: mono }}>prompts.md</strong> {step}</span>
     <img src={promptsQr} alt="第二堂 prompts.md 的 QR code" style={{ width: 120, height: 120, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 5 }} />
   </a>
+    <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 100, fontSize: 24, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3 }}>{PROMPTS_URL}</a>
+  </>
 );
 
 // A file on GitHub the class opens on their laptops (the deck is open there too).
@@ -1178,14 +1182,15 @@ const GetVault: Page = () => (
   <Shell chapter={1} source={'Obsidian 說明：管理儲存庫 obsidian.md/help/manage-vaults'}>
     <PracticeEyebrow time="練習 1 第 3 步">練習 1｜安裝</PracticeEyebrow>
     <Heading>下載並打開三國筆記庫</Heading>
+    <a href={VAULT_ZIP_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 100, fontSize: 24, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3 }}>{decodeURI(VAULT_ZIP_URL)}</a>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: 56, alignItems: 'start' }}>
         <In i={0} style={{ background: amberSoft, borderTop: `5px solid ${amber}`, padding: '20px 24px 24px', textAlign: 'center' }}>
-          <div style={{ fontSize: 28, fontWeight: 600 }}>下載三國筆記庫</div>
-          <a href={VAULT_ZIP_URL} target="_blank" rel="noreferrer" aria-label="開啟 GitHub 上的三國人物知識庫 ZIP">
-            <img src={vaultQr} alt="三國人物知識庫 ZIP 的 GitHub 下載 QR code" style={{ width: 250, height: 250, display: 'block', margin: '14px auto 0', imageRendering: 'pixelated' }} />
+          <div style={{ fontSize: 28, fontWeight: 600 }}>下載 aw-02-lab.zip</div>
+          <a href={VAULT_ZIP_URL} target="_blank" rel="noreferrer" aria-label="下載第二堂的 aw-02-lab.zip">
+            <img src={vaultQr} alt="aw-02-lab.zip 的 GitHub 下載 QR code" style={{ width: 250, height: 250, display: 'block', margin: '14px auto 0', imageRendering: 'pixelated' }} />
           </a>
-          <a href={VAULT_ZIP_URL} download="三國人物知識庫.zip" style={{ display: 'inline-block', marginTop: 10, padding: '8px 20px', background: amber, color: '#FFFFFF', fontSize: 24, fontWeight: 600, textDecoration: 'none' }}>在筆電上按這裡下載</a>
+          <a href={VAULT_ZIP_URL} download="aw-02-lab.zip" style={{ display: 'inline-block', marginTop: 10, padding: '8px 20px', background: amber, color: '#FFFFFF', fontSize: 24, fontWeight: 600, textDecoration: 'none' }}>在筆電上按這裡下載</a>
         </In>
         {/* One click per step: the ZIP is there on arrival, then unzip (with the OS tip), then open in Obsidian. */}
         <Stage w={1216} h={420}>
@@ -1199,11 +1204,12 @@ const GetVault: Page = () => (
               </InG>
             </Layer>
             <Step duration={STEP_MS}>
-              <Layer w={1216} h={300} label="第 2 步：解壓縮成三國人物知識庫資料夾">
+              <Layer w={1216} h={300} label="第 2 步：解壓縮成 aw-02-lab 資料夾，筆記庫是裡面的三國人物知識庫">
                 <g className="aw2-build" style={buildDelay(0)}><MapArrow x1={290} x2={370} y={125} /></g>
                 <g className="aw2-build" style={buildDelay(1)}>
                   <Folder x={410} y={40} w={240} h={170} />
-                  <text x={530} y={150} textAnchor="middle" fontSize="26" fill={ink}>三國人物知識庫</text>
+                  <text x={530} y={124} textAnchor="middle" fontSize="22" fill={muted}>aw-02-lab/</text>
+                  <text x={530} y={164} textAnchor="middle" fontSize="26" fontWeight="600" fill={ink}>三國人物知識庫</text>
                   <text x={530} y={260} textAnchor="middle" fontSize="28" fontWeight="600" fill={ink}>2｜解壓縮</text>
                 </g>
               </Layer>
@@ -1247,11 +1253,11 @@ const VaultCheck: Page = () => (
         <In i={0}><TreePanel src={treeOk} ok label="對了：六個資料夾＋入口卡" alt="Obsidian 左側：人物、勢力、原文、整理、模板、關係六個資料夾和三國演義入口卡" /></In>
         <div>
           <Steps>
-            <Step duration={STEP_MS}><TreePanel src={treeWrong} ok={false} label="選到外層：只有一個資料夾" alt="Obsidian 左側只看到一個三國人物知識庫資料夾，代表打開了外面那一層" /></Step>
+            <Step duration={STEP_MS}><TreePanel src={treeWrong} ok={false} label="選到外層：看到參考結果、prompts" alt="Obsidian 左側看到三國人物知識庫、參考結果兩個資料夾和 prompts、README，代表打開了外層的 aw-02-lab" /></Step>
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><div style={{ textAlign: 'center', fontSize: 32, marginTop: 36 }}>解壓縮多包了一層：重新打開<strong>裡面那個</strong>「三國人物知識庫」</div></Step></Steps>
+      <Steps><Step duration={STEP_MS}><div style={{ textAlign: 'center', fontSize: 32, marginTop: 36 }}>打開成外層 aw-02-lab 了：重新打開<strong>裡面那個</strong>「三國人物知識庫」</div></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1264,17 +1270,17 @@ const MergeOutline: Page = () => (
   <Shell chapter={2} source={'Obsidian 說明：內部連結 obsidian.md/help/links'}>
     <PracticeEyebrow time="25 分鐘（五步）">練習 2｜合併</PracticeEyebrow>
     <Heading>把大綱放進「整理」資料夾</Heading>
-    <div style={{ position: 'absolute', top: 176, right: 144, textAlign: 'right', fontSize: 24, lineHeight: 1.5, color: muted }}>沒有大綱的人，下載範例<br /><FileLink href={SAMPLE_OUTLINE_URL}>三國演義大綱.md</FileLink></div>
+    <div style={{ position: 'absolute', top: 176, right: 144, textAlign: 'right', fontSize: 24, lineHeight: 1.5, color: muted }}>沒有大綱的人，用 參考結果/ 的<br /><FileLink href={SAMPLE_OUTLINE_URL}>三國演義大綱.md</FileLink></div>
     <Fit>
       <Stage h={460}>
         <Steps>
-          <Layer h={460} label="第一堂的 aw-01-lab 資料夾裡有 三國演義大綱.md">
+          <Layer h={460} label="第一堂的 Codex_練習 資料夾裡有 三國演義大綱.md">
             <InG i={0}>
               <Folder x={0} y={40} w={460} h={330} fill={surface} stroke={faint} sw={3} />
-              <text x="26" y="100" fontSize="30" fontWeight="600" fill={ink}>aw-01-lab/</text>
+              <text x="26" y="100" fontSize="30" fontWeight="600" fill={ink}>Codex_練習/</text>
               <text x="40" y="160" fontSize="27" fontFamily={mono} fill={muted}>原文/</text>
               <text x="40" y="206" fontSize="27" fontFamily={mono} fill={muted}>回目.md</text>
-              <text x="40" y="252" fontSize="27" fontFamily={mono} fill={muted}>prompts.md</text>
+              <text x="40" y="252" fontSize="27" fontFamily={mono} fill={muted}>AGENTS.md</text>
               <rect x="24" y="282" width="412" height="58" fill={amberSoft} stroke={amber} strokeWidth="3" />
               <text x="40" y="321" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>三國演義大綱.md</text>
             </InG>
@@ -1686,7 +1692,7 @@ const OpenInCodex: Page = () => (
             </Step>
             <Step duration={STEP_MS}>
               <div style={{ background: 'rgba(233,182,80,0.18)', outline: '3px solid #E9B650', margin: '6px -12px 0', padding: '0 12px' }}>{'人物  勢力  原文  整理  模板  關係'}</div>
-              <Pin style={{ ...CODEX_CALLOUT, top: 280 }}><Callout n={4} title="六個資料夾都在" detail="只列出「三國人物知識庫」：/quit，再 cd 進裡面那層" /></Pin>
+              <Pin style={{ ...CODEX_CALLOUT, top: 280 }}><Callout n={4} title="六個資料夾都在" detail="看到參考結果：/quit，再 cd 進去" /></Pin>
             </Step>
           </Steps>
         </Terminal>
@@ -2751,7 +2757,7 @@ const NOTES = new Map<Page, string>([
 先問大家：這些 [[ ]] 現在連到哪？按一下：哪裡都還沒連到。大綱是單獨一個檔案，旁邊沒有劉備卡，所以劉備是淡色的連結，點下去只會新增一張空白卡。
 最後一下：大綱有連結了，但還沒接上人物卡。今天就是要把它放進筆記庫，接上講師準備的人物卡。
 補充數字（不用記）：講師這份 21 段、每段都有出處，Codex 跑了 1 分 38 秒；回目標題裡沒有加 [[ ]]。這份就是 GitHub 上的範例大綱，今天的畫面和數字都用它。
-第一堂沒來、或大綱不見的同學，用講師的範例大綱：第 ${pageOf(MergeOutline)} 頁右上角有連結（examples/aw-02-lab/三國演義大綱.md），下載後一樣放進筆記庫的「整理」資料夾。練習 3 全班也用這一份對照。`],
+第一堂沒來、或大綱不見的同學，用講師的範例大綱：在 aw-02-lab 的 參考結果/ 裡（第 ${pageOf(MergeOutline)} 頁右上角也有連結），一樣拖進筆記庫的「整理」資料夾。練習 3 全班也用這一份對照。`],
   [TodayGoal, `05:00–08:00
 左邊是第一堂結束時的樣子：大綱是一個單獨的檔案，裡面的 [[劉備]]、[[曹操]]、[[呂布]] 都是連結，但連到空處，因為還沒有那些卡。
 按一下：今天結束時，大綱放進「三國人物知識庫」的「整理」資料夾，大綱裡的劉備、關羽、張飛、曹操，就連到講師寫好的人物卡；人物卡再透過〈桃園結義〉〈煮酒論英雄〉這些關係卡連在一起。
@@ -2803,25 +2809,25 @@ Obsidian 的「儲存庫」，英文 Vault，就是你電腦裡的一個資料�
 按一下：標 2 的地方，三個選項裡，今天用第二個「開啟資料夾為儲存庫」。現在先不要按「建立新的儲存庫」，下一頁下載完教材再按。官方說明：https://obsidian.md/help/User+interface/Language+settings
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：第一次打開是英文畫面，最下面選「繁體中文」，畫面當下就換成中文，不用重開。`],
   [GetVault, `36:00–41:00
-在筆電的簡報上按「在筆電上按這裡下載」。手機掃 QR code 只會存到手機，用不到。按鈕和 QR code 連到同一份 ZIP：
+在筆電的簡報上按「在筆電上按這裡下載」。手機掃 QR code 只會存到手機，用不到。按鈕和 QR code 連到同一份 aw-02-lab.zip，這堂的東西都在裡面：三國人物知識庫（筆記庫）、參考結果、prompts.md。
 ${VAULT_ZIP_URL}
-1 下載 ZIP。按一下，2 解壓縮：Windows 一定要在 ZIP 上按右鍵選「全部解壓縮」，直接雙擊只是預覽，Obsidian 打不開；解壓縮後外面可能多一層同名資料夾，往裡面點一層。Mac 雙擊就會解開。按一下，3 回到 Obsidian，按「開啟資料夾為儲存庫」，選「三國人物知識庫」這一層，不要選外層的下載資料夾。
+1 下載 ZIP。按一下，2 解壓縮：Windows 一定要在 ZIP 上按右鍵選「全部解壓縮」，直接雙擊只是預覽，Obsidian 打不開；Mac 雙擊就會解開。按一下，3 回到 Obsidian，按「開啟資料夾為儲存庫」，選 aw-02-lab 裡面的「三國人物知識庫」這一層，不要選外層的 aw-02-lab。筆記庫裡只有卡片和原文；提示詞和參考結果放在外面，Codex 在筆記庫工作時才不會讀到。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：ZIP 解出來的資料夾沒有 .obsidian，打開時不會跳「信任作者」或限制模式的視窗，直接進到空白的「新分頁」，左邊就是六個資料夾和〈三國演義〉。Obsidian 會自己在裡面建一個 .obsidian 資料夾，不用管它。Windows 未實測。
 步驟也寫在 prompts.md 的〈練習 1〉：${PROMPTS_URL}`],
   [VaultCheck, `41:00–45:00
 這是講師電腦上的實際畫面。先看左邊：打開對的資料夾，左側會看到六個資料夾：人物、勢力、原文、整理、模板、關係，最下面是入口卡〈三國演義〉。看到這樣，練習 1 就完成了。
-按一下：如果左邊只看到一個叫「三國人物知識庫」的資料夾，代表你打開的是外面那一層。Windows 的「全部解壓縮」常會多包一層同名資料夾。
+按一下：如果左邊看到的是「三國人物知識庫」「參考結果」兩個資料夾，加上 prompts、README，代表你打開的是外層的 aw-02-lab。Windows 的「全部解壓縮」有時還會再多包一層 aw-02-lab，一樣往裡面找。
 按一下：解法：在左下角的儲存庫名稱點一下，選「管理儲存庫」，重新「開啟資料夾為儲存庫」，這次選裡面那個「三國人物知識庫」。
 還有時間的人，打開〈桃園結義〉，點幾個紫色人名逛逛。`],
   [Section2, `45:00–45:30
 第二章：把第一堂的大綱放進筆記庫，跟講師的人物卡接起來。這一整章都是練習 2。`],
   [MergeOutline, `45:30–50:00
-練習 2 第一步，3 分鐘。左邊是第一堂的 aw-01-lab 資料夾，裡面有大家寫好的 三國演義大綱.md。
+練習 2 第一步，3 分鐘。左邊是第一堂的練習資料夾 aw-01-lab/Codex_練習，裡面有大家寫好的 三國演義大綱.md。
 按一下：只要搬這一個檔，拖進「三國人物知識庫」的「整理」資料夾。可以在檔案總管（Mac 是 Finder）裡拖，也可以直接拖到 Obsidian 左側的「整理」上。旁邊的「人物」資料夾是講師的卡，不用動。
 按一下：大綱第 1 回裡寫的是 [[劉備]]，人物資料夾裡剛好有 劉備.md，所以這個連結自己就接上了，不用改任何字。
 最後一下：只搬一個檔，連結自己會接上。
 補充，給好奇的同學：如果有人第一堂另外讓 Codex 寫了自己的 劉備.md，這次先不要放進來。同一個筆記庫裡有兩張都叫劉備的卡，[[劉備]] 只會連到其中一張，另一張就沒人連得到。
-第一堂沒來、或大綱不見的人：點右上角的「三國演義大綱.md」，GitHub 頁面右上角有下載鈕（Download raw file），存下來再拖進 整理/。這份就是講師的範例大綱：${SAMPLE_OUTLINE_URL}
+第一堂沒來、或大綱不見的人：用 aw-02-lab 裡 參考結果/ 的「三國演義大綱.md」，一樣拖進 整理/。這份就是講師的範例大綱，線上也看得到：${SAMPLE_OUTLINE_URL}
 另外：大綱每段最後的「出處：原文/第001回.txt」，在這座筆記庫裡也找得到。原文/ 已經放了第 1 到 21 回的全文，跟第一堂的檔案一樣，不用從第一堂的資料夾複製。原文是 .txt，Obsidian 預設不顯示 .txt，左邊的 原文/ 看起來是空的；要看原文，用 Finder（Windows 是檔案總管）打開 原文/，按右鍵用「文字編輯」（Windows 是「記事本」）打開。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：預設設定下，原文/ 展開是空的，24 個 .txt 都在，只是不顯示。到「設定 → 檔案與連結」打開「偵測所有的副檔名」，左邊就會列出第001回、第002回……旁邊標 TXT；點下去 Obsidian 不會在自己裡面打開，而是交給 Mac 的「文字編輯」。所以上課還是直接教 Finder 打開就好。Windows 未實測。`],
   [ClickLiubei, `50:00–52:30
@@ -2871,8 +2877,8 @@ R 檢索：問「依這座筆記庫，曹操參與哪場戰役？」，先在筆
 這一頁大家一起做，練習 3 的追問和練習 4 都要用。打開終端機（Windows 是 PowerShell）。打 cd 和一個空格，把「三國人物知識庫」資料夾拖進視窗，按 Enter。
 按一下：打 codex。第一次在這個資料夾開 Codex，會問你信不信任這個資料夾，選 Yes, continue，跟第一堂一樣。
 按一下：貼上「列出這個資料夾第一層的資料夾，不要讀或修改任何檔案。」提示詞在 prompts.md 的〈準備〉：${PROMPTS_URL}
-按一下：要看到人物、勢力、原文、整理、模板、關係，可能還有 .obsidian。只列出一個「三國人物知識庫」，就是進到外層了，Windows 的「全部解壓縮」常會這樣：輸入 /quit，cd 進裡面那一層，再打 codex。不要只看 /status 的 Directory，外層和裡層名字一樣，看不出來。
-實測（2026-10-24，Codex 0.154.0）：在對的資料夾，它列出 .obsidian、人物、勢力、原文、整理、模板、關係；在多一層的資料夾，它回答「這個資料夾第一層只有一個資料夾：三國人物知識庫」。
+按一下：要看到人物、勢力、原文、整理、模板、關係，可能還有 .obsidian。列出的是「三國人物知識庫」「參考結果」，就是 cd 到外層的 aw-02-lab 了：輸入 /quit，cd 進裡面的「三國人物知識庫」，再打 codex。
+實測（2026-10-24，Codex 0.154.0）：在對的資料夾，它列出 .obsidian、人物、勢力、原文、整理、模板、關係；在多一層的資料夾（當時是舊版 ZIP），它回答「這個資料夾第一層只有一個資料夾：三國人物知識庫」。
 沒裝 Codex 或登入不了的同學，跟旁邊的人一組，看他的畫面一起核對，練習 3 的核對不需要 Codex。`],
   [AskWithFiles, `76:00–77:00
 講師先示範，同一題貫穿整章。在 Codex 輸入這一整段，這就是講師實跑時用的提示詞：

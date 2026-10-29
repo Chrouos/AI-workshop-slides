@@ -184,7 +184,7 @@ Session 就像這一次協作的工作桌：你可以在裡面補充背景、提
 
 ```bash
 # 進入課程提供的練習專案
-$ cd examples/aw-01-lab
+$ cd examples/aw-01-lab/Codex_練習
 
 # 啟動 Codex
 $ codex
@@ -355,13 +355,15 @@ Memory 是 Codex 在工作過程中保留的「上下文資訊」。
 
 本課的練習資料夾是 [aw-01-lab](../examples/aw-01-lab/)，也可以直接下載 [aw-01-lab.zip](../examples/aw-01-lab.zip)。裡面只有文字檔，不需要寫程式：
 
-- `原文/`：《三國演義》第 1 回到第 21 回全文，一回一個檔案，取自維基文庫（公有領域）。
-- `回目.md`：21 回的回目清單，方便查哪一回講什麼。
-- `prompts.md`：練習要貼的提示詞，練習 1 貼給 ChatGPT，練習 2 貼給 Codex。
+- `ChatGPT_練習/`：練習 1（ChatGPT）的參考結果。練習 1 課後自己做，做完再看。
+- `Codex_練習/`：練習 2 打開 Codex 的資料夾，裡面只放 Codex 要讀的東西：
+  - `原文/`：《三國演義》第 1 回到第 21 回全文，一回一個檔案，取自維基文庫（公有領域）。
+  - `回目.md`：21 回的回目清單，方便查哪一回講什麼。
+- `prompts.md`：兩個練習要貼的提示詞，練習 1 貼給 ChatGPT，練習 2 貼給 Codex。
 
-練習 2 請 Codex 只看資料夾裡的原文，寫出前 21 回的大綱，每段附上出處，最後自己回原文抽查。完整步驟和提示詞在 [prompts.md](../examples/aw-01-lab/prompts.md)。
+練習 2 在 `Codex_練習/` 打開 Codex，請它只看資料夾裡的原文，寫出前 21 回的大綱，每段附上出處，最後自己回原文抽查。完整步驟和提示詞在 [prompts.md](../examples/aw-01-lab/prompts.md)。
 
-`確認資料夾（/status）→ 把規則寫進 AGENTS.md → 照原文寫大綱 → 回原文核對`
+`確認資料夾（/status）→ 自己用文字編輯器建 AGENTS.md → 照原文寫大綱 → 回原文核對`
 
 ## 如何更有效率地使用 Token
 

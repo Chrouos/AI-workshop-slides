@@ -179,13 +179,17 @@ const PracticeEyebrow = ({ children, time }: { children: ReactNode; time: string
 // Lesson 4's steps, prompts and URLs live outside the vault, in the lab folder.
 const PROMPTS_URL = 'https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-lab/prompts.md';
 const LAB_URL = 'https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-lab/README.md';
+const LAB_ZIP_URL = 'https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip';
 
 // Top-right on a practice page: where to copy this practice's steps and prompts.
 const PromptsCopy = ({ step, section }: { step?: string; section?: string }) => (
+  <>
   <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', top: 176, right: 144, display: 'flex', alignItems: 'center', gap: 18, color: muted, textDecoration: 'none' }}>
     <span style={{ textAlign: 'right', fontSize: 24, lineHeight: 1.4 }}>複製步驟和網址<br /><strong style={{ color: amber, fontFamily: mono }}>prompts.md</strong> {section ?? `練習 ${step}`}</span>
     <img src={promptsQr} alt="prompts.md 的 QR code" style={{ width: 120, height: 120, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 5 }} />
   </a>
+    <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 100, fontSize: 24, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3 }}>{PROMPTS_URL}</a>
+  </>
 );
 
 // The five chapters of the lesson. Pages inside a chapter show where we are.
@@ -2429,11 +2433,11 @@ const NOTES = new Map<Page, string>([
   [Cover, `00:00–01:00
 最後一堂。前三堂我們寫了大綱、做了筆記庫、用 Skill 排出時間軸，全部都還在自己的電腦裡。今天把它變成一個網址，同學、家人打開就看得到。
 右下角三個圓圈就是今天的路線：筆記 → GitHub → 網址。
-請大家先在筆電打開這份簡報，網址在畫面上：chrouos.github.io/AI-workshop-slides。練習頁右上角的 prompts.md 連結要在筆電上點，步驟、提示詞和網址都整段複製，不用照投影幕打字；投影幕上的 QR code 只能用手機掃。今天的教材都在 ${LAB_URL} ，所有教材的總表在 https://github.com/Chrouos/AI-workshop-slides/tree/main/examples 。`],
+請大家先在筆電打開這份簡報，網址在畫面上：chrouos.github.io/AI-workshop-slides。練習頁右上角的 prompts.md 連結要在筆電上點，步驟、提示詞和網址都整段複製，不用照投影幕打字；投影幕上的 QR code 只能用手機掃。今天的教材都在 ${LAB_URL} ，整包下載是 aw-04-lab.zip：${LAB_ZIP_URL} ，所有教材的總表在 https://github.com/Chrouos/AI-workshop-slides/tree/main/examples 。`],
   [LessonRecap, `01:00–04:00
 先回頭看三樣東西。第一堂用 Codex 寫出 三國演義大綱.md，人名都是 [[連結]]。第二堂把它放進 Obsidian，和人物、勢力、關係卡連起來。第三堂用 Skill 擴充卡片，排出 時間軸.md。
 按一下：第四個站是今天要做的網站。
-再按一下：今天把前三堂的成果放到一個網址上。請大家先打開 Obsidian，確認 整理/時間軸.md 和 關係/三英戰呂布.md 都在。第三堂缺課、或 Codex 沒跑出來的人，下載第三堂完成版，照 README 把檔案拖進筆記庫，記得拖檔案、不要拖整個資料夾：${LAB_URL}`],
+再按一下：今天把前三堂的成果放到一個網址上。請大家先打開 Obsidian，確認 整理/時間軸.md 和 關係/三英戰呂布.md 都在。第三堂缺課、或 Codex 沒跑出來的人，下載 aw-04-lab.zip（${LAB_ZIP_URL}），照 README 把裡面「第三堂完成版」的檔案拖進筆記庫，記得拖檔案、不要拖整個資料夾：${LAB_URL}`],
   [SiteGoal, `04:00–07:30
 這是做完後的樣子（示意，實際外觀看模板）。打開網址先到首頁〈三國演義〉，點〈知識庫導覽〉。導覽頁是一般的筆記，裡面的 [[連結]] 都點得開。
 從導覽頁有兩條路：上面那條到〈時間軸〉，看事件的先後順序；它是一張表格，第三堂的 Skill 讓人名寫成純文字，所以表格裡的人名不能點。下面那條直接到〈劉備〉〈桃園結義〉這些人物、事件卡。
@@ -2626,10 +2630,10 @@ eleventyConfig.addPassthroughCopy({ "extra": "extra" });
 最後一下：外掛只送筆記，.html 要自己放。這是講師網站的本機測試結果，還沒在線上驗證。`],
   [Practice3, `77:00–93:00
 練習 3，16 分鐘（多給的 3 分鐘來自課前作業省下的時間，給 Codex 預覽、核對清單用）：做導覽頁，把時間軸卡和導覽頁連到的卡一起發布。兩段提示詞都在 prompts.md 練習 3，在筆電上複製：${PROMPTS_URL}
-第三堂缺課、或手上沒有 時間軸.md、三英戰呂布.md 的人，先下載第三堂完成版，照 README 拖進筆記庫：${LAB_URL}
+第三堂缺課、或手上沒有 時間軸.md、三英戰呂布.md 的人，先下載 aw-04-lab.zip，照 README 把「第三堂完成版」的檔案拖進筆記庫：${LAB_URL}
 1. 做導覽頁：在三國人物知識庫資料夾打開 Codex，貼上：
 「請在 整理/ 新增 知識庫導覽.md。分成時間、人物、事件三段：時間那段只放 [[時間軸]]；人物那段用 [[連結]] 列出 人物/ 裡的每張卡；事件那段用 [[連結]] 列出 關係/ 裡的每張卡，但先不要放〈三英戰呂布〉，練習 4 再加。只連到已有的卡，不要新增卡片，也不要改別的檔案。開頭加上 dg-publish: true。寫入前先給我看。」
-看過預覽：事件那段沒有三英戰呂布，也沒有筆記庫裡找不到的卡，再回「可以」。Codex 做不出來，就用 aw-04-lab 的 範例/整理/知識庫導覽.md。
+看過預覽：事件那段沒有三英戰呂布，也沒有筆記庫裡找不到的卡，再回「可以」。Codex 做不出來，就用 aw-04-lab 的 參考結果/整理/知識庫導覽.md。
 2. 打開〈三國演義〉，在最後一行加 [[知識庫導覽]]。
 3. 找出還沒勾的卡。在同一個 Codex 貼上：
 「列出 整理/知識庫導覽.md 連到的每張卡，每張一行，寫出它開頭有沒有 dg-publish: true。只列清單，不要修改任何檔案。」

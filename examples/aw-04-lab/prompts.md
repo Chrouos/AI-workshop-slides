@@ -1,6 +1,7 @@
 # 第四堂：發布成網站
 
 這頁在筆電打開，網址和提示詞整段複製，不用照投影片打字。簡報網址：https://chrouos.github.io/AI-workshop-slides
+這堂的檔案都在 [aw-04-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip) 裡：這份 prompts.md、`第三堂完成版/`（缺課補上用）、`參考結果/`（講師的導覽頁範例）。
 
 框上面那行「定位｜期望輸出｜限制」是簡報上的三格重點，不用貼。
 
@@ -16,7 +17,7 @@
    - 等一兩分鐘，看到 Congratulations 和一個網址。
 4. 打開網址：點那個網址，要看到 Digital Garden 模板的首頁。把網址和 repo 名稱抄下來，上課要用。
 5. 打開一次 token 頁：登入 GitHub，打開 https://github.com/settings/personal-access-tokens/new 。看得到建立 token 的表單就好，先不用建。GitHub 要你再輸入一次密碼、驗證碼，或要你設定雙重驗證（2FA），照畫面做完；上課建 token 時還會再問一次，忘了密碼的人現在就重設。
-6. 用 Obsidian 打開三國人物知識庫，確認 `整理/時間軸.md` 和 `關係/三英戰呂布.md` 都在。少了的話，下載 [第三堂完成版.zip](第三堂完成版.zip)，照 [README](README.md) 放進去。
+6. 用 Obsidian 打開三國人物知識庫，確認 `整理/時間軸.md` 和 `關係/三英戰呂布.md` 都在。少了的話，下載 [aw-04-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip)，照 [README](README.md) 把裡面「第三堂完成版」的檔案放進去。
 
 做完的樣子：手上有一個 `….vercel.app` 網址，打開是 Digital Garden 模板的首頁（不是錯誤頁）；記得 repo 名稱；token 頁打得開。只拿到網址、沒打開看過，不算做完。
 
@@ -62,7 +63,7 @@ token 只放在外掛裡，不貼進筆記、截圖或群組。
 請在 整理/ 新增 知識庫導覽.md。分成時間、人物、事件三段：時間那段只放 [[時間軸]]；人物那段用 [[連結]] 列出 人物/ 裡的每張卡；事件那段用 [[連結]] 列出 關係/ 裡的每張卡，但先不要放〈三英戰呂布〉，練習 4 再加。只連到已有的卡，不要新增卡片，也不要改別的檔案。開頭加上 dg-publish: true。寫入前先給我看。
 ```
 
-   看過預覽：事件那段沒有三英戰呂布，也沒有筆記庫裡找不到的卡，再回「可以」。Codex 做不出來，就用講師的 [範例/整理/知識庫導覽.md](範例/整理/知識庫導覽.md)。
+   看過預覽：事件那段沒有三英戰呂布，也沒有筆記庫裡找不到的卡，再回「可以」。Codex 做不出來，就用講師的 [參考結果/整理/知識庫導覽.md](參考結果/整理/知識庫導覽.md)。
 
 2. 打開〈三國演義〉，在最後一行加 `[[知識庫導覽]]`。
 3. 找出還沒勾的卡。在同一個 Codex 貼上：
@@ -99,5 +100,5 @@ token 只放在外掛裡，不貼進筆記、截圖或群組。
 - GitHub 註冊：https://github.com/signup
 - Vercel 註冊：https://vercel.com/signup
 - 第三堂完成版：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-lab/README.md
-- 講師的三國筆記庫（點了直接下載）：https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-vault/%E4%B8%89%E5%9C%8B%E4%BA%BA%E7%89%A9%E7%9F%A5%E8%AD%98%E5%BA%AB.zip
+- 講師的三國筆記庫（第二堂的 aw-02-lab.zip，點了直接下載）：https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip
 - 所有教材總表：https://github.com/Chrouos/AI-workshop-slides/tree/main/examples
