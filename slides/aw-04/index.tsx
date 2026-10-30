@@ -1408,7 +1408,7 @@ const NavPage: Page = () => (
           </div>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>連到的卡不會自動發布，每張要自己勾</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>放進導覽頁的卡，也要各自勾 dg-publish 才會上網站</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1595,7 +1595,7 @@ const PromptCheck = ({ children }: { children: ReactNode }) => (
 const Practice32: Page = () => (
   <Shell chapter={3} source={'Digital Garden 指令 docs.forestry.md/getting-started/02-commands'}>
     <PracticeEyebrow time="14 分鐘">練習 3-2｜導覽頁</PracticeEyebrow>
-    <Heading>練習（導覽頁）：讓讀者點到每張卡</Heading>
+    <Heading>練習（導覽頁）：幫網站做目錄</Heading>
     <PromptsCopy lead="複製兩段提示詞" section="練習 3-2" />
     <PillRow>
       <Pill tag="定位">知識庫導覽</Pill>
@@ -2257,7 +2257,7 @@ dg-publish 是「要公開」的勾。左邊是你的知識庫，五張卡，三
 按一下：2，首頁最後一行連到 [[知識庫導覽]]，紫色箭頭從這個連結指到左邊的導覽頁。
 按一下：3，黃框 3 裡，導覽頁連到的每張卡都要勾 dg-publish。連到的卡不會自動一起發布：外掛只送出有勾的卡，導覽頁連到一張沒勾的卡，網站上點那個連結就是 404。教材原本的 12 張卡都已經勾好。還沒勾的，通常是第三堂新增的〈白門樓〉〈草船借箭〉，和你第二堂自己寫的卡；時間軸在練習 3-1 已經勾好了。怎麼找出沒勾的卡，練習 3-2 再做。
 按一下：〈劉備-5歲版〉沒有公開，除非你本來就想公開它。
-最後一下：連到的卡不會自動發布，每張要自己勾。`],
+最後一下：放進導覽頁的卡，也要各自勾 dg-publish 才會上網站。`],
   [PublishCommand, `30:00–31:00
 屬性看過了，現在發布。發布要用命令面板：按 Ctrl／Cmd + P，打 garden，會列出 Digital Garden 的所有指令。這是講師的實際畫面，外掛 2.103.0。第二行 Add publish flag 標著「挑卡時再用」，第三章第 ${pageOf(AddFlag)} 頁再用。
 按一下：1，第一行 Publish All Notes Marked for Publish：一次發布所有勾了 dg-publish 的卡。今天的練習都用它，後面簡稱 Publish All。
