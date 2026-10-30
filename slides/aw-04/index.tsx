@@ -781,8 +781,8 @@ const Tick = ({ x, time, kind, label, sub, hot = false, manual = false }: { x: n
 );
 
 const UpdateTimeline: Page = () => (
-  <Shell chapter={3} source={'Forestry.md 儀表板 Publish history（講師 2026-10-30 實測）'}>
-    <Eyebrow>一次更新的流程｜講師實測</Eyebrow>
+  <Shell chapter={3} source={'Forestry.md 儀表板 Publish history'}>
+    <Eyebrow>一次更新的流程</Eyebrow>
     <Heading>自動部署的更新流程</Heading>
     <Fit>
       <Stage h={430}>
@@ -808,7 +808,7 @@ const UpdateTimeline: Page = () => (
             <Build i={1}><Tick x={TICK_XS[4]} time="自動" kind="globe" label="網址更新" sub="重新整理就看到" hot /></Build>
             <Build i={2}>
               <path d={`M${TICK_XS[1]} 380 V394 H${TICK_XS[4]} V380`} fill="none" stroke={amber} strokeWidth="3" />
-              <text x={(TICK_XS[1] + TICK_XS[4]) / 2} y="428" textAnchor="middle" fontSize="27" fontWeight="600" fill={amber}>按發布後大約半分鐘（講師實測 22–24 秒）</text>
+              <text x={(TICK_XS[1] + TICK_XS[4]) / 2} y="428" textAnchor="middle" fontSize="27" fontWeight="600" fill={amber}>按發布後大約半分鐘</text>
             </Build>
           </Layer></Step>
         </Steps>
@@ -923,7 +923,7 @@ const CatchChip = ({ children }: { children: ReactNode }) => (
 );
 
 const ForestryAccount: Page = () => (
-  <Shell chapter={1} source={'Forestry.md forestry.md（講師 2026-10-30 實際畫面）'}>
+  <Shell chapter={1} source={'Forestry.md forestry.md（實際畫面）'}>
     <Eyebrow>課前作業｜實際畫面</Eyebrow>
     <Heading>註冊 Forestry.md</Heading>
     <Fit>
@@ -950,7 +950,7 @@ const ForestryAccount: Page = () => (
 );
 
 const PlantGarden: Page = () => (
-  <Shell chapter={1} source={'Forestry.md 儀表板（講師 2026-10-30 實際畫面）'}>
+  <Shell chapter={1} source={'Forestry.md 儀表板（實際畫面）'}>
     <Eyebrow>登入後第一個畫面｜實際畫面</Eyebrow>
     <Heading>種一座花園（Plant）</Heading>
     <Fit>
@@ -969,7 +969,7 @@ const PlantGarden: Page = () => (
 );
 
 const GardenLive: Page = () => (
-  <Shell chapter={1} source={'Forestry.md 儀表板（講師 2026-10-30 實際畫面）'}>
+  <Shell chapter={1} source={'Forestry.md 儀表板（實際畫面）'}>
     <Eyebrow>種好之後｜實際畫面</Eyebrow>
     <Heading>網站上線：Your garden is live</Heading>
     <Fit>
@@ -1056,7 +1056,7 @@ const InstallPlugin: Page = () => (
 );
 
 const ConnectForestry: Page = () => (
-  <Shell chapter={2} source={'Digital Garden 外掛 2.103.0 設定；Forestry.md 儀表板（講師 2026-10-30 實際畫面）'}>
+  <Shell chapter={2} source={'Digital Garden 外掛 2.103.0 設定；Forestry.md 儀表板（實際畫面）'}>
     <Eyebrow>設定 → Digital Garden｜實際畫面</Eyebrow>
     <Heading>用 Garden Key 連上 Forestry</Heading>
     <Fit>
@@ -1084,7 +1084,7 @@ const NoPlace = ({ y, label }: { y: number; label: string }) => (
 );
 
 const KeySafety: Page = () => (
-  <Shell chapter={2} source={'Forestry.md 儀表板 Garden Key 說明（講師 2026-10-30 畫面）'}>
+  <Shell chapter={2} source={'Forestry.md 儀表板 Garden Key 說明'}>
     <Eyebrow>Garden Key 的保管</Eyebrow>
     <Heading>Garden Key 等同密碼</Heading>
     <Lead>有了它，誰都能發布到你的網站</Lead>
@@ -1136,13 +1136,13 @@ const SlugRow = ({ y, path }: { y: number; path: string }) => (
 );
 
 const SlugFail: Page = () => (
-  <Shell chapter={2} source={'Forestry.md Publish history；@sindresorhus/slugify 1.1.2 實測（講師 2026-10-30）'}>
-    <Eyebrow>講師實際踩到的錯｜發布失敗</Eyebrow>
+  <Shell chapter={2} source={'Forestry.md Publish history；@sindresorhus/slugify 1.1.2'}>
+    <Eyebrow>常見的錯｜發布失敗</Eyebrow>
     <Heading>中文卡名發布失敗</Heading>
     <Fit>
       <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '640px 1fr', gap: 80, alignItems: 'start' }}>
         <div style={{ position: 'relative' }}>
-          <In i={0}><Screenshot src={forestryPublishHistory} aspect={1197 / 782} width={640} caption="講師第一次發布：連續失敗兩次" alt="Forestry 的 Publish history：最下面 Garden planted，接著兩筆 Publish failed，最上面一筆 Notes published" /></In>
+          <In i={0}><Screenshot src={forestryPublishHistory} aspect={1197 / 782} width={640} caption="第一次發布：連續失敗兩次" alt="Forestry 的 Publish history：最下面 Garden planted，接著兩筆 Publish failed，最上面一筆 Notes published" /></In>
           <Steps><Step duration={STEP_MS}><div className="aw4-still"><Spot box={[4, 178, 632, 162]} /></div></Step></Steps>
         </div>
         <div>
@@ -1179,7 +1179,7 @@ const SlugFix: Page = () => (
           <Steps>
             <Step duration={STEP_MS}><TourStep n={1} title="說明就寫了" detail="non-Latin（中文）要關掉" box={[22, 116, 804, 96]} /></Step>
             <Step duration={STEP_MS}><TourStep n={2} title="把開關關掉" detail="變成灰色" box={[1078, 112, 92, 52]} badge="right" /></Step>
-            <Step duration={STEP_MS}><Callout n={3} title="再發布一次" detail="講師關掉後就變 Published" /></Step>
+            <Step duration={STEP_MS}><Callout n={3} title="再發布一次" detail="關掉後就變 Published" /></Step>
           </Steps>
         </div>
       </div>
@@ -1228,7 +1228,7 @@ const Practice2: Page = () => (
 );
 
 const EditAgain: Page = () => (
-  <Shell chapter={3} source={'Forestry.md Publish history（講師 2026-10-30 實測）'}>
+  <Shell chapter={3} source={'Forestry.md Publish history'}>
     <PracticeEyebrow time="4 分鐘">小練習｜也是休息時間</PracticeEyebrow>
     <Heading>改一句，再發布一次</Heading>
     <PromptsCopy section="小練習" />
@@ -1314,7 +1314,7 @@ const SourceDoc = ({ x, y, w, h, name, lines, highlight }: { x: number; y: numbe
 
 const FrontmatterCheck: Page = () => (
   <Shell chapter={4} source={'Digital Garden 入門（dg-publish）docs.forestry.md/getting-started/01-getting-started'}>
-    <Eyebrow>實測：第三堂產出的兩張卡</Eyebrow>
+    <Eyebrow>第三堂產出的兩張卡</Eyebrow>
     <Heading>前置中繼資料（Frontmatter）</Heading>
     <Fit>
       <Stage h={470}>
@@ -1511,13 +1511,13 @@ const Practice31: Page = () => (
 
 const HtmlTest: Page = () => (
   <Shell chapter={4} source={'markdown-it（模板設定 html: true）github.com/markdown-it/markdown-it；模板 github.com/oleeskild/digitalgarden'}>
-    <Eyebrow>實測：第三堂 Skill 的產出｜本機建置</Eyebrow>
+    <Eyebrow>第三堂 Skill 的產出｜本機建置</Eyebrow>
     <Heading>時間軸卡上網站（本機測試）</Heading>
     <Fit>
       <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '500px 1fr', gap: 110, alignItems: 'start' }}>
         <In i={0}>
           <CropShot src={timelineSite} alt="時間軸.md 在 Digital Garden 網站上的樣子：米色框裡一條橫向時間軸，看得到桃園結義第 1 回、三英戰呂布第 5 回、白門樓第 19 回，其餘要往右捲；下方來源卡是六行純文字檔名" nat={[1224, 1410]} crop={[0, 0, 1224, 1410]} width={500} />
-          <Caption>講師模板本機建置（2026-10-30）</Caption>
+          <Caption>模板本機建置的畫面</Caption>
         </In>
         <div style={{ display: 'grid', gap: 48, paddingTop: 60 }}>
           <Steps>
@@ -1776,7 +1776,7 @@ const StatusChip = ({ x, y, w, label, color }: { x: number; y: number; w: number
 );
 
 const NotUpdated: Page = () => (
-  <Shell chapter={5} source={'Forestry.md 儀表板 Publish history（講師 2026-10-30 實測）'}>
+  <Shell chapter={5} source={'Forestry.md 儀表板 Publish history'}>
     <Eyebrow>常見問題｜右邊狀態照 Forestry 的字</Eyebrow>
     <Heading>部署疑難排解：四個檢查</Heading>
     <Fit>

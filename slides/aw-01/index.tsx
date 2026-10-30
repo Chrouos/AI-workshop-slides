@@ -988,7 +988,7 @@ const WhatIsHallucination: Page = () => (
       <In i={0} style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 56 }}>
         <Icon kind="chat" size={64} color={muted} />
         <div style={{ position: 'relative', background: '#FFFFFF', border: `2px solid ${rule}`, borderRadius: 16, padding: '24px 40px', fontSize: 44 }}><span>問：劉備字什麼？　答：</span><strong>劉備，字孔明。</strong></div>
-        <span style={{ fontSize: 24, color: quiet }}><span>小模型 qwen3:1.7b</span><br /><span>講師實測</span></span>
+        <span style={{ fontSize: 24, color: quiet }}><span>小模型 qwen3:1.7b</span></span>
       </In>
       <div style={{ display: 'grid', gap: 40 }}>
         <Steps>
@@ -2120,7 +2120,7 @@ const StartScreen: Page = () => (
             <RowMark top={202} height={46} width={960} n={<span>2</span>} badge={false} />
             <RowMark top={355} height={46} width={500} n={<span>3</span>} badge={false} />
           </Shot>
-          <Caption><span>教材範例｜路徑是講師的另一個資料夾，你的會是 Codex_練習</span></Caption>
+          <Caption><span>教材範例｜你的路徑會是 Codex_練習</span></Caption>
         </In>
         <div style={{ display: 'grid', gap: 40 }}>
           <Steps>
@@ -2662,8 +2662,8 @@ const L = ({ children }: { children: ReactNode }) => <span style={{ color: link 
 
 const OutlineResult: Page = () => (
   <Shell chapter={5} source={<span>{'維基文庫《三國演義》第 1–21 回 zh.wikisource.org/wiki/三國演義'}</span>}>
-    <Eyebrow><span>講師實測｜Codex 0.154</span></Eyebrow>
-    <Heading><span>實測結果：21 段，每段附出處</span></Heading>
+    <Eyebrow><span>實際結果｜Codex 0.154</span></Eyebrow>
+    <Heading><span>結果：21 段，每段附出處</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1100px 1fr', gap: 48, alignItems: 'center' }}>
         <In i={0} style={{ background: '#FFFFFF', border: `1px solid ${rule}`, boxShadow: '0 10px 30px rgba(28,25,23,0.08)' }}>
@@ -2789,7 +2789,7 @@ const PracticeVideo: Page = () => {
   };
   return (
     <Shell chapter={5}>
-      <Eyebrow><span>講師示範｜OpenCode｜約 5 分鐘</span></Eyebrow>
+      <Eyebrow><span>示範影片｜OpenCode｜約 5 分鐘</span></Eyebrow>
       <Heading><span>實作影片：從 cd 到大綱存檔</span></Heading>
       <Fit>
         <div style={{ display: 'grid', gridTemplateColumns: '979px 1fr', gap: 48, alignItems: 'center' }}>
@@ -2803,7 +2803,7 @@ const PracticeVideo: Page = () => {
               preload="metadata"
               onTimeUpdate={(e) => setNow(e.currentTarget.currentTime)}
               onKeyDown={(e) => { if (e.key === ' ') e.stopPropagation(); }}
-              aria-label="講師實作影片：cd 進 Codex_練習、打開 OpenCode、問兩個問題，再用練習 2-3 的提示詞寫出 21 回大綱並存檔"
+              aria-label="實作示範影片：cd 進 Codex_練習、打開 OpenCode、問兩個問題，再用練習 2-3 的提示詞寫出 21 回大綱並存檔"
               style={{ width: 979, height: 640, display: 'block', background: '#000000', border: `1px solid ${rule}` }}
             />
           </In>
@@ -2882,7 +2882,7 @@ const NextLesson: Page = () => (
               <text x="30" y="362" fontSize="26" fill={okGreen}>出處：原文/…</text>
             </InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={440} label="放進筆記庫，連到講師的人物卡">
+          <Step duration={STEP_MS}><Layer h={440} label="放進筆記庫，連到範例人物卡">
             <MapArrow x1={420} x2={540} y={220} hot />
             <rect x="560" y="10" width="1072" height="420" fill={surface} />
             <text x="590" y="58" fontSize="28" fontWeight="600" fill={ink}>Obsidian 筆記庫</text>
@@ -3041,7 +3041,7 @@ const NoPlan: Page = () => (
             <g fill="none" stroke={okGreen} strokeWidth="4"><StepPath d="M300 235 C350 235 350 76 400 76" /></g>
             <g className="aw1-build" style={buildDelay(1)}>
               <RouteCard y={10} kind="cloud" title={<tspan>{"A｜opencode＋免費模型"}</tspan>} sub={<tspan>{"不用登入、不用信用卡"}</tspan>} tag={<tspan>{"首選"}</tspan>} tone="ok" />
-              <RouteWhy y={10}><tspan>實測可用｜第 </tspan>{pageOf(OpencodeSteps)}<tspan> 頁</tspan></RouteWhy>
+              <RouteWhy y={10}><tspan>可用｜第 </tspan>{pageOf(OpencodeSteps)}<tspan> 頁</tspan></RouteWhy>
             </g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={470} label="備案 B：Codex 加 OpenRouter，要帳號和 API Key">
@@ -3092,7 +3092,7 @@ const MapChip = ({ codex, oc }: { codex: ReactNode; oc: ReactNode }) => (
 
 const OpencodeSteps: Page = () => (
   <Shell source={<span>{'opencode 安裝 opencode.ai；文件 opencode.ai/docs/zen、opencode.ai/docs/tui'}</span>}>
-    <Eyebrow><span>附錄｜備案 A｜opencode 1.19.3 實測</span></Eyebrow>
+    <Eyebrow><span>附錄｜備案 A｜opencode 1.19.3</span></Eyebrow>
     <Heading><span>備案 A：opencode＋免費模型</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '880px 1fr', gap: 56, alignItems: 'center' }}>
@@ -3133,8 +3133,8 @@ const OpencodeSteps: Page = () => (
 
 const OpencodeRun: Page = () => (
   <Shell source={<span>{'opencode 文件 opencode.ai/docs/zen'}</span>}>
-    <Eyebrow><span>附錄｜備案 A｜講師電腦實測 2026-10-17</span></Eyebrow>
-    <Heading><span>opencode 實測：29 秒建好檔案</span></Heading>
+    <Eyebrow><span>附錄｜備案 A｜實際結果</span></Eyebrow>
+    <Heading><span>opencode：29 秒建好檔案</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '960px 1fr', gap: 48, alignItems: 'center' }}>
         <In i={0}>
@@ -3188,7 +3188,7 @@ const Rung = ({ x, h, size, name, l1, l2, verdict }: { x: number; h: number; siz
 
 const LocalLadder: Page = () => (
   <Shell source={<span>{'Ollama 文件 docs.ollama.com/context-length'}</span>}>
-    <Eyebrow><span>附錄｜備案 C｜1B、2B 夠不夠？講師電腦實測</span></Eyebrow>
+    <Eyebrow><span>附錄｜備案 C｜1B、2B 夠不夠？</span></Eyebrow>
     <Heading><span>備案 C：1B、2B 的模型不夠用</span></Heading>
     <Fit>
       <Stage h={450}>
@@ -3209,7 +3209,7 @@ const LocalLadder: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <div style={{ fontSize: 24, color: quiet, textAlign: 'center' }}>講師在這台電腦（Ollama 0.40.3）、這些任務測過的模型</div>
+      <div style={{ fontSize: 24, color: quiet, textAlign: 'center' }}>Ollama 0.40.3、這些任務測過的模型</div>
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}><span>最少要 gemma4:e2b，而且只能拿來示範</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
@@ -3223,7 +3223,7 @@ const CtxTick = ({ label, hot = false, bad = false }: { label: ReactNode; hot?: 
 
 const OllamaRoute: Page = () => (
   <Shell source={<span>{'Ollama 文件 docs.ollama.com/integrations/opencode'}</span>}>
-    <Eyebrow><span>附錄｜備案 C｜Ollama 0.40.3 實測</span></Eyebrow>
+    <Eyebrow><span>附錄｜備案 C｜Ollama 0.40.3</span></Eyebrow>
     <Heading><span>備案 C：用 Ollama 示範本機模型</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '620px 1fr', gap: 48, alignItems: 'center' }}>
@@ -3270,7 +3270,7 @@ const ErrorCard = ({ msg, fix }: { msg: ReactNode; fix: ReactNode }) => (
 
 const OpenRouterRoute: Page = () => (
   <Shell source={<span>{'OpenRouter 文件 openrouter.ai/docs/cookbook/coding-agents/codex-cli'}</span>}>
-    <Eyebrow><span>附錄｜備案 B｜codex-cli 0.154.0 實測</span></Eyebrow>
+    <Eyebrow><span>附錄｜備案 B｜codex-cli 0.154.0</span></Eyebrow>
     <Heading><span>備案 B：Codex＋OpenRouter</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '900px 1fr', gap: 44, alignItems: 'center' }}>
