@@ -5,6 +5,9 @@ import { useEffect, useRef, useState } from 'react';
 import ddResult from './assets/diagram-design-result.png';
 import dgHtmlTest from './assets/digital-garden-html-test.png';
 import timelineFirstRun from './assets/timeline-first-run.png';
+import tlDiagram from './assets/timeline-diagram-design.png';
+import tlArchify from './assets/timeline-archify.png';
+import tlInstructor from './assets/timeline-instructor.png';
 import promptsQr from './assets/prompts-qr.svg';
 
 // Where students copy every prompt from (opened on their laptop, not typed off the projector).
@@ -1969,59 +1972,50 @@ const RagStageLabel = ({ x, letter, text, color }: { x: number; letter: string; 
   </g>
 );
 
+// One stage of RAG, shown as a box with its step number in the header.
+const RagBox = ({ n, title, tone, children }: { n: number; title: string; tone: string; children: ReactNode }) => (
+  <div style={{ background: '#FFFFFF', border: `2px solid ${tone}`, height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 22px', background: surface, borderBottom: `1px solid ${rule}` }}>
+      <NumDot n={n} size={40} />
+      <span style={{ fontSize: 30, fontWeight: 600 }}>{title}</span>
+    </div>
+    <div style={{ padding: '18px 22px 22px', fontSize: 27, lineHeight: 1.6, flex: 1 }}>{children}</div>
+  </div>
+);
+
 const RagAgain: Page = () => (
   <Shell chapter={4} source={'Lewis et al. 2020, arXiv:2005.11401；原文：維基文庫《三國演義》第 5 回'}>
-    <Eyebrow>用的是 RAG 的做法</Eyebrow>
-    <Heading>檢索增強生成（RAG）</Heading>
-    <Lead>先找原文，再依據原文寫卡片</Lead>
+    <Eyebrow>照原文補卡｜檢索增強生成（RAG）</Eyebrow>
+    <Heading>先找原文，再照著寫</Heading>
+    <Lead>像開書考：先翻到那一頁，照著寫，寫上頁碼</Lead>
     <Fit>
-      <Stage h={440}>
+      <In i={0} style={{ display: 'flex', gap: 40, fontSize: 26, color: muted, marginBottom: 16 }}>
+        <span><Mk>橘底</Mk>＝原文和新卡裡的同一件事</span>
+        <span><Mk ok>綠底</Mk>＝原文沒寫，就不寫</span>
+      </In>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 28, height: 330 }}>
         <Steps>
-          <Layer h={440} label="R 找原文：第 5 回寫「這三個圍住呂布，轉燈兒般廝殺」">
-            <InG i={0}><RagStageLabel x={0} letter="R" text="找原文" color={amber} /></InG>
-            <InG i={1}>
-              <DocShape x={0} y={56} w={420} h={290} fill="#FFFFFF" stroke={rule} />
-              <text x="28" y="104" fontSize="25" fontFamily={mono} fill={muted}>原文/第005回.md</text>
-              <rect x="20" y="148" width="380" height="120" fill={amberSoft} />
-              <text x="38" y="196" fontSize="33" fontFamily={display} fill={ink}>這三個圍住呂布，</text>
-              <text x="38" y="248" fontSize="33" fontFamily={display} fill={ink}>轉燈兒般廝殺。</text>
-              <text x="28" y="316" fontSize="25" fill={quiet}>……</text>
-            </InG>
-          </Layer>
-          <Step duration={STEP_MS}><Layer h={440} label="A 帶著原文、卡片模板和你的要求一起交給 Codex">
-            <g className="aw3-build" style={buildDelay(0)}><MapArrow x1={432} x2={540} y={200} hot /></g>
-            <g className="aw3-build" style={buildDelay(1)}>
-              <RagStageLabel x={552} letter="A" text="帶著原文寫" color={blue} />
-              <rect x="552" y="56" width="420" height="290" fill={blueSoft} stroke={blue} strokeWidth="2" />
-              <text x="762" y="136" textAnchor="middle" fontSize="36" fontFamily={mono} fontWeight="600" fill={ink}>Codex</text>
-              <text x="762" y="206" textAnchor="middle" fontSize="30" fill={ink}>＋ 原文這一段</text>
-              <text x="762" y="256" textAnchor="middle" fontSize="30" fill={ink}>＋ 卡片模板</text>
-              <text x="762" y="306" textAnchor="middle" fontSize="30" fill={ink}>＋ 你的要求</text>
-            </g>
-          </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={440} label="G 寫成新卡：三英戰呂布，附上出處">
-            <g className="aw3-build" style={buildDelay(0)}><MapArrow x1={984} x2={1092} y={200} hot /></g>
-            <g className="aw3-build" style={buildDelay(1)}>
-              <RagStageLabel x={1104} letter="G" text="寫成新卡" color={okGreen} />
-              <DocShape x={1104} y={56} w={528} h={290} fill={sage} stroke={okGreen} sw={3} />
-              <text x="1132" y="106" fontSize="26" fontFamily={mono} fill={ink}>關係/三英戰呂布.md</text>
-              <text x="1132" y="156" fontSize="26" fontFamily={mono} fill={muted}>回目: 5</text>
-              <text x="1132" y="212" fontSize="29" fill={ink}>……三人圍住呂布廝殺。</text>
-              <rect x="1124" y="250" width="488" height="56" fill="#FFFFFF" stroke={okGreen} strokeWidth="2" />
-              <text x="1144" y="288" fontSize="25" fontFamily={mono} fill={okGreen}>出處：原文/第005回.md</text>
-            </g>
-          </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={440} label="原文沒寫的事，就不寫">
-            <g className="aw3-build" style={buildDelay(0)}><DownArrowSvg x={762} y1={348} y2={378} color={amber} /></g>
-            <g className="aw3-build" style={buildDelay(1)}>
-              <rect x="552" y="382" width="420" height="56" fill={amberSoft} stroke={amber} strokeWidth="2" />
-              <CrossMark x={590} y={410} size={20} color={amber} />
-              <text x="620" y="420" fontSize="28" fill={ink}>原文沒寫的事 → 不寫</text>
-            </g>
-          </Layer></Step>
+          <In i={1}><RagBox n={1} title="先找：原文那一段" tone={amber}>
+            <Path size={24}>原文/第005回.md</Path>
+            <div style={{ marginTop: 12 }}>劉玄德掣<Mk>雙股劍</Mk>，……來助戰。</div>
+            <div style={{ marginTop: 6 }}>這三個<Mk>圍住呂布</Mk>，轉燈兒般廝殺。</div>
+          </RagBox></In>
+          <Step duration={STEP_MS}><RagBox n={2} title="一起交給 Codex" tone={blue}>
+            <div style={{ display: 'grid', gap: 12 }}>
+              <span style={{ background: amberSoft, padding: '6px 14px' }}>第 5 回那一段</span>
+              <span style={{ background: surface, padding: '6px 14px' }}>關係卡模板</span>
+              <span style={{ background: surface, padding: '6px 14px' }}>你的要求：找不到就不寫</span>
+            </div>
+          </RagBox></Step>
+          <Step duration={STEP_MS}><RagBox n={3} title="照著寫：新卡" tone={okGreen}>
+            <Path size={24}>關係/三英戰呂布.md</Path>
+            <div style={{ marginTop: 10 }}>回目: 5　年份: <Mk ok>（空白）</Mk></div>
+            <div style={{ marginTop: 6 }}>[[劉備]] 也持<Mk>雙股劍</Mk>加入，三人合力<Mk>圍戰呂布</Mk>。</div>
+            <div style={{ marginTop: 6, fontFamily: mono, fontSize: 23, color: muted }}>出處：原文/第005回.md</div>
+          </RagBox></Step>
         </Steps>
-      </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>新卡每一句都要找得到原文出處</Takeaway></Step></Steps>
+      </div>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>新卡每一句，都要找得到原文那一句</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2529,6 +2523,47 @@ const PersonFilter: Page = () => (
   </Shell>
 );
 
+// One drawing of the same 整理/時間軸.md: who drew it, then a crop of the real page.
+const StyleTile = ({ src, alt, name, sub }: { src: string; alt: string; name: string; sub: string }) => (
+  <div>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginBottom: 12 }}>
+      <span style={{ fontFamily: mono, fontSize: 30, fontWeight: 600, color: amber }}>{name}</span>
+      <span style={{ fontSize: 25, color: muted }}>{sub}</span>
+    </div>
+    <img src={src} alt={alt} style={{ width: 520, height: 220, display: 'block', border: `1px solid ${rule}`, boxShadow: '0 10px 30px rgba(28,25,23,0.08)' }} />
+  </div>
+);
+
+const TimelineStyles: Page = () => (
+  <Shell chapter={5} source={'講師 2026-10-30 實跑（aw-03-sample-output/練習4/）；skills 1.7.4 的 npx skills find，2026-10-30'}>
+    <PracticeEyebrow time="練習 4 第 5 步">練習 4｜進階選做</PracticeEyebrow>
+    <Heading>進階：換一個畫圖 Skill</Heading>
+    <PromptsCopy step="4-5" />
+    <In i={0} style={{ marginTop: 18, fontSize: 30, color: muted }}>同一份 整理/時間軸.md，換一個 Skill 畫，會長一樣嗎？</In>
+    <Fit>
+      <Steps>
+        <Step duration={STEP_MS}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 520px)', justifyContent: 'space-between' }}>
+          <StyleTile src={tlDiagram} name="diagram-design" sub="練習 1-4 已裝" alt="diagram-design 畫的時間軸：灰底、細黑線、小圓點，事件名稱在線上，回目在線下" />
+          <StyleTile src={tlArchify} name="archify" sub="要另外裝" alt="archify 畫的時間軸：米色底、大號襯線標題，事件放在白色卡片裡，紅色圓點" />
+          <StyleTile src={tlInstructor} name="講師版" sub="自己寫的 HTML" alt="講師版時間軸：橘色粗線，事件名稱放在黃色標籤裡，上方有「全部事件」「只看劉備」切換鈕" />
+        </div></Step>
+      </Steps>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 520px', gap: 36, alignItems: 'center', marginTop: 32 }}>
+        <Steps><Step duration={STEP_MS}>
+          <TermBox title="找畫圖 Skill（節錄；也可以到 skills.sh 網站搜）" size={25}>
+            <TL tone="type">$ npx skills find timeline</TL>
+            <TL hot>tt-a1i/archify@archify                       183.6K installs</TL>
+            <TL hot>cathrynlavery/diagram-design@diagram-design  22.1K installs</TL>
+          </TermBox>
+        </Step></Steps>
+        <Steps><Step duration={STEP_MS}>
+          <div style={{ fontFamily: display, fontSize: 44, lineHeight: 1.35, color: amber }}>同樣是畫圖，每個 Skill 畫法不同，挑你喜歡的</div>
+        </Step></Steps>
+      </div>
+    </Fit>
+  </Shell>
+);
+
 // ---------- Close ----------
 
 const RecapStop = ({ x, n, verb }: { x: number; n: Chapter; verb: string }) => (
@@ -2735,7 +2770,7 @@ const deck: Page[] = [
   Section2, SkillsAddCmd, RepoName, CdVault, AddEli5, AddEli5Scope, AddDiagram, SkillsList, InstallVideo,
   Section3, DiagramRun, DiagramResult, Eli5Rewrite, UseVideo, BreakPage,
   Section4, CardTemplate, RagAgain, EnrichPractice, YearCheck,
-  Section5, TimelineGoal, SkillSkeleton, SaveSkill, RunTimeline, TimelineResult, EditLoop, EditExample, TimelineVideo, PersonFilter,
+  Section5, TimelineGoal, SkillSkeleton, SaveSkill, RunTimeline, TimelineResult, EditLoop, EditExample, TimelineVideo, PersonFilter, TimelineStyles,
   Recap, NextLesson, ReferencesSkills, ReferencesTools,
   AppendixIndex, InstallErrors, ZipFallback, CallByName, DescriptionTrigger, LoadOnUse, PromptAgentsSkill, McpPlug, SkillOrMcp, DgPublishCopied, HtmlLinkTest,
 ];
@@ -2922,11 +2957,11 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
 按一下：年份，原文有寫才填，沒寫就留空。例如第 1 回原文寫了「中平元年」，所以〈桃園結義〉填了年份；實測新增的三張卡，原文都沒寫年份，就是空的。
 按一下：出處，寫是哪一回的原文檔。參與人物那一行也要看：有卡的人名寫成 [[劉備]] 這樣的連結，沒卡的寫純文字，這樣 Obsidian 才不會多出一堆沒有卡片的空連結。模板裡的 [[劉備]] 外面包了反引號（\`），是為了讓模板本身不算一個連結，不會在 Obsidian 裡多出反向連結。
 最後一下：每張新卡都照這個格式寫。回目和年份放在最上面的 frontmatter，Obsidian 會顯示成屬性欄位。`],
-  [RagAgain, `71:00–73:00。新增卡片，用的是 RAG 的做法：先找原文，再照著寫。像開書考，書上沒有就不寫。R，先找原文，例如第 5 回寫「這三個圍住呂布，轉燈兒般廝殺」。
-按一下，A：Codex 帶著這段原文、卡片模板和你的要求一起寫。
-按一下，G：寫成新卡，最後附上出處。
-按一下：原文沒寫的事就不寫；年份也一樣，不要讓 Codex 自己換算西元年。
-最後一下：新卡每一句都要找得到原文出處。`],
+  [RagAgain, `71:00–73:00。新增卡片用的是 RAG，檢索增強生成，第一堂、第二堂都講過，這裡用一個例子再走一次：補〈三英戰呂布〉這張卡。像開書考：先翻到課本那一頁，照著寫，最後寫上頁碼。
+第一步，先找：到 原文/第005回.md 找到那一段：「劉玄德掣雙股劍……來助戰」「這三個圍住呂布，轉燈兒般廝殺」。
+按一下，第二步，一起交給 Codex：原文那一段、關係卡模板、你的要求「找不到就不寫」。這三樣放在一起，Codex 就不是憑記憶寫，是照著手上的原文寫。
+按一下，第三步，照著寫成新卡。看橘底：原文的「雙股劍」「圍住呂布」，新卡寫成「劉備也持雙股劍加入，三人合力圍戰呂布」，同一件事，找得到出處。最後一行寫出處：原文/第005回.md。再看綠底的年份：第 5 回原文沒寫是哪一年，所以年份留空，不讓 Codex 自己換算西元年。
+最後一下：新卡每一句，都要找得到原文那一句。等一下練習完，我們就用這個標準核對年份。`],
   [EnrichPractice, `73:00–79:00。練習 3，三張卡都要做，第五章的時間軸會用到。筆記庫裡已經準備好原文：原文/ 有第 1 到 21 回全文，和第 37、38、46 回的節選；模板也在 模板/關係卡模板.md。直接貼上 prompts.md 練習 3-1：
 只根據 原文/第005回.md、原文/第019回.md、原文/第046回.md，新增三張關係卡：關係/三英戰呂布.md、關係/白門樓.md、關係/草船借箭.md。照 模板/關係卡模板.md 寫：frontmatter 填 回目、年份，年份原文有寫才填，沒寫就留空；最後一行寫「出處：資料夾/檔名」，例如「出處：原文/第005回.md」。人名有卡的才加 [[ ]]。原文找不到的事不要寫；舊卡不改，新卡不加 dg-publish。
 左邊是做完的樣子，貼之前先看一次，做完拿來對照。
@@ -2987,11 +3022,16 @@ npx 裝不起來：prompts.md 練習 4-1 最後有備用做法，用一行指令
 口頭補一句（畫面不用再按）：五個都搜不到的同學，一樣有事做：挑一個你不滿意的地方，例如顏色、事件名稱的字太小、想在線下多寫參與人物，寫成一句規則，用同樣的方式加在輸出格式最後，存檔，再跑一次。規則寫進 SKILL.md，下次 Codex 會照做。`],
   [TimelineVideo, `105:00–108:00。講師錄好的練習 4 完整過程（2026-10-30，Codex 0.165.0，約 2 分鐘，等待的空檔剪掉了），課堂上不現場跑。0:00 npx 裝骨架；0:38 第一次跑，Codex 回報「未填年份均標示『未記載』」；1:12 /quit 後用 grep 數，整理/時間軸.md 裡有 6 處「未記載」；1:22 SKILL.md 最後多了兩行規則（影片略過編輯畫面，用 tail 顯示檔案最後四行；你們用 open -e 或 notepad 打開來貼）；1:28 重開 Codex，同一句再跑一次；2:10 再搜，0 處。
 重點就是這一段：同一句提示詞，改了 SKILL.md，結果跟著變。影片開頭有一行 Codex 有新版的提示，不用理它；中間有一行讀到 superpowers 的 SKILL.md，是講師電腦另外裝的 Skill，你們不會有。還在改規則的同學，跟著影片做。`],
-  [PersonFilter, `108:00–112:00。做完的人挑戰進階選做：只排出劉備的事件。照練習 4-3 的方法打開 SKILL.md，在步驟的第 3 步下面加一行第 4 步：「使用者指定人物時，只留下參與人物有他的事件」，存檔。下面是加這一步之前的六件事。
+  [PersonFilter, `108:00–110:00。做完的人挑戰進階選做：只排出劉備的事件。照練習 4-3 的方法打開 SKILL.md，在步驟的第 3 步下面加一行第 4 步：「使用者指定人物時，只留下參與人物有他的事件」，存檔。下面是加這一步之前的六件事。
 按一下：/quit、重開 Codex 後輸入：「請使用 sanguo-timeline skill，只排劉備的事件，存成 整理/時間軸-劉備.md」。
 按一下：這是講師實測的結果，2026-10-18、10-24（舊版表格）和 10-30（橫向時間軸）都是第 1、5、19、21、49 回，五件事。草船借箭被拿掉了，因為它的參與人物是周瑜、諸葛亮、魯肅、[[曹操]]，沒有劉備。
 按一下：所以你的結果可能是 5 件或 6 件。第二堂練習自己寫過〈轅門射戟〉或〈許田打圍〉的同學，那張卡的參與人物有劉備，會多一件，變成 6 件，這是對的；寫〈溫酒斬華雄〉的沒有劉備，還是 5 件。10-30 那次，只有第 1 回有年份（中平元年），來源卡是純文字，練習 4-3 加的兩條規則照樣有效。核對方法一樣：打開每張卡看「參與人物」那一行。
-還有時間：prompts.md 練習 4-5，換一個畫圖 Skill（diagram-design 或 archify）畫同一條時間軸，存成 圖/三國時間軸.html。同一份資料，不同 Skill 畫出來的樣子都不一樣，挑自己喜歡的。講師 10-30 兩個都跑過，成品和講師版放在線上的 aw-03-sample-output/練習4/。archify 畫時間軸要每件事都有完整日期，三國卡片只有回目，Codex 沒有硬套，改寫一份自己的 HTML，也沒有編年份。
+還有時間的同學，下一頁換一個畫圖 Skill。`],
+  [TimelineStyles, `110:00–112:00。進階選做第二題：同一份 整理/時間軸.md，換一個畫圖 Skill 畫。先問大家：交給不同的 Skill 畫，會長一樣嗎？
+按一下：講師 10-30 實跑的三份。左邊 diagram-design，練習 1-4 已經裝好，畫得很素：灰底、細線、小圓點。中間 archify，要另外裝：米色底、大標題，事件放在卡片裡。右邊是講師自己寫的 HTML，把第 1 到 120 回整條畫出來，還能切換「只看劉備」。三份都沒有自己補年份，只有桃園結義有中平元年。archify 原本要每件事都有完整日期，三國卡片只有回目，Codex 沒有硬套它的格式，改寫了一份自己的 HTML。
+同樣叫做「畫圖」的 Skill，每個人寫的 SKILL.md 不一樣，畫出來的風格就不一樣。沒有哪一個是標準答案。
+按一下：去哪裡找？在終端機打 npx skills find，後面接英文關鍵字，例如 timeline。講師 10-30 搜過，archify 和 diagram-design 都在結果裡，旁邊是安裝次數。也可以上 skills.sh 這個網站搜。找到喜歡的，跟第二章一樣用 npx skills add 裝。裝之前先到 GitHub 打開它的 SKILL.md 看一眼，Skill 執行時有 Codex 的完整權限。
+最後一下：同樣是畫圖，每個 Skill 畫法不同，挑你喜歡的。提示詞在 prompts.md 練習 4-5，用 archify 的話把開頭的 diagram-design 換成 archify。成品放在線上的 aw-03-sample-output/練習4/，下載回去用瀏覽器打開比一比。
 最後 2 分鐘，請一兩位同學分享自己改了 SKILL.md 哪一行。`],
   [Recap, `112:00–116:00。回顧五件事。一、Skill 是交給 Agent 的做事說明，提示詞寫出 Skill 名稱就能用。二、用 npx skills add 加上 GitHub 的「帳號/專案」安裝，選 Project 就裝進筆記庫的 .agents/skills；指令不行時，下載 ZIP 自己放進去。三、diagram-design 把卡片畫成關係圖，eli5 把古文改成白話，都是一句話叫 Skill 做事。四、照原文補卡就是 RAG，找不到就不寫。五、結果不滿意，改 SKILL.md 再跑，這是今天的重點。
 按一下：下一堂把筆記庫發布成網站。`],

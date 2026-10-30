@@ -325,6 +325,12 @@ diagram-design 如果先問要用哪種樣式，回答：
 - `三國時間軸-archify.html`：archify 畫時間軸要每件事都有完整日期，三國卡片只有回目，所以 Codex 沒有硬套 archify 的格式，改寫一份自己的 HTML。
 - `三國時間軸-講師版.html`：把第 1 到第 120 回整條畫出來，可以切換「只看劉備」。
 
+想找別的畫圖 Skill：在終端機打下面這行，後面接英文關鍵字，會列出相關的 Skill 和安裝次數（講師 2026-10-30 搜過，archify 和 diagram-design 都在裡面）；也可以到 https://skills.sh 搜尋。找到喜歡的，用練習 1-3 的方法裝。裝之前先到它的 GitHub 打開 SKILL.md 看一眼。
+
+```text
+npx skills find timeline
+```
+
 ## 備用做法
 
 ### 裝不起來
