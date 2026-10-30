@@ -170,6 +170,11 @@ const Footer = ({ source }: { source?: ReactNode }) => {
   );
 };
 
+// A full link to copy sits on its own line under the footer rule, so it never takes room from the page.
+const FooterUrl = ({ href, children }: { href: string; children?: ReactNode }) => (
+  <a href={href} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 18, fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', fontSize: 22, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3, whiteSpace: 'nowrap' }}>{children ?? href}</a>
+);
+
 const Eyebrow = ({ children }: { children: ReactNode }) => (
   <div style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', fontSize: 24, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#78716C' }}>{children}</div>
 );
@@ -196,8 +201,7 @@ const PromptsCopy = ({ step, section }: { step?: string; section?: string }) => 
     <span style={{ textAlign: 'right', fontSize: 24, lineHeight: 1.4 }}>複製步驟和網址<br /><strong style={{ color: amber, fontFamily: mono }}>prompts.md</strong> {section ?? `練習 ${step}`}</span>
     <img src={promptsQr} alt="prompts.md 的 QR code" style={{ width: 120, height: 120, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 5 }} />
   </a>
-    <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 112, fontSize: 24, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3 }}>{PROMPTS_URL}</a>
-    <div aria-hidden style={{ order: 1, height: 24, flexShrink: 0 }} />
+    <FooterUrl href={PROMPTS_URL} />
   </>
 );
 
@@ -286,7 +290,7 @@ const Callout = ({ n, title, detail }: { n: number; title: ReactNode; detail?: R
 const Typed = ({ children }: { children: ReactNode }) => <span style={{ color: '#8DD4A0' }}>{children}</span>;
 
 const Caption = ({ children }: { children: ReactNode }) => (
-  <div style={{ fontSize: 22, lineHeight: 1.4, color: quiet, marginTop: 12 }}>{children}</div>
+  <div style={{ fontSize: 24, lineHeight: 1.4, color: quiet, marginTop: 12 }}>{children}</div>
 );
 
 // A real screenshot at its own aspect ratio.
@@ -547,7 +551,7 @@ const SiteGoal: Page = () => (
   <Shell>
     <Eyebrow>成果示意｜外觀依模板而定</Eyebrow>
     <Heading>今天要做出的網站</Heading>
-    <Fit z={1.05}>
+    <Fit>
       <Figure h={420} label="網站上的路徑：首頁三國演義 → 知識庫導覽 → 時間軸看事件順序，或 → 劉備、桃園結義等人物和事件卡">
         <InG i={0}><BrowserFrame x={0} y={0} w={1632} h={410} url="https://你的花園.forestry.md" /></InG>
         <InG i={1}><SitePage x={30} kind="首頁" name="三國演義" line="東漢末年，天下大亂" next="知識庫導覽" /></InG>
@@ -787,9 +791,9 @@ const UpdateTimeline: Page = () => (
     <Fit>
       <Stage h={430}>
         <Steps>
-          <Layer h={430} label="你動手：在〈劉備〉補一句">
+          <Layer h={430} label="你動手：在〈三國演義〉加一句">
             <line x1={TICK_XS[0]} y1="230" x2={TICK_XS[4]} y2="230" stroke={rule} strokeWidth="4" />
-            <InG i={0}><Tick x={TICK_XS[0]} time="你動手" kind="doc" label="改一句" sub="〈劉備〉補一句" manual /></InG>
+            <InG i={0}><Tick x={TICK_XS[0]} time="你動手" kind="doc" label="改一句" sub="〈三國演義〉" manual /></InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={430} label="你動手：按發布">
             <g fill="none" stroke={link} strokeWidth="5"><StepPath d={`M${TICK_XS[0] + 20} 230 H${TICK_XS[1] - 20}`} /></g>
@@ -1037,7 +1041,7 @@ const Section3: Page = () => <SectionPage chapter={3} label="03 / 原理" lead="
 
 const InstallPlugin: Page = () => (
   <Shell chapter={2} source={'Obsidian 說明：社群外掛 obsidian.md/help/community-plugins'}>
-    <Eyebrow>Obsidian 設定｜實際畫面（Obsidian 1.14.4）</Eyebrow>
+    <Eyebrow>Obsidian 設定｜實際畫面</Eyebrow>
     <Heading>安裝 Digital Garden 外掛</Heading>
     <Fit>
       <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '880px 1fr', gap: 64, alignItems: 'start' }}>
@@ -1056,7 +1060,7 @@ const InstallPlugin: Page = () => (
 );
 
 const ConnectForestry: Page = () => (
-  <Shell chapter={2} source={'Digital Garden 外掛 2.103.0 設定；Forestry.md 儀表板（實際畫面）'}>
+  <Shell chapter={2} source={'Digital Garden 外掛設定；Forestry.md 儀表板（實際畫面）'}>
     <Eyebrow>設定 → Digital Garden｜實際畫面</Eyebrow>
     <Heading>用 Garden Key 連上 Forestry</Heading>
     <Fit>
@@ -1136,7 +1140,7 @@ const SlugRow = ({ y, path }: { y: number; path: string }) => (
 );
 
 const SlugFail: Page = () => (
-  <Shell chapter={2} source={'Forestry.md Publish history；@sindresorhus/slugify 1.1.2'}>
+  <Shell chapter={2} source={'Forestry.md Publish history；@sindresorhus/slugify'}>
     <Eyebrow>常見的錯｜發布失敗</Eyebrow>
     <Heading>中文卡名發布失敗</Heading>
     <Fit>
@@ -1169,7 +1173,7 @@ const SlugFail: Page = () => (
 );
 
 const SlugFix: Page = () => (
-  <Shell chapter={2} source={'Digital Garden 外掛 2.103.0 設定 Simple note URLs'}>
+  <Shell chapter={2} source={'Digital Garden 外掛設定 Simple note URLs'}>
     <Eyebrow>設定 → Digital Garden → Publishing｜外掛畫面</Eyebrow>
     <Heading>關掉 Simple note URLs</Heading>
     <Fit>
@@ -1324,10 +1328,10 @@ const FrontmatterCheck: Page = () => (
             <InG i={1}><MapArrow x1={640} x2={992} y={124} hot /><text x="816" y="104" textAnchor="middle" fontSize="28" fontWeight="600" fill={amber}>eli5 改寫</text></InG>
             <InG i={2}><SourceDoc x={1012} y={0} w={620} h={268} name="劉備-5歲版.md" lines={['---', 'dg-publish: true', '---', '劉備，字玄德，是中山靖王的後代。']} highlight={1} /></InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={470} label="改寫版連 dg-publish: true 也一起抄過去">
+          <Step duration={STEP_MS}><Layer h={470} label="如果改寫版也有 dg-publish: true">
             <Build>
               <rect x="1030" y="122" width="330" height="48" fill="none" stroke={warn} strokeWidth="4" />
-              <text x="1380" y="156" fontSize="27" fontWeight="600" fill={warn}>連這行也抄了</text>
+              <text x="1380" y="156" fontSize="27" fontWeight="600" fill={warn}>如果 5 歲版也有這行</text>
             </Build>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={470} label="發布後，網站上會多一張劉備">
@@ -1458,7 +1462,7 @@ const NavPage: Page = () => (
 
 const PublishCommand: Page = () => (
   <Shell chapter={2} source={'Digital Garden 指令 docs.forestry.md/getting-started/02-commands'}>
-    <Eyebrow>發布｜Digital Garden 2.103.0 實際畫面</Eyebrow>
+    <Eyebrow>發布｜實際畫面</Eyebrow>
     <Heading>命令面板（Command Palette）</Heading>
     <Lead>Ctrl／Cmd + P，打 garden 找指令</Lead>
     <Fit>
@@ -1511,13 +1515,13 @@ const Practice31: Page = () => (
 
 const HtmlTest: Page = () => (
   <Shell chapter={4} source={'markdown-it（模板設定 html: true）github.com/markdown-it/markdown-it；模板 github.com/oleeskild/digitalgarden'}>
-    <Eyebrow>第三堂 Skill 的產出｜本機建置</Eyebrow>
-    <Heading>時間軸卡上網站（本機測試）</Heading>
+    <Eyebrow>第三堂 Skill 的產出｜實際畫面</Eyebrow>
+    <Heading>時間軸卡在網站上的樣子</Heading>
     <Fit>
       <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '500px 1fr', gap: 110, alignItems: 'start' }}>
         <In i={0}>
           <CropShot src={timelineSite} alt="時間軸.md 在 Digital Garden 網站上的樣子：米色框裡一條橫向時間軸，看得到桃園結義第 1 回、三英戰呂布第 5 回、白門樓第 19 回，其餘要往右捲；下方來源卡是六行純文字檔名" nat={[1224, 1410]} crop={[0, 0, 1224, 1410]} width={500} />
-          <Caption>模板本機建置的畫面</Caption>
+          <Caption>Digital Garden 模板建置的畫面</Caption>
         </In>
         <div style={{ display: 'grid', gap: 48, paddingTop: 60 }}>
           <Steps>
@@ -1777,7 +1781,7 @@ const StatusChip = ({ x, y, w, label, color }: { x: number; y: number; w: number
 
 const NotUpdated: Page = () => (
   <Shell chapter={5} source={'Forestry.md 儀表板 Publish history'}>
-    <Eyebrow>常見問題｜右邊狀態照 Forestry 的字</Eyebrow>
+    <Eyebrow>常見問題｜發布了，網站沒變</Eyebrow>
     <Heading>部署疑難排解：四個檢查</Heading>
     <Fit>
       <Stage h={520}>
@@ -1970,7 +1974,7 @@ const RefGroup = ({ label, children }: { label: string; children: ReactNode }) =
 );
 
 const RefHint = () => (
-  <div style={{ fontSize: 25, color: quiet, marginTop: 14 }}>到右邊的網站搜尋標題就找得到；完整網址寫在講者備註</div>
+  <div style={{ fontSize: 25, color: quiet, marginTop: 14 }}>到橘色那個網站，搜尋下一行的標題就找得到</div>
 );
 
 const ReferencesGarden: Page = () => (
@@ -2019,7 +2023,7 @@ const ReferencesDeploy: Page = () => (
         </In>
         <In i={1}>
           <RefGroup label="Digital Garden 外掛設定">
-            <RefItem who="obsidian-digital-garden 2.103.0" where="github.com" title="Simple note URLs：中文卡名要關掉" />
+            <RefItem who="obsidian-digital-garden" where="github.com" title="Simple note URLs：中文卡名要關掉" />
             <RefItem who="Digital Garden 文件" where="docs.forestry.md" title="自己架：GitHub＋Vercel（課後選讀）" />
           </RefGroup>
         </In>
@@ -2128,7 +2132,7 @@ const NOTES = new Map<Page, string>([
 最後一下：你按發布；之後的建置、上線都自動。注意，按發布這一步要你自己做。`],
   [UpdateTimeline, `48:30–51:00
 剛才你改了一句、按發布，背後發生了這五步。時間是講師 2026-10-30 在 Forestry.md 實測的。
-第一格：你在〈劉備〉補一句。紫色字寫「你動手」。
+第一格：你在〈三國演義〉加一句，就是剛才的小練習。紫色字寫「你動手」。
 按一下：你按發布，外掛把這張卡送出去。這也是你動手。
 按一下：綠色開始是自動的。Forestry 收到，它的發布紀錄（Publish history）多一筆。
 按一下：Forestry 重新建置整個網站。
@@ -2196,7 +2200,8 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
 最後一下：換一把新的，舊的就失效。`],
   [SlugFail, `29:30–31:00
 這頁是講師準備課程時真的踩到的錯，你們也一定會遇到，所以先講。
-左邊是講師的 Publish history，發布紀錄，最新的在最上面。最下面是種花園，接著連續兩次 Publish failed，失敗。
+左邊是講師的 Publish history，發布紀錄，最新的在最上面。
+按一下：框起來的是最下面種花園之後，連續兩次 Publish failed，失敗。
 按一下：右邊看原因。外掛有一個設定叫 Simple note URLs，預設開著，會把卡片路徑轉成英文小寫的網址，例如 My Folder/My Note 變成 my-folder/my-note。可是中文字它轉不了，直接拿掉。講師用同一個轉換套件實測：人物/劉備、人物/關羽、關係/桃園結義，全部變成三條斜線。
 按一下：每張卡的網址都一樣，網站不知道哪個網址給哪張卡，建置就失敗。錯誤訊息裡會出現 DuplicatePermalink，意思就是網址重複。
 最後一下：卡名是中文，就要關掉 Simple note URLs。下一頁看在哪裡關。`],
@@ -2225,11 +2230,11 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
 最後一下：屬性面板打勾，等於原始檔寫 dg-publish: true。
 另一個方法：打開那張卡，Ctrl／Cmd + P，執行 Digital Garden: Add publish flag，它會幫你加上這行。`],
   [FrontmatterCheck, `60:00–62:30
-這是第三堂實測時發生的事。我們用 eli5 把 人物/劉備.md 改寫成 5 歲小孩聽得懂的版本，存成 劉備-5歲版.md。內容是對的。
-按一下：但它把開頭的 dg-publish: true 也一起抄了過去。
+第三堂我們用 eli5 把 人物/劉備.md 改寫成 5 歲小孩聽得懂的版本，存成 劉備-5歲版.md。改寫時，Codex 可能把開頭的屬性一起抄過去。
+按一下：如果 5 歲版開頭也有 dg-publish: true，它也會被發布。
 按一下：結果是一發布，網站上會多一張〈劉備-5歲版〉，和原本的〈劉備〉並排，讀者會搞不清楚哪張才對。
-按一下：如果有 dg-publish、又不想公開，就刪掉那行，或在屬性取消勾選。第三堂的 eli5 提示詞現在最後一句是「新檔不要加 dg-publish。」，所以你的5 歲版可能本來就沒有這行；講師實測那次是舊提示詞，才會抄過去。
-按一下：反過來的情況也有。第三堂時間軸 Skill 實跑產出的 時間軸.md，開頭完全沒有屬性，直接就是一段 HTML。它不會被發布；練習 3-1 會幫它加上。
+按一下：如果有 dg-publish、又不想公開，就刪掉那行，或在屬性取消勾選。第三堂的 eli5 提示詞最後一句是「新檔不要加 dg-publish。」，所以多數人的 5 歲版本來就沒有這行；Codex 沒照做的話才會出現。
+按一下：反過來的情況也有。第三堂時間軸 Skill 產出的 時間軸.md，開頭完全沒有屬性，直接就是一段 HTML。它不會被發布；練習 3-1 會幫它加上。
 最後一下：新卡發布前，先看開頭三行。不想公開的卡刪掉 dg-publish，要公開的卡缺了就補上。`],
   [Practice31, `62:30–70:30
 練習 3-1，8 分鐘：讓第三堂的時間軸卡上線。步驟在 prompts.md 練習 3-1：${PROMPTS_URL}
@@ -2237,8 +2242,7 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
 2，沒有 dg-publish 的話，Ctrl／Cmd + P，執行 Add publish flag。
 3，Ctrl／Cmd + P，Publish All Notes Marked for Publish，等 Publish history 變 Published。
 4，打開你的網址，後面接 /整理/時間軸/。
-按一下：看到橫向時間軸就過關；404 就是沒勾，或勾了還沒發布。下一頁看時間軸在網站上的樣子。
-筆記庫裡沒有第三堂的 時間軸.md 或三張新卡的同學（第三堂沒做完）：講師的成品在線上 https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output ，練習3 資料夾的 時間軸.md 放進 整理/；三張卡在 aw-03-lab.zip 的 關係/ 資料夾（線上 examples/aw-03-lab/關係/），放進 關係/。拖檔案、不要拖整個資料夾。`],
+按一下：看到橫向時間軸就過關；404 就是沒勾，或勾了還沒發布。下一頁看時間軸在網站上的樣子。`],
   [HomeFlag, `73:00–74:30
 網站打開的第一頁是哪一張？由 dg-home 決定。
 左邊是〈三國演義〉的開頭：除了 dg-publish，還多一行 dg-home: true。講師的教材已經加好了。
@@ -2290,7 +2294,7 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
 時間軸裡的人名是純文字、點不了，這是對的。如果時間軸裡出現 [[ ]]，或點了會 404 的來源卡連結，回第三堂的 SKILL.md 補規則，再產生一次。`],
 
   [Section5, `89:00–89:30
-最後一章：先請同學驗收你的網站，再看 Git 和接下來可以做什麼。`],
+最後一章：先請同學驗收你的網站，再看接下來可以做什麼。`],
   [CheckSite, `89:30–91:30
 驗收的方法：從首頁依序點，每個連結都要打得開。路線和開場那頁一樣：首頁 → 導覽頁，再分兩條，一條到時間軸，一條到導覽頁上的卡。
 按一下：首頁點得到導覽頁嗎？
@@ -2300,7 +2304,7 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
   [Practice4, `91:30–103:30
 練習 4，12 分鐘（多 2 分鐘給修好再走一次）：互相驗收。兩人一組。步驟在 prompts.md 練習 4。
 1. 公開〈三英戰呂布〉：練習 3-2 故意沒把它放進導覽頁，它也還沒有 dg-publish。打開它，執行 Digital Garden: Add publish flag；在導覽頁的事件那段加上 [[三英戰呂布]]；再執行 Publish All Notes Marked for Publish。
-按一下：2. 找網址：打開 Forestry 儀表板，最上面「Your garden is live」下面那行就是你的網址，按 Copy address 複製。傳之前，自己先開無痕視窗（Chrome、Edge：Ctrl＋Shift＋N；Mac：Cmd＋Shift＋N）貼上，從首頁點到〈三英戰呂布〉。再把網址傳給同學，用 LINE 或寫在紙上都可以。
+按一下：2. 傳你的網址：打開 Forestry 儀表板，最上面「Your garden is live」下面那行就是你的網址，按 Copy address 複製。傳之前，自己先開無痕視窗（Chrome、Edge：Ctrl＋Shift＋N；Mac：Cmd＋Shift＋N）貼上，從首頁點到〈三英戰呂布〉。再把網址傳給同學，用 LINE 或寫在紙上都可以。
 按一下：3. 同學在自己的電腦開無痕視窗，貼上你的網址。一定要看同學自己打開的公開網址，不要看講師的螢幕，也不要用你自己的電腦，你的瀏覽器可能留著舊的畫面。只能從首頁開始點：首頁 → 導覽頁 → 三英戰呂布，不能直接打卡片的網址。
 按一下：4. 回報結果：找到新卡就打勾；找不到，說哪一頁打不開、看到什麼（404、連結不見）。你回去查那一頁的 dg-publish 和連結，修好再發布，請同學再點一次。
 做完交換角色。最後請一兩組分享在哪一頁打不開，通常是三英戰呂布沒勾（404）、導覽頁改了沒重新發布（連結不在），或改了沒等 Published 就去看。`],
@@ -2317,14 +2321,14 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
 按一下：Obsidian 這條線。第一堂只預告；第二堂安裝、連結、畫關係圖；第三堂用卡片上的回目排出時間軸；今天用 Digital Garden 發布。
 按一下：Skills 這條線。第一堂預告 AGENTS.md；第三堂安裝熱門 Skill、自己寫一個；今天把 Skill 的產出放上網站。
 最後一下：四堂課都在擴充同一個三國知識庫，每一堂都用上一堂的成果。`],
-  [NextSteps, `111:30–114:00
+  [NextSteps, `111:30–120:00
 最後是選修延伸，給想多做一點的人。llm-wiki 是一組整理筆記庫的 Skill，放在發布之前用：
 $wiki-ingest：收新資料，整理成卡片，對應循環的第一步。
 按一下：$wiki-query：查答案，附出處，就是第二堂的 RAG，對應第二步。
 按一下：$wiki-lint：健檢，找斷掉的連結、孤立頁、缺屬性的頁。它找到的斷連結，就是同學在網站上點不開的地方。
 安裝（需要 Python 3）：pip install obsidian-wiki，再 obsidian-wiki setup --vault <筆記庫完整路徑>，最後 obsidian-wiki doctor 檢查。裝好後在 Codex 打開筆記庫，說「set up my wiki」。
 完整說明：https://github.com/Ar9av/obsidian-wiki/blob/main/docs/installation.md 、https://github.com/Ar9av/obsidian-wiki/blob/main/docs/skills.md
-按一下：整理、查證、健檢完，再按發布。後面兩頁是參考資料，再後面是附錄，課後有興趣再看。最後幾分鐘留給大家發問。謝謝大家這四堂課。`],
+按一下：整理、查證、健檢完，再按發布。後面兩頁是參考資料，再後面是附錄，課後有興趣再看。114:00 之後的時間留給大家發問。謝謝大家這四堂課。`],
   [AppendixIndex, `（課後自讀，上課不講。）
 附錄三頁，給想多懂一點的同學：時間軸要自己改 HTML 時，哪種連結寫法點得開；打一個網址，網頁從哪來；工程師說的自動部署是什麼。`],
   [ReferencesGarden, `（課後自讀，上課不講。）

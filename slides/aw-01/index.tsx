@@ -175,6 +175,11 @@ const Footer = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// A full link to copy sits on its own line under the footer rule, so it never takes room from the page.
+const FooterUrl = ({ href, children }: { href: string; children?: ReactNode }) => (
+  <a href={href} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 18, fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', fontSize: 22, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3, whiteSpace: 'nowrap' }}>{children ?? href}</a>
+);
+
 const Eyebrow = ({ children }: { children: ReactNode }) => (
   <div style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', fontSize: 24, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#78716C' }}>{children}</div>
 );
@@ -636,11 +641,11 @@ const Agenda: Page = () => (
       <div style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, paddingBottom: 12, borderBottom: `1px solid ${rule}` }}>
         <span /><SmallLabel><span>章節</span></SmallLabel><SmallLabel><span>結束時你會</span></SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel><span>時間｜頁</span></SmallLabel></span>
       </div>
-      <AgendaRow i={0} n={1} numberLabel={<span>01</span>} name={<span>{"AI 怎麼走到今天"}</span>} kind="think" result={<span>{"知道 AI 為什麼會說錯"}</span>} time={<span>{"10–40 分"}</span>} page={Section1} />
-      <AgendaRow i={1} n={2} numberLabel={<span>02</span>} name={<span>{"ChatGPT 與 Codex"}</span>} kind="search" result={<span>{"分得清 ChatGPT 和 Codex"}</span>} time={<span>{"40–50 分"}</span>} page={Section2} />
+      <AgendaRow i={0} n={1} numberLabel={<span>01</span>} name={<span>{"AI 怎麼走到今天"}</span>} kind="think" result={<span>{"知道 AI 為什麼會說錯"}</span>} time={<span>{"10–38 分"}</span>} page={Section1} />
+      <AgendaRow i={1} n={2} numberLabel={<span>02</span>} name={<span>{"ChatGPT 與 Codex"}</span>} kind="search" result={<span>{"分得清 ChatGPT 和 Codex"}</span>} time={<span>{"38–50 分"}</span>} page={Section2} />
       <AgendaRow i={2} n={3} numberLabel={<span>03</span>} name={<span>{"安裝 Codex"}</span>} kind="down" result={<span>{"電腦裡有 Codex"}</span>} time={<span>{"50–67 分"}</span>} page={Section3} />
       <AgendaRow i={3} n={4} numberLabel={<span>04</span>} name={<span>{"看懂 Codex"}</span>} kind="terminal" result={<span>{"會看 /status、寫規則"}</span>} time={<span>{"67–84 分"}</span>} page={Section4} />
-      <AgendaRow i={4} n={5} numberLabel={<span>05</span>} name={<span>{'使用 Codex'}<br />{''}</span>} kind="doc" result={<span>{'建立自己的知識庫'}</span>} time={<span>{"84–108 分"}</span>} page={Section5} />
+      <AgendaRow i={4} n={5} numberLabel={<span>05</span>} name={<span>{'使用 Codex'}<br />{''}</span>} kind="doc" result={<span>{'建立自己的知識庫'}</span>} time={<span>{"84–112 分"}</span>} page={Section5} />
     </Fit>
   </Shell>
 );
@@ -1355,7 +1360,7 @@ const ToolCalc: Page = () => (
                 <Dim><span>{'codex\n'}</span></Dim>
                 <span>{'用 Python 程式計算結果是：8484'}</span>
               </Terminal>
-              <Caption><span>codex-cli 0.154.0｜已刪去與題目無關的系統警告</span></Caption>
+              <Caption><span>已刪去與題目無關的系統警告</span></Caption>
             </Step>
           </Steps>
         </div>
@@ -1428,7 +1433,7 @@ const WebSearch: Page = () => (
                   <div style={{ position: 'absolute', left: '85.5%', top: 4, width: '13.5%', bottom: 4, border: '4px solid #E9B650', boxSizing: 'border-box' }} />
                 </Crop>
               </div>
-              <Caption><span>ChatGPT 實際畫面｜2026 年 9 月</span></Caption>
+              <Caption><span>ChatGPT 實際畫面</span></Caption>
             </div>
             <Callout n={<span>{2}</span>} title={<span>{"回答附上來源"}</span>} detail="可點開原網頁核對" />
           </div>
@@ -1859,10 +1864,10 @@ const ChatGPTSelf: Page = () => (
         <div style={{ display: 'grid', gap: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 32 }}><Icon kind="doc" size={40} color={amber} /><span>提示詞：</span><Path size={32}><span>prompts.md</span></Path><span>的「練習 1」</span></div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 32 }}><Icon kind="folder" size={40} color={amber} /><span>參考結果：</span><Path size={32}><span>aw-01-lab/ChatGPT_練習/</span></Path></div>
-          <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ fontSize: 24, color: amber, textDecoration: 'underline', textUnderlineOffset: 3 }}>{PROMPTS_URL}</a>
         </div>
       </In>
     </Fit>
+    <FooterUrl href={PROMPTS_URL} />
   </Shell>
 );
 
@@ -1931,7 +1936,7 @@ const TermRow = ({ cue, children }: { cue?: 1 | 2 | 3; children: ReactNode }) =>
 );
 
 const TermDot = ({ n, cue }: { n: number; cue?: 1 | 2 | 3 }) => (
-  <span className={cue ? 'aw1-cue' : undefined} data-cue={cue} style={{ display: 'inline-flex', fontFamily: 'var(--osd-font-body)' }}><NumDot n={n} size={40} /></span>
+  <span className={cue ? 'aw1-cue' : undefined} data-cue={cue} style={{ display: 'inline-flex', fontFamily: 'var(--osd-font-body)' }}><NumDot n={n} size={42} /></span>
 );
 
 const TerminalAnatomy: Page = () => (
@@ -2030,14 +2035,14 @@ const BrowserFrame = ({ url, children }: { url: ReactNode; children: ReactNode }
       <span style={{ width: 13, height: 13, borderRadius: 20, background: '#DF6A63' }} />
       <span style={{ width: 13, height: 13, borderRadius: 20, background: '#E9B650' }} />
       <span style={{ width: 13, height: 13, borderRadius: 20, background: '#73BB78' }} />
-      <span style={{ flex: 1, marginLeft: 10, background: '#FFFFFF', border: `1px solid ${rule}`, borderRadius: 18, padding: '3px 18px', fontFamily: mono, fontSize: 22, color: muted }}>{url}</span>
+      <span style={{ flex: 1, marginLeft: 10, background: '#FFFFFF', border: `1px solid ${rule}`, borderRadius: 18, padding: '3px 18px', fontFamily: mono, fontSize: 24, color: muted }}>{url}</span>
     </div>
     {children}
   </div>
 );
 
 const CodexLogin: Page = () => (
-  <Shell chapter={3} source={<span>{'Codex CLI 0.154.0 實際畫面文字｜developers.openai.com/codex/cli'}</span>}>
+  <Shell chapter={3} source={<span>{'Codex CLI 實際畫面文字｜developers.openai.com/codex/cli'}</span>}>
     <Eyebrow><span>步驟 6／7｜在練習資料夾打 codex，按 Enter</span></Eyebrow>
     <Heading><span>用 ChatGPT 帳號登入 Codex</span></Heading>
     <Fit>
@@ -2079,7 +2084,7 @@ const TrustCard = ({ when, path, pick, ok }: { when: ReactNode; path: ReactNode;
 );
 
 const CodexTrust: Page = () => (
-  <Shell chapter={3} source={<span>{'Codex CLI 0.154.0 實際畫面文字｜developers.openai.com/codex/cli'}</span>}>
+  <Shell chapter={3} source={<span>{'Codex CLI 實際畫面文字｜developers.openai.com/codex/cli'}</span>}>
     <Eyebrow><span>步驟 7／7｜登入之後，Codex 會問這一題</span></Eyebrow>
     <Heading><span>確認資料夾，再選信任</span></Heading>
     <Fit>
@@ -2106,7 +2111,7 @@ const CodexTrust: Page = () => (
 
 // ---------- 04 看懂 Codex ----------
 
-const Section4: Page = () => <SectionPage chapter={4} title={<span>{"看懂 Codex"}</span>} label={<span>{"04 / CODEX CLI"}</span>} lead="啟動畫面、Session、/status、Memory" />;
+const Section4: Page = () => <SectionPage chapter={4} title={<span>{"看懂 Codex"}</span>} label={<span>{"04 / CODEX CLI"}</span>} lead="啟動畫面、/status、Session、Memory" />;
 
 const StartScreen: Page = () => (
   <Shell chapter={4} source={<span>{'Codex CLI 文件 developers.openai.com/codex/cli'}</span>}>
@@ -2115,7 +2120,7 @@ const StartScreen: Page = () => (
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1000px 1fr', gap: 64, alignItems: 'center' }}>
         <In i={0}>
-          <Shot src={codexStart} alt="Codex 0.154.0 啟動畫面：model 與 directory 兩個欄位，下方是輸入列" crop={[130, 340, 920, 420]} width={1000}>
+          <Shot src={codexStart} alt="Codex 啟動畫面：model 與 directory 兩個欄位，下方是輸入列" crop={[130, 340, 920, 420]} width={1000}>
             <RowMark top={150} height={46} width={960} n={<span>1</span>} badge={false} />
             <RowMark top={202} height={46} width={960} n={<span>2</span>} badge={false} />
             <RowMark top={355} height={46} width={500} n={<span>3</span>} badge={false} />
@@ -2407,12 +2412,12 @@ const DownloadLab: Page = () => (
   <Shell chapter={3}>
     <Eyebrow><span>步驟 4／7｜練習資料夾｜維基文庫原文，公有領域</span></Eyebrow>
     <Heading><span>下載練習資料夾 aw-01-lab</span></Heading>
+    <FooterUrl href={LAB_ZIP_URL} />
     <In i={0} style={{ marginTop: 30, display: 'flex', alignItems: 'center', gap: 28 }}>
       <a href={LAB_ZIP_URL} target="_blank" rel="noreferrer" aria-label="下載 aw-01-lab.zip"><img src={labQr} alt="aw-01-lab.zip 的下載 QR code" style={{ width: 150, height: 150, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 6 }} /></a>
       <div style={{ display: 'grid', gap: 12 }}>
         <span style={{ fontSize: 32, fontWeight: 600 }}>掃碼，或按下面的按鈕下載 ZIP</span>
         <a href={LAB_ZIP_URL} download="aw-01-lab.zip" style={{ justifySelf: 'start', display: 'inline-flex', alignItems: 'center', gap: 12, background: amber, color: '#FFFFFF', padding: '10px 24px', fontSize: 28, fontWeight: 600, textDecoration: 'none' }}><Icon kind="down" size={34} color="#FFFFFF" /><span>下載 aw-01-lab.zip</span></a>
-        <a href={LAB_ZIP_URL} target="_blank" rel="noreferrer" style={{ fontSize: 26, lineHeight: 1.4, color: amber, textDecoration: 'underline', textUnderlineOffset: 4 }}>{LAB_ZIP_URL}</a>
       </div>
     </In>
     <Fit>
@@ -2662,7 +2667,7 @@ const L = ({ children }: { children: ReactNode }) => <span style={{ color: link 
 
 const OutlineResult: Page = () => (
   <Shell chapter={5} source={<span>{'維基文庫《三國演義》第 1–21 回 zh.wikisource.org/wiki/三國演義'}</span>}>
-    <Eyebrow><span>實際結果｜Codex 0.154</span></Eyebrow>
+    <Eyebrow><span>實際結果</span></Eyebrow>
     <Heading><span>結果：21 段，每段附出處</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1100px 1fr', gap: 48, alignItems: 'center' }}>
@@ -3092,7 +3097,7 @@ const MapChip = ({ codex, oc }: { codex: ReactNode; oc: ReactNode }) => (
 
 const OpencodeSteps: Page = () => (
   <Shell source={<span>{'opencode 安裝 opencode.ai；文件 opencode.ai/docs/zen、opencode.ai/docs/tui'}</span>}>
-    <Eyebrow><span>附錄｜備案 A｜opencode 1.19.3</span></Eyebrow>
+    <Eyebrow><span>附錄｜備案 A｜四個步驟</span></Eyebrow>
     <Heading><span>備案 A：opencode＋免費模型</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '880px 1fr', gap: 56, alignItems: 'center' }}>
@@ -3138,7 +3143,7 @@ const OpencodeRun: Page = () => (
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '960px 1fr', gap: 48, alignItems: 'center' }}>
         <In i={0}>
-          <Terminal title={<span>{"終端機｜aw-01-lab 的複本"}</span>} size={25}>
+          <Terminal title={<span>{"終端機"}</span>} size={25}>
             <Typed><span>$</span></Typed><span>{' opencode run -m opencode/deepseek-v4.1-flash-free \\\n'}</span><AskLine><span>{'  "列出這個資料夾的檔案，然後建立 hello.md，內容是：你好"\n'}</span></AskLine>
             <Steps>
               <Step duration={STEP_MS}><div><Dim><span>{'$ ls -la …'}</span></Dim></div></Step>
@@ -3209,7 +3214,7 @@ const LocalLadder: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <div style={{ fontSize: 24, color: quiet, textAlign: 'center' }}>Ollama 0.40.3、這些任務測過的模型</div>
+      <div style={{ fontSize: 24, color: quiet, textAlign: 'center' }}>任務：列檔、建檔、寫大綱</div>
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}><span>最少要 gemma4:e2b，而且只能拿來示範</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
@@ -3223,7 +3228,7 @@ const CtxTick = ({ label, hot = false, bad = false }: { label: ReactNode; hot?: 
 
 const OllamaRoute: Page = () => (
   <Shell source={<span>{'Ollama 文件 docs.ollama.com/integrations/opencode'}</span>}>
-    <Eyebrow><span>附錄｜備案 C｜Ollama 0.40.3</span></Eyebrow>
+    <Eyebrow><span>附錄｜備案 C｜Ollama</span></Eyebrow>
     <Heading><span>備案 C：用 Ollama 示範本機模型</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '620px 1fr', gap: 48, alignItems: 'center' }}>
@@ -3270,7 +3275,7 @@ const ErrorCard = ({ msg, fix }: { msg: ReactNode; fix: ReactNode }) => (
 
 const OpenRouterRoute: Page = () => (
   <Shell source={<span>{'OpenRouter 文件 openrouter.ai/docs/cookbook/coding-agents/codex-cli'}</span>}>
-    <Eyebrow><span>附錄｜備案 B｜codex-cli 0.154.0</span></Eyebrow>
+    <Eyebrow><span>附錄｜備案 B｜設定檔</span></Eyebrow>
     <Heading><span>備案 B：Codex＋OpenRouter</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '900px 1fr', gap: 44, alignItems: 'center' }}>
@@ -3489,12 +3494,12 @@ const NOTES = new Map<Page, string>([
 四堂課只做一件作品：一座《三國演義》知識庫。
 第 1 堂（今天）：用 Codex 照原文寫大綱，人名寫成 [[劉備]] 這種連結。
 第 2 堂：把大綱放進 Obsidian，和講師準備的人物卡連起來。
-第 3 堂：用 Skill 擴充卡片、排出時間軸。
+第 3 堂：用 Skill 排出時間軸。
 第 4 堂：發布成網站，同學可以從首頁一路點進每張卡。
 每一堂都接著上一堂的成果做，所以今天的大綱檔請一定要存好。`],
   [Agenda, `07:00–10:00。
 今天五章：第一章以 GPT 為例，說明 AI 怎麼生成文字、為什麼會錯，以及 CoT、工具和 RAG 怎麼補救；第二章比較 ChatGPT 和 Codex；第三章從打開終端機開始，安裝 Codex、下載練習資料夾，在資料夾裡登入 Codex；第四章看懂 Codex 的畫面、Session、/status 和 Memory；第五章是練習 2，用 Codex 寫大綱。練習 1 用 ChatGPT，課後自己練，第二章結尾會告訴你在哪裡。
-第五章大約 108 分結束，剩下的時間留給沒跑完的同學補做和提問。還沒裝好 Codex 的同學，現在就舉手，助教先過去協助安裝。`],
+第五章大約 112 分結束，接著總結、預告下一堂，剩下的時間留給沒跑完的同學補做和提問。還沒裝好 Codex 的同學，現在就舉手，助教先過去協助安裝。`],
   [Section1, `10:00–10:30。
 第一章：AI 怎麼走到今天，以 GPT 為例。我們照因果順序講：每一種補救方法，都是為了解決上一步的問題。`],
   [Evolution, `10:30–11:30。
@@ -3647,7 +3652,7 @@ ChatGPT 是對話框：你問一句，它回一段話，適合發想、請它解
 Mac：按 command 加空白鍵，叫出 Spotlight 搜尋框，打 terminal，按 return。中文介面的 App 叫「終端機」，打中文也找得到。找不到的話，從「應用程式 → 工具程式 → 終端機」打開。
 Windows：按鍵盤上的 Windows 鍵，或點左下角開始，打 powershell，選「Windows PowerShell」。不要選「以系統管理員身分執行」，一般開就好。也不要開到「命令提示字元」，它的開頭沒有 PS，等一下的安裝指令在那裡跑不動。
 按一下：打開後會看到這樣的視窗。Mac 的開頭是你的帳號名稱，最後一個符號是 %；Windows 的開頭是 PS。Mac 的終端機可能是白底黑字，跟畫面顏色不一樣沒關係。
-最後一下：看到游標在閃，就能打字了。打開了的同學舉個手；還沒打開的，旁邊的人幫忙看一下。`],
+畫面下方這句：看到游標在閃，就能打字了。打開了的同學舉個手；還沒打開的，旁邊的人幫忙看一下。`],
   [TerminalAnatomy, `53:00–56:00。
 終端機就是 CLI，英文 Command Line Interface，命令列介面。平常的 App 用滑鼠點按鈕；這裡沒有按鈕，要打一行字告訴電腦做什麼。等一下的 Codex 也是在這種視窗裡用的。
 先看第一行。前面這段叫提示字元，代表電腦在等你打字。Mac 的 ~ 代表你現在在哪個資料夾，~ 是你的使用者資料夾；Windows 是 PS C:\\Users\\你的名字>，意思一樣。
@@ -3780,7 +3785,7 @@ Windows：Codex 在 Windows 讀這些中文檔會不會變亂碼，講師沒有�
 按一下：再看標題。把大綱那段的標題，和 回目.md 第 21 回比一比。講師舊版的大綱就是在這裡出錯：「張翼德」被改成 [[張飛]]。
 最後一下：搜得到原句，還要確認原句支持摘要的每件事。搜得到，只證明這句原文真的存在。第二句講了四件事：截擊袁術、脫離曹操、斬殺車冑、占據徐州。這句引文只講到關羽獻計，車冑有沒有真的被殺，要往下讀原文才確認得了。人物、因果、先後都對，標題也和回目一字不差，這段才算核對過。抽查兩段對了，只代表這兩段；整份還是要分段核對，例如每次五回。回到自己的資料核對，是 RAG 的最後一步。
 時間不夠就先做一段，有時間再做第二段。`],
-  [PracticeVideo, `107:30 起（影片約 5 分鐘）。
+  [PracticeVideo, `107:30–112:30（影片約 5 分鐘）。
 練習講完，放一次講師的實作影片，從頭到尾看一遍整個流程。按影片的播放鍵開始；右邊的時間可以直接跳段，時間不夠就從 2:08 寫大綱那段開始看。影片沒有聲音，邊放邊講。
 先講一句：影片裡用的是 OpenCode 加免費的 DeepSeek 模型，不是 Codex。步驟完全一樣：cd 進 Codex_練習、打開工具、貼提示詞。沒有 ChatGPT 方案的人，附錄有 OpenCode 的裝法。
 0:00 先 cd 進 Codex_練習，打 ls 看到 原文 和 回目.md，再用 cat 看 AGENTS.md 裡的三條規則。
@@ -3789,16 +3794,17 @@ Windows：Codex 在 Windows 讀這些中文檔會不會變亂碼，講師沒有�
 1:32 問「諸葛亮第一次出場在第幾回？」這題是陷阱：前 21 回諸葛亮還沒登場。OpenCode 搜了原文，回答找不到，只在第 9 回的詩裡提到「諸葛」。這是 AGENTS.md 那條「找不到就說找不到」的效果。
 2:08 貼上練習 2-3 的提示詞。它一回一回讀完 21 個檔，大約一分半寫出草稿。
 3:48 它問「要我直接寫入 三國演義大綱.md 嗎？」回「寫入」，它就存進資料夾。最後回到終端機打 ls，多了 三國演義大綱.md。
-放這段影片，後面每頁的時間都會往後延約 5 分鐘；時間緊就只放 2:08 之後。`],
-  [Recap, `107:30–111:30。
+時間緊就只放 2:08 之後那段，省下的時間留給補做和提問。`],
+  [Recap, `112:30–115:30。
 回顧五章。一、GPT 在猜下一個字，會猜錯也會說得很肯定。二、ChatGPT 在對話框回答，Codex 在資料夾裡讀寫檔案。三、用官方獨立安裝程式裝好 Codex，並用 codex --version 確認。四、Codex 裡先看 /status 的 Directory，重要的規則寫進 AGENTS.md。五、用 Codex 照原文寫出大綱，每段附出處。
 最後一下：AI 寫的內容，要回原文核對。`],
-  [NextLesson, `111:30–115:30。
+  [NextLesson, `115:30–120:00。
 下一堂把今天的大綱放進 Obsidian。
 左邊是今天的三國演義大綱.md，人名都是 [[連結]]。
 按一下：放進筆記庫後，[[劉備]]、[[關羽]]、[[張飛]]、[[曹操]]、[[孫權]] 會連到講師準備的人物卡，大綱和人物卡就互相連結。
 按一下：還沒有卡的人名，例如董卓、呂布，會是淡紫色連結（比有卡的紫色淡），下一堂再決定要不要補卡。
-按一下：請在下一堂前先安裝 Obsidian：https://obsidian.md 。大綱檔請存好，下一堂要用。`],
+按一下：請在下一堂前先安裝 Obsidian：https://obsidian.md 。大綱檔請存好，下一堂要用。
+剩下的時間開放提問，沒跑完練習的同學可以留下來補做。`],
   [ReferencesModel, `（課後自讀，上課不講。）
 第 1 章前半用到的論文，按章節排。arXiv 編號可以直接打 arxiv.org/abs/編號 打開。
 猜下一個字、Token：

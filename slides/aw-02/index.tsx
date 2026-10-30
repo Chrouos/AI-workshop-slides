@@ -163,7 +163,7 @@ const GH = 'https://github.com/Chrouos/AI-workshop-slides/blob/main/examples';
 const PROMPTS_URL = `${GH}/aw-02-lab/prompts.md`;
 // The frozen sample outline from lesson 1, used by the appendix's 曹操 discussion.
 const SAMPLE_OUTLINE_URL = `${GH}/aw-01-sample-output/%E4%B8%89%E5%9C%8B%E6%BC%94%E7%BE%A9%E5%A4%A7%E7%B6%B1.md`;
-// Practice 3 round 1: the instructor's answer with three planted errors (the whole class checks this one).
+// Practice 3 round 1: a real Codex answer on the lesson-2 vault (all three quotes found, all three events present); the whole class checks this one.
 const CHECK3_URL = `${GH}/aw-02-sample-output/%E5%85%88%E6%A0%B8%E5%B0%8D%E9%80%99%E4%BB%BD%E5%9B%9E%E7%AD%94.md`;
 // Appendix, optional discussion: the 曹操 seven-battle run and the wide ten-line graph.
 const ADV3_URL = `${GH}/aw-02-sample-output/%E9%80%B2%E9%9A%8E_%E6%9B%B9%E6%93%8D%E6%88%B0%E5%BD%B9%E5%9B%9E%E7%AD%94.md`;
@@ -194,6 +194,11 @@ const Footer = ({ source }: { source?: ReactNode }) => {
   );
 };
 
+// A full link to copy sits on its own line under the footer rule, so it never takes room from the page.
+const FooterUrl = ({ href, children }: { href: string; children?: ReactNode }) => (
+  <a href={href} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 18, fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', fontSize: 22, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3, whiteSpace: 'nowrap' }}>{children ?? href}</a>
+);
+
 const Eyebrow = ({ children }: { children: ReactNode }) => (
   <div style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', fontSize: 24, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#78716C' }}>{children}</div>
 );
@@ -216,8 +221,7 @@ const PromptsCopy = ({ step }: { step: string }) => (
     <span style={{ textAlign: 'right', fontSize: 24, lineHeight: 1.4 }}>複製提示詞<br /><strong style={{ color: amber, fontFamily: mono }}>prompts.md</strong> {step}</span>
     <img src={promptsQr} alt="第二堂 prompts.md 的 QR code" style={{ width: 120, height: 120, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 5 }} />
   </a>
-    <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 112, fontSize: 24, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3 }}>{PROMPTS_URL}</a>
-    <div aria-hidden style={{ order: 1, height: 24, flexShrink: 0 }} />
+    <FooterUrl href={PROMPTS_URL} />
   </>
 );
 
@@ -696,13 +700,12 @@ const StartDownloads: Page = () => (
   <Shell source={'Obsidian 說明：下載與安裝 obsidian.md/help/install'}>
     <PracticeEyebrow time="現在開始，邊下載邊聽">練習 1｜下載</PracticeEyebrow>
     <Heading>先下載 Obsidian 和 aw-02-lab.zip</Heading>
-    <a href={VAULT_ZIP_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 112, fontSize: 24, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3 }}>{decodeURI(VAULT_ZIP_URL)}</a>
-    <div aria-hidden style={{ order: 1, height: 24, flexShrink: 0 }} />
+    <FooterUrl href={VAULT_ZIP_URL}>{decodeURI(VAULT_ZIP_URL)}</FooterUrl>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1040px 1fr', gap: 72, alignItems: 'start' }}>
         <In i={0}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 32, fontWeight: 600, marginBottom: 16 }}><NumDot n={1} />下載並安裝 Obsidian</div>
-          <Screenshot src={downloadPage} aspect={1400 / 490} width={1040} url="obsidian.md/download" caption="官方下載頁（2026-10 擷取）｜免費，不用註冊" alt="Obsidian 下載頁上的紫色 Download 按鈕">
+          <Screenshot src={downloadPage} aspect={1400 / 490} width={1040} url="obsidian.md/download" caption="官方下載頁｜免費，不用註冊" alt="Obsidian 下載頁上的紫色 Download 按鈕">
             <RegionMark n={1} i={2} x={13} y={14} w={74} h={52} badge="left" />
           </Screenshot>
         </In>
@@ -1959,7 +1962,7 @@ const VideoRag: Page = () => (
   </Shell>
 );
 
-// Practice 3, round 1: one fixed answer with three planted errors, the same for the whole class.
+// Practice 3, round 1: one real Codex answer, the same for the whole class (every row checks out).
 // The table rows have a fixed height so each verdict lands in its row on a click.
 const FX_COLS = '200px 230px 1fr 170px';
 const FX_HEAD = 52;
@@ -2138,7 +2141,7 @@ const RStep: Page = () => (
       <In i={0}>
         <div style={{ background: term, color: '#F5F5F4', padding: '16px 28px', fontFamily: mono, fontSize: 27, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span><span style={{ color: '#8DD4A0' }}>Ran</span>{" rg -n -i '曹操|戰役|戰爭|之戰|大戰' -g '*.md' ."}</span>
-          <span style={{ fontFamily: 'var(--osd-font-body)', fontSize: 22, color: '#BCC3CC' }}>Codex 紀錄</span>
+          <span style={{ fontFamily: 'var(--osd-font-body)', fontSize: 24, color: '#BCC3CC' }}>Codex 紀錄</span>
         </div>
       </In>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 440px', gap: 56, marginTop: 22, alignItems: 'start' }}>
@@ -2243,7 +2246,7 @@ const GStep: Page = () => (
       <div style={{ display: 'grid', gridTemplateColumns: '720px 1fr', gap: 48, alignItems: 'center' }}>
         <In i={0}>
           <div style={{ background: term, borderTop: `5px solid ${amber}`, padding: '20px 30px 26px' }}>
-            <div style={{ fontSize: 22, color: '#BCC3CC', marginBottom: 10 }}>Codex 實際回答（全文，排版調整）</div>
+            <div style={{ fontSize: 24, color: '#BCC3CC', marginBottom: 10 }}>Codex 實際回答（全文，排版調整）</div>
             <AnsLine size={30}>曹操參與的戰役是：赤壁之戰。</AnsLine>
             <AnsLine color="#F3D9B1">· 人物/曹操.md：</AnsLine>
             <AnsLine indent={30}>「第 49 至 50 回曹操率大軍南下，</AnsLine>
@@ -2996,7 +2999,7 @@ const NextSkills: Page = () => (
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>同一座筆記庫，下一堂會多出圖和時間軸</Takeaway></Step></Steps>
       <Steps><Step duration={STEP_MS}>
         <div style={{ marginTop: 22, textAlign: 'center', fontSize: 30, color: muted }}>
-          <strong style={{ color: ink }}>課前：</strong>到 nodejs.org 裝 Node.js（LTS 版），終端機打 <span style={{ fontFamily: mono, background: surface, border: `1px solid ${rule}`, padding: '2px 12px' }}>node -v</span>、<span style={{ fontFamily: mono, background: surface, border: `1px solid ${rule}`, padding: '2px 12px' }}>git --version</span>，都看到版本號就好
+          <strong style={{ color: ink }}>課前：</strong>裝好 git 和 Node.js（LTS 版），終端機打<span style={{ fontFamily: mono, background: surface, border: `1px solid ${rule}`, padding: '2px 12px' }}>node -v</span>、<span style={{ fontFamily: mono, background: surface, border: `1px solid ${rule}`, padding: '2px 12px' }}>git --version</span>，都看到版本號就好
         </div>
       </Step></Steps>
     </Fit>
@@ -3225,7 +3228,7 @@ ${VAULT_ZIP_URL}
 按一下，1：在左側「關係」資料夾按右鍵，選「新增筆記」，取名就是事件名稱；從 prompts.md 練習 2-2 複製整段模板（從第一行 --- 開始），貼進去，回目、年份會變成屬性欄。不要從模板檔按 Cmd+A 全選複製，會漏掉屬性。
 按一下，2：用完整的句子寫兩三句就好，大綱那一回的段落可以拿來當底稿。有卡的人名前後加兩對中括號，例如 [[劉備]]；打完 [[ 和第一個字，Obsidian 會跳出選單。看範例：紫框的張飛加了 [[ ]]，變成連結；參與人物裡的呂布底下畫虛線，他還沒有卡，寫純文字。
 按一下，3：填上回目，例如 5；最後一行寫出處，例如「出處：原文/第005回.md」。
-請從這三個事件挑一個，三個都連得到關羽，第三章會用到：第 5 回〈溫酒斬華雄〉，連到關羽、曹操；第 16 回〈轅門射戟〉，連到劉備、關羽、張飛（原文「關、張隨往」，呂布寫純文字，也要列進參與人物）；第 20 回〈許田打圍〉，連到曹操、劉備、關羽。不要寫三英戰呂布和白門樓：第三堂會請 Codex 新增這兩張，同名的卡會撞在一起。
+請從這三個事件挑一個，三個都連得到關羽，第三章會用到：第 5 回〈溫酒斬華雄〉，連到關羽、曹操；第 16 回〈轅門射戟〉，連到劉備、關羽、張飛（原文「關、張隨往」，呂布寫純文字，也要列進參與人物）；第 20 回〈許田打圍〉，連到曹操、劉備、關羽。不要寫三英戰呂布和白門樓：第三堂會直接發這兩張寫好的卡，同名的卡會撞在一起。
 不確定細節就查原文：在 Obsidian 左邊打開 原文/，點那一回就看得到。
 寫完怎麼知道成功：打開〈關羽〉，右邊的反向連結裡出現你的新卡。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：在「關係」按右鍵選「新增筆記」，標題已經選好，直接打「許田打圍」按 Enter 就改好名字。寫完、連到曹操、劉備、關羽後，〈關羽〉的反向連結馬上多一列「許田打圍」。`],
@@ -3294,7 +3297,7 @@ R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係�
 提示詞已經把範圍收得很緊，大部分人會全部打勾，全部打勾也是正確結果。
 做完的同學：線上的「關係」用詞，例如「結義兄弟」「溫酒斬華雄」，卡片原句撐不撐得住？這種判斷比較主觀，附錄第 ${pageOf(CheckLines)}–${pageOf(AskBack4)} 頁有講師用寬問法跑出來的例子，可以拿來討論。`],
   [Recap, `107:00–111:00。回顧四章。一，Obsidian：點連結往下讀，看反向連結找回來。二，寫一張自己的關係卡，連到人物，也從大綱連回來。三，RAG：Codex 先查筆記再回答，回答要附檔名和原句；你查兩件事，原句搜不搜得到、該有的卡有沒有漏。四，知識圖譜：每條線的兩個人，都要在來源卡的參與人物裡。
-最後一下：RAG 的回答查兩件事：有沒有根據、有沒有漏。第 1 輪那份回答，第 2 列完全正確，但整份還是漏了一件，這是今天最想讓大家記住的。`],
+最後一下：RAG 的回答查兩件事：有沒有根據、有沒有漏。第 1 輪那份回答兩欄都過；第 2 輪多了你的卡，有沒有漏，要對照關羽卡和你的卡才知道。引用都搜得到，不代表沒漏，所以兩件事要分開查。`],
   [NextSkills, `111:00–120:00（含問答）。下一堂講 Skill。Skill 就是一份寫好的做事說明，像食譜：照著做，每次的做法都一樣。
 第一步，把 Skill 裝進 Codex。按一下：第二步，用 Skill 做事：畫關係圖、把卡片改寫成好讀的版本。按一下：第三步，自己寫一個 Skill，把三國的事件排成時間軸。
 按一下：同一座筆記庫，下一堂會多出圖和時間軸，今天的筆記庫和你寫的卡請留著。
@@ -3344,7 +3347,7 @@ Obsidian 官方說明：
   [GrayDecide, `（附錄，選做。）淡色連結要補卡，還是先留著？步驟在 prompts.md 的〈附錄：整理淡色連結〉。
 左邊是講師大綱裡出現最多次、還沒有卡的人：呂布 29 次、董卓 19 次，袁術、袁紹、李傕、孫堅各 6 次。你的大綱數字會不一樣，所以先自己數。
 按一下，1：按 Cmd+Shift+F（Windows 是 Ctrl+Shift+F）打開搜尋，輸入「呂布」，看「三國演義大綱」那一列有幾處。
-按一下，2：常出現、原文也夠寫一張卡的，記下來。呂布第 5 回三英戰呂布、第 19 回白門樓都有完整的故事，第三堂會用 Skill 照原文補。
+按一下，2：常出現、原文也夠寫一張卡的，記下來。呂布第 5 回三英戰呂布、第 19 回白門樓都有完整的故事；這兩張第三堂會直接發寫好的卡。
 按一下，3：只出現一兩次的，先留著。淡色連結不會壞，之後補卡就自動變深色。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：Cmd+Shift+F 搜「呂布」，在講師的大綱是「29 項結果」，連回目標題裡的呂布也算進去。原文放進筆記庫後，搜尋結果還會多出原文裡的呂布。`],
   [BacklinksReal, `（附錄，課堂不講。）左邊是劉備卡右側的反向連結面板，放進講師的大綱後的實際畫面（2026-10-24 擷取，Obsidian 1.14.5）。這裡的數字算的是「劉備被提到幾處」，不是卡片有幾張。大綱放進來之前，筆記庫裡有 17 處提到劉備。

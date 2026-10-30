@@ -166,6 +166,11 @@ const Footer = ({ source }: { source?: ReactNode }) => {
   );
 };
 
+// A full link to copy sits on its own line under the footer rule, so it never takes room from the page.
+const FooterUrl = ({ href, children }: { href: string; children?: ReactNode }) => (
+  <a href={href} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 18, fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', fontSize: 22, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3, whiteSpace: 'nowrap' }}>{children ?? href}</a>
+);
+
 const Eyebrow = ({ children }: { children: ReactNode }) => (
   <div style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', fontSize: 24, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#78716C' }}>{children}</div>
 );
@@ -187,8 +192,7 @@ const PromptsCopy = ({ step }: { step: string }) => (
     <span style={{ textAlign: 'right', fontSize: 24, lineHeight: 1.4 }}>複製提示詞<br /><strong style={{ color: amber, fontFamily: mono }}>prompts.md</strong> 練習 {step}</span>
     <img src={promptsQr} alt="prompts.md 的 QR code" style={{ width: 120, height: 120, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 5 }} />
   </a>
-    <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 120, fontSize: 24, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3 }}>{PROMPTS_URL}</a>
-    <div aria-hidden style={{ order: 1, height: 24, flexShrink: 0 }} />
+    <FooterUrl href={PROMPTS_URL} />
   </>
 );
 
@@ -713,12 +717,12 @@ const Agenda: Page = () => (
     <Heading>課程大綱</Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, paddingBottom: 12, borderBottom: `1px solid ${rule}` }}>
-        <span /><SmallLabel>章節</SmallLabel><SmallLabel color={okGreen}>必做（全員完成）</SmallLabel><SmallLabel color={quiet}>選做</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
+        <span /><SmallLabel>章節</SmallLabel><SmallLabel>課堂會教</SmallLabel><SmallLabel color={quiet}>有時間再試</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
       </div>
-      <AgendaRow i={0} n={1} must="看懂一份 SKILL.md" time="11–27 分" page={Section1} />
-      <AgendaRow i={1} n={2} must="裝好兩個 Skill" time="27–44 分" page={Section2} />
-      <AgendaRow i={2} n={3} must="畫一張圖、改寫一張卡" opt="標籤疊到就修" time="44–64 分" page={Section3} />
-      <AgendaRow i={3} n={4} must="跑時間軸，補規則再跑一次" opt="只排劉備、換畫圖 Skill" time="69–112 分" page={Section4} />
+      <AgendaRow i={0} n={1} must="怎麼看懂 SKILL.md" time="11–27 分" page={Section1} />
+      <AgendaRow i={1} n={2} must="安裝兩個熱門 Skill" time="27–44 分" page={Section2} />
+      <AgendaRow i={2} n={3} must="用 Skill 畫圖、改寫卡" opt="標籤疊到就修" time="44–64 分" page={Section3} />
+      <AgendaRow i={3} n={4} must="跑時間軸，補規則再跑" opt="只排劉備、換畫圖 Skill" time="69–112 分" page={Section4} />
     </Fit>
   </Shell>
 );
@@ -726,6 +730,67 @@ const Agenda: Page = () => (
 // ---------- 01 什麼是 Skill ----------
 
 const Section1: Page = () => <SectionPage chapter={1} label="01 / SKILL" lead="交給 Agent 的一份做事說明" />;
+
+// 07: what eli5 does before we use it — one content in, the way of telling it changes per listener.
+// Audience styles are quoted from the real SKILL.md tables (Age 5, Middle school, Manager, Parents).
+const AUDIENCES = [
+  { who: '5 歲小孩', how: '簡單的詞、短句子、好玩的比喻' },
+  { who: '國中生', how: '術語先解釋，一步一步講' },
+  { who: '主管', how: '先講影響、時程、成本' },
+  { who: '爸媽', how: '用他們熟悉的東西打比方' },
+];
+const AUD_Y = [12, 120, 228, 336];
+
+const Eli5Intro: Page = () => (
+  <Shell chapter={1} source={'eli5 原始檔 github.com/DreambigOu/ELI5'}>
+    <Eyebrow>先認識今天的 Skill</Eyebrow>
+    <Heading>eli5：依聽眾換講法</Heading>
+    <Lead>Explain Like I'm 5，講得像我只有 5 歲</Lead>
+    <Fit>
+      <Stage h={430}>
+        <Steps>
+          <Layer h={430} label="一段內容交給 eli5，eli5 先認出聽眾，再換講法：5 歲小孩用簡單的詞、短句子、好玩的比喻；國中生先解釋術語、一步一步講；主管先講影響、時程、成本；爸媽用他們熟悉的東西打比方">
+            <InG i={0}>
+              <DocShape x={0} y={110} w={300} h={220} />
+              {[0, 1, 2, 3].map(k => <rect key={k} x={36} y={160 + k * 40} width={k === 3 ? 140 : 226} height={14} rx="7" fill={raised} />)}
+              <text x="150" y="384" textAnchor="middle" fontSize="28" fill={muted}>要講的內容</text>
+              <MapArrow x1={320} x2={444} y={220} />
+            </InG>
+            <InG i={1}>
+              <rect x="450" y="110" width="360" height="220" fill={amberSoft} stroke={amber} strokeWidth="3" />
+              <text x="630" y="196" textAnchor="middle" fontSize="50" fontWeight="600" fontFamily={mono} fill={amber}>eli5</text>
+              <SvgLines x={630} y={256} lines={['先認出聽眾', '再換講法']} size={30} fill={ink} />
+            </InG>
+            <g fill="none" stroke={faint} strokeWidth="3">
+              {AUD_Y.map((y, k) => <DrawPath key={k} i={2 + k * 0.5} d={`M812 220 C900 220 912 ${y + 43} 990 ${y + 43}`} />)}
+            </g>
+            {AUDIENCES.map((a, k) => (
+              <InG key={a.who} i={2.5 + k * 0.5}>
+                <rect x="1000" y={AUD_Y[k]} width="632" height="86" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+                <text x="1026" y={AUD_Y[k] + 54} fontSize="30" fontWeight="600" fill={ink}>{a.who}</text>
+                <text x="1196" y={AUD_Y[k] + 53} fontSize="27" fill={muted}>{a.how}</text>
+              </InG>
+            ))}
+          </Layer>
+          <Step duration={STEP_MS}><Layer h={430} label="今天的任務：要講的內容是人物/劉備.md，聽眾是 5 歲小孩">
+            <g fill="none" stroke={amber} strokeWidth="5"><StepPath d={`M812 220 C900 220 912 ${AUD_Y[0] + 43} 990 ${AUD_Y[0] + 43}`} /></g>
+            <g className="aw3-build" style={buildDelay(1)}>
+              <rect x="1000" y={AUD_Y[0]} width="632" height="86" fill={amberSoft} stroke={amber} strokeWidth="4" />
+              <text x="1026" y={AUD_Y[0] + 54} fontSize="30" fontWeight="600" fill={amber}>{AUDIENCES[0].who}</text>
+              <text x="1196" y={AUD_Y[0] + 53} fontSize="27" fill={ink}>{AUDIENCES[0].how}</text>
+            </g>
+            <g className="aw3-build" style={buildDelay(2)}>
+              <rect x="0" y="110" width="300" height="220" fill="none" stroke={amber} strokeWidth="4" />
+              <rect x="-10" y="350" width="320" height="50" fill="#FAFAF9" />
+              <text x="150" y="384" textAnchor="middle" fontSize="27" fontFamily={mono} fontWeight="600" fill={amber}>人物/劉備.md</text>
+            </g>
+          </Layer></Step>
+        </Steps>
+      </Stage>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={30}>任務目的：卡片內容不變，講到 5 歲小孩也聽得懂</Takeaway></Step></Steps>
+    </Fit>
+  </Shell>
+);
 
 // Two colours used across chapter 1: what this prompt asks for (changes every time),
 // and what the Skill supplies (the reusable method).
@@ -740,13 +805,13 @@ const SplitCard = ({ k, title, children }: { k: 'task' | 'skill'; title: string;
   </div>
 );
 
-// 07: one task, and which part of the prompt belongs to whom.
+// 08: the task example, and which part of the prompt belongs to whom.
 const TaskPrompt: Page = () => (
   <Shell chapter={1} source={'prompts.md 練習 2-3；eli5 github.com/dreambigou/eli5'}>
-    <Eyebrow>從一個任務開始</Eyebrow>
+    <Eyebrow>任務範例</Eyebrow>
     <Heading>任務：把劉備卡講給 5 歲小孩聽</Heading>
     <Fit>
-      <In i={0}><PromptBox size={30}><Hl k="skill">請使用 eli5 skill</Hl>，把 <Hl k="task">人物/劉備.md</Hl> 用<Hl k="task">5 歲小孩</Hl>聽得懂的方式重新說一次，存成 <Hl k="task">整理/劉備-5歲版.md</Hl>。<Hl k="task">只用卡片裡有的內容</Hl>，不要加新的事實；<Hl k="task">保留 [[連結]]</Hl>。……</PromptBox></In>
+      <In i={0}><PromptBox size={30}><Hl k="skill">請使用 eli5 skill</Hl>，把 <Hl k="task">人物/劉備.md</Hl> 用 <Hl k="task">5 歲小孩</Hl>聽得懂的方式重新說一次，存成 <Hl k="task">整理/劉備-5歲版.md</Hl>。<Hl k="task">只用卡片裡有的內容</Hl>，不要加新的事實；<Hl k="task">保留 [[連結]]</Hl>。……</PromptBox></In>
       <Steps>
         <Step duration={STEP_MS}><div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, marginTop: 36 }}>
           <SplitCard k="task" title="藍底：寫在提示詞，每次會變">哪張卡：人物/劉備.md<br />給誰看：5 歲小孩<br />存哪裡、限制：只用原卡、保留連結</SplitCard>
@@ -758,12 +823,12 @@ const TaskPrompt: Page = () => (
   </Shell>
 );
 
-// 08: naming the Skill, and the instructor's real log showing Codex picked it up.
+// 09: naming the Skill, and the real log showing Codex picked it up.
 const PickSkill: Page = () => (
   <Shell chapter={1} source={'Codex Skills 文件 developers.openai.com/codex/skills'}>
     <Eyebrow>怎麼叫出 Skill</Eyebrow>
     <Heading>點名 eli5，看它的回報</Heading>
-    <Fit z={1.1}>
+    <Fit>
       <div style={{ position: 'relative', height: 300 }}>
         <TermBox title="Codex 實際紀錄（節錄）" width={1080} size={28}>
           <Steps>
@@ -832,72 +897,117 @@ const SkillFolder: Page = () => (
 );
 
 
-const Eli5Skill: Page = () => (
-  <Shell chapter={1} source={'eli5 原始檔 github.com/DreambigOu/ELI5；Agent Skills 規格 agentskills.io/specification'}>
-    <Eyebrow>Skill 裡面｜eli5 真實檔案（節錄）</Eyebrow>
-    <Heading>eli5 怎麼處理「5 歲小孩」</Heading>
-    <Fit>
-      <div style={{ display: 'grid', gridTemplateColumns: '1040px 1fr', gap: 48, alignItems: 'center' }}>
-        <In i={0}>
-          <CodeDoc title=".agents/skills/eli5/SKILL.md（節錄）" size={26} lh={1.34}>
-            <CL band={amberSoft}>---</CL>
-            <CL band={amberSoft} n={1}>name: eli5</CL>
-            <CL band={amberSoft}>description: "Explain any topic … tailored to a</CL>
-            <CL band={amberSoft}>  specific audience's level of understanding …"</CL>
-            <CL band={amberSoft}>---</CL>
-            <CL band={raised} n={2}>## Step 1: Identify the Audience</CL>
-            <CL band={raised}>### Ages</CL>
-            <CL band={raised}>| Age 5 | Super simple words. Fun analogies with</CL>
-            <CL band={raised}>|       | toys, animals … Short sentences. |</CL>
-            <CL color={quiet}>## Step 2: Read the Source Material</CL>
-            <CL band={sage} n={3}>## Step 3: Craft the Explanation</CL>
-            <CL band={sage}>### Structure  1. "what"  2. analogy  3. details</CL>
-            <CL band={sage}>### Language Calibration  No jargon. One idea per sentence.</CL>
-          </CodeDoc>
-          <div style={{ marginTop: 14 }}><WebLink href="https://github.com/DreambigOu/ELI5/blob/main/skills/eli5/SKILL.md" size={24}>看完整原文：github.com/DreambigOu/ELI5/…/skills/eli5/SKILL.md</WebLink></div>
-        </In>
-        <div style={{ display: 'grid', gap: 36 }}>
-          <Steps>
-            <Step duration={STEP_MS}><Callout n={1} title="何時用" detail="要依對象解釋時（name、description）" /></Step>
-            <Step duration={STEP_MS}><Callout n={2} title="先認出聽眾" detail="「5 歲小孩」對得上 Age 5：很簡單的詞、短句子、好玩的比喻" /></Step>
-            <Step duration={STEP_MS}><Callout n={3} title="再照做法寫" detail="先說是什麼、打比方、補細節；不用艱深的詞" /></Step>
-          </Steps>
-        </div>
-      </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={26}>name、description 必寫；下面的做法依任務寫</Takeaway></Step></Steps>
-    </Fit>
-  </Shell>
-);
-
-// 10: the result, traced back to where each change comes from.
-const TraceRow = ({ k, what, from }: { k: 'task' | 'skill'; what: ReactNode; from: string }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: '1fr 520px', alignItems: 'center', gap: 24, padding: '12px 20px', background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `6px solid ${k === 'task' ? blue : amber}`, fontSize: 28 }}>
-    <span>{what}</span>
-    <span style={{ fontWeight: 600, color: k === 'task' ? blue : amber }}>{from}</span>
+// 10: the output first — what changed and what stayed, before opening the Skill.
+const ChangeRow = ({ kept = false, tag, children }: { kept?: boolean; tag: string; children: ReactNode }) => (
+  <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', alignItems: 'center', gap: 20, padding: '12px 22px', background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `6px solid ${kept ? okGreen : amber}`, fontSize: 28, height: '100%', boxSizing: 'border-box' }}>
+    <span style={{ fontWeight: 600, color: kept ? okGreen : amber }}>{tag}</span>
+    <span>{children}</span>
   </div>
 );
 
 const ResultTrace: Page = () => (
-  <Shell chapter={1} source={'範例檔 aw-03-sample-output/練習2/劉備-5歲版.md；eli5 github.com/dreambigou/eli5'}>
-    <Eyebrow>看結果，對回規則</Eyebrow>
-    <Heading>改寫結果，各來自哪裡</Heading>
+  <Shell chapter={1} source={'範例檔 aw-03-sample-output/練習2/劉備-5歲版.md；卡片原文：維基文庫《三國演義》第 1 回'}>
+    <Eyebrow>看輸出</Eyebrow>
+    <Heading>改寫後：講法變了，事實沒變</Heading>
     <Fit>
+      <In i={0} style={{ display: 'flex', gap: 40, fontSize: 27, marginBottom: 16 }}>
+        <span><Mk>橘底</Mk>＝換了說法</span>
+        <span><Mk ok>綠底</Mk>＝原封不動</span>
+      </In>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36 }}>
-        <In i={0}><RewritePanel label="原卡" file="人物/劉備.md" tone="plain">黃巾起事，招兵<Hl k="skill">榜文</Hl>貼到涿縣，劉備看著榜文嘆氣，被身後的 <Hl k="task">[[張飛]]</Hl> 一聲喝住，兩人進酒店喝酒時，又遇上推著車子要進城<Hl k="skill">投軍</Hl>的 <Hl k="task">[[關羽]]</Hl></RewritePanel></In>
-        <In i={1}><RewritePanel label="eli5 改寫後" file="整理/劉備-5歲版.md" tone="ok">有人貼出<Hl k="skill">告示</Hl>，要找人<Hl k="skill">當兵</Hl>。劉備看著告示，嘆了一口氣。這時，身後的 <Hl k="task">[[張飛]]</Hl> 大聲叫住他。兩人進店裡喝酒。他們又遇到了 <Hl k="task">[[關羽]]</Hl>。</RewritePanel></In>
+        <In i={1}><RewritePanel label="原卡" file="人物/劉備.md" tone="plain"><div style={{ fontSize: 29, lineHeight: 1.7 }}>黃巾起事，招兵<Mk>榜文</Mk>貼到涿縣，劉備看著榜文嘆氣，被身後的 <Mk ok>[[張飛]]</Mk> 一聲喝住，兩人進酒店喝酒時，又遇上推著車子要進城<Mk>投軍</Mk>的 <Mk ok>[[關羽]]</Mk></div></RewritePanel></In>
+        <In i={2}><RewritePanel label="eli5 改寫後" file="整理/劉備-5歲版.md" tone="ok"><div style={{ fontSize: 29, lineHeight: 1.7 }}>黃巾起事了，有人貼出<Mk>告示</Mk>，要找人當兵。劉備看著告示，嘆了一口氣。這時，身後的 <Mk ok>[[張飛]]</Mk> 大聲叫住他。兩人進店裡喝酒。他們又遇到了 <Mk ok>[[關羽]]</Mk>。關羽推著車子，正要進城<Mk>當兵</Mk>。</div></RewritePanel></In>
       </div>
-      <div style={{ display: 'grid', gap: 12, marginTop: 28 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 16px', marginTop: 24 }}>
         <Steps>
-          <Step duration={STEP_MS}><TraceRow k="skill" what="榜文 → 告示、投軍 → 當兵；一長句拆成短句" from="對得上 eli5 Age 5：簡單的詞、短句子" /></Step>
-          <Step duration={STEP_MS}><TraceRow k="task" what={<>[[張飛]]、[[關羽]] 還在；存成 整理/劉備-5歲版.md</>} from="來自提示詞：保留連結、存成…" /></Step>
+          <Step duration={STEP_MS}><ChangeRow tag="詞變簡單">榜文 → 告示、投軍 → 當兵</ChangeRow></Step>
+          <Step duration={STEP_MS}><ChangeRow tag="句子變短">原卡一整句，拆成六個短句</ChangeRow></Step>
+          <Step duration={STEP_MS}><ChangeRow tag="多了比喻">開頭：把他想成「帶大家做大事的隊長」</ChangeRow></Step>
+          <Step duration={STEP_MS}><ChangeRow kept tag="沒變">[[張飛]]、[[關羽]] 連結都還在</ChangeRow></Step>
         </Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>做法來自 Skill，這次的要求來自提示詞</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>這些改法從哪來？打開 eli5 看</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
 
-// 11: change the card or the audience; the prompt changes, the Skill stays.
+// 11: inside eli5, part 1 — the two fields at the top, the only part Codex reads before it picks a Skill.
+const Eli5Front: Page = () => (
+  <Shell chapter={1} source={'eli5 原始檔 github.com/DreambigOu/ELI5；Codex Skills 文件 developers.openai.com/codex/skills'}>
+    <Eyebrow>打開 eli5｜SKILL.md 開頭</Eyebrow>
+    <Heading>開頭兩欄：name 和 description</Heading>
+    <Fit>
+      <div style={{ display: 'grid', gridTemplateColumns: '1000px 1fr', gap: 52, alignItems: 'center' }}>
+        <In i={0}>
+          <CodeDoc title=".agents/skills/eli5/SKILL.md（開頭）" size={27} lh={1.42}>
+            <CL color={quiet}>---</CL>
+            <CL band={raised} n={1}>name: eli5</CL>
+            <CL band={amberSoft} n={2}>description: "Explain any topic, code, concept,</CL>
+            <CL band={amberSoft}>  or error tailored to a specific audience's</CL>
+            <CL band={amberSoft}>  level of understanding.</CL>
+            <CL band={sage} n={3}>  Use this skill whenever the user says</CL>
+            <CL band={sage}>  'explain like I am', 'ELI5', 'explain this</CL>
+            <CL band={sage}>  to my', 'break this down for', 'dumb it</CL>
+            <CL band={sage}>  down', 'simplify this for' …"</CL>
+            <CL color={quiet}>---</CL>
+            <CL color={quiet}># Explain Like I Am... (ELI5)</CL>
+            <CL color={quiet}>## Step 1: Identify the Audience …</CL>
+          </CodeDoc>
+        </In>
+        <div style={{ display: 'grid', gap: 36 }}>
+          <Steps>
+            <Step duration={STEP_MS}><Callout n={1} title="name：它的名字" detail="資料夾也叫 eli5；點名就寫這個字" /></Step>
+            <Step duration={STEP_MS}><Callout n={2} title="description 前半：做什麼" detail="照聽眾的程度，解釋任何主題" /></Step>
+            <Step duration={STEP_MS}><Callout n={3} title="description 後半：何時用" detail="聽到「ELI5」「解釋給…聽」「講簡單一點」" /></Step>
+          </Steps>
+        </div>
+      </div>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={30}>Codex 平常只看這兩欄，選中了才讀全文</Takeaway></Step></Steps>
+    </Fit>
+  </Shell>
+);
+
+// 12: inside eli5, part 2 — the method in the body, traced to the changes on the output page.
+const Eli5Body: Page = () => (
+  <Shell chapter={1} source={'eli5 原始檔 github.com/DreambigOu/ELI5；Agent Skills 規格 agentskills.io/specification'}>
+    <Eyebrow>打開 eli5｜SKILL.md 本文（節錄）</Eyebrow>
+    <Heading>本文：先認聽眾，再照步驟寫</Heading>
+    <Fit>
+      <div style={{ display: 'grid', gridTemplateColumns: '1040px 1fr', gap: 48, alignItems: 'center' }}>
+        <In i={0}>
+          <CodeDoc title=".agents/skills/eli5/SKILL.md（本文節錄）" size={25} lh={1.34}>
+            <CL band={raised} n={1}>## Step 1: Identify the Audience</CL>
+            <CL band={raised}>### Ages / Grade Levels / Job Roles / Relationships</CL>
+            <CL band={raised}>| Age 5 | Super simple words. Use fun analogies</CL>
+            <CL band={raised}>|       | with toys, animals … Short sentences. |</CL>
+            <CL band={raised}>If the audience isn't explicitly stated, default to "Age 5"</CL>
+            <CL color={quiet}>## Step 2: Read the Source Material</CL>
+            <CL band={sage} n={2}>## Step 3: Craft the Explanation</CL>
+            <CL band={sage}>### Structure</CL>
+            <CL band={sage}>1. Start with the "what"   2. Use an analogy</CL>
+            <CL band={sage}>3. Fill in details   4. End with the "so what"</CL>
+            <CL band={sage}>### Language Calibration: No jargon. One idea per sentence.</CL>
+            <CL color={quiet}>## Tone Matching · Examples · Important Reminders</CL>
+          </CodeDoc>
+        </In>
+        <div style={{ display: 'grid', gap: 34 }}>
+          <Steps>
+            <Step duration={STEP_MS}><Callout n={1} title="認出聽眾：Age 5" detail="簡單的詞、短句子；對得上「詞變簡單」「句子變短」" /></Step>
+            <Step duration={STEP_MS}><Callout n={2} title="照結構寫：先說是什麼，再打比方" detail="對得上開頭的「隊長」比喻" /></Step>
+            <Step duration={STEP_MS}><div style={{ background: blueSoft, borderLeft: `6px solid ${blue}`, padding: '16px 22px' }}>
+              <div style={{ fontSize: 30, fontWeight: 600, color: blue }}>保留 [[連結]]：eli5 沒寫</div>
+              <div style={{ fontSize: 26, color: muted, marginTop: 6 }}>這條來自提示詞</div>
+            </div></Step>
+          </Steps>
+        </div>
+      </div>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={30}>做法來自 Skill，這次的要求來自提示詞</Takeaway></Step></Steps>
+    </Fit>
+    <FooterUrl href="https://github.com/DreambigOu/ELI5/blob/main/skills/eli5/SKILL.md">看完整原文：https://github.com/DreambigOu/ELI5/blob/main/skills/eli5/SKILL.md</FooterUrl>
+  </Shell>
+);
+
+// 13: change the card or the audience; the prompt changes, the Skill stays.
 const ReuseRow = ({ card, who, sample = false }: { card: string; who: string; sample?: boolean }) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 16, background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `6px solid ${blue}`, padding: '16px 24px', fontSize: 29 }}>
     <span>請使用 eli5 skill，把 <Hl k="task">{card}</Hl> 改給 <Hl k="task">{who}</Hl> 看……</span>
@@ -983,7 +1093,7 @@ const DescriptionTrigger: Page = () => (
 const LaneHead = ({ x, n, label }: { x: number; n: number; label: string }) => (
   <g>
     <circle cx={x + 17} cy={30} r={17} fill={amber} />
-    <text x={x + 17} y={38} textAnchor="middle" fontSize="22" fontWeight="600" fill="#FFFFFF">{n}</text>
+    <text x={x + 17} y={38} textAnchor="middle" fontSize="24" fontWeight="600" fill="#FFFFFF">{n}</text>
     <text x={x + 46} y={39} fontSize="25" fontWeight="600" fill={quiet}>{label}</text>
   </g>
 );
@@ -1064,7 +1174,7 @@ const FlowArrow = () => (
 
 // A small tag pinning a line of the real run to a step of the flow.
 const StepTag = ({ n }: { n: number }) => (
-  <span style={{ marginLeft: 22, padding: '2px 12px', background: '#E9B650', color: term, fontFamily: 'var(--osd-font-body)', fontSize: 22, fontWeight: 600 }}>第 {n} 步</span>
+  <span style={{ marginLeft: 22, padding: '2px 12px', background: '#E9B650', color: term, fontFamily: 'var(--osd-font-body)', fontSize: 24, fontWeight: 600 }}>第 {n} 步</span>
 );
 
 const LoadOnUse: Page = () => (
@@ -1076,7 +1186,7 @@ const LoadOnUse: Page = () => (
       <div style={{ display: 'flex', alignItems: 'stretch' }}>
         <In i={0}><FlowStep n={1} title={<>載入 Skill 清單</>} sub={<>開 Session 時就做</>} /></In>
         <Steps>
-          <Step duration={STEP_MS}><div style={{ display: 'flex' }}><FlowArrow /><FlowStep n={2} title={<>你提問</>} sub={<>改寫劉備卡給 5 歲小孩</>} /></div></Step>
+          <Step duration={STEP_MS}><div style={{ display: 'flex' }}><FlowArrow /><FlowStep n={2} title={<>你提問</>} sub={<>劉備卡講給 5 歲小孩</>} /></div></Step>
           <Step duration={STEP_MS}><div style={{ display: 'flex' }}><FlowArrow /><FlowStep n={3} title={<>比對 description</>} sub={<>哪個 Skill 符合</>} /></div></Step>
           <Step duration={STEP_MS}><div style={{ display: 'flex' }}><FlowArrow /><FlowStep n={4} title={<>選中 eli5</>} sub={<>依對象用白話解釋</>} /></div></Step>
           <Step duration={STEP_MS}><div style={{ display: 'flex' }}><FlowArrow /><FlowStep n={5} title={<>讀完整 SKILL.md</>} sub={<>照裡面的步驟做</>} hot /></div></Step>
@@ -1230,7 +1340,7 @@ const CompareTable: Page = () => (
         <TRow head cols={CMP_COLS} cells={['名稱', '是什麼', '什麼時候用', '三國例子']} />
         <In i={0}><TRow cols={CMP_COLS} size={31} cells={[<strong>Prompt</strong>, '這一次的要求', '只做一次的事', '把劉備卡改短一點']} /></In>
         <In i={1}><TRow cols={CMP_COLS} size={31} cells={[<strong style={{ fontFamily: mono }}>AGENTS.md</strong>, '這個專案的規則', '每次都要遵守', '回答都附檔名']} /></In>
-        <In i={2}><TRow cols={CMP_COLS} size={31} tint={amberSoft} cells={[<strong>Skill</strong>, '一類工作的做法', '常常重複做', 'eli5 改成5 歲版']} /></In>
+        <In i={2}><TRow cols={CMP_COLS} size={31} tint={amberSoft} cells={[<strong>Skill</strong>, '一類工作的做法', '常常重複做', 'eli5 改成 5 歲版']} /></In>
         <In i={3}><TRow cols={CMP_COLS} size={31} tint={blueSoft} cells={[<strong>MCP</strong>, '連到外部工具', '要查外部系統', '讀 GitHub 上的檔案']} /></In>
       </div>
       <Steps>
@@ -1424,7 +1534,7 @@ const WebLink = ({ href, children, size = 30 }: { href: string; children: ReactN
 const InstallNode: Page = () => (
   <Shell source={'Git 安裝 git-scm.com/install/mac、git-scm.com/install/windows；Node.js 下載 nodejs.org/en/download'}>
     <Eyebrow>沒有 git 或 Node.js｜邊聽邊裝</Eyebrow>
-    <Heading>先裝 git，再裝 Node.js</Heading>
+    <Heading>安裝 git &amp; Node.js</Heading>
     <PromptsCopy step="1-1" />
     <Fit z={0.9}>
       <In i={0}><SmallLabel>第 1 步｜git</SmallLabel></In>
@@ -1498,7 +1608,7 @@ const Press = ({ children }: { children: ReactNode }) => (
 );
 
 const AddEli5: Page = () => (
-  <Shell chapter={2} source={'eli5（MIT 授權）github.com/dreambigou/eli5；skills 1.7.4 github.com/vercel-labs/skills'}>
+  <Shell chapter={2} source={'eli5（MIT 授權）github.com/dreambigou/eli5；skills 安裝工具 github.com/vercel-labs/skills'}>
     <PracticeEyebrow time="練習 1 第 3 步">練習 1｜安裝</PracticeEyebrow>
     <Heading>練習（Skill）：npx skills add 裝 eli5</Heading>
     <PromptsCopy step="1-3" />
@@ -1529,7 +1639,7 @@ const AddEli5: Page = () => (
 );
 
 const AddEli5Scope: Page = () => (
-  <Shell chapter={2} source={'skills 1.7.4（Project 與 Global）github.com/vercel-labs/skills'}>
+  <Shell chapter={2} source={'skills 安裝工具（Project 與 Global）github.com/vercel-labs/skills'}>
     <PracticeEyebrow time="練習 1 第 3 步">練習 1｜安裝</PracticeEyebrow>
     <Heading>接著三題：選 Project，裝進筆記庫</Heading>
     <PromptsCopy step="1-3" />
@@ -1610,7 +1720,7 @@ const InstallErrors: Page = () => (
     <Fit>
       <div style={{ borderTop: `1px solid ${rule}` }}>
         <ErrRow os="MAC" msg="zsh: command not found: npx" cause="沒裝 Node.js" fix={<>照第 {pageOf(InstallNode)} 頁裝 Node.js，終端機關掉重開</>} />
-        <ErrRow os="MAC／WINDOWS" msg="Failed to clone … spawn git ENOENT" cause="沒有 git" fix={<>Mac 裝 Homebrew 後 <Path size={28}>brew install git</Path>；Windows 到 git-scm.com/install/windows</>} />
+        <ErrRow os="MAC／WINDOWS" msg="Failed to clone … spawn git ENOENT" cause="沒有 git" fix={<>Mac：裝 Homebrew 後 <Path size={28}>brew install git</Path><br />Windows：<Path size={28}>git-scm.com/install/windows</Path></>} />
         <ErrRow os="WINDOWS（示意）" msg="… npx.ps1 … 已停用指令碼執行" cause="PowerShell 擋住 npx" fix={<>改打 <Path size={28}>npx.cmd skills add …</Path></>} />
       </div>
     </Fit>
@@ -2045,7 +2155,7 @@ const SkillSkeleton: Page = () => (
         </SkelPart></Step>
         <Step duration={STEP_MS}><SkelPart note={<Callout n={3} title="輸出格式：長什麼樣" detail="名字不加 [[ ]]，第四堂能直接發布" />}>
           <CL band={sage} n={3}>## 輸出格式</CL>
-          <CL band={sage}>- 一段 HTML，畫成橫向時間軸：事件依回目由左到右排</CL>
+          <CL band={sage}>- 一段 HTML，畫成橫向時間軸：事件依回目由左到右排在一條線上</CL>
           <CL band={sage}>- 線上只寫事件名稱，線下寫回目和年份</CL>
           <CL band={sage}>- 比畫面寬的時候可以左右拖曳，看得到完整時間軸</CL>
           <CL band={sage}>- HTML 裡的名字用純文字，不加 [[ ]]</CL>
@@ -2064,7 +2174,7 @@ const HtmlLinkTest: Page = () => (
       <div style={{ display: 'grid', gridTemplateColumns: '660px 1fr', gap: 72, alignItems: 'center', position: 'relative' }}>
         <In i={0}>
           <Crop src={dgHtmlTest} alt="Digital Garden 網站的測試頁：HTML 區塊裡的 [[劉備]]、[[關羽]]、[[張飛]] 原樣顯示成文字；下方顯示 script 有執行" iw={1400} ih={900} crop={[400, 180, 640, 580]} width={660} />
-          <Caption>網站模板本機建置的畫面</Caption>
+          <Caption>放上網站後的樣子</Caption>
         </In>
         <div style={{ display: 'grid', gap: 40 }}>
           <Steps>
@@ -2183,14 +2293,14 @@ const TimelineResult: Page = () => (
     <Fit>
       <div style={{ position: 'relative', marginTop: 12 }}>
         <In i={0}>
-          <Crop src={timelineFirstRun} alt="第一次跑出的時間軸：一條橫線上依序是桃園結義、三英戰呂布、白門樓、煮酒論英雄、草船借箭、赤壁之戰，線下是第 1、5、19、21、46、49 回；第 5 回以後都寫年份：未記載；下方來源卡是藍色底線的連結" iw={2480} ih={1400} crop={[40, 360, 2400, 760]} width={1600} />
-          <Caption>用瀏覽器打開 整理/時間軸.md 的 HTML</Caption>
+          <Crop src={timelineFirstRun} alt="第一次跑出的時間軸：一條橫線上依序是桃園結義、三英戰呂布、白門樓、煮酒論英雄、草船借箭、赤壁之戰，線下是第 1、5、19、21、46、49 回；第 5 回以後都寫年份：未記載；下方來源卡是藍色底線的連結" iw={2480} ih={1400} crop={[40, 360, 2400, 760]} width={1500} />
+          <Caption>整理/時間軸.md 裡的 HTML 畫出來的樣子</Caption>
         </In>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40, marginTop: 28 }}>
           <Steps>
-            <Step duration={STEP_MS}><Callout n={1} title="6 件事，依回目排好" detail="小說順序，不是精確年代" /><MarkLayer width={1600} height={507}><RegionMark step n={1} x={1} y={2} w={98} h={23} badge="left" /></MarkLayer></Step>
-            <Step duration={STEP_MS}><Callout n={2} title="年份寫「未記載」" detail="SKILL.md 沒說沒年份要怎麼寫" /><MarkLayer width={1600} height={507}><RegionMark step n={2} x={18} y={24} w={81} h={10} badge="left" /></MarkLayer></Step>
-            <Step duration={STEP_MS}><Callout n={3} title="來源卡變成連結" detail="SKILL.md 沒說要不要連結" /><MarkLayer width={1600} height={507}><RegionMark step n={3} x={2.5} y={56.5} w={66.5} h={43} badge="right" /></MarkLayer></Step>
+            <Step duration={STEP_MS}><Callout n={1} title="6 件事，依回目排好" detail="小說順序，不是精確年代" /><MarkLayer width={1500} height={475}><RegionMark step n={1} x={1} y={2} w={98} h={23} badge="left" /></MarkLayer></Step>
+            <Step duration={STEP_MS}><Callout n={2} title="年份寫「未記載」" detail="SKILL.md 沒說沒年份要怎麼寫" /><MarkLayer width={1500} height={475}><RegionMark step n={2} x={18} y={24} w={81} h={10} badge="left" /></MarkLayer></Step>
+            <Step duration={STEP_MS}><Callout n={3} title="來源卡變成連結" detail="SKILL.md 沒說要不要連結" /><MarkLayer width={1500} height={475}><RegionMark step n={3} x={2.5} y={56.5} w={66.5} h={43} badge="right" /></MarkLayer></Step>
           </Steps>
         </div>
       </div>
@@ -2366,7 +2476,7 @@ const StyleRow = ({ src, alt, name, sub, cover = false }: { src: string; alt: st
 );
 
 const TimelineStyles: Page = () => (
-  <Shell chapter={4} source={'範例 aw-03-sample-output/練習3/；skills 1.7.4 的 npx skills find'}>
+  <Shell chapter={4} source={'範例 aw-03-sample-output/練習3/；npx skills find github.com/vercel-labs/skills'}>
     <PracticeEyebrow time="練習 3 第 5 步">練習 3｜進階選做</PracticeEyebrow>
     <Heading>進階：換一個畫圖 Skill</Heading>
     <PromptsCopy step="3-5" />
@@ -2376,7 +2486,7 @@ const TimelineStyles: Page = () => (
         <Steps>
           <Step duration={STEP_MS}><StyleRow src={tlDiagram} name="diagram-design" sub="練習 1-4 已裝" alt="diagram-design 畫的時間軸：灰底、細黑線、小圓點，六件事平均排開，事件名稱在線上，回目在線下" /></Step>
           <Step duration={STEP_MS}><StyleRow cover src={tlArchify} name="archify" sub="要另外裝" alt="archify 畫的時間軸：米色底、大號襯線字，紅色圓點，六件事平均排開" /></Step>
-          <Step duration={STEP_MS}><StyleRow cover src={tlInstructor} name="自訂 HTML" sub="照需求另外寫" alt="自訂 HTML 時間軸：橘色粗線照第 1 到 50 回的比例排，事件名稱放在黃色標籤裡，看得出第 21 到 46 回中間空了一大段" /></Step>
+          <Step duration={STEP_MS}><StyleRow cover src={tlInstructor} name="自訂 HTML" sub="照需求另外寫" alt="自訂 HTML 時間軸：橘色粗線照第 1 到 120 回的比例排（圖只截到第 50 回），事件名稱放在黃色標籤裡，看得出第 21 到 46 回中間空了一大段" /></Step>
         </Steps>
       </div>
       <Steps><Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 20, marginTop: 40, fontSize: 30 }}>
@@ -2508,7 +2618,7 @@ const ReferencesSkills: Page = () => (
   <Shell>
     <Eyebrow>延伸閱讀｜第 1 章用到的文件</Eyebrow>
     <Heading>參考資料（一）：Skill、AGENTS.md 與 MCP</Heading>
-    <RefHint>完整網址寫在這頁的講者備忘稿</RefHint>
+    <RefHint>到橘色那個網站，搜尋下一行的標題就找得到</RefHint>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
         <In i={0}>
@@ -2536,7 +2646,7 @@ const ReferencesTools: Page = () => (
   <Shell>
     <Eyebrow>延伸閱讀｜第 2–4 章用到的工具與原文</Eyebrow>
     <Heading>參考資料（二）：兩個 Skill 與原文</Heading>
-    <RefHint>arXiv 編號：到 arxiv.org/abs/ 後面接編號，就能打開論文</RefHint>
+    <RefHint>到橘色那個網站，搜尋下一行的標題就找得到</RefHint>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
         <In i={0}>
@@ -2587,7 +2697,7 @@ export const meta: SlideMeta = {
 
 const deck: Page[] = [
   Cover, Review, Agenda, ToolCheck, InstallNode,
-  Section1, TaskPrompt, PickSkill, Eli5Skill, ResultTrace, WhySkill, SkillFolder, CompareTable,
+  Section1, Eli5Intro, TaskPrompt, PickSkill, ResultTrace, Eli5Front, Eli5Body, WhySkill, SkillFolder, CompareTable,
   Section2, SkillsAddCmd, RepoName, CdVault, AddEli5, AddEli5Scope, AddDiagram, SkillsList, InstallVideo,
   Section3, DiagramRun, DiagramResult, UseVideo, Eli5Rewrite, BreakPage,
   Section4, TimelineGoal, SkillSkeleton, SaveSkill, RunTimeline, TimelineResult, EditLoop, EditExample, TimelineVideo, PersonFilter, TimelineStyles,
@@ -2627,35 +2737,45 @@ const NOTES = new Map<Page, string>([
 按一下：這 12 條線（桃園結義 3 條、煮酒論英雄 4 條、赤壁之戰 5 條），都是關係卡最後一行「參與人物」寫出來的，上一堂我們請 Codex 照這個規則畫過 ASCII 關係圖。
 請大家打開上一堂的筆記庫，確認卡片都還在。今天全部接著用這一個筆記庫。
 最後一下：今天用 Skill 畫一張關係圖、改寫一張卡，最後自己寫 Skill 排出時間軸。`],
-  [Agenda, `06:00–08:00。今天四章、三個練習。中間那欄是必做，每個人都要完成：看懂一份 SKILL.md、裝好兩個 Skill、畫一張關係圖並改寫一張卡、自己的 sanguo-timeline 跑出一次結果，補一條規則再跑一次。右邊是選做，時間夠再做：標籤疊到就請 Codex 修、只排劉備的事件、換一個畫圖 Skill 畫同一條時間軸。進度落後的同學，先顧必做那一欄。第三章做完，64 分休息 5 分鐘。
-第四章花的時間最多：跑自己的 Skill、看結果、改 SKILL.md、再跑一次，這是今天的重點。裝不起來時的解法、想多懂一點的內容，都放在最後的附錄，需要時再翻。最後 8 分鐘預告第四堂；第四堂前請先註冊 Forestry.md。
+  [Agenda, `06:00–08:00。今天四章、三個練習。中間那欄是課堂會一起做的：怎麼看懂一份 SKILL.md、安裝兩個熱門 Skill、用 Skill 畫一張關係圖並改寫一張卡、跑自己的 sanguo-timeline，補一條規則再跑一次。右邊是有時間再試的：標籤疊到就請 Codex 修、只排劉備的事件、換一個畫圖 Skill 畫同一條時間軸。跟不上也沒關係，先跟著中間那欄走。第三章做完，64 分休息 5 分鐘。
+第四章花的時間最多：跑自己的 Skill、看結果、改 SKILL.md、再跑一次，這是今天的重點。裝不起來時的解法、想多懂一點的內容，都放在最後的附錄，需要時再翻。最後 8 分鐘總結、預告第四堂；第四堂前請先註冊 Forestry.md。
 下一頁先做練習 1 的第一步：檢查電腦有沒有 Node.js 和 git。`],
-  [Section1, `11:00–11:15。第一章：什麼是 Skill。先看一次 Skill 做出來的成果，再講為什麼需要它、打開一份真的 SKILL.md，最後用一張表和 Prompt、AGENTS.md、MCP 比一比。還在裝 Node.js 的同學，邊裝邊聽。`],
-  [TaskPrompt, `11:15–13:00。從一個任務開始：把劉備卡講給 5 歲小孩聽。eli5 的全名是 Explain Like I'm 5，就是「講得像我只有 5 歲」，我們就真的請它講給 5 歲小孩聽。這是第三章練習 2-3 的提示詞，大家等一下會自己貼。
+  [Section1, `11:00–11:15。第一章：什麼是 Skill。先認識今天要用的 eli5，再跟著一個任務走一遍：下提示詞、看 Codex 有沒有用到它、看改寫結果，最後打開 eli5 的 SKILL.md，看那些改法是從哪裡來的。接著講為什麼要存成 Skill、Skill 資料夾長什麼樣子，最後用一張表和 Prompt、AGENTS.md、MCP 比一比。還在裝 Node.js 的同學，邊裝邊聽。`],
+  [Eli5Intro, `11:15–12:45。先認識今天第一個用到的 Skill：eli5。全名是 Explain Like I'm 5，英文網路上常見的說法，意思是「講得像我只有 5 歲」，請對方用最簡單的方式解釋。
+eli5 只做一件事：同一段內容，看是誰在聽，換一種講法。左邊是要講的內容，中間是 eli5，它先認出聽眾，再決定怎麼講。右邊四種聽眾，都是它的 SKILL.md 裡真的有寫的：5 歲小孩用簡單的詞、短句子、好玩的比喻；國中生要先解釋術語、一步一步講；主管先聽影響、時程、成本；爸媽就用他們熟悉的東西打比方。檔案裡還有更多，例如 10 歲、大學生、工程師、朋友。
+按一下：今天的任務，要講的內容是 人物/劉備.md，聽眾選 5 歲小孩，對到第一列。
+最後一下：任務目的。劉備卡照原文寫，「招兵榜文」「投軍」這種詞讀起來吃力。我們要的是內容不變、講法換掉，讓 5 歲小孩也聽得懂。第三章練習 2 大家會自己做一次。`],
+  [TaskPrompt, `12:45–14:15。任務範例：把劉備卡講給 5 歲小孩聽。這是第三章練習 2-3 的提示詞，大家等一下會自己貼。
 先看提示詞裡的兩種顏色。按一下：藍底的部分寫在提示詞裡，每次都會變：這次是哪張卡、給誰看、存到哪裡、有什麼限制，例如只用原卡的內容、保留 [[連結]]。橘底只有一句「請使用 eli5 skill」，把「怎麼解釋給這個聽眾聽」交給 eli5。
 要分清楚：保留連結、存到 整理/ 這些要求，是我們寫在提示詞裡的，不是 eli5 自己會做的事。eli5 只負責「依聽眾調整解釋方式」。
 最後一下：講給 5 歲小孩聽要怎麼寫？Codex 自己不知道，它去翻 eli5。下一頁看它怎麼翻。`],
-  [PickSkill, `13:00–15:00。點名，就是在提示詞寫出 Skill 名稱，明確告訴 Codex 要用哪一個。這是講師 2026-10-30 的實跑紀錄（Codex 0.165.0）。
+  [PickSkill, `14:15–15:45。點名，就是在提示詞寫出 Skill 名稱，明確告訴 Codex 要用哪一個。這是講師 2026-10-30 的實跑紀錄（Codex 0.165.0）。
 按一下：Codex 先回報「我會先讀取 eli5 skill 和劉備卡片，再用適合 5 歲小孩的說法寫成新檔」。看到這一句，才確定它有要用 eli5。
 按一下：接著它執行 cat .agents/skills/eli5/SKILL.md，把整份 SKILL.md 讀進來，同時讀劉備卡，再照 SKILL.md 的做法改寫。等一下大家自己跑的時候，也看這兩行。
 按一下：沒點名的話，Codex 會看每個 Skill 的 description 自己挑，可能挑對，也可能挑錯或沒用到，細節放附錄第 ${pageOf(CallByName)}–${pageOf(LoadOnUse)} 頁。今天的練習提示詞全部都有點名。
-最後一下：點名是明確告訴它；看到回報才算確認。正式的點名寫法也可以在提示詞打 $ 從選單挑，例如 $eli5。`],
-  [Eli5Skill, `15:00–18:00。Codex 讀進來的 SKILL.md 長這樣，這是 eli5 的真實檔案，只節錄幾行。SKILL.md 是純文字檔，用一般的文字編輯器就能打開。我們追一條線：提示詞寫了「5 歲小孩」，eli5 怎麼處理？
-按一下：第一塊，最上面兩條 --- 中間的 name 和 description，寫它叫什麼、什麼時候用：要依對象解釋的時候。不點名時，Codex 就靠 description 判斷。
-按一下：第二塊，Step 1 先認出聽眾。裡面有一張年齡對照表，「5 歲小孩」對得上 Age 5 那一列：用很簡單的詞、拿玩具和動物打比方、句子要短。這張表也有 10 歲、15 歲、國中生、大學生，換對象就對到另一列；沒寫對象的話，它預設就是 Age 5。
-按一下：第三塊，Step 3 照做法寫：Structure 規定先說是什麼、打比方、補細節；Language Calibration 說不要用艱深的詞、一句只講一件事。
-最後一下：name 和 description 每份 Skill 都要寫；下面的做法沒有固定格式，依任務寫。eli5 用 Step 1、2、3，第四章我們自己寫的時間軸 Skill 會用「步驟」和「輸出格式」兩段，這是這堂課用的簡化骨架。
-檔案位置：筆記庫裡的 .agents/skills/eli5/SKILL.md，第二章會裝。程式碼框下面的連結可以點，在筆電上打開就是 GitHub 上的完整原文：https://github.com/DreambigOu/ELI5/blob/main/skills/eli5/SKILL.md ，年齡、年級、職業那幾張對照表都在裡面。`],
-  [ResultTrace, `18:00–21:00。看結果，再對回規則。左邊是原卡第二段，右邊是 eli5 改寫的實際產出（講師 2026-10-30 實跑，範例檔 aw-03-sample-output/練習2/劉備-5歲版.md）。橘底和藍底的顏色，跟任務那頁一樣：橘底對得上 eli5，藍底來自提示詞。
-按一下：榜文變成告示、投軍變成當兵；原卡一整句，改寫成好幾個短句。這些對得上 eli5 Age 5 那一列：簡單的詞、短句子。我們只能說「對得上」，看不到模型內部是不是因為這一條才這樣改。
-按一下：[[張飛]]、[[關羽]] 這兩個連結還在，檔案存成 整理/劉備-5歲版.md。這兩件事來自提示詞，eli5 本身沒有這條規則。提示詞沒寫的話，連結可能就不見了。
-最後一下：做法來自 Skill，這次的要求來自提示詞。整份改寫的開頭還多了一句比喻：「你可以把他想成一個想帶著大家一起做大事的隊長」，這也對得上 eli5 的「打比方」。`],
-  [WhySkill, `21:00–23:00。那為什麼要把做法存成 Skill？第一列是剛剛的任務。
+最後一下：點名是明確告訴它；看到回報才算確認。正式的點名寫法也可以在提示詞打 $ 從選單挑，例如 $eli5。下一頁先看它改寫出來的結果。`],
+  [ResultTrace, `15:45–17:45。先看輸出。左邊是原卡第二段，右邊是 eli5 改寫的實際產出（講師 2026-10-30 實跑，範例檔 aw-03-sample-output/練習2/劉備-5歲版.md）。上面的顏色：橘底是換了說法的地方，綠底是原封不動的地方。請大家先自己找找看，哪裡不一樣？
+按一下：詞變簡單。榜文變成告示，投軍變成當兵。
+按一下：句子變短。原卡這一段是一整句，右邊拆成六個短句，一句只講一件事。
+按一下：多了比喻。整份改寫的開頭多了一句：「你可以把他想成一個想帶著大家一起做大事的隊長」，原卡沒有這句。
+按一下：沒變的。[[張飛]]、[[關羽]] 這兩個連結都還在，事件也照原卡的順序。
+最後一下：這些改法從哪來？Codex 剛剛讀了 eli5 的 SKILL.md，接下來兩頁打開它看。`],
+  [Eli5Front, `17:45–19:45。打開 eli5 的 SKILL.md。它是純文字檔，用一般的文字編輯器就能打開，放在筆記庫的 .agents/skills/eli5/SKILL.md，第二章會裝。先看最上面兩條 --- 中間這一段，只有兩欄。
+按一下：第一欄 name，Skill 的名字。資料夾也要叫這個名字；提示詞裡點名「請使用 eli5 skill」，寫的就是它。
+按一下：第二欄 description 的前半，說它做什麼：依照聽眾的理解程度，解釋任何主題、程式碼、概念或錯誤訊息。
+按一下：description 的後半，說什麼時候用：使用者說「explain like I am」「ELI5」「explain this to my」「break this down for」「simplify this for」這類話的時候。原文後面還有一句：就算只說了「explain to my wife」「tell my boss」這種半句，也要用。
+最後一下：Codex 開 Session 時，只先讀每個 Skill 的這兩欄，當成一張清單；被點名，或比對 description 選中了，才讀下面的全文。所以 description 要寫清楚做什麼、何時用。沒點名時怎麼挑、裝很多 Skill 會不會塞滿上下文，在附錄第 ${pageOf(CallByName)}–${pageOf(LoadOnUse)} 頁。`],
+  [Eli5Body, `19:45–22:00。再看本文，這段才是做法。畫面只節錄幾行，完整原文在頁面最下面的連結，筆電上點開就是 GitHub。
+按一下：第一塊，Step 1 先認出聽眾。裡面有四張對照表：年齡、年級、職業、家人朋友。提示詞寫了「5 歲小孩」，對上 Age 5 那一列：用很簡單的詞、拿玩具和動物打比方、句子要短。這對得上上一頁的「詞變簡單」「句子變短」。表格下面還有一句：沒說聽眾是誰，就當成 5 歲。Step 2 是先讀懂要講的內容，這次就是劉備卡。
+按一下：第二塊，Step 3 照做法寫。Structure 規定順序：先用一句話說是什麼、打比方、補細節、最後說跟你有什麼關係；Language Calibration 說不用艱深的詞、一句只講一件事。開頭那句「隊長」的比喻，對得上這裡的「打比方」。我們只能說「對得上」，看不到模型內部是不是因為這一條才這樣改。
+按一下：那 [[連結]] 為什麼還在？翻遍 eli5 都沒有這條規則。保留連結、存到 整理/劉備-5歲版.md、只用卡片裡有的內容，都是我們寫在提示詞裡的，就是任務頁的藍底。提示詞沒寫的話，連結可能就不見了。
+最後一下：做法來自 Skill，這次的要求來自提示詞。name 和 description 每份 Skill 都要寫；下面的做法沒有固定格式，依任務寫。eli5 用 Step 1、2、3，第四章我們自己寫的時間軸 Skill 會用「步驟」和「輸出格式」兩段。`],
+  [WhySkill, `22:00–23:30。那為什麼要把做法存成 Skill？第一列是剛剛的任務。
 按一下：換成關羽卡，提示詞只改藍底的卡片名稱。
 按一下：換成曹操卡、改給國中生看，提示詞改了兩個地方，eli5 一個字都不用動，它的對照表裡本來就有國中生（Middle school）該怎麼講。這兩列是示意，講師沒有實跑。
 像食譜架：做法先存好，要用時翻出來，不用每次重新交代怎麼解釋。
 最後一下：每次不同的寫提示詞，可重用的做法存成 Skill。分清楚這兩件事，第四章自己寫 Skill 時才知道哪些要寫進 SKILL.md。`],
-  [SkillFolder, `23:00–24:30。Skill 在電腦裡就是一個資料夾。eli5 的資料夾裡只有一個 SKILL.md。
+  [SkillFolder, `23:30–24:30。Skill 在電腦裡就是一個資料夾。eli5 的資料夾裡只有一個 SKILL.md。
 按一下：diagram-design 比較大，除了 SKILL.md，還有 references、scripts、assets，放參考資料、小程式和圖檔。
 最後一下：每個 Skill 都有 SKILL.md；其他檔案是附件，看需要才有。Agent 讀 SKILL.md 時，會照裡面的指示再去翻附件。`],
   [DescriptionTrigger, `（附錄，課堂不講；想知道沒點名時 Codex 怎麼挑 Skill 再看。）Codex 怎麼知道該用哪個 Skill？Codex 會看 description。像在書架前找書，看書背就大概知道該拿哪本。你說「把劉備卡用 5 歲小孩聽得懂的方式重新說一次」，架上有四個 Skill，各自的 description 寫著它管什麼。
@@ -2679,7 +2799,7 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
   [McpPlug, `（附錄，課堂不講。）第四種是 MCP，全名 Model Context Protocol。左邊是 Skill，教 Codex 怎麼做事。
 按一下：右邊是 MCP，像插座，把外面的工具接進來：GitHub、Google Drive、公司資料庫。Skill 寫得再好，Codex 也讀不到沒有連線的外部系統；要用外部系統，就要設定 MCP。
 最後一下：Skill 告訴 Codex 怎麼做，MCP 讓 Codex 連到外部工具。今天的練習只用 Skill，MCP 知道是什麼就好。`],
-  [CompareTable, `24:30–27:00。Skill 跟其他幾種交代 Codex 的方式差在哪？這張表從上往下念一次就好。Prompt 是這一次的要求，例如把劉備卡改短一點。AGENTS.md 是這個專案的規則，每次都要遵守，例如回答都附檔名。Skill 是一類工作的做法，常常重複做的事，例如用 eli5 改成5 歲版。MCP 連到外部工具或資料，例如讀 GitHub 上的檔案。
+  [CompareTable, `24:30–27:00。Skill 跟其他幾種交代 Codex 的方式差在哪？這張表從上往下念一次就好。Prompt 是這一次的要求，例如把劉備卡改短一點。AGENTS.md 是這個專案的規則，每次都要遵守，例如回答都附檔名。Skill 是一類工作的做法，常常重複做的事，例如用 eli5 改成 5 歲版。MCP 連到外部工具或資料，例如讀 GitHub 上的檔案。
 最後一下：常常重複做的事，寫成 Skill。只做一次的事打 Prompt 就好；每次都要遵守的規則放 AGENTS.md；要連外部系統，才需要 MCP。今天的練習只用 Skill，MCP 知道是什麼就好。三種方式的圖解和 Skill／MCP 判斷題放在附錄第 ${pageOf(PromptAgentsSkill)}–${pageOf(SkillOrMcp)} 頁。`],
   [SkillOrMcp, `（附錄，課堂不講；可當課後自我檢查。）判斷題，請大家先舉手猜。情境 1：每次 Review PR，都要照公司的 10 條規範檢查。
 按一下：Skill，因為這是固定的做法和檢查流程。
@@ -2746,7 +2866,7 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
   [InstallVideo, `41:00–44:00。這是講師事先錄好的完整安裝過程，課堂上不現場跑。按播放鍵開始，影片沒有聲音，邊放邊講；右邊的時間可以直接跳段。
 還在裝的同學，跟著影片一步一步做：裝 eli5 時一路按 Enter，裝 diagram-design 一樣，最後開 Codex 列出 Skill。已經裝好的同學，這三分鐘幫旁邊的人看畫面，或舉手提問。
 影片約 2 分半（講師 2026-10-30 錄，skills 1.7.4、Codex 0.165.0）。0:00 裝 eli5：第一次會問 Ok to proceed，之後每題都直接按 Enter；0:44 裝 diagram-design，下載要等十幾秒；1:32 開 Codex 列出 Skill。講師電腦裝了很多 Skill，清單很長，eli5 和 diagram-design 會先閃過、被捲到上面；你們的清單短很多。講師電腦有裝 Claude Code，所以安裝完成時寫著 symlinked: Claude Code；你們沒裝的話不會有這行。`],
-  [Section3, `44:00–44:15。第三章：用 Skill 做好讀的筆記。兩個練習：用 diagram-design 把關係卡畫成圖，用 eli5 把劉備卡改成5 歲版。`],
+  [Section3, `44:00–44:15。第三章：用 Skill 做好讀的筆記。兩個練習：用 diagram-design 把關係卡畫成圖，用 eli5 把劉備卡改成 5 歲版。`],
   [DiagramRun, `44:15–49:00。練習 2 共 20 分鐘。Codex 還開在筆記庫裡，直接貼上 prompts.md 練習 2-1，跟畫面上這段一樣。這段提示詞把圖的樣子講清楚：人物放進勢力的框、事件依回目由上到下、平滑曲線、線上只寫兩三個字的關係，檔名改列在圖下方的表。講師用舊版提示詞實跑時沒寫這些，Codex 在每條線旁邊都標了兩個檔名，線又直角轉來轉去，整張圖很亂。
 按一下：Codex 讀完卡片，第一次用 diagram-design 會停下來問樣式。這是講師 2026-10-30 實跑的畫面（Codex 0.165.0，diagram-design 2.6.136），這次是三個選項。選項的寫法會跟著版本變，不用背，找「預設」那一項。
 按一下：回答「保留預設樣式，請直接產生並存檔。」
@@ -2769,7 +2889,7 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
 接下來到 64:00，把練習 2 的三步做完：畫圖、線太亂就重排、改寫劉備卡。`],
   [DgPublishCopied, `（附錄，第四堂發布前再看；第四堂也會講。講師早期用舊提示詞實測時遇到的，當時是改寫給國中生。）實測時發現一件事。原卡最上面有 dg-publish: true，這是第四堂發布用的開關。eli5 改寫時，把這一行也照抄過去了。
 按一下：第四堂發布時，兩張劉備卡都會公開，網站上會出現兩個劉備。
-按一下：不想公開5 歲版，就刪掉 dg-publish 那一行（改成 dg-publish: false，或在 Obsidian 的屬性欄取消勾選也可以）。下次請 Codex 改寫時，提示詞最後多加一句：「新檔不要加 dg-publish」，新檔就不會帶著公開設定。
+按一下：不想公開 5 歲版，就刪掉 dg-publish 那一行（改成 dg-publish: false，或在 Obsidian 的屬性欄取消勾選也可以）。下次請 Codex 改寫時，提示詞最後多加一句：「新檔不要加 dg-publish」，新檔就不會帶著公開設定。
 最後一下：發布前，先看最上面的 frontmatter。`],
   [BreakPage, `64:00–69:00。中場休息 5 分鐘。練習 2 還沒做完的同學，可以利用這段時間補做；有問題就舉手，講師和助教過去看。回來接第四章：寫自己的 Skill。`],
   [Section4, `69:00–69:15。第四章：寫自己的 Skill。把排時間軸的做法寫成 SKILL.md，以後一句話就能重排。`],
@@ -2829,7 +2949,7 @@ npx 裝不起來：prompts.md 練習 3-1 最後有備用做法，用一行指令
   [TimelineStyles, `106:00–112:00。進階選做第二題：同一份 整理/時間軸.md，換一個畫圖 Skill 畫。先問大家：交給不同的 Skill 畫，會長一樣嗎？接下來一張一張看，都是講師 10-30 實跑的成品，整條時間軸截下來，六件事都在；每按一下換一張，放在同一個位置比較。
 按一下：diagram-design，練習 1-4 已經裝好，畫得很素：灰底、細線、小圓點，六件事平均排開。
 按一下：archify，要另外裝：米色底、大號襯線字、紅色圓點，一樣平均排開。archify 原本要每件事都有完整日期，三國卡片只有回目，Codex 沒有硬套它的格式，改寫了一份自己的 HTML。
-按一下：講師自己寫的 HTML，照第 1 到 50 回的比例排，看得出第 21 回到第 46 回中間空了一大段；網頁上還能切換「只看劉備」。三份都沒有自己補年份，只有桃園結義有中平元年。
+按一下：自訂 HTML，不用畫圖 Skill，請 Codex 照需求另外寫的。它照第 1 到 120 回的比例排，畫面只截到第 50 回，看得出第 21 回到第 46 回中間空了一大段；網頁上還能切換「只看劉備」。三份都沒有自己補年份，只有桃園結義有中平元年。
 同樣叫做「畫圖」的 Skill，每個人寫的 SKILL.md 不一樣，畫出來的風格就不一樣，沒有哪一個是標準答案，挑你喜歡的。
 按一下：去哪裡找？在終端機打 npx skills find，後面接英文關鍵字，例如 timeline。講師 10-30 搜過，archify 有 18.3 萬次安裝、diagram-design 有 2.2 萬次，都在結果裡。也可以上 skills.sh 這個網站搜。找到喜歡的，跟第二章一樣用 npx skills add 裝；裝之前先到 GitHub 打開它的 SKILL.md 看一眼，Skill 執行時有 Codex 的完整權限。
 提示詞在 prompts.md 練習 3-5，用 archify 的話把開頭的 diagram-design 換成 archify。成品放在線上的 aw-03-sample-output/練習3/，下載回去用瀏覽器打開比一比。

@@ -231,7 +231,7 @@ notepad .agents\skills\sanguo-timeline\SKILL.md
 - 來源卡只寫檔名純文字，不做連結，不用 <a href>，也不用 [[ ]]
 ```
 
-為什麼不請 Codex 改：Codex 為了安全，預設不讓自己改 `.agents/` 裡的檔案，會回你「.agents 設為唯讀」（Codex 0.165.0）。說明書由你來改，Codex 照著做。
+為什麼不請 Codex 改：Codex 為了安全，預設不讓自己改 `.agents/` 裡的檔案，會回你「.agents 設為唯讀」。說明書由你來改，Codex 照著做。
 
 4. 打 `codex` 重開，再貼一次：
 
@@ -264,7 +264,7 @@ notepad .agents\skills\sanguo-timeline\SKILL.md
 同一份 `整理/時間軸.md`，交給不同的 Skill 畫，畫出來的樣子都不一樣。挑一個你喜歡的：
 
 - diagram-design：練習 1-4 已經裝好，直接用。
-- archify（https://github.com/tt-a1i/archify ）：先在 Codex 輸入 `/quit` 離開，回到終端機（還在筆記庫裡），用練習 1-3 的方法裝，後面幾題的答法一樣。這行未測試，裝不起來就改用 diagram-design。
+- archify（https://github.com/tt-a1i/archify ）：先在 Codex 輸入 `/quit` 離開，回到終端機（還在筆記庫裡），用練習 1-3 的方法裝，後面幾題的答法一樣。裝不起來就改用 diagram-design。
 
 ```text
 npx skills add tt-a1i/archify
