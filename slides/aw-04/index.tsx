@@ -600,17 +600,13 @@ const SiteGoal: Page = () => (
   </Shell>
 );
 
-// A table-of-contents row: chapter, the thing you walk away with, time and page.
-const AGENDA_COLS = '90px 1fr 560px 180px';
+// A table-of-contents row: chapter, time and page.
+const AGENDA_COLS = '90px 1fr 220px';
 
-const AgendaRow = ({ i, n, kind, result, time, page }: { i: number; n: Chapter; kind: IconKind; result: string; time: string; page: Page }) => (
+const AgendaRow = ({ i, n, time, page }: { i: number; n: Chapter; time: string; page: Page }) => (
   <In i={i} style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, alignItems: 'center', minHeight: 108, borderBottom: `1px solid ${rule}` }}>
     <span style={{ fontFamily: display, fontSize: 40, color: amber }}>{String(n).padStart(2, '0')}</span>
     <span style={{ fontSize: 38, fontWeight: 600 }}>{CHAPTERS[n - 1]}</span>
-    <span style={{ display: 'flex', alignItems: 'center', gap: 22 }}>
-      <Icon kind={kind} size={54} color={amber} />
-      <span style={{ fontSize: 30 }}>{result}</span>
-    </span>
     <span style={{ textAlign: 'right' }}><span style={{ display: 'block', fontSize: 26, color: amber }}>{time}</span><span style={{ display: 'block', fontSize: 24, color: quiet, marginTop: 4 }}>第 {pageOf(page)} 頁</span></span>
   </In>
 );
@@ -621,13 +617,13 @@ const Agenda: Page = () => (
     <Heading>課程大綱</Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, paddingBottom: 12, borderBottom: `1px solid ${rule}` }}>
-        <span /><SmallLabel>章節</SmallLabel><SmallLabel>結束時你會</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
+        <span /><SmallLabel>章節</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
       </div>
-      <AgendaRow i={0} n={1} kind="globe" result="打得開自己的網址" time="10–22 分" page={Section1} />
-      <AgendaRow i={1} n={2} kind="plug" result="首頁變成三國演義" time="22–44 分" page={Section2} />
-      <AgendaRow i={2} n={3} kind="gear" result="說得出網站怎麼更新" time="44–58 分" page={Section3} />
-      <AgendaRow i={3} n={4} kind="timeline" result="時間軸、導覽頁上線" time="58–89 分" page={Section4} />
-      <AgendaRow i={4} n={5} kind="user" result="同學點得到你的新卡" time="89–120 分" page={Section5} />
+      <AgendaRow i={0} n={1} time="10–22 分" page={Section1} />
+      <AgendaRow i={1} n={2} time="22–44 分" page={Section2} />
+      <AgendaRow i={2} n={3} time="44–58 分" page={Section3} />
+      <AgendaRow i={3} n={4} time="58–89 分" page={Section4} />
+      <AgendaRow i={4} n={5} time="89–120 分" page={Section5} />
     </Fit>
   </Shell>
 );

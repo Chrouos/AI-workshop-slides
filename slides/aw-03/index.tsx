@@ -698,15 +698,13 @@ const Review: Page = () => (
   </Shell>
 );
 
-// A table-of-contents row: chapter, what everyone finishes, what's optional, time and page.
-const AGENDA_COLS = '80px 360px 1fr 380px 150px';
+// A table-of-contents row: chapter, time and page.
+const AGENDA_COLS = '90px 1fr 220px';
 
-const AgendaRow = ({ i, n, must, opt, time, page }: { i: number; n: Chapter; must: string; opt?: string; time: string; page: Page }) => (
-  <In i={i} style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, alignItems: 'center', minHeight: 100, borderBottom: `1px solid ${rule}` }}>
-    <span style={{ fontFamily: display, fontSize: 38, color: amber }}>{String(n).padStart(2, '0')}</span>
-    <span style={{ fontSize: 30, fontWeight: 600 }}>{CHAPTERS[n - 1]}</span>
-    <span style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 30 }}><Icon kind="ok" size={38} color={okGreen} />{must}</span>
-    <span style={{ fontSize: 28, color: opt ? muted : faint }}>{opt ?? '—'}</span>
+const AgendaRow = ({ i, n, time, page }: { i: number; n: Chapter; time: string; page: Page }) => (
+  <In i={i} style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, alignItems: 'center', minHeight: 108, borderBottom: `1px solid ${rule}` }}>
+    <span style={{ fontFamily: display, fontSize: 40, color: amber }}>{String(n).padStart(2, '0')}</span>
+    <span style={{ fontSize: 38, fontWeight: 600 }}>{CHAPTERS[n - 1]}</span>
     <span style={{ textAlign: 'right' }}><span style={{ display: 'block', fontSize: 26, color: amber }}>{time}</span><span style={{ display: 'block', fontSize: 24, color: quiet, marginTop: 4 }}>第 {pageOf(page)} 頁</span></span>
   </In>
 );
@@ -717,12 +715,12 @@ const Agenda: Page = () => (
     <Heading>課程大綱</Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, paddingBottom: 12, borderBottom: `1px solid ${rule}` }}>
-        <span /><SmallLabel>章節</SmallLabel><SmallLabel>課堂會教</SmallLabel><SmallLabel color={quiet}>有時間再試</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
+        <span /><SmallLabel>章節</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
       </div>
-      <AgendaRow i={0} n={1} must="怎麼看懂 SKILL.md" time="11–27 分" page={Section1} />
-      <AgendaRow i={1} n={2} must="安裝兩個熱門 Skill" time="27–44 分" page={Section2} />
-      <AgendaRow i={2} n={3} must="用 Skill 畫圖、改寫卡" opt="標籤疊到就修" time="44–64 分" page={Section3} />
-      <AgendaRow i={3} n={4} must="跑時間軸，補規則再跑" opt="只排劉備、換畫圖 Skill" time="69–112 分" page={Section4} />
+      <AgendaRow i={0} n={1} time="11–27 分" page={Section1} />
+      <AgendaRow i={1} n={2} time="27–44 分" page={Section2} />
+      <AgendaRow i={2} n={3} time="44–64 分" page={Section3} />
+      <AgendaRow i={3} n={4} time="69–112 分" page={Section4} />
     </Fit>
   </Shell>
 );
@@ -2737,7 +2735,7 @@ const NOTES = new Map<Page, string>([
 按一下：這 12 條線（桃園結義 3 條、煮酒論英雄 4 條、赤壁之戰 5 條），都是關係卡最後一行「參與人物」寫出來的，上一堂我們請 Codex 照這個規則畫過 ASCII 關係圖。
 請大家打開上一堂的筆記庫，確認卡片都還在。今天全部接著用這一個筆記庫。
 最後一下：今天用 Skill 畫一張關係圖、改寫一張卡，最後自己寫 Skill 排出時間軸。`],
-  [Agenda, `06:00–08:00。今天四章、三個練習。中間那欄是課堂會一起做的：怎麼看懂一份 SKILL.md、安裝兩個熱門 Skill、用 Skill 畫一張關係圖並改寫一張卡、跑自己的 sanguo-timeline，補一條規則再跑一次。右邊是有時間再試的：標籤疊到就請 Codex 修、只排劉備的事件、換一個畫圖 Skill 畫同一條時間軸。跟不上也沒關係，先跟著中間那欄走。第三章做完，64 分休息 5 分鐘。
+  [Agenda, `06:00–08:00。今天四章、三個練習。先看懂一份 SKILL.md，再安裝兩個熱門 Skill，接著用 Skill 畫一張關係圖、改寫一張卡，最後跑自己的 sanguo-timeline，補一條規則再跑一次。做得快的同學有加碼題：標籤疊到就請 Codex 修、只排劉備的事件、換一個畫圖 Skill 畫同一條時間軸，到那一頁再說。第三章做完，64 分休息 5 分鐘。
 第四章花的時間最多：跑自己的 Skill、看結果、改 SKILL.md、再跑一次，這是今天的重點。裝不起來時的解法、想多懂一點的內容，都放在最後的附錄，需要時再翻。最後 8 分鐘總結、預告第四堂；第四堂前請先註冊 Forestry.md。
 下一頁先做練習 1 的第一步：檢查電腦有沒有 Node.js 和 git。`],
   [Section1, `11:00–11:15。第一章：什麼是 Skill。先認識今天要用的 eli5，再跟著一個任務走一遍：下提示詞、看 Codex 有沒有用到它、看改寫結果，最後打開 eli5 的 SKILL.md，看那些改法是從哪裡來的。接著講為什麼要存成 Skill、Skill 資料夾長什麼樣子，最後用一張表和 Prompt、AGENTS.md、MCP 比一比。還在裝 Node.js 的同學，邊裝邊聽。`],
