@@ -2429,65 +2429,70 @@ const EditExample: Page = () => (
   </Shell>
 );
 
-// One event on the person-filter timeline.
-const FilterDot = ({ x, n, name }: { x: number; n: string; name: string }) => (
+// One stop on 劉備's storyline: allies on the left, the event in the middle, opponents on the right.
+// Names come from a real Codex run of practice 3-4 (see the page's notes).
+const STORY_X = 816;
+const StoryRow = ({ y, n, name, left, right, extra }: { y: number; n: string; name: string; left?: string; right?: string; extra?: string }) => (
   <g>
-    <circle cx={x} cy="110" r="14" fill={amber} />
-    <text x={x} y="72" textAnchor="middle" fontSize="25" fontWeight="600" fill={amber}>{n}</text>
-    <text x={x} y="166" textAnchor="middle" fontSize="28" fill={ink}>{name}</text>
-  </g>
-);
-
-const LiuChip = ({ x }: { x: number }) => (
-  <g>
-    <rect x={x - 62} y="190" width="124" height="48" fill={sage} stroke={okGreen} strokeWidth="2" />
-    <text x={x} y="223" textAnchor="middle" fontSize="26" fill={okGreen}>劉備</text>
+    <rect x={STORY_X - 170} y={y - 20} width="340" height="40" fill="#FFFFFF" stroke={amber} strokeWidth="2" />
+    <text x={STORY_X} y={y + 9} textAnchor="middle" fontSize="26" fill={ink}><tspan fill={quiet} fontSize="24">{n}</tspan>　<tspan fontWeight="600">{name}</tspan></text>
+    {left ? <g className="aw3-build" style={buildDelay(0)}><line x1={STORY_X - 230} y1={y} x2={STORY_X - 174} y2={y} stroke={okGreen} strokeWidth="2" strokeDasharray="6 6" /><text x={STORY_X - 244} y={y + 9} textAnchor="end" fontSize="26" fill={okGreen}>{left}</text></g> : null}
+    {right ? <g className="aw3-build" style={buildDelay(1)}><line x1={STORY_X + 174} y1={y} x2={STORY_X + 230} y2={y} stroke={blue} strokeWidth="2" strokeDasharray="6 6" /><text x={STORY_X + 244} y={y + 9} fontSize="26" fill={blue}>{right}{extra ? <tspan fill={quiet} fontSize="24">　未明：{extra}</tspan> : null}</text></g> : null}
   </g>
 );
 
 const PersonFilter: Page = () => (
   <Shell chapter={4}>
     <PracticeEyebrow time="練習 3 第 4 步">練習 3｜進階選做</PracticeEyebrow>
-    <Heading>進階：只排出劉備的事件</Heading>
+    <Heading>進階：畫出劉備的故事線</Heading>
     <PromptsCopy step="3-4" />
-    <In i={0} style={{ marginTop: 40 }}>
-      <CodeDoc title="自己在 SKILL.md 的步驟加第 4 步" size={28}>
-        <CL band={sage} color={okGreen}>+ 4. 使用者指定人物時，只留下參與人物有他的事件</CL>
+    <In i={0} style={{ marginTop: 24, display: 'grid', gridTemplateColumns: '1000px 1fr', gap: 32, alignItems: 'start' }}>
+      <CodeDoc title="自己在 SKILL.md 的步驟加第 4 步" size={24} lh={1.4}>
+        <CL band={sage} color={okGreen}>{'+ 4. 使用者指定人物時，改畫成他的故事線：'}</CL>
+        <CL band={sage} color={okGreen}>{'     只留下參與人物有他的事件，由上往下排；'}</CL>
+        <CL band={sage} color={okGreen}>{'     中間放事件，左邊同一邊、右邊作對的人，'}</CL>
+        <CL band={sage} color={okGreen}>{'     說不上敵友的寫在事件下面'}</CL>
       </CodeDoc>
+      <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `6px solid ${amber}`, padding: '16px 26px' }}>
+        <SmallLabel>你輸入</SmallLabel>
+        <div style={{ fontSize: 26, lineHeight: 1.5, marginTop: 8 }}>請使用 sanguo-timeline skill，畫劉備的故事線，存成 整理/劉備的故事線.md</div>
+      </div>
     </In>
-    <Steps><Step duration={STEP_MS}><div style={{ marginTop: 20 }}><PromptBox size={29}>請使用 sanguo-timeline skill，只排劉備的事件，存成 整理/時間軸-劉備.md</PromptBox></div></Step></Steps>
     <Fit>
-      <Stage h={240}>
+      <Stage h={310}>
         <Steps>
-          <Layer h={260} label="加第 4 步之前，全部六件事：桃園結義、三英戰呂布、白門樓、煮酒論英雄、草船借箭、赤壁之戰">
+          <Layer h={310} label="第三堂的六件事，依回目由上往下：桃園結義、三英戰呂布、白門樓、煮酒論英雄、草船借箭、赤壁之戰">
             <InG i={1}>
-              <line x1="60" y1="110" x2="1572" y2="110" stroke={amber} strokeWidth="4" />
-              <FilterDot x={110} n="第 1 回" name="桃園結義" />
-              <FilterDot x={392} n="第 5 回" name="三英戰呂布" />
-              <FilterDot x={674} n="第 19 回" name="白門樓" />
-              <FilterDot x={956} n="第 21 回" name="煮酒論英雄" />
-              <FilterDot x={1238} n="第 46 回" name="草船借箭" />
-              <FilterDot x={1520} n="第 49 回" name="赤壁之戰" />
+              <text x={STORY_X - 244} y="12" textAnchor="end" fontSize="24" fontWeight="600" fill={okGreen}>同一邊</text>
+              <text x={STORY_X} y="12" textAnchor="middle" fontSize="24" fontWeight="600" fill={quiet}>事件</text>
+              <text x={STORY_X + 244} y="12" fontSize="24" fontWeight="600" fill={blue}>作對</text>
+              <line x1={STORY_X} y1="24" x2={STORY_X} y2="304" stroke={rule} strokeWidth="3" />
+              <StoryRow y={44} n="第 1 回" name="桃園結義" />
+              <StoryRow y={92} n="第 5 回" name="三英戰呂布" />
+              <StoryRow y={140} n="第 19 回" name="白門樓" />
+              <StoryRow y={188} n="第 21 回" name="煮酒論英雄" />
+              <StoryRow y={236} n="第 46 回" name="草船借箭" />
+              <StoryRow y={284} n="第 49 回" name="赤壁之戰" />
             </InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={260} label="結果：草船借箭的參與人物沒有劉備，被拿掉；其他五件留下">
+          <Step duration={STEP_MS}><Layer h={310} label="草船借箭的參與人物沒有劉備，被拿掉">
             <g className="aw3-build" style={buildDelay(0)}>
-              <rect x="1150" y="40" width="176" height="150" fill="#FAFAF9" opacity="0.82" />
-              <CrossMark x={1238} y={110} size={40} color={warn} />
-              <text x="1238" y="228" textAnchor="middle" fontSize="25" fill={warn}>沒有劉備</text>
+              <rect x={STORY_X - 172} y="214" width="344" height="44" fill="#FAFAF9" opacity="0.85" />
+              <line x1={STORY_X - 160} y1="236" x2={STORY_X + 160} y2="236" stroke={warn} strokeWidth="4" />
+              <text x={STORY_X + 244} y="245" fontSize="26" fill={warn}>沒有劉備，拿掉</text>
             </g>
-            <g className="aw3-build" style={buildDelay(1)}>
-              <LiuChip x={110} />
-              <LiuChip x={392} />
-              <LiuChip x={674} />
-              <LiuChip x={956} />
-              <LiuChip x={1520} />
-            </g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={310} label="其餘五站分左右：左邊同一邊，右邊作對；白門樓的侯成、宋憲、魏續敵友未明；曹操在白門樓同一邊，到煮酒論英雄和赤壁之戰換到作對">
+            <StoryRow y={44} n="第 1 回" name="桃園結義" left="關羽、張飛" />
+            <StoryRow y={92} n="第 5 回" name="三英戰呂布" left="關羽、張飛、公孫瓚" right="呂布" />
+            <StoryRow y={140} n="第 19 回" name="白門樓" left="曹操、關羽、張飛" right="呂布、陳宮、高順" extra="侯成、宋憲、魏續" />
+            <StoryRow y={188} n="第 21 回" name="煮酒論英雄" left="關羽、張飛" right="曹操" />
+            <StoryRow y={284} n="第 49 回" name="赤壁之戰" left="孫權、關羽、張飛" right="曹操" />
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', marginTop: 18 }}>
-        <div style={{ background: sage, padding: '12px 28px' }}><StatusLine ok size={29}>草船借箭沒有劉備，拿掉，剩 5 件</StatusLine></div>
+      <Steps><Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', marginTop: 12 }}>
+        <div style={{ background: sage, padding: '10px 28px' }}><StatusLine ok size={28}>左右兩邊的名字，都在那張卡的參與人物裡</StatusLine></div>
       </div></Step></Steps>
     </Fit>
   </Shell>
@@ -2768,7 +2773,7 @@ const NOTES = new Map<Page, string>([
 按一下：這 12 條線（桃園結義 3 條、煮酒論英雄 4 條、赤壁之戰 5 條），都是關係卡最後一行「參與人物」寫出來的，上一堂我們請 Codex 照這個規則畫過 ASCII 關係圖。
 請大家打開上一堂的筆記庫，確認卡片都還在。今天全部接著用這一個筆記庫。
 最後一下：今天用 Skill 畫一張關係圖、改寫一張卡，最後自己寫 Skill 排出時間軸。`],
-  [Agenda, `06:00–08:00。今天四章、三個練習。先看懂一份 SKILL.md，再安裝兩個熱門 Skill，接著用 Skill 畫一張關係圖、改寫一張卡，最後跑自己的 sanguo-timeline，補一條規則再跑一次。做得快的同學有加碼題：標籤疊到就請 Codex 修、只排劉備的事件、換一個畫圖 Skill 畫同一條時間軸，到那一頁再說。第三章做完，64 分休息 5 分鐘。
+  [Agenda, `06:00–08:00。今天四章、三個練習。先看懂一份 SKILL.md，再安裝兩個熱門 Skill，接著用 Skill 畫一張關係圖、改寫一張卡，最後跑自己的 sanguo-timeline，補一條規則再跑一次。做得快的同學有加碼題：標籤疊到就請 Codex 修、畫劉備的故事線、換一個畫圖 Skill 畫同一條時間軸，到那一頁再說。第三章做完，64 分休息 5 分鐘。
 第四章花的時間最多：跑自己的 Skill、看結果、改 SKILL.md、再跑一次，這是今天的重點。裝不起來時的解法、想多懂一點的內容，都放在最後的附錄，需要時再翻。最後 8 分鐘總結、預告第四堂；第四堂前請先註冊 Forestry.md。
 下一頁先做練習 1 的第一步：檢查電腦有沒有 Node.js 和 git。`],
   [Section1, `11:00–11:15。第一章：什麼是 Skill。先認識今天要用的 eli5，再跟著一個任務走一遍：下提示詞、看 Codex 有沒有用到它、看改寫結果，最後打開 eli5 的 SKILL.md，看那些改法是從哪裡來的。接著講為什麼要存成 Skill、Skill 資料夾長什麼樣子，最後用一張表和 Prompt、AGENTS.md、MCP 比一比。還在裝 Node.js 的同學，邊裝邊聽。`],
@@ -2973,10 +2978,12 @@ npx 裝不起來：prompts.md 練習 3-1 最後有備用做法，用一行指令
 五個都搜不到的同學，一樣有事做：挑一個你不滿意的地方，例如顏色、事件名稱的字太小、想在線下多寫參與人物，寫成一句規則，用同樣的方式加在輸出格式最後，存檔，再跑一次。`],
   [TimelineVideo, `99:00–102:00。講師錄好的練習 3 完整過程（2026-10-30，Codex 0.165.0，約 2 分鐘，等待的空檔剪掉了），課堂上不現場跑。0:00 npx 裝骨架；0:38 第一次跑，Codex 回報「未填年份均標示『未記載』」；1:12 /quit 後用 grep 數，整理/時間軸.md 裡有 6 處「未記載」；1:22 SKILL.md 最後多了兩行規則（影片略過編輯畫面，用 tail 顯示檔案最後四行；你們用 open -e 或 notepad 打開來貼）；1:28 重開 Codex，同一句再跑一次；2:10 再搜，0 處。
 重點就是這一段：同一句提示詞，改了 SKILL.md，結果跟著變。影片開頭有一行 Codex 有新版的提示，不用理它；中間有一行讀到 superpowers 的 SKILL.md，是講師電腦另外裝的 Skill，你們不會有。還在改規則的同學，跟著影片做。`],
-  [PersonFilter, `102:00–106:00。做完的人挑戰進階選做：只排出劉備的事件。照練習 3-3 的方法打開 SKILL.md，在步驟的第 3 步下面加一行第 4 步：「使用者指定人物時，只留下參與人物有他的事件」，存檔。下面是加這一步之前的六件事。
-按一下：/quit、重開 Codex 後輸入：「請使用 sanguo-timeline skill，只排劉備的事件，存成 整理/時間軸-劉備.md」。
-按一下：這是講師實測的結果，2026-10-18、10-24（舊版表格）和 10-30（橫向時間軸）都是第 1、5、19、21、49 回，五件事。草船借箭被拿掉了，因為它的參與人物是周瑜、諸葛亮、魯肅、[[曹操]]，沒有劉備。
-按一下：所以你的結果可能是 5 件或 6 件。第二堂練習自己寫過〈轅門射戟〉或〈許田打圍〉的同學，那張卡的參與人物有劉備，會多一件，變成 6 件，這是對的；寫〈溫酒斬華雄〉的沒有劉備，還是 5 件。10-30 那次，只有第 1 回有年份（中平元年），來源卡是純文字，練習 3-3 加的兩條規則照樣有效。核對方法一樣：打開每張卡看「參與人物」那一行。
+  [PersonFilter, `102:00–106:00。做完的人挑戰進階選做：畫出劉備的故事線。照練習 3-3 的方法打開 SKILL.md，在步驟的第 3 步下面加一行第 4 步，內容在 prompts.md 練習 3-4，整段複製，存檔。這一行告訴 Skill：指定人物時，只留下有他的事件，由上往下排，中間放事件，左邊放和他同一邊的人，右邊放和他作對的人，說不上敵友的寫在事件下面。
+/quit、重開 Codex 後輸入：「請使用 sanguo-timeline skill，畫劉備的故事線，存成 整理/劉備的故事線.md」。
+下面先列出第三堂的六件事，照回目往下排。
+按一下：草船借箭的參與人物是周瑜、諸葛亮、魯肅、曹操，沒有劉備，所以被拿掉，剩五站。
+按一下：其餘五站分左右。這是講師 2026-10-30 用 Codex 0.165.0，在範例筆記庫的副本上實跑的結果，成品放在 aw-03-sample-output/練習3/劉備的故事線.md。白門樓時曹操和劉備同坐，在同一邊；到了煮酒論英雄和赤壁之戰，曹操在作對那一邊。侯成、宋憲、魏續的卡片沒有交代和劉備的關係，Codex 寫成敵友未明。煮酒論英雄的曹操放哪一邊，每個人跑出來可能不一樣：劉備當時寄身在曹操底下，卻防著他。看 Codex 寫的理由合不合卡片就好。
+按一下：核對方法：打開每張關係卡，看「參與人物」那一行，左右兩邊的名字都要在裡面；不在裡面的名字，是 Codex 自己加的，要刪掉。第二堂自己寫過〈轅門射戟〉或〈許田打圍〉的同學會多一站，這是對的。
 還有時間的同學，下一頁換一個畫圖 Skill。`],
   [TimelineStyles, `106:00–112:00。進階選做第二題：同一份 整理/時間軸.md，換一個畫圖 Skill 畫。先問大家：交給不同的 Skill 畫，會長一樣嗎？接下來一張一張看，都是講師 10-30 實跑的成品，整條時間軸截下來，六件事都在；每按一下換一張，放在同一個位置比較。
 按一下：diagram-design，練習 1-4 已經裝好，畫得很素：灰底、細線、小圓點，六件事平均排開。
