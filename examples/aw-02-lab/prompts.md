@@ -104,11 +104,11 @@
 
 ### 第 1 輪：全班核對同一份回答
 
-1. 打開 [先核對這份回答.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-02-sample-output/%E5%85%88%E6%A0%B8%E5%B0%8D%E9%80%99%E4%BB%BD%E5%9B%9E%E7%AD%94.md)。這份是講師準備的，故意藏了 3 個錯。
+1. 打開 [先核對這份回答.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-02-sample-output/%E5%85%88%E6%A0%B8%E5%B0%8D%E9%80%99%E4%BB%BD%E5%9B%9E%E7%AD%94.md)。這份是講師在第二堂的筆記庫實跑的回答（還沒有大家自己的卡）。
 2. 每一列在自己的 Obsidian 查「有根據？」，打勾或打叉。
 3. 打開 人物/關羽.md，最後一行「關係與事件」列了三件事。回答都用到了嗎？漏了哪一件？
 
-看結果：找到 3 個打叉的列和 1 件漏掉的事。答案在投影片上，按一下才出現。
+看結果：每一列都打了勾或叉，也查完三件事有沒有到齊。答案在投影片上，按一下才出現。核對是為了確認，全部打勾也是正確結果。
 
 ### 第 2 輪：問你自己的筆記庫
 
