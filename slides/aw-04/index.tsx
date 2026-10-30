@@ -1862,8 +1862,8 @@ const CourseRecap: Page = () => (
       </In>
       <div>
         <Steps>
-          <Step duration={STEP_MS}><MatrixRow label="RAG" cells={['Web Search 就是 RAG', '查筆記、附出處', '照原文新增卡片', '每張卡都有出處']} /></Step>
-          <Step duration={STEP_MS}><MatrixRow label="Obsidian" cells={['（預告）', '安裝、連結、關係圖', '卡片模板、時間欄位', 'Digital Garden 發布']} /></Step>
+          <Step duration={STEP_MS}><MatrixRow label="RAG" cells={['Web Search 就是 RAG', '查筆記、附出處', '時間軸只照卡片排', '每張卡都有出處']} /></Step>
+          <Step duration={STEP_MS}><MatrixRow label="Obsidian" cells={['（預告）', '安裝、連結、關係圖', '用回目排時間軸', 'Digital Garden 發布']} /></Step>
           <Step duration={STEP_MS}><MatrixRow label="Skills" cells={['AGENTS.md（預告）', '（預告）', '安裝、自己寫一個', 'Skill 產出放上網站']} /></Step>
         </Steps>
       </div>
@@ -2102,7 +2102,7 @@ const NOTES = new Map<Page, string>([
 右下角三個圓圈就是今天的路線：筆記 → Forestry.md → 網址。Forestry.md 是幫你放網站的服務，等一下會介紹。
 請大家先在筆電打開這份簡報，網址在畫面上：chrouos.github.io/AI-workshop-slides。練習頁右上角的 prompts.md 連結要在筆電上點，步驟、提示詞和網址都整段複製，不用照投影幕打字；投影幕上的 QR code 只能用手機掃。今天的教材都在 ${LAB_URL} ，整包下載是 aw-04-lab.zip：${LAB_ZIP_URL} ，所有教材的總表在 https://github.com/Chrouos/AI-workshop-slides/tree/main/examples 。`],
   [LessonRecap, `01:00–04:00
-先回頭看三樣東西。第一堂用 Codex 寫出 三國演義大綱.md，人名都是 [[連結]]。第二堂把它放進 Obsidian，和人物、勢力、關係卡連起來。第三堂用 Skill 擴充卡片，排出 時間軸.md。
+先回頭看三樣東西。第一堂用 Codex 寫出 三國演義大綱.md，人名都是 [[連結]]。第二堂把它放進 Obsidian，和人物、勢力、關係卡連起來。第三堂補進三張關係卡，用自己寫的 Skill 排出 時間軸.md。
 按一下：第四個站是今天要做的網站。
 再按一下：今天把前三堂的成果放到一個網址上。請大家先打開 Obsidian，確認第三堂做的 整理/時間軸.md 和 關係/三英戰呂布.md 都在。`],
   [SiteGoal, `04:00–07:30
@@ -2238,7 +2238,7 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
 3，Ctrl／Cmd + P，Publish All Notes Marked for Publish，等 Publish history 變 Published。
 4，打開你的網址，後面接 /整理/時間軸/。
 按一下：看到橫向時間軸就過關；404 就是沒勾，或勾了還沒發布。下一頁看時間軸在網站上的樣子。
-筆記庫裡沒有第三堂的 時間軸.md 或三張新卡的同學（第三堂沒做完）：講師的成品在線上 https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output ，練習4 資料夾的 時間軸.md 放進 整理/，練習3 資料夾的三張卡放進 關係/，拖檔案、不要拖整個資料夾。`],
+筆記庫裡沒有第三堂的 時間軸.md 或三張新卡的同學（第三堂沒做完）：講師的成品在線上 https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output ，練習3 資料夾的 時間軸.md 放進 整理/；三張卡在 aw-03-lab.zip 的 關係/ 資料夾（線上 examples/aw-03-lab/關係/），放進 關係/。拖檔案、不要拖整個資料夾。`],
   [HomeFlag, `73:00–74:30
 網站打開的第一頁是哪一張？由 dg-home 決定。
 左邊是〈三國演義〉的開頭：除了 dg-publish，還多一行 dg-home: true。講師的教材已經加好了。
@@ -2262,7 +2262,7 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
 最後一下：先 Add publish flag，再 Publish All。另外，Forestry 的儀表板會提到 Publication Center，是左邊工具列的小幼苗圖示，可以看哪些卡要發布；今天用命令面板就夠了。
 來源：https://docs.forestry.md/getting-started/02-commands/`],
   [HtmlTest, `70:30–73:00
-這是第三堂時間軸 Skill 跑出來的 時間軸.md，也就是講師第三堂練習 4 跑出來的那份：一段 HTML，畫成橫向時間軸，第 1 回到第 49 回共六件事，下面一段「來源卡」列出每件事出自哪張關係卡。講師 2026-10-30 把它放進自己的 Digital Garden 模板，在電腦上建置成網站，這是實際畫面。先說清楚：這是本機建置，還沒透過 Obsidian 外掛發布到線上驗證，等一下大家發布後請一起確認。
+這是第三堂時間軸 Skill 跑出來的 時間軸.md，也就是講師第三堂練習 3 跑出來的那份：一段 HTML，畫成橫向時間軸，第 1 回到第 49 回共六件事，下面一段「來源卡」列出每件事出自哪張關係卡。講師 2026-10-30 把它放進自己的 Digital Garden 模板，在電腦上建置成網站，這是實際畫面。先說清楚：這是本機建置，還沒透過 Obsidian 外掛發布到線上驗證，等一下大家發布後請一起確認。
 按一下：1，HTML 照常顯示。模板預設就允許筆記裡寫 HTML（markdown-it 的 html: true），所以第三堂讓 Skill 產出 HTML 沒有問題。這段時間軸只用到排版和顏色設定，沒有 script，網站上不需要另外跑程式。
 按一下：2，網站的內文欄比較窄，一開始只看得到桃園結義、三英戰呂布、白門樓三件。用觸控板往右滑，或拖曳時間軸下方的捲軸，就會看到煮酒論英雄、草船借箭、赤壁之戰。發布後請大家實際滑一次，確認六件都在。
 按一下：3，來源卡寫成純文字檔名，沒有做成連結，所以不會點到 404。第三堂第一次跑的時候，Skill 把來源卡寫成 <a href="../關係/桃園結義.md"> 這種連結；講師之前用舊版 Skill 排出的時間軸，在這個模板上點下去就是 404。所以第三堂在 SKILL.md 補了一條規則：來源卡只寫檔名純文字，不做連結。用舊版 Skill 產出的同學，重跑一次，或手動把那幾個 <a> 拿掉。`],
@@ -2313,8 +2313,8 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
 最後一下：從第 1 步往下查，不要跳步。`],
   [CourseRecap, `106:00–109:00
 四堂課走一圈。上面是四個成果：大綱、筆記庫、時間軸、網站。
-按一下：RAG 這條線。第一堂知道 Web Search 就是 RAG；第二堂在自己的筆記庫查資料、附出處；第三堂照原文新增卡片；今天網站上每張卡都有出處。
-按一下：Obsidian 這條線。第一堂只預告；第二堂安裝、連結、畫關係圖；第三堂加卡片模板和時間欄位；今天用 Digital Garden 發布。
+按一下：RAG 這條線。第一堂知道 Web Search 就是 RAG；第二堂在自己的筆記庫查資料、附出處；第三堂的時間軸只照卡片上寫的回目和年份排，沒寫的不補；今天網站上每張卡都有出處。
+按一下：Obsidian 這條線。第一堂只預告；第二堂安裝、連結、畫關係圖；第三堂用卡片上的回目排出時間軸；今天用 Digital Garden 發布。
 按一下：Skills 這條線。第一堂預告 AGENTS.md；第三堂安裝熱門 Skill、自己寫一個；今天把 Skill 的產出放上網站。
 最後一下：四堂課都在擴充同一個三國知識庫，每一堂都用上一堂的成果。`],
   [NextSteps, `111:30–114:00

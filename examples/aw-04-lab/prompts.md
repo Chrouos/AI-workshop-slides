@@ -62,7 +62,7 @@ Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛
 3. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish，等 Publish history 變成 Published。
 4. 打開你的網址，後面接 `/整理/時間軸/`。
 
-筆記庫裡沒有 `整理/時間軸.md`，或沒有第三堂新增的三張卡（第三堂沒做完）：講師的成品在線上 [aw-03-sample-output/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output)，把 `練習4/時間軸.md` 放進筆記庫的 `整理/`，`練習3/關係/` 的三張卡放進 `關係/`。拖檔案，不要拖整個資料夾。
+筆記庫裡沒有 `整理/時間軸.md`，或沒有第三堂拖進來的三張卡（第三堂沒做完）：講師的成品在線上 [aw-03-sample-output/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output)，把 `練習3/時間軸.md` 放進筆記庫的 `整理/`；三張卡在 [aw-03-lab/關係/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-lab/%E9%97%9C%E4%BF%82)（也在 aw-03-lab.zip 裡），放進 `關係/`。拖檔案，不要拖整個資料夾。
 
 看結果：看到橫向時間軸就過關。網站的內文欄比較窄，一開始只看得到前三件，用觸控板往右滑，或拖動時間軸下方的捲軸，就看得到其他事件。出現 404，就是那張還沒勾，或勾了還沒發布。
 

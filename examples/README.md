@@ -28,7 +28,8 @@
 - 簡報：[aw-03](https://chrouos.github.io/AI-workshop-slides/s/aw-03/)
 - 下載：[aw-03-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-03-lab.zip)，Codex 一樣開在自己的「三國人物知識庫」，這包只是教材：
   - `prompts.md`：[線上看](aw-03-lab/prompts.md)，含 Skill 裝不起來時的備用做法
-  - `sanguo-timeline/`：練習 4 的時間軸 Skill 骨架，用 `npx skills add` 裝進筆記庫
+  - `sanguo-timeline/`：練習 3 的時間軸 Skill 骨架，用 `npx skills add` 裝進筆記庫
+  - `關係/`：三張照原文寫好的關係卡，練習 3-1 第一步拖進筆記庫的 `關係/`
 - 講師每個練習的實跑成品：[aw-03-sample-output/](aw-03-sample-output/README.md)
 
 ## 第四堂：發布到網站

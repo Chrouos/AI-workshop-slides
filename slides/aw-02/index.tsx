@@ -1618,7 +1618,7 @@ const GrayDecide: Page = () => (
         <div style={{ display: 'grid', gap: 22 }}>
           <Steps>
             <Step duration={STEP_MS}><Decision n={1} when="先數次數" then="搜尋「呂布」" eg={<>Cmd+Shift+F（Windows 是 Ctrl+Shift+F）</>} /></Step>
-            <Step duration={STEP_MS}><Decision n={2} when="常出現、原文夠寫" then="記下來，第三堂補卡" eg="例：呂布 29 次，第 5、19 回都有他" /></Step>
+            <Step duration={STEP_MS}><Decision n={2} when="常出現、原文夠寫" then="記下來，之後照原文補卡" eg="例：呂布 29 次，第 5、19 回都有他" /></Step>
             <Step duration={STEP_MS}><Decision n={3} when="只出現一兩次" then="先留著" eg="淡色不會壞，之後再補" /></Step>
           </Steps>
         </div>
@@ -2967,7 +2967,7 @@ const SkillStop = ({ x, n, kind, label }: { x: number; n: number; kind: IconKind
 const NextSkills: Page = () => (
   <Shell source={'Codex 文件：Skills developers.openai.com/codex/skills；agentskills.io'}>
     <Eyebrow>下一堂預告</Eyebrow>
-    <Heading>用 Skill 擴充筆記庫</Heading>
+    <Heading>用 Skill 畫圖、排時間軸</Heading>
     <Lead>Skill＝寫好的做事說明，像一份食譜</Lead>
     <Fit>
       <Stage h={430}>
@@ -3216,7 +3216,7 @@ ${VAULT_ZIP_URL}
 按一下，標 1：劉備是深紫色，筆記庫裡有 劉備.md，點了會打開。關羽、張飛、曹操、〈桃園結義〉也一樣。
 按一下，標 2：董卓是淡紫色，筆記庫裡還沒有這張卡，這叫「未解析連結」（Unresolved Link）。點了 Obsidian 會在筆記庫最外層新增一張空白的 董卓.md，不想新增就先別點。淡色不代表打錯字，只是還沒寫卡。
 投影或螢幕分不出深淺時，按 Cmd+O（Windows 是 Ctrl+O）搜名字，找不到這個檔，就是還沒有卡。
-淡色的名字要不要補卡、怎麼數它出現幾次，是選做，放在附錄第 ${pageOf(GrayDecide)} 頁；第三堂會用 Skill 照原文補卡。`],
+淡色的名字要不要補卡、怎麼數它出現幾次，是選做，放在附錄第 ${pageOf(GrayDecide)} 頁；之後可以照原文補卡；第三堂會直接給大家講師照原文寫好的三張卡。`],
   [VideoCard, `37:30–41:00（影片約 3 分鐘）。下一步是今天最重要的動手：自己寫一張關係卡，再把它連回大綱。先看講師做一次，影片邊放邊講，右邊的時間可以跳段。
 影片裡要講的一點：影片是從模板按 Cmd+A 全選複製，Obsidian 不會選到最上面的「屬性」（回目、年份），所以貼上後沒有回目，1:50 示範補法：右上角 ⋯ →「新增檔案屬性」，名稱打 回目，值打 20。你們不用這樣做：prompts.md 練習 2-2 直接放了整段模板（從 --- 開始），複製貼進新筆記，回目、年份會自動變成屬性欄。
 影片內容（講師的螢幕錄影，3 分 07 秒，沒有聲音）：0:00 在 Finder 打開 Codex_練習/原文，Cmd+A 全選 21 個檔，拖到 Obsidian 左側的 原文/；再把大綱拖進 整理/。0:32 打開大綱，點第 1 回的劉備。0:44 在 關係/ 新增筆記〈許田打圍〉，貼上模板。1:08 寫兩三句（原文第 20 回），人名加 [[ ]]，參與人物寫曹操、劉備、關羽。1:50 補回目和出處。2:08 打開大綱第 20 回那段，最後加上（[[許田打圍]]）。2:30 打開〈許田打圍〉和〈關羽〉，看反向連結。`],
