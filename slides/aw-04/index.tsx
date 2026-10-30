@@ -211,9 +211,9 @@ const PromptsCopy = ({ lead, section }: { lead: string; section: string }) => (
   </>
 );
 
-// The five chapters of the lesson. Pages inside a chapter show where we are.
-const CHAPTERS = ['開一座花園', '連接 Obsidian', '網站怎麼更新', '挑卡發布', '檢查網站與延伸'];
-type Chapter = 1 | 2 | 3 | 4 | 5;
+// The four chapters of the lesson, in the order you meet them. Pages inside a chapter show where we are.
+const CHAPTERS = ['開一座花園', '連上 Obsidian', '挑卡發布', '更新與檢查'];
+type Chapter = 1 | 2 | 3 | 4;
 
 // One segment of the route bar. The current chapter is amber; on a chapter's opening
 // page it fills in left to right, once, on the live page only.
@@ -233,7 +233,6 @@ const RouteBar = ({ chapter, enter = false }: { chapter: Chapter; enter?: boolea
       <RouteSeg color={tone(2)} fill={fill && chapter === 2} />
       <RouteSeg color={tone(3)} fill={fill && chapter === 3} />
       <RouteSeg color={tone(4)} fill={fill && chapter === 4} />
-      <RouteSeg color={tone(5)} fill={fill && chapter === 5} />
       <span style={{ marginLeft: 12, fontSize: 24, fontWeight: 600, color: amber, letterSpacing: '0.04em' }}>
         {String(chapter).padStart(2, '0')}｜{CHAPTERS[chapter - 1]}
       </span>
@@ -523,10 +522,10 @@ const LessonRecap: Page = () => (
     <Fit>
       <Stage h={390}>
         <Steps>
-          <Layer h={390} label="第一堂大綱、第二堂筆記庫、第三堂時間軸">
+          <Layer h={390} label="第一堂大綱、第二堂知識庫、第三堂時間軸">
             <InG i={0}><LessonStop x={204} n={1} kind="doc" name="大綱" file="三國演義大綱.md" /></InG>
             <InG i={1}><MapArrow x1={300} x2={516} y={110} /></InG>
-            <InG i={2}><LessonStop x={612} n={2} kind="folder" name="筆記庫" file="三國人物知識庫/" /></InG>
+            <InG i={2}><LessonStop x={612} n={2} kind="folder" name="知識庫" file="三國人物知識庫/" /></InG>
             <InG i={3}><MapArrow x1={708} x2={924} y={110} /></InG>
             <InG i={4}><LessonStop x={1020} n={3} kind="timeline" name="時間軸" file="整理/時間軸.md" /></InG>
           </Layer>
@@ -540,17 +539,6 @@ const LessonRecap: Page = () => (
       <Steps><Step duration={STEP_MS}><Takeaway>今天把前三堂的成果，放到一個網址上</Takeaway></Step></Steps>
     </Fit>
   </Shell>
-);
-
-// A page of the finished site, drawn as one card the reader walks through.
-const SitePage = ({ x, kind, name, line, next }: { x: number; kind: string; name: string; line: string; next?: string }) => (
-  <g>
-    <rect x={x} y="86" width="340" height="290" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
-    <text x={x + 26} y="130" fontSize="24" fill={quiet}>{kind}</text>
-    <text x={x + 26} y="186" fontSize="38" fontWeight="600" fill={ink}>{name}</text>
-    <text x={x + 26} y="236" fontSize="25" fill={muted}>{line}</text>
-    {next ? <text x={x + 26} y="330" fontSize="29" fill={link} textDecoration="underline">{next}</text> : null}
-  </g>
 );
 
 // The finished example site, before anything is explained: three real pages, left to right
@@ -573,7 +561,7 @@ const LiveShot = ({ n, src, title, detail, alt }: { n: number; src: string; titl
 );
 
 const FinalSite: Page = () => (
-  <Shell source={'範例網站 glowing-clearing.forestry.md；筆記庫 examples/final（GitHub）'}>
+  <Shell source={'範例網站 glowing-clearing.forestry.md；知識庫 examples/final（GitHub）'}>
     <Eyebrow>範例網站｜實際畫面</Eyebrow>
     <Heading>四堂課的筆記，發布成網站</Heading>
     <Fit>
@@ -587,59 +575,6 @@ const FinalSite: Page = () => (
       </div>
     </Fit>
     <FooterUrl href={FINAL_URL} />
-  </Shell>
-);
-
-const SiteGoal: Page = () => (
-  <Shell>
-    <Eyebrow>成果示意｜外觀依模板而定</Eyebrow>
-    <Heading>今天要做出的網站</Heading>
-    <Fit>
-      <Figure h={420} label="網站上的路徑：首頁三國演義 → 知識庫導覽 → 時間軸看事件順序，或 → 劉備、桃園結義等人物和事件卡">
-        <InG i={0}><BrowserFrame x={0} y={0} w={1632} h={410} url="https://你的花園.forestry.md" /></InG>
-        <InG i={1}><SitePage x={30} kind="首頁" name="三國演義" line="東漢末年，天下大亂" next="知識庫導覽" /></InG>
-        <InG i={3}>
-          <rect x="434" y="86" width="400" height="290" fill={amberSoft} stroke={amber} strokeWidth="2" />
-          <text x="460" y="130" fontSize="24" fill={amber}>導覽頁</text>
-          <text x="460" y="186" fontSize="38" fontWeight="600" fill={ink}>知識庫導覽</text>
-          <text x="460" y="246" fontSize="29" fill={link} textDecoration="underline">時間軸</text>
-          <text x="460" y="298" fontSize="29" fill={link} textDecoration="underline">劉備、曹操、孫權</text>
-          <text x="460" y="350" fontSize="29" fill={link} textDecoration="underline">桃園結義、赤壁之戰</text>
-        </InG>
-        <InG i={5}>
-          <rect x="930" y="86" width="672" height="146" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
-          <text x="956" y="118" fontSize="24" fill={quiet}>時間軸｜看事件順序</text>
-          <text x="1590" y="118" textAnchor="end" fontSize="24" fill={muted}>橫向，沒有連結</text>
-          <line x1="956" y1="180" x2="1576" y2="180" stroke={muted} strokeWidth="3" />
-          <path d="M1576 172 L1590 180 L1576 188 Z" fill={muted} />
-          <text x="1030" y="162" textAnchor="middle" fontSize="24" fill={ink}>桃園結義</text>
-          <circle cx="1030" cy="180" r="7" fill={muted} />
-          <text x="1030" y="216" textAnchor="middle" fontSize="24" fill={muted}>第 1 回</text>
-          <text x="1190" y="162" textAnchor="middle" fontSize="24" fill={ink}>三英戰呂布</text>
-          <circle cx="1190" cy="180" r="7" fill={muted} />
-          <text x="1190" y="216" textAnchor="middle" fontSize="24" fill={muted}>第 5 回</text>
-          <text x="1350" y="162" textAnchor="middle" fontSize="24" fill={ink}>白門樓</text>
-          <circle cx="1350" cy="180" r="7" fill={muted} />
-          <text x="1350" y="216" textAnchor="middle" fontSize="24" fill={muted}>第 19 回</text>
-          <text x="1510" y="162" textAnchor="middle" fontSize="24" fill={ink}>煮酒論英雄</text>
-          <circle cx="1510" cy="180" r="7" fill={muted} />
-          <text x="1510" y="216" textAnchor="middle" fontSize="24" fill={muted}>第 21 回</text>
-        </InG>
-        <InG i={7}>
-          <rect x="930" y="246" width="672" height="130" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
-          <text x="956" y="284" fontSize="24" fill={quiet}>人物、事件卡</text>
-          <text x="956" y="340" fontSize="36" fontWeight="600" fill={ink}>劉備　桃園結義　……</text>
-        </InG>
-        <g fill="none" stroke={amber} strokeWidth="4">
-          <DrawPath i={2} d="M374 231 H420" />
-          <DrawPath i={4} d="M834 238 C880 238 880 151 916 151" />
-          <DrawPath i={6} d="M834 290 C880 290 880 311 916 311" />
-          <DrawPath i={6} d="M834 342 C880 342 880 311 916 311" />
-        </g>
-        <InG i={3}><polygon points="432,231 416,222 416,240" fill={amber} /></InG><InG i={5}><polygon points="928,151 912,142 912,160" fill={amber} /></InG><InG i={7}><polygon points="928,311 912,302 912,320" fill={amber} /></InG>
-      </Figure>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}>首頁 → 導覽頁 → 時間軸、人物、事件</Takeaway></Step></Steps>
-    </Fit>
   </Shell>
 );
 
@@ -663,17 +598,16 @@ const Agenda: Page = () => (
       <div style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, paddingBottom: 12, borderBottom: `1px solid ${rule}` }}>
         <span /><SmallLabel>章節</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
       </div>
-      <AgendaRow i={0} n={1} time="10–22 分" page={Section1} />
-      <AgendaRow i={1} n={2} time="22–44 分" page={Section2} />
-      <AgendaRow i={2} n={3} time="44–52 分" page={Section3} />
-      <AgendaRow i={3} n={4} time="52–87 分" page={Section4} />
-      <AgendaRow i={4} n={5} time="87–120 分" page={Section5} />
+      <AgendaRow i={0} n={1} time="8–20 分" page={Section1} />
+      <AgendaRow i={1} n={2} time="20–50 分" page={Section2} />
+      <AgendaRow i={2} n={3} time="50–83 分" page={Section3} />
+      <AgendaRow i={3} n={4} time="83–120 分" page={Section4} />
     </Fit>
   </Shell>
 );
 
-// The lesson's route on a chapter's opening page: five stops, this one in amber.
-const TRACK_XS = [110, 463, 816, 1169, 1522];
+// The lesson's route on a chapter's opening page: four stops, this one in amber.
+const TRACK_XS = [130, 594, 1058, 1522];
 
 const TrackStop = ({ x, n, chapter }: { x: number; n: Chapter; chapter: Chapter }) => {
   const now = n === chapter;
@@ -690,14 +624,13 @@ const TrackStop = ({ x, n, chapter }: { x: number; n: Chapter; chapter: Chapter 
 const ChapterTrack = ({ chapter }: { chapter: Chapter }) => {
   const cur = TRACK_XS[chapter - 1];
   return (
-    <Figure h={170} label={`今天的五章，現在在第 ${chapter} 章：${CHAPTERS[chapter - 1]}`}>
-      <line x1={TRACK_XS[0]} y1="50" x2={TRACK_XS[4]} y2="50" stroke={rule} strokeWidth="4" />
+    <Figure h={170} label={`今天的四章，現在在第 ${chapter} 章：${CHAPTERS[chapter - 1]}`}>
+      <line x1={TRACK_XS[0]} y1="50" x2={TRACK_XS[3]} y2="50" stroke={rule} strokeWidth="4" />
       {chapter > 1 ? <g stroke={amber} strokeWidth="5" fill="none"><DrawPath i={1} d={`M${TRACK_XS[0]} 50 H${cur}`} /></g> : null}
       <TrackStop x={TRACK_XS[0]} n={1} chapter={chapter} />
       <TrackStop x={TRACK_XS[1]} n={2} chapter={chapter} />
       <TrackStop x={TRACK_XS[2]} n={3} chapter={chapter} />
       <TrackStop x={TRACK_XS[3]} n={4} chapter={chapter} />
-      <TrackStop x={TRACK_XS[4]} n={5} chapter={chapter} />
     </Figure>
   );
 };
@@ -729,15 +662,15 @@ const WebsiteIs: Page = () => (
               <rect x="40" y="150" width="390" height="64" rx="32" fill={amberSoft} stroke={amber} strokeWidth="2" />
               <text x="235" y="192" textAnchor="middle" fontSize="28" fill={ink}>輸入網址，按 Enter</text>
             </InG>
-            <InG i={1}><SvgNum x={24} y={385} n={1} /><text x="60" y="395" fontSize="30" fontWeight="600" fill={ink}>你的瀏覽器</text></InG>
+            <InG i={1}><SvgNum x={24} y={385} n={1} /><text x="60" y="395" fontSize="30" fontWeight="600" fill={ink}>用戶端：你的瀏覽器</text></InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={420} label="網址指向一台一直開著的電腦，它找到〈劉備〉這個檔案">
+          <Step duration={STEP_MS}><Layer h={420} label="網址指向伺服器，一台一直開著的電腦，它找到〈劉備〉這個檔案">
             <MapArrow x1={484} x2={584} y={170} hot draw />
             <text x="534" y="150" textAnchor="middle" fontSize="24" fill={amber}>要這頁</text>
             <Build>
               <rect x="600" y="20" width="440" height="300" fill={surface} stroke={faint} strokeWidth="2" />
               <SvgIcon kind="server" x={648} y={72} size={56} color={muted} />
-              <text x="692" y="82" fontSize="28" fill={ink}>一直開著的電腦</text>
+              <text x="692" y="82" fontSize="28" fill={ink}>伺服器：一直開著的電腦</text>
               <DocShape x={630} y={130} w={110} h={150} />
               <text x="685" y="222" textAnchor="middle" fontSize="28" fill={muted}>首頁</text>
               <DocShape x={765} y={130} w={110} h={150} fill={amberSoft} stroke={amber} sw={3} />
@@ -745,7 +678,7 @@ const WebsiteIs: Page = () => (
               <DocShape x={900} y={130} w={110} h={150} />
               <text x="955" y="222" textAnchor="middle" fontSize="28" fill={muted}>曹操</text>
             </Build>
-            <Build i={1}><SvgNum x={624} y={385} n={2} /><text x="660" y="395" fontSize="30" fontWeight="600" fill={ink}>主機找到檔案</text></Build>
+            <Build i={1}><SvgNum x={624} y={385} n={2} /><text x="660" y="395" fontSize="30" fontWeight="600" fill={ink}>伺服器找到檔案</text></Build>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={420} label="檔案傳回來，瀏覽器畫成網頁">
             <MapArrow x1={1054} x2={1150} y={170} hot draw />
@@ -758,7 +691,7 @@ const WebsiteIs: Page = () => (
               <rect x="1192" y="208" width="370" height="12" fill={rule} />
               <text x="1192" y="280" fontSize="28" fill={link} textDecoration="underline">桃園結義</text>
             </Build>
-            <Build i={1}><SvgNum x={1186} y={385} n={3} /><text x="1222" y="395" fontSize="30" fontWeight="600" fill={ink}>瀏覽器畫成網頁</text></Build>
+            <Build i={1}><SvgNum x={1186} y={385} n={3} /><text x="1222" y="395" fontSize="30" fontWeight="600" fill={ink}>用戶端畫成網頁</text></Build>
           </Layer></Step>
         </Steps>
       </Stage>
@@ -784,7 +717,7 @@ const CiCd: Page = () => (
   <Shell source={'Fowler 2024, Continuous Integration martinfowler.com/articles/continuousIntegration.html'}>
     <Eyebrow>自動化部署</Eyebrow>
     <Heading>持續整合與持續部署（CI/CD）</Heading>
-    <Lead>按發布後，自動建置並更新網站</Lead>
+    <Lead>CI 自動檢查、建置；CD 自動上線</Lead>
     <Fit>
       <Stage h={470}>
         <Steps>
@@ -795,30 +728,30 @@ const CiCd: Page = () => (
             <InG i={3}><MapArrow x1={772} x2={860} y={110} /><LaneBox x={868} y={50} kind="user" label="自己重做網頁" tone="hand" /></InG>
             <InG i={4}><MapArrow x1={1206} x2={1294} y={110} /><LaneBox x={1302} y={50} kind="globe" label="上線" tone="plain" /></InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={470} label="CI/CD：你按發布送到 Forestry，之後建置和上線都自動跑">
-            <text x="0" y="270" fontSize="28" fontWeight="600" fill={amber}>CI/CD：你只按發布，建置和上線自動完成</text>
+          <Step duration={STEP_MS}><Layer h={470} label="CI/CD：你按發布送到 Forestry，之後檢查、建置和上線都自動跑">
+            <text x="0" y="270" fontSize="28" fontWeight="600" fill={amber}>CI/CD：你只按發布，檢查、建置、上線自動完成</text>
             <Build><LaneBox x={0} y={290} kind="doc" label="改好檔案" tone="plain" /></Build>
             <Build i={1}><MapArrow x1={338} x2={426} y={350} hot /><LaneBox x={434} y={290} kind="mail" label="按發布" tone="you" /><text x="599" y="446" textAnchor="middle" fontSize="25" fontWeight="600" fill={link}>手動：送到 Forestry</text></Build>
-            <Build i={2}><MapArrow x1={772} x2={860} y={350} hot /><LaneBox x={868} y={290} kind="gear" label="自動建置" tone="auto" /></Build>
+            <Build i={2}><MapArrow x1={772} x2={860} y={350} hot /><LaneBox x={868} y={290} kind="gear" label="檢查、建置" tone="auto" /></Build>
             <Build i={3}><MapArrow x1={1206} x2={1294} y={350} hot /><LaneBox x={1302} y={290} kind="globe" label="自動上線" tone="auto" /></Build>
             <Build i={4}><path d="M868 418 V428 H1632 V418" fill="none" stroke={okGreen} strokeWidth="3" /><text x="1250" y="458" textAnchor="middle" fontSize="25" fontWeight="600" fill={okGreen}>Forestry 收到後，自動跑</text></Build>
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>你按發布之後，建置、上線都會自動完成</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>你按發布之後，檢查、建置、上線都會自動完成</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
 
 const BuildStep: Page = () => (
-  <Shell chapter={3} source={'Digital Garden 模板 github.com/oleeskild/digitalgarden（Forestry.md 也用它建置）；Eleventy 文件 11ty.dev/docs'}>
-    <Eyebrow>原始檔 → 網頁</Eyebrow>
-    <Heading>靜態網站建置（Build）</Heading>
-    <Lead>把 Markdown 筆記轉成瀏覽器能讀的網頁</Lead>
+  <Shell chapter={2} source={'Digital Garden 模板 github.com/oleeskild/digitalgarden（Forestry.md 也用它建置）；Eleventy 文件 11ty.dev/docs'}>
+    <Eyebrow>Building 在做什麼</Eyebrow>
+    <Heading>建置（Build）</Heading>
+    <Lead>把筆記做成瀏覽器能看的網頁</Lead>
     <Fit>
       <Stage h={430}>
         <Steps>
-          <Layer h={430} label="原始檔 人物/劉備.md：開頭三行屬性，內文有 [[關羽]]、[[張飛]] 兩個連結">
+          <Layer h={430} label="原始檔 人物/劉備.md：開頭是屬性，內文有 [[關羽]]、[[張飛]] 兩個連結">
             <InG i={0}>
               <DocShape x={0} y={0} w={620} h={420} />
               <text x="32" y="50" fontSize="25" fill={quiet}>人物/劉備.md（原始檔）</text>
@@ -841,14 +774,14 @@ const BuildStep: Page = () => (
             <MapArrow x1={640} x2={980} y={310} hot draw />
             <Build i={1}><text x="810" y="362" textAnchor="middle" fontSize="26" fill={muted}>你按發布，這步自動跑</text></Build>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={430} label="做好的網頁：屬性不見了，[[關羽]]、[[張飛]] 變成可以點的連結">
+          <Step duration={STEP_MS}><Layer h={430} label="做好的網頁：屬性不顯示，[[關羽]]、[[張飛]] 變成可以點的連結">
             <Build>
               <BrowserFrame x={1000} y={0} w={632} h={420} url="…/人物/劉備/" />
               <text x="1036" y="140" fontSize="48" fontWeight="600" fill={ink}>劉備</text>
               <text x="1036" y="236" fontSize="34" fill={ink}>第 1 回和 <tspan fill={link} textDecoration="underline">關羽</tspan>、</text>
               <text x="1036" y="292" fontSize="34" fill={ink}><tspan fill={link} textDecoration="underline">張飛</tspan> 桃園結義。</text>
             </Build>
-            <Build i={1}><text x="1036" y="384" fontSize="25" fill={quiet}>開頭三行不會顯示</text></Build>
+            <Build i={1}><text x="1036" y="384" fontSize="25" fill={quiet}>屬性不會顯示在網頁上</text></Build>
           </Layer></Step>
         </Steps>
       </Stage>
@@ -936,8 +869,8 @@ const GardenLive: Page = () => (
         <In i={0}><Screenshot src={forestryGardenLive} aspect={2014 / 1250} width={880} alt="Forestry 儀表板：Your garden is live，網址 glowing-clearing.forestry.md，Copy address 按鈕；下面是 Connect Obsidian、Choose your home page 兩個步驟" /></In>
         <div style={{ display: 'grid', gap: 44, paddingTop: 30 }}>
           <Steps>
-            <Step duration={STEP_MS}><TourStep n={1} title="你的網址" detail="點一下就能打開" box={[300, 164, 284, 38]} badge="right" /></Step>
-            <Step duration={STEP_MS}><TourStep n={2} title="Copy address" detail="複製網址，練習 4 會用到" box={[386, 198, 108, 34]} at={[364, 214]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={1} title="你的網址" detail="點一下就能打開" box={[300, 164, 284, 38]} at={[616, 183]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={2} title="Copy address" detail="複製網址，下一頁練習 1 就用到" box={[386, 198, 108, 34]} at={[526, 215]} /></Step>
             <Step duration={STEP_MS}><TourStep n={3} title="下一步：Connect Obsidian" detail="第二章做" box={[28, 318, 620, 46]} /></Step>
           </Steps>
         </div>
@@ -991,7 +924,7 @@ const Practice1: Page = () => (
 
 // ---------- 03 連接 Obsidian ----------
 
-const Section3: Page = () => <SectionPage chapter={3} label="03 / 原理" lead="改一句、再發布一次，看網站怎麼更新" />;
+const Section3: Page = () => <SectionPage chapter={3} label="03 / 挑卡" lead="決定哪些卡公開，讓時間軸和導覽頁上線" />;
 
 const InstallPlugin: Page = () => (
   <Shell chapter={2} source={'Obsidian 說明：社群外掛 obsidian.md/help/community-plugins'}>
@@ -1003,7 +936,7 @@ const InstallPlugin: Page = () => (
         <In i={1}><Screenshot src={dgPluginInstall} aspect={840 / 490} width={600} alt="社群外掛的 Digital Garden 頁：版本 2.103.0、作者 oleeskild、安裝按鈕" /></In>
         <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, marginTop: 8 }}>
           <Steps>
-            <Step duration={STEP_MS}><TourStep n={1} title="第三方外掛程式" detail="按「離開受限模式」" box={[730, 300, 124, 44]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={1} title="第三方外掛程式" detail="按「離開受限模式」，才能裝外掛" box={[730, 300, 124, 44]} /></Step>
             <Step duration={STEP_MS}><TourStep n={2} title="瀏覽 → 搜 Digital Garden" detail="認明作者是 oleeskild" box={[944, 0, 600, 178]} /></Step>
             <Step duration={STEP_MS}><TourStep n={3} title="安裝 → 啟用" detail="裝好後按「啟用」" box={[962, 280, 84, 46]} at={[938, 303]} /></Step>
           </Steps>
@@ -1024,8 +957,8 @@ const ConnectForestry: Page = () => (
         <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, marginTop: 8 }}>
           <Steps>
             <Step duration={STEP_MS}><TourStep n={1} title="Publish to 選 Forestry.md" box={[810, 76, 166, 44]} /></Step>
-            <Step duration={STEP_MS}><TourStep n={2} title="Reveal Garden Key，複製" detail="或按儀表板的 Connect Obsidian" box={[1074, 244, 476, 44]} /></Step>
-            <Step duration={STEP_MS}><TourStep n={3} title="貼上，按 Connect" detail="出現 Connected to 你的花園" box={[462, 226, 516, 58]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={2} title="Reveal Garden Key，複製" detail="外掛靠它找到你的花園" box={[1074, 244, 476, 44]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={3} title="貼上，按 Connect" detail="連上後，首頁選〈三國演義〉" box={[462, 226, 516, 58]} /></Step>
           </Steps>
         </div>
       </div>
@@ -1077,7 +1010,7 @@ const KeySafety: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>按 Regenerate 之後，舊的 Garden Key 就不能用</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>舊 Key 失效，把新 Key 貼回外掛設定</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1095,8 +1028,8 @@ const SlugRow = ({ y, path }: { y: number; path: string }) => (
 
 const SlugFail: Page = () => (
   <Shell chapter={2} source={'Forestry.md Publish history；@sindresorhus/slugify'}>
-    <Eyebrow>常見的錯｜發布失敗</Eyebrow>
-    <Heading>中文卡名發布失敗</Heading>
+    <Eyebrow>Failed 的原因｜實際畫面</Eyebrow>
+    <Heading>卡名是中文，網址撞在一起</Heading>
     <Fit>
       <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '640px 1fr', gap: 80, alignItems: 'start' }}>
         <div style={{ position: 'relative' }}>
@@ -1113,7 +1046,7 @@ const SlugFail: Page = () => (
                 <Build i={3}><SlugRow y={220} path="關係/桃園結義" /></Build>
               </Layer></Step>
               <Step duration={STEP_MS}><Layer w={600} h={360} label="中文字被拿掉，每張卡的網址重複，網站建置失敗">
-                <Build><text x="0" y="340" fontSize="26" fontWeight="600" fill={warn}>中文字被拿掉，網址重複 → 建置失敗</text></Build>
+                <Build><text x="0" y="340" fontSize="26" fontWeight="600" fill={warn}>網址重複（DuplicatePermalink）→ 建置失敗</text></Build>
               </Layer></Step>
             </Steps>
           </Stage>
@@ -1126,16 +1059,16 @@ const SlugFail: Page = () => (
 
 const SlugFix: Page = () => (
   <Shell chapter={2} source={'Digital Garden 外掛設定 Simple note URLs'}>
-    <Eyebrow>設定 → Digital Garden → Publishing｜外掛畫面</Eyebrow>
+    <Eyebrow>設定 → 第三方外掛 → Digital Garden → Publishing</Eyebrow>
     <Heading>關掉 Simple note URLs</Heading>
     <Fit>
       <div style={{ position: 'relative', width: 1200, margin: '0 auto' }}>
         <In i={0}><Screenshot src={forestryPluginSlugify} aspect={1850 / 386} width={1200} caption="連上 Forestry 之後，同一頁往下捲才看得到 Publishing" alt="Digital Garden 外掛設定的 Publishing 區：Simple note URLs，說明寫 Turn this off if your note names use non-Latin characters，開關是開著的" /></In>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, marginTop: 40 }}>
           <Steps>
-            <Step duration={STEP_MS}><TourStep n={1} title="說明裡就有寫" detail="卡名是中文，就要關掉" box={[22, 116, 1000, 96]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={1} title="說明裡就有寫" detail="non-Latin＝不是英文字母" box={[22, 116, 1000, 96]} /></Step>
             <Step duration={STEP_MS}><TourStep n={2} title="把開關關掉" detail="截圖裡是開著的（紫色）" box={[1078, 112, 92, 52]} badge="right" /></Step>
-            <Step duration={STEP_MS}><Callout n={3} title="再發布一次" detail="看 Publish history 有沒有變 Published" /></Step>
+            <Step duration={STEP_MS}><Callout n={3} title="再發布一次" detail="等 Published，打開網址：首頁是〈三國演義〉" /></Step>
           </Steps>
         </div>
       </div>
@@ -1151,32 +1084,37 @@ const SlugFix: Page = () => (
 
 const Practice2: Page = () => (
   <Shell chapter={2} source={'Digital Garden 指令 docs.forestry.md/getting-started/02-commands'}>
-    <PracticeEyebrow time="10 分鐘">練習 2｜連接</PracticeEyebrow>
-    <Heading>練習（連接）：連上 Forestry</Heading>
+    <PracticeEyebrow time="13 分鐘">練習 2｜連上並發布</PracticeEyebrow>
+    <Heading>練習（連接）：連上並發布第一次</Heading>
     <PillRow>
-      <Pill tag="定位">今天的儲存庫</Pill>
-      <Pill tag="期望輸出">首頁變三國演義</Pill>
+      <Pill tag="定位">今天的知識庫</Pill>
+      <Pill tag="期望輸出">首頁是三國演義</Pill>
       <Pill tag="限制">Garden Key 不外流</Pill>
     </PillRow>
-    <Fit z={0.92}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 10 }}>
-        <FlowStep i={1} n={1} w={230} kind="plug" label="安裝外掛" sub="Digital Garden" />
+    <Fit>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 6 }}>
+        <FlowStep i={1} n={1} w={220} kind="plug" label="裝外掛、連線" sub="Garden Key" />
         <FlowArrow i={2} />
-        <FlowStep i={3} n={2} w={230} kind="server" label="Publish to" sub="選 Forestry.md" />
+        <FlowStep i={3} n={2} w={220} kind="doc" label="看屬性" sub="〈三國演義〉" />
         <FlowArrow i={4} />
-        <FlowStep i={5} n={3} w={230} kind="key" label="Garden Key" sub="貼上 → Connect" />
+        <FlowStep i={5} n={3} w={220} kind="upload" label="Publish All" sub="Ctrl／Cmd + P" />
         <FlowArrow i={6} />
-        <FlowStep i={7} n={4} w={230} kind="home" label="選首頁" sub="〈三國演義〉" />
+        <FlowStep i={7} n={4} w={220} kind="clock" label="看狀態" sub="Publish history" />
         <FlowArrow i={8} />
-        <FlowStep i={9} n={5} w={230} kind="gear" label="關一個開關" sub="Simple note URLs" />
+        <FlowStep i={9} n={5} w={220} kind="gear" label="關開關" sub="Simple note URLs" />
         <FlowArrow i={10} />
-        <FlowStep i={11} n={6} w={230} kind="upload" label="發布" sub="Publish All Notes" />
+        <FlowStep i={11} n={6} w={220} kind="globe" label="再發布" sub="打開網址" />
       </div>
       <Steps>
         <Step duration={STEP_MS}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 40, marginTop: 56 }}>
-            <div style={{ background: sage, padding: '16px 30px' }}><StatusLine ok size={32}>Published，首頁變〈三國演義〉</StatusLine></div>
-            <div style={{ background: warnSoft, padding: '16px 30px' }}><StatusLine ok={false} size={32}>Failed：先查第 5 步的開關</StatusLine></div>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 40, marginTop: 40 }}>
+            <div style={{ background: warnSoft, padding: '14px 30px' }}><StatusLine ok={false} size={30}>第一次 Failed 是正常的：做第 5 步</StatusLine></div>
+            <div style={{ background: surface, padding: '14px 30px' }}><StatusLine ok size={30}>已經 Published：跳到第 6 步</StatusLine></div>
+          </div>
+        </Step>
+        <Step duration={STEP_MS}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+            <div style={{ background: sage, padding: '14px 30px' }}><StatusLine ok size={30}>打開網址，首頁是〈三國演義〉：過關</StatusLine></div>
           </div>
         </Step>
       </Steps>
@@ -1185,7 +1123,7 @@ const Practice2: Page = () => (
 );
 
 const EditAgain: Page = () => (
-  <Shell chapter={3} source={'Forestry.md Publish history'}>
+  <Shell chapter={4} source={'Forestry.md Publish history'}>
     <PracticeEyebrow time="4 分鐘">小練習｜也是休息時間</PracticeEyebrow>
     <Heading>改一句，再發布一次</Heading>
     <PillRow>
@@ -1197,39 +1135,27 @@ const EditAgain: Page = () => (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 16 }}>
         <FlowStep i={1} n={1} w={330} kind="doc" label="改一句" sub="〈三國演義〉加一句" />
         <FlowArrow i={2} />
-        <FlowStep i={3} n={2} w={330} kind="upload" label="再發布" sub="Publish All Notes" />
+        <FlowStep i={3} n={2} w={330} kind="upload" label="再發布" sub="Publish All" />
         <FlowArrow i={4} />
-        <FlowStep i={5} n={3} w={330} kind="clock" label="看發布紀錄" sub="Published 了嗎" />
+        <FlowStep i={5} n={3} w={330} kind="clock" label="等 Published" sub="Publish history" />
         <FlowArrow i={6} />
         <FlowStep i={7} n={4} w={330} kind="browser" label="重新整理" sub="網址上看那句" />
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 56, marginTop: 28 }}>
-        <Steps>
-          <Step duration={STEP_MS}>
-            <div style={{ position: 'relative' }}>
-              <span style={{ position: 'absolute', left: -22, top: -22, zIndex: 1, borderRadius: 26, boxShadow: '0 0 0 4px #FFFFFF' }}><NumDot n={3} /></span>
-              <CropShot src={forestryPublishBuilding} nat={[1274, 996]} crop={[48, 222, 1169, 260]} width={740} alt="Forestry 的 Publish history：最上面一筆 Building，Running for 9s；下面一筆 Published，Live now" />
-              <Caption>Building＝還在建置；變成 Published 才上線</Caption>
-            </div>
-          </Step>
-        </Steps>
-        <Steps>
-          <Step duration={STEP_MS}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20, position: 'relative' }}>
-              <span style={{ position: 'absolute', left: -22, top: -22, zIndex: 1, borderRadius: 26, boxShadow: '0 0 0 4px #FFFFFF' }}><NumDot n={4} /></span>
-              <div style={{ background: sage, padding: '16px 30px' }}><StatusLine ok size={32}>看到新句子：網站更新了</StatusLine></div>
-              <div style={{ background: warnSoft, padding: '16px 30px' }}><StatusLine ok={false} size={32}>沒變：等半分鐘再重新整理</StatusLine></div>
-            </div>
-          </Step>
-        </Steps>
-      </div>
+      <Steps>
+        <Step duration={STEP_MS}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 40, marginTop: 56 }}>
+            <div style={{ background: sage, padding: '16px 30px' }}><StatusLine ok size={32}>看到新句子：網站更新了</StatusLine></div>
+            <div style={{ background: warnSoft, padding: '16px 30px' }}><StatusLine ok={false} size={32}>沒變：等半分鐘再重新整理</StatusLine></div>
+          </div>
+        </Step>
+      </Steps>
     </Fit>
   </Shell>
 );
 
 // ---------- 04 挑卡發布 ----------
 
-const Section4: Page = () => <SectionPage chapter={4} label="04 / 發布" lead="先挑卡，再讓時間軸和導覽頁上線" />;
+const Section4: Page = () => <SectionPage chapter={4} label="04 / 檢查" lead="改一句再發布，再從首頁點到新卡" />;
 
 // The tick on a card in the picture, decoded: the same tick in Obsidian's property panel
 // (a crop of the real screenshot), which is the same as the line dg-publish: true.
@@ -1241,15 +1167,16 @@ const PropertyStrip = ({ x, y }: { x: number; y: number }) => (
 );
 
 const PublishFlag: Page = () => (
-  <Shell chapter={4} source={'Digital Garden 入門（dg-publish）docs.forestry.md/getting-started/01-getting-started；Obsidian 說明：屬性 obsidian.md/help/properties'}>
-    <Eyebrow>挑卡發布｜哪些卡會上網站</Eyebrow>
+  <Shell chapter={2} source={'Digital Garden 入門（dg-publish）docs.forestry.md/getting-started/01-getting-started；Obsidian 說明：屬性 obsidian.md/help/properties'}>
+    <Eyebrow>打開〈三國演義〉｜看屬性第一行</Eyebrow>
     <Heading>發布旗標（dg-publish）</Heading>
+    <Lead>屬性（Frontmatter）裡「要公開」的勾</Lead>
     <Fit>
       <Stage h={470}>
         <Steps>
-          <Layer h={470} label="你的儲存庫有五張卡，三張打勾，兩張沒勾；中間是一個寫著 dg-publish 的篩子">
-            <InG i={0}><SvgIcon kind="folder" x={26} y={28} size={44} color={muted} /><text x="60" y="40" fontSize="28" fontWeight="600" fill={ink}>你的儲存庫</text></InG>
-            <InG i={1}><CardRow x={0} y={80} w={360} name="三國演義" on /><CardRow x={0} y={150} w={360} name="劉備" on /><CardRow x={0} y={220} w={360} name="時間軸" on /></InG>
+          <Layer h={470} label="你的知識庫有五張卡，三張打勾，兩張沒勾；中間是一個寫著 dg-publish 的篩子">
+            <InG i={0}><SvgIcon kind="folder" x={26} y={28} size={44} color={muted} /><text x="60" y="40" fontSize="28" fontWeight="600" fill={ink}>你的知識庫</text></InG>
+            <InG i={1}><CardRow x={0} y={80} w={360} name="三國演義" on /><CardRow x={0} y={150} w={360} name="劉備" on /><CardRow x={0} y={220} w={360} name="桃園結義" on /></InG>
             <InG i={2}><CardRow x={0} y={290} w={360} name="我的草稿" on={false} /><CardRow x={0} y={360} w={360} name="上課筆記" on={false} /></InG>
             <InG i={3}>
               <path d="M520 100 H900 L760 260 V340 H660 V260 Z" fill={amberSoft} stroke={amber} strokeWidth="3" />
@@ -1275,7 +1202,7 @@ const PublishFlag: Page = () => (
               <BrowserFrame x={1030} y={110} w={602} h={340} url="….forestry.md" />
               <CardRow x={1070} y={190} w={300} name="三國演義" on />
               <CardRow x={1070} y={270} w={300} name="劉備" on />
-              <CardRow x={1070} y={350} w={300} name="時間軸" on />
+              <CardRow x={1070} y={350} w={300} name="桃園結義" on />
             </Build>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={470} label="沒勾的兩張留在你的電腦">
@@ -1287,7 +1214,7 @@ const PublishFlag: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>dg-publish 只負責選卡，按發布才會送出</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>勾了 dg-publish，還要按發布才會上網站</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1305,9 +1232,9 @@ const SourceDoc = ({ x, y, w, h, name, lines, highlight }: { x: number; y: numbe
 );
 
 const FrontmatterCheck: Page = () => (
-  <Shell chapter={4} source={'Digital Garden 入門（dg-publish）docs.forestry.md/getting-started/01-getting-started'}>
-    <Eyebrow>第三堂產出的兩張卡</Eyebrow>
-    <Heading>前置中繼資料（Frontmatter）</Heading>
+  <Shell chapter={3} source={'Digital Garden 入門（dg-publish）docs.forestry.md/getting-started/01-getting-started'}>
+    <Eyebrow>第三堂的 eli5 改寫版</Eyebrow>
+    <Heading>發布前，看新卡的屬性</Heading>
     <Fit>
       <Stage h={470}>
         <Steps>
@@ -1331,34 +1258,63 @@ const FrontmatterCheck: Page = () => (
               <text x="1374" y="415" fontSize="26" fontWeight="600" fill={warn}>多一張劉備</text>
             </Build>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={470} label="5 歲版不想公開：把 dg-publish 那行劃掉、刪掉">
+          <Step duration={STEP_MS}><Layer h={470} label="5 歲版不想公開：拿掉 dg-publish 那行，網站上那張也跟著不見">
             <g fill="none" stroke={okGreen} strokeWidth="5" strokeLinecap="round"><StepPath d="M1040 146 H1350" /></g>
-            <Build i={4}><text x="1372" y="204" fontSize="26" fontWeight="600" fill={okGreen}>不想公開：刪掉這行</text></Build>
+            <Build i={4}><text x="1372" y="204" fontSize="26" fontWeight="600" fill={okGreen}>不想公開：拿掉這行</text></Build>
             <Build i={6}><rect x="1054" y="372" width="570" height="68" fill="#FFFFFF" opacity="0.8" /><line x1="1066" y1="406" x2="1340" y2="406" stroke={okGreen} strokeWidth="4" strokeLinecap="round" /></Build>
-          </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={470} label="第三張卡 時間軸.md：開頭沒有屬性，要公開就補上 dg-publish: true">
-            <Build>
-              <DocShape x={0} y={296} w={620} h={170} />
-              <text x="28" y="340" fontSize="26" fontWeight="600" fill={ink}>時間軸.md</text>
-              <text x="180" y="340" fontSize="24" fill={muted}>Skill 產出，開頭沒有屬性</text>
-              <line x1="28" y1="360" x2="580" y2="360" stroke={rule} strokeWidth="2" />
-            </Build>
-            <Build i={2}>
-              <rect x="22" y="382" width="320" height="52" fill={amberSoft} stroke={amber} strokeWidth="2" strokeDasharray="8 6" />
-              <text x="38" y="417" fontSize="26" fontFamily={mono} fill={amber}>+ dg-publish: true</text>
-              <text x="366" y="417" fontSize="26" fontWeight="600" fill={amber}>要公開就補上</text>
-            </Build>
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>新卡發布前，先看開頭三行</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>改寫出來的卡，可能連 dg-publish 一起抄過去</Takeaway></Step></Steps>
+    </Fit>
+  </Shell>
+);
+
+// Adding the publish flag to a card that has none: the card, the command, the tick it leaves.
+const AddFlag: Page = () => (
+  <Shell chapter={3} source={'Digital Garden 外掛指令（實際畫面）；Obsidian 說明：屬性 obsidian.md/help/properties'}>
+    <Eyebrow>要公開的卡｜實際畫面</Eyebrow>
+    <Heading>用 Add publish flag 補上勾</Heading>
+    <Fit>
+      <div style={{ position: 'relative', width: 1632, height: 330 }}>
+        <In i={0} style={{ position: 'absolute', left: 0, top: 0 }}>
+          <Figure w={440} h={300} label="整理/時間軸.md：開頭直接是一段 HTML，沒有屬性">
+            <DocShape x={0} y={0} w={440} h={300} />
+            <text x="28" y="48" fontSize="27" fontWeight="600" fill={ink}>整理/時間軸.md</text>
+            <line x1="28" y1="68" x2="400" y2="68" stroke={rule} strokeWidth="2" />
+            <text x="28" y="122" fontSize="26" fontFamily={mono} fill={quiet}>{'<div class="tl">'}</text>
+            <text x="28" y="166" fontSize="26" fontFamily={mono} fill={quiet}>…</text>
+            <NoDot x={46} y={240} r={18} />
+            <text x="76" y="250" fontSize="27" fontWeight="600" fill={warn}>沒有屬性</text>
+          </Figure>
+        </In>
+        <Steps>
+          <Step duration={STEP_MS}>
+            <div style={{ position: 'absolute', left: 470, top: 0, width: 620 }}>
+              <div style={{ fontSize: 28, fontWeight: 600, marginBottom: 12 }}><span style={{ color: amber }}>→</span>　Ctrl／Cmd + P，選這行</div>
+              <div style={{ position: 'relative' }}>
+                <CropShot src={dgPaletteForestry} nat={[1406, 1123]} crop={[20, 120, 760, 145]} width={620} alt="Obsidian 命令面板：第一行 Publish All Notes Marked for Publish，第二行 Digital Garden: Add publish flag" />
+                <Spot box={[0, 60, 620, 58]} />
+              </div>
+            </div>
+          </Step>
+          <Step duration={STEP_MS}>
+            <div style={{ position: 'absolute', left: 1130, top: 0, width: 502 }}>
+              <div style={{ fontSize: 28, fontWeight: 600, marginBottom: 12 }}><span style={{ color: amber }}>→</span>　屬性多了一個勾</div>
+              <CropShot src={dgProperty} nat={[1830, 770]} crop={[90, 400, 560, 96]} width={502} alt="Obsidian 屬性面板：dg-publish 已打勾" />
+              <div style={{ marginTop: 18 }}><StatusLine ok size={28}>{`和第 ${pageOf(PublishFlag)} 頁的勾一樣`}</StatusLine></div>
+            </div>
+          </Step>
+        </Steps>
+      </div>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}>練習 3-1 就用它，替時間軸補上勾</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
 
 const HomeFlag: Page = () => (
   <Shell chapter={2} source={'Digital Garden 入門（dg-home）docs.forestry.md/getting-started/01-getting-started'}>
-    <Eyebrow>網站的第一頁</Eyebrow>
+    <Eyebrow>〈三國演義〉屬性第二行</Eyebrow>
     <Heading>dg-home：指定網站首頁</Heading>
     <Fit>
       <Stage h={440}>
@@ -1408,7 +1364,7 @@ const Signpost = ({ y, label, links }: { y: number; label: string; links: string
 );
 
 const NavPage: Page = () => (
-  <Shell chapter={4} source={'Obsidian 說明：內部連結 obsidian.md/help/links'}>
+  <Shell chapter={3} source={'Obsidian 說明：內部連結 obsidian.md/help/links'}>
     <Eyebrow>讓讀者從首頁點到每張卡</Eyebrow>
     <Heading>建立知識庫導覽頁</Heading>
     <Fit>
@@ -1446,13 +1402,13 @@ const NavPage: Page = () => (
                   <polygon points="782,38 798,29 798,47" fill={link} className="aw4-tip" style={{ transitionDelay: '480ms' }} />
                 </svg>
               </></Step>
-              <Step duration={STEP_MS}><><div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}><SpotNum n={3} /><StatusLine ok size={30}>連到的卡都有 dg-publish</StatusLine></div><Spot box={[238, 144, 530, 254]} n={3} inside /></></Step>
+              <Step duration={STEP_MS}><><div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}><SpotNum n={3} /><StatusLine ok size={30}>連到的卡，每張都要勾 dg-publish</StatusLine></div><Spot box={[238, 144, 530, 254]} n={3} inside /></></Step>
               <Step duration={STEP_MS}><div style={{ display: 'flex', alignItems: 'center', gap: 12 }}><SpotNum /><StatusLine ok size={30}>5 歲版沒有公開（除非你想公開）</StatusLine></div></Step>
             </Steps>
           </div>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>人物、事件的連結，都放在導覽頁</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>連到的卡不會自動發布，每張要自己勾</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1465,31 +1421,53 @@ const PublishCommand: Page = () => (
     <Fit>
       <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '640px 1fr', gap: 80, alignItems: 'start' }}>
         <In i={0}><CropShot src={dgPaletteForestry} nat={[1406, 1123]} crop={[0, 10, 1406, 1113]} width={640} alt="Obsidian 命令面板列出 Digital Garden 的指令：第一行 Publish All Notes Marked for Publish，第二行 Add publish flag，下面還有 Publish Active Note 等" /></In>
+        <In i={1} style={{ position: 'absolute', left: 240, top: 84, height: 32, padding: '0 14px', display: 'flex', alignItems: 'center', background: raised, border: `1px solid ${rule}`, fontSize: 24, color: quiet }}>挑卡時再用</In>
         <div style={{ display: 'grid', gap: 44, paddingTop: 30 }}>
           <Steps>
             <Step duration={STEP_MS}><TourStep n={1} title="Publish All Notes Marked for Publish" detail="發布所有勾了 dg-publish 的卡，今天的練習都用這個" box={[8, 55, 624, 28]} badge="right" /></Step>
-            <Step duration={STEP_MS}><TourStep n={2} title="Add publish flag" detail="幫打開的這張卡加上 dg-publish" box={[8, 85, 624, 28]} /></Step>
-            <Step duration={STEP_MS}><TourStep n={3} title="Publish Active Note" detail="只發布打開的這一張" box={[8, 318, 624, 28]} badge="right" /></Step>
+            <Step duration={STEP_MS}><TourStep n={2} title="Publish Active Note" detail="只發布打開的這一張" box={[8, 318, 624, 28]} badge="right" /></Step>
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>先 Add publish flag，再 Publish All</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>練習 2 只要用 Publish All</Takeaway></Step></Steps>
+    </Fit>
+  </Shell>
+);
+
+// The publish log right after Publish All: the newest row is on top. Rows of the real
+// screenshot (crop of forestry-publish-building.png) are outlined one per click.
+const PublishStatus: Page = () => (
+  <Shell chapter={2} source={'Forestry.md 儀表板 Publish history（實際畫面）'}>
+    <Eyebrow>按完發布｜回 Forestry 儀表板</Eyebrow>
+    <Heading>看 Publish history 的狀態</Heading>
+    <Fit>
+      <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '820px 1fr', gap: 90, alignItems: 'start' }}>
+        <In i={0}><CropShot src={forestryPublishBuilding} nat={[1274, 996]} crop={[48, 33, 1169, 611]} width={820} alt="Forestry 的 Publish history，最新的在最上面：第一筆 Building，Running for 9s；第二筆 Published，Live now；第三筆 Publish failed，Failed" /></In>
+        <div style={{ display: 'grid', gap: 44, paddingTop: 20 }}>
+          <Steps>
+            <Step duration={STEP_MS}><TourStep n={1} title="Building：建置中" detail="約半分鐘；下一頁看它在做什麼" box={[4, 122, 812, 100]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={2} title="Published：上線了" detail="Live now＝網址上現在的版本" box={[4, 226, 812, 100]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={3} title="Failed：沒有上線" detail="點右邊箭頭看原因" box={[4, 328, 812, 100]} /></Step>
+          </Steps>
+        </div>
+      </div>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}>最上面那一筆，就是你剛按的發布</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
 
 const Practice31: Page = () => (
-  <Shell chapter={4} source={'Digital Garden 指令 docs.forestry.md/getting-started/02-commands'}>
+  <Shell chapter={3} source={'Digital Garden 指令 docs.forestry.md/getting-started/02-commands'}>
     <PracticeEyebrow time="8 分鐘">練習 3-1｜時間軸</PracticeEyebrow>
     <Heading>練習（dg-publish）：讓時間軸卡上線</Heading>
     <PillRow>
       <Pill tag="定位">整理/時間軸.md</Pill>
       <Pill tag="期望輸出">網站看得到時間軸</Pill>
-      <Pill tag="限制">先查開頭三行</Pill>
+      <Pill tag="限制">先看屬性</Pill>
     </PillRow>
     <Fit>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 16 }}>
-        <FlowStep i={1} n={1} w={330} kind="doc" label="打開時間軸" sub="看開頭三行" />
+        <FlowStep i={1} n={1} w={330} kind="doc" label="打開時間軸" sub="看屬性" />
         <FlowArrow i={2} />
         <FlowStep i={3} n={2} w={330} kind="ok" label="Add publish flag" sub="沒有 dg-publish 才加" />
         <FlowArrow i={4} />
@@ -1501,7 +1479,7 @@ const Practice31: Page = () => (
         <Step duration={STEP_MS}>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 40, marginTop: 56 }}>
             <div style={{ background: sage, padding: '16px 30px' }}><StatusLine ok size={32}>看到橫向時間軸：過關</StatusLine></div>
-            <div style={{ background: warnSoft, padding: '16px 30px' }}><StatusLine ok={false} size={32}>404：沒勾或沒發布</StatusLine></div>
+            <div style={{ background: warnSoft, padding: '16px 30px' }}><StatusLine ok={false} size={32}>404（找不到頁面）：沒勾或還沒發布</StatusLine></div>
           </div>
         </Step>
       </Steps>
@@ -1510,7 +1488,7 @@ const Practice31: Page = () => (
 );
 
 const HtmlTest: Page = () => (
-  <Shell chapter={4} source={'範例網站 glowing-clearing.forestry.md/整理/時間軸/；markdown-it（模板設定 html: true）github.com/markdown-it/markdown-it'}>
+  <Shell chapter={3} source={'範例網站 glowing-clearing.forestry.md/整理/時間軸/；markdown-it（模板設定 html: true）github.com/markdown-it/markdown-it'}>
     <Eyebrow>範例網站｜實際畫面</Eyebrow>
     <Heading>時間軸卡在網站上的樣子</Heading>
     <Fit>
@@ -1521,9 +1499,9 @@ const HtmlTest: Page = () => (
         </In>
         <div style={{ display: 'grid', gap: 48, paddingTop: 40 }}>
           <Steps>
-            <Step duration={STEP_MS}><TourStep n={1} title={<StatusLine ok size={34}>HTML 照常顯示</StatusLine>} detail="橫向時間軸，沒有用到 script" box={[4, 6, 632, 460]} /></Step>
-            <Step duration={STEP_MS}><TourStep n={2} title={<StatusLine ok size={34}>其他事件往右滑</StatusLine>} detail="內文欄比較窄，後面的事件在右邊" box={[6, 101, 628, 85]} badge="right" /></Step>
-            <Step duration={STEP_MS}><TourStep n={3} title={<StatusLine ok size={34}>來源卡是純文字</StatusLine>} detail="沒有連結，就不會點到 404" box={[13, 209, 230, 256]} badge="right" /></Step>
+            <Step duration={STEP_MS}><TourStep n={1} title={<StatusLine ok size={34}>HTML 照常顯示</StatusLine>} detail="第三堂的橫向時間軸直接發布" box={[4, 6, 632, 460]} /></Step>
+            <Step duration={STEP_MS}><TourStep n={2} title={<StatusLine ok size={34}>事件名稱是純文字</StatusLine>} detail="點不了；後面的事件往右滑" box={[6, 101, 628, 85]} badge="right" /></Step>
+            <Step duration={STEP_MS}><TourStep n={3} title={<StatusLine ok size={34}>來源卡也是純文字</StatusLine>} detail="沒有連結，就不會點到 404" box={[13, 209, 230, 256]} badge="right" /></Step>
           </Steps>
         </div>
       </div>
@@ -1600,32 +1578,50 @@ const HtmlLinks: Page = () => (
   </Shell>
 );
 
+// Practice 3-2 pastes two Codex prompts: each shows the real text, then the check on a click.
+const PromptStepTitle = ({ n, children }: { n: number; children: ReactNode }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 30, fontWeight: 600, whiteSpace: 'nowrap' }}><NumDot n={n} />{children}</div>
+);
+const PromptPaste = ({ children }: { children: ReactNode }) => (
+  <div style={{ background: term, color: '#F5F5F4', padding: '20px 28px', fontFamily: mono, fontSize: 24, lineHeight: 1.5 }}>
+    <div style={{ color: '#BCC3CC', marginBottom: 6 }}>貼進 Codex</div>
+    <Typed>{children}</Typed>
+  </div>
+);
+const PromptCheck = ({ children }: { children: ReactNode }) => (
+  <div style={{ background: sage, padding: '14px 24px', fontSize: 26, lineHeight: 1.45, color: ink }}>{children}</div>
+);
+
 const Practice32: Page = () => (
-  <Shell chapter={4} source={'Digital Garden 指令 docs.forestry.md/getting-started/02-commands'}>
+  <Shell chapter={3} source={'Digital Garden 指令 docs.forestry.md/getting-started/02-commands'}>
     <PracticeEyebrow time="14 分鐘">練習 3-2｜導覽頁</PracticeEyebrow>
-    <Heading>練習（導覽頁）：讓讀者點得到每張卡</Heading>
+    <Heading>練習（導覽頁）：讓讀者點到每張卡</Heading>
     <PromptsCopy lead="複製兩段提示詞" section="練習 3-2" />
     <PillRow>
       <Pill tag="定位">知識庫導覽</Pill>
       <Pill tag="期望輸出">導覽頁連結點得開</Pill>
-      <Pill tag="限制">先查開頭三行</Pill>
+      <Pill tag="限制">先看屬性</Pill>
     </PillRow>
     <Fit>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 16 }}>
-        <FlowStep i={1} n={1} w={330} kind="terminal" label="Codex 做導覽頁" sub="三英戰呂布先不放" />
-        <FlowArrow i={2} />
-        <FlowStep i={3} n={2} w={330} kind="home" label="首頁連導覽頁" sub="加 [[知識庫導覽]]" />
-        <FlowArrow i={4} />
-        <FlowStep i={5} n={3} w={330} kind="search" label="列出沒勾的卡" sub="Codex 只列，你核對" />
-        <FlowArrow i={6} />
-        <FlowStep i={7} n={4} w={330} kind="upload" label="全部發布" sub="Publish All Notes" />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'start' }}>
+        <In i={1} style={{ display: 'grid', gap: 18 }}>
+          <PromptStepTitle n={1}>Codex 做導覽頁</PromptStepTitle>
+          <PromptPaste>請在 整理/ 新增 知識庫導覽.md。分成時間、人物、事件三段：時間那段只放 [[時間軸]]；人物那段用 [[連結]] 列出 人物/ 裡的每張卡；事件那段用 [[連結]] 列出 關係/ 裡的每張卡，但先不要放〈三英戰呂布〉，練習 4 再加。只連到已有的卡，不要新增卡片，也不要改別的檔案。開頭加上 dg-publish: true。寫入前先給我看。</PromptPaste>
+          <Steps><Step duration={STEP_MS}><PromptCheck>看預覽：沒有三英戰呂布、沒有找不到的卡 → 回「可以」</PromptCheck></Step></Steps>
+        </In>
+        <In i={2} style={{ display: 'grid', gap: 18 }}>
+          <PromptStepTitle n={2}>〈三國演義〉最後一行加 <span style={{ fontFamily: mono, color: link }}>[[知識庫導覽]]</span></PromptStepTitle>
+          <PromptStepTitle n={3}>列出還沒勾的卡</PromptStepTitle>
+          <PromptPaste>列出 整理/知識庫導覽.md 連到的每張卡，每張一行，寫出它開頭有沒有 dg-publish: true。只列清單，不要修改任何檔案。</PromptPaste>
+          <Steps><Step duration={STEP_MS}><PromptCheck>標「沒有」的卡打開看屬性：要公開就 Add publish flag，不公開就從導覽頁刪掉</PromptCheck></Step></Steps>
+        </In>
       </div>
       <Steps>
         <Step duration={STEP_MS}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 32, marginTop: 56 }}>
-            <div style={{ background: sage, padding: '16px 28px' }}><StatusLine ok size={30}>首頁 → 導覽頁 → 每張卡</StatusLine></div>
-            <div style={{ background: sage, padding: '16px 28px' }}><StatusLine ok size={30}>導覽頁的連結都點得開</StatusLine></div>
-            <div style={{ background: warnSoft, padding: '16px 28px' }}><StatusLine ok={false} size={30}>404：那張沒勾或沒發布</StatusLine></div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 28, marginTop: 36 }}>
+            <PromptStepTitle n={4}>Publish All，等 Published</PromptStepTitle>
+            <div style={{ background: sage, padding: '12px 24px' }}><StatusLine ok size={28}>首頁 → 導覽頁 → 每張卡</StatusLine></div>
+            <div style={{ background: warnSoft, padding: '12px 24px' }}><StatusLine ok={false} size={28}>404：那張沒勾或沒發布</StatusLine></div>
           </div>
         </Step>
       </Steps>
@@ -1635,73 +1631,34 @@ const Practice32: Page = () => (
 
 // ---------- 05 檢查網站與延伸 ----------
 
-const Section5: Page = () => <SectionPage chapter={5} label="05 / 檢查" lead="自己從首頁點一遍，點不開就查四個地方" />;
 
-// Checking the site like a relay: every hand-off has to work.
-const RelayStop = ({ x, y = 130, name, state }: { x: number; y?: number; name: string; state: 'ok' | 'bad' | 'idle' }) => (
+// One stop on the route a reader clicks in practice 4: white before the check, green once it opens.
+const RouteStop = ({ x, w, name, ok = false }: { x: number; w: number; name: string; ok?: boolean }) => (
   <g>
-    <circle cx={x} cy={y} r="62" fill={state === 'bad' ? warnSoft : state === 'ok' ? sage : '#FFFFFF'} stroke={state === 'bad' ? warn : state === 'ok' ? okGreen : faint} strokeWidth="3" />
-    <text x={x} y={y + 11} textAnchor="middle" fontSize="30" fill={ink}>{name}</text>
+    <rect x={x} y="0" width={w} height="76" rx="38" fill={ok ? sage : '#FFFFFF'} stroke={ok ? okGreen : faint} strokeWidth="3" />
+    <text x={x + w / 2} y="49" textAnchor="middle" fontSize="30" fontWeight="600" fill={ink}>{name}</text>
   </g>
 );
 
-// Inside a <Step>: the same stop, now showing its result, fading in over the white one after `at` ms.
-const StopResult = ({ x, y, name, state, at }: { x: number; y?: number; name: string; state: 'ok' | 'bad'; at: number }) => (
-  <g className="aw4-tip" style={{ transitionDelay: `${at}ms` }}><RelayStop x={x} y={y} name={name} state={state} /></g>
+// Inside a <Step>: the same stop turning green, fading in over the white one after `at` ms.
+const RouteStopOk = ({ x, w, name, at }: { x: number; w: number; name: string; at: number }) => (
+  <g className="aw4-tip" style={{ transitionDelay: `${at}ms` }}><RouteStop x={x} w={w} name={name} ok /></g>
 );
 
-const CheckSite: Page = () => (
-  <Shell chapter={5}>
-    <Eyebrow>自己檢查</Eyebrow>
-    <Heading>從首頁點一遍</Heading>
-    <Lead>每個連結都要打得開</Lead>
-    <Fit>
-      <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '20px 0' }}>
-        <Stage h={380}>
-          <Steps>
-            <Layer h={380} label="四站：首頁、導覽頁，再分到時間軸和白門樓；還沒點過的都是白色">
-              <InG i={0}><RelayStop x={170} y={190} name="首頁" state="idle" /></InG>
-              <InG i={1}><RelayStop x={560} y={190} name="導覽頁" state="idle" /></InG>
-              <InG i={2}><RelayStop x={1000} y={86} name="時間軸" state="idle" /></InG>
-              <InG i={3}><RelayStop x={1000} y={300} name="白門樓" state="idle" /></InG>
-            </Layer>
-            <Step duration={STEP_MS}><Layer h={380} label="首頁點得到導覽頁：兩站都變綠">
-              <StopResult x={170} y={190} name="首頁" state="ok" at={300} />
-              <g fill="none" stroke={okGreen} strokeWidth="6"><StepPath d="M232 190 H498" /></g>
-              <StopResult x={560} y={190} name="導覽頁" state="ok" at={560} />
-              <Build i={6}><OkDot x={365} y={150} /><text x="365" y="262" textAnchor="middle" fontSize="27" fill={ink}>首頁點得到導覽頁？</text></Build>
-            </Layer></Step>
-            <Step duration={STEP_MS}><Layer h={380} label="導覽頁點得到時間軸，時間軸變綠；時間軸裡的人名是純文字，這是對的">
-              <g fill="none" stroke={okGreen} strokeWidth="6"><StepPath d="M616 162 L940 104" /></g>
-              <StopResult x={1000} y={86} name="時間軸" state="ok" at={560} />
-              <Build i={7}>
-                <OkDot x={778} y={110} />
-                <text x="1090" y="70" fontSize="28" fontWeight="600" fill={ink}>時間軸打得開</text>
-                <text x="1090" y="110" fontSize="26" fill={okGreen}>人名是純文字：這是對的</text>
-                <text x="1090" y="148" fontSize="26" fill={muted}>人物連結在導覽頁</text>
-              </Build>
-            </Layer></Step>
-            <Step duration={STEP_MS}><Layer h={380} label="導覽頁點白門樓打不開，白門樓變紅：先查白門樓有沒有勾 dg-publish">
-              <g fill="none" stroke={warn} strokeWidth="6"><StepPath d="M616 218 L752 252" /><StepPath i={4} d="M806 266 L940 290" /></g>
-              <Build i={5}><NoDot x={779} y={259} r={26} /></Build>
-              <StopResult x={1000} y={300} name="白門樓" state="bad" at={900} />
-              <Build i={10}>
-                <text x="1090" y="292" fontSize="28" fontWeight="600" fill={warn}>打不開？</text>
-                <text x="1090" y="332" fontSize="26" fill={warn}>查這張的 dg-publish</text>
-              </Build>
-            </Layer></Step>
-          </Steps>
-        </Stage>
-      </div>
-      <Steps><Step duration={STEP_MS}><Takeaway>補勾之後，再發布一次</Takeaway></Step></Steps>
-    </Fit>
-  </Shell>
+// Why the route breaks at one stop: a red box hung under that stop (`at` is the stop's centre).
+const RouteFail = ({ i, x, w, at, label }: { i: number; x: number; w: number; at: number; label: string }) => (
+  <Build i={i}>
+    <line x1={at} y1="80" x2={at} y2="118" stroke={warn} strokeWidth="3" />
+    <rect x={x} y="118" width={w} height="58" fill={warnSoft} />
+    <NoDot x={x + 32} y={147} r={16} />
+    <text x={x + 62} y="156" fontSize="26" fontWeight="600" fill={warn}>{label}</text>
+  </Build>
 );
 
 const Practice4: Page = () => (
-  <Shell chapter={5}>
-    <PracticeEyebrow time="10 分鐘">練習 4｜自己檢查</PracticeEyebrow>
-    <Heading>練習：從首頁點到新卡</Heading>
+  <Shell chapter={4}>
+    <PracticeEyebrow time="14 分鐘">練習 4｜自己檢查</PracticeEyebrow>
+    <Heading>練習（檢查）：從首頁點到新卡</Heading>
     <PillRow>
       <Pill tag="定位">一張新卡</Pill>
       <Pill tag="期望輸出">首頁點得到新卡</Pill>
@@ -1709,23 +1666,42 @@ const Practice4: Page = () => (
     </PillRow>
     <Fit>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 24 }}>
-        <FlowStep i={1} n={1} w={330} kind="upload" label="公開三英戰呂布" sub="勾選、加進導覽頁" />
+        <FlowStep i={1} n={1} w={420} kind="upload" label="公開三英戰呂布" sub="勾選、加進導覽頁、發布" />
         <FlowArrow i={2} />
-        <FlowStep i={3} n={2} w={330} kind="clock" label="等到 Published" sub="看 Publish history" />
+        <FlowStep i={3} n={2} w={420} kind="clock" label="等到 Published" sub="看 Publish history" />
         <FlowArrow i={4} />
-        <FlowStep i={5} n={3} w={330} kind="browser" label="開無痕視窗" sub="打開自己的網址" />
-        <FlowArrow i={6} />
-        <FlowStep i={7} n={4} w={330} kind="home" label="從首頁點" sub="首頁 → 導覽頁 → 新卡" />
+        <FlowStep i={5} n={3} w={420} kind="home" label="打開網址，從首頁點" sub="一站一站點下去" />
       </div>
-      <Steps>
-        <Step duration={STEP_MS}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 32, marginTop: 56 }}>
-            <div style={{ background: sage, padding: '16px 28px' }}><StatusLine ok size={30}>點到新卡：完成</StatusLine></div>
-            <div style={{ background: warnSoft, padding: '16px 28px' }}><StatusLine ok={false} size={30}>404：新卡沒勾 dg-publish</StatusLine></div>
-            <div style={{ background: warnSoft, padding: '16px 28px' }}><StatusLine ok={false} size={30}>導覽頁沒有新連結：看下一頁</StatusLine></div>
-          </div>
-        </Step>
-      </Steps>
+      <div style={{ marginTop: 44 }}>
+        <Stage h={180}>
+          <Steps>
+            <Layer h={180} label="要走的路線：首頁 → 導覽頁 → 三英戰呂布，還沒點過的都是白色">
+              <InG i={6}>
+                <RouteStop x={150} w={180} name="首頁" />
+                <RouteStop x={430} w={220} name="導覽頁" />
+                <RouteStop x={790} w={280} name="三英戰呂布" />
+                <g stroke={faint} strokeWidth="3"><line x1="330" y1="38" x2="414" y2="38" /><line x1="650" y1="38" x2="774" y2="38" /></g>
+                <polygon points="428,38 412,29 412,47" fill={faint} />
+                <polygon points="788,38 772,29 772,47" fill={faint} />
+              </InG>
+            </Layer>
+            <Step duration={STEP_MS}><Layer h={180} label="點得到：三站依序變綠，點到新卡就完成">
+              <RouteStopOk x={150} w={180} name="首頁" at={100} />
+              <g fill="none" stroke={okGreen} strokeWidth="5"><StepPath i={1} d="M330 38 H414" /><StepPath i={6} d="M650 38 H774" /></g>
+              <polygon points="428,38 412,29 412,47" fill={okGreen} className="aw4-tip" style={{ transitionDelay: '560ms' }} />
+              <RouteStopOk x={430} w={220} name="導覽頁" at={560} />
+              <polygon points="788,38 772,29 772,47" fill={okGreen} className="aw4-tip" style={{ transitionDelay: '1020ms' }} />
+              <RouteStopOk x={790} w={280} name="三英戰呂布" at={1020} />
+              <Build i={12}><OkDot x={1150} y={38} r={26} /><text x="1192" y="50" fontSize="34" fontWeight="600" fill={okGreen}>點到新卡：完成</text></Build>
+            </Layer></Step>
+            <Step duration={STEP_MS}><Layer h={180} label="點不到：導覽頁沒有新連結，看下一頁；點新卡是 404，新卡沒勾 dg-publish">
+              <Build i={0}><text x="150" y="157" fontSize="28" fontWeight="600" fill={warn}>點不到？</text></Build>
+              <RouteFail i={1} x={360} w={352} at={540} label="沒有新連結：看下一頁" />
+              <RouteFail i={3} x={744} w={416} at={930} label="404：新卡沒勾 dg-publish" />
+            </Layer></Step>
+          </Steps>
+        </Stage>
+      </div>
     </Fit>
   </Shell>
 );
@@ -1760,8 +1736,8 @@ const StatusChip = ({ x, y, w, label, color }: { x: number; y: number; w: number
 );
 
 const NotUpdated: Page = () => (
-  <Shell chapter={5} source={'Forestry.md 儀表板 Publish history'}>
-    <Eyebrow>常見問題｜發布了，網站沒變</Eyebrow>
+  <Shell chapter={4} source={'Forestry.md 儀表板 Publish history'}>
+    <Eyebrow>發布了，網站沒變</Eyebrow>
     <Heading>部署疑難排解：四個檢查</Heading>
     <Fit>
       <Stage h={520}>
@@ -1785,23 +1761,23 @@ const NotUpdated: Page = () => (
               <text x="980" y="196" fontSize="25" fill={okGreen}>和按發布的時間相符：Forestry 已收到</text>
             </Build>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={520} label="檢查三：那一筆的狀態。Building 再等，Published 是完成，Failed 點開看原因">
+          <Step duration={STEP_MS}><Layer h={520} label="檢查三：那一筆的狀態。Building 再等，Published 往下一步，Failed 點開看原因">
             <Build><CheckRow y={250} n={3} title="狀態是什麼？" sub="Building／Published／Failed" /></Build>
             <Build i={1}>
               <rect x="640" y="240" width="992" height="190" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
               <StatusChip x={668} y={262} w={140} label="Building" color={blue} />
-              <text x="828" y="290" fontSize="26" fill={ink}>建置中，通常約半分鐘，再等一下</text>
+              <text x="828" y="290" fontSize="26" fill={ink}>再等一下</text>
               <StatusChip x={668} y={316} w={140} label="Published" color={okGreen} />
-              <text x="828" y="344" fontSize="26" fill={ink}>完成，網址已更新</text>
+              <text x="828" y="344" fontSize="26" fill={ink}>往第 4 步</text>
               <StatusChip x={668} y={370} w={140} label="Failed" color={warn} />
-              <text x="828" y="398" fontSize="26" fill={ink}>失敗：卡名是中文，先查 Simple note URLs 關了沒</text>
+              <text x="828" y="398" fontSize="26" fill={ink}>{`點右邊箭頭看原因，對照第 ${pageOf(SlugFail)} 頁`}</text>
             </Build>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={520} label="檢查四：瀏覽器強制重新整理">
-            <Build><CheckRow y={440} n={4} title="重新整理、清快取" sub="Ctrl／Cmd + Shift + R" /></Build>
+          <Step duration={STEP_MS}><Layer h={520} label="檢查四：瀏覽器略過快取重新載入">
+            <Build><CheckRow y={440} n={4} title="略過快取重新載入" sub="Ctrl／Cmd + Shift + R" /></Build>
             <Build i={1}>
               <rect x="640" y="448" width="760" height="64" fill={surface} stroke={faint} strokeWidth="2" />
-              <text x="668" y="490" fontSize="26" fill={ink}>瀏覽器：Ctrl／Cmd + Shift + R 強制重新整理</text>
+              <text x="668" y="490" fontSize="26" fill={ink}>瀏覽器按 Ctrl／Cmd + Shift + R，或開無痕視窗</text>
             </Build>
           </Layer></Step>
         </Steps>
@@ -1827,7 +1803,7 @@ const DoneRow = ({ top, name, practice, done = false }: { top: number; name: str
 );
 
 const FinalResult: Page = () => (
-  <Shell chapter={5} source={'範例網站 glowing-clearing.forestry.md/整理/時間軸/'}>
+  <Shell chapter={4} source={'範例網站 glowing-clearing.forestry.md/整理/時間軸/'}>
     <Eyebrow>最終成果｜打開自己的網站對照</Eyebrow>
     <Heading>你的網站：今天練習的成果</Heading>
     <Fit>
@@ -1845,7 +1821,7 @@ const FinalResult: Page = () => (
           <Step duration={STEP_MS}><DoneRow top={(DONE_H + 30) * 2} name="三英戰呂布" practice="練習 4" done /></Step>
         </Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway>你的網站，也從首頁點得到每張卡</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway>三項都打勾，今天的網站就完成了</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1879,7 +1855,7 @@ const CourseRecap: Page = () => (
       <In i={0} style={{ display: 'grid', gridTemplateColumns: MATRIX_COLS, gap: 12 }}>
         <span />
         <MatrixHead n={1} kind="doc" name="大綱" />
-        <MatrixHead n={2} kind="folder" name="筆記庫" />
+        <MatrixHead n={2} kind="folder" name="知識庫" />
         <MatrixHead n={3} kind="timeline" name="時間軸" />
         <MatrixHead n={4} kind="globe" name="網站" hot />
       </In>
@@ -1954,7 +1930,7 @@ const Closing: Page = () => (
 const NextSteps: Page = () => (
   <Shell source={'obsidian-wiki 文件 github.com/Ar9av/obsidian-wiki'}>
     <Eyebrow>選修延伸｜課後</Eyebrow>
-    <Heading>發布前，用 llm-wiki 整理</Heading>
+    <Heading>發布前，用 obsidian-wiki 整理</Heading>
     <Fit>
       <div style={{ display: 'grid', gap: 28 }}>
         <Steps>
@@ -1964,7 +1940,7 @@ const NextSteps: Page = () => (
           <Step duration={STEP_MS}><SkillRow cmd="$wiki-query" what="查答案，附出處" icon={<g>
             <circle cx="44" cy="36" r="24" fill="none" stroke={okGreen} strokeWidth="5" /><path d="M62 54 l22 22" stroke={okGreen} strokeWidth="6" strokeLinecap="round" />
           </g>} /></Step>
-          <Step duration={STEP_MS}><SkillRow cmd="$wiki-lint" what="健檢：斷連結、孤立頁" icon={<g>
+          <Step duration={STEP_MS}><SkillRow cmd="$wiki-lint" what="健檢：斷連結、沒人連到的頁" icon={<g>
             <rect x="6" y="28" width="38" height="24" rx="12" fill="none" stroke={faint} strokeWidth="5" /><rect x="66" y="28" width="38" height="24" rx="12" fill="none" stroke={faint} strokeWidth="5" />
             <path d="M50 22 L60 58" stroke={warn} strokeWidth="5" strokeLinecap="round" />
           </g>} /></Step>
@@ -2094,7 +2070,6 @@ Section1.transition = OPENER;
 Section2.transition = OPENER;
 Section3.transition = OPENER;
 Section4.transition = OPENER;
-Section5.transition = OPENER;
 
 export const meta: SlideMeta = {
   title: 'aw-04 發布成網站',
@@ -2103,12 +2078,11 @@ export const meta: SlideMeta = {
 };
 
 const deck: Page[] = [
-  Cover, LessonRecap, FinalSite, SiteGoal, Agenda,
+  Cover, LessonRecap, FinalSite, Agenda,
   Section1, ForestryAccount, PlantGarden, GardenLive, Practice1,
-  Section2, InstallPlugin, ConnectForestry, KeySafety, SlugFail, SlugFix, HomeFlag, PublishCommand, Practice2,
-  Section3, EditAgain, BuildStep,
-  Section4, PublishFlag, FrontmatterCheck, Practice31, HtmlTest, NavPage, Practice32,
-  Section5, CheckSite, Practice4, NotUpdated, FinalResult,
+  Section2, InstallPlugin, ConnectForestry, KeySafety, PublishFlag, HomeFlag, PublishCommand, PublishStatus, BuildStep, SlugFail, SlugFix, Practice2,
+  Section3, FrontmatterCheck, AddFlag, Practice31, HtmlTest, NavPage, Practice32,
+  Section4, EditAgain, Practice4, NotUpdated, FinalResult,
   CourseRecap, Closing, NextSteps, ReferencesGarden, ReferencesDeploy,
   AppendixIndex, HtmlLinks, WebsiteIs, CiCd,
 ];
@@ -2121,171 +2095,180 @@ function pageOf(page: Page) {
 // Speaker notes, keyed by page so they stay aligned with the deck order.
 const NOTES = new Map<Page, string>([
   [Cover, `00:00–01:00
-最後一堂。前三堂我們寫了大綱、做了筆記庫、用 Skill 排出時間軸，全部都還在自己的電腦裡。今天把它變成一個網址，同學、家人打開就看得到。
+最後一堂。前三堂我們寫了大綱、做了知識庫、用 Skill 排出時間軸，全部都還在自己的電腦裡。知識庫就是三國人物知識庫這個資料夾，Obsidian 叫它儲存庫（vault），今天都叫它知識庫。今天把它變成一個網址，同學、家人打開就看得到。
 右下角三個圓圈就是今天的路線：筆記 → Forestry.md → 網址。Forestry.md 是幫你放網站的服務，等一下會介紹。
 先在筆電打開這份簡報，網址在畫面上：chrouos.github.io/AI-workshop-slides。第 ${pageOf(Agenda)} 頁大綱右上角是今天的步驟手冊 prompts.md，每個練習的步驟和網址都在裡面，在筆電上點開、整段複製，不用照投影幕打字；投影幕上的 QR code 只能用手機掃。今天的教材都在 ${LAB_URL} ，整包下載是 aw-04-lab.zip：${LAB_ZIP_URL} ，所有教材的總表在 https://github.com/Chrouos/AI-workshop-slides/tree/main/examples 。`],
   [LessonRecap, `01:00–04:00
-先回頭看三樣東西。第一堂用 Codex 寫出 三國演義大綱.md，人名都是 [[連結]]。第二堂把它放進 Obsidian，和人物、勢力、關係卡連起來。第三堂補進三張關係卡，用自己寫的 Skill 排出 時間軸.md。
+先回頭看三樣東西。第一堂用 Codex 寫出 三國演義大綱.md，人名都是 [[連結]]。第二堂把它放進 Obsidian 的知識庫，和人物、勢力、關係卡連起來。第三堂補進三張關係卡，用自己寫的 Skill 排出 時間軸.md。
 按一下：第四個站是今天要做的網站。
 再按一下：今天把前三堂的成果放到一個網址上。先打開 Obsidian，確認第三堂做的 整理/時間軸.md 和 關係/三英戰呂布.md 都在。`],
   [FinalSite, `04:00–05:30
-先看做完的樣子。這是範例網站 glowing-clearing.forestry.md 的實際畫面，用的是四堂課同一個三國筆記庫，另外照原文多補了幾張人物、事件卡。網址就在下面參考列，大家可以在筆電上打開點點看。
+先看做完的樣子。這是範例網站 glowing-clearing.forestry.md 的實際畫面，用的是四堂課同一個三國知識庫，另外照原文多補了幾張人物、事件卡。網址就在下面參考列，大家可以在筆電上打開點點看。
 先看首頁〈三國演義〉，打開網址第一頁就是它。
 按一下：換成導覽頁，從這裡點到時間軸、人物、事件。
 按一下：再換成〈劉備的故事線〉：照回目排出劉備一路遇到誰、和誰經歷了哪些事。每一站中間是事件，左邊是同伴，右邊是對手；像曹操、呂布，在不同站會換邊。上面的圖是一段 HTML，下面再用一般的 [[連結]] 連到每張人物、事件卡。網頁上的小標題、引用框、表格，都是筆記裡的 Markdown 寫的。
-最後一下：今天的目標是讀者從首頁點得到每一張卡。範例的筆記庫放在 GitHub，課後想對照可以看：${FINAL_URL}
+最後一下：今天的目標是讀者從首頁點得到每一張卡。範例的知識庫放在 GitHub，課後想對照可以看：${FINAL_URL}
 畫面是 2026-10-30 發布後擷取，網址逐頁確認打得開。`],
-  [SiteGoal, `05:30–07:30
-剛才是範例網站；這頁把它拆成路線來看（示意，實際外觀看模板）。打開網址先到首頁〈三國演義〉，點〈知識庫導覽〉。導覽頁是一般的筆記，裡面的 [[連結]] 都點得開。
-從導覽頁有兩條路：上面那條到〈時間軸〉，看事件的先後順序；它是一條橫向時間軸，線上只有事件名稱和回目。第三堂的 Skill 規定時間軸裡不放連結，所以在時間軸上點不到人物或事件卡。下面那條直接到〈劉備〉〈桃園結義〉這些人物、事件卡。
-按一下：這就是今天的路線，首頁 → 導覽頁 → 時間軸、人物、事件。第五章大家會照這條路，自己從首頁點一遍。`],
-  [Agenda, `07:30–10:00
-五章、五個練習，中間還有一個小練習當休息。順序是先動手、再講原理。
+  [Agenda, `05:30–08:00
+四章、五個練習，中間還有一個小練習當休息。章節的順序，就是真的做一遍會遇到的順序：遇到什麼，就在那一步講什麼。
 右上角是今天的步驟手冊 prompts.md：課前作業和每個練習的步驟都在裡面，請現在在筆電打開，整堂課開著；後面只有練習 3-2 那頁會再放一次這個連結。網址：${PROMPTS_URL}
-第一章開一座花園：註冊 Forestry.md、種一座花園，練習 1 打開自己的網址。第二章連接 Obsidian：裝外掛、用 Garden Key 連線、選首頁，再關掉 Simple note URLs 這個開關（卡名是中文就要關），練習 2 發布第一次。第三章網站怎麼更新：小練習改一句再發布，再看建置做了什麼。第四章挑卡發布：先看 dg-publish 怎麼挑卡，練習 3-1 讓時間軸上線，練習 3-2 做導覽頁。第五章檢查網站：練習 4 自己從首頁點到新卡，點不開就照四個檢查一項一項查，最後看做完的樣子。
+第一章開一座花園：註冊 Forestry.md、種一座花園，練習 1 打開自己的網址。第二章連上 Obsidian：裝外掛、連上 Forestry，看〈三國演義〉開頭的發布設定，按發布，回 Forestry 看結果；第一次發布常會失敗，就在這一章修好再發布，練習 2 把整段自己做一遍。第三章挑卡發布：決定哪些卡公開，練習 3-1 讓時間軸上線，練習 3-2 做導覽頁。第四章更新與檢查：小練習改一句再發布，練習 4 從首頁點到新卡，點不開就照四個檢查查；最後看成果、回顧四堂課、課後怎麼繼續，留幾分鐘問答。
 比較可能卡住的是第一、二章的帳號和連線。上週的課前作業是註冊 Forestry.md 帳號、種一座花園，等一下第 ${pageOf(ForestryAccount)} 頁會確認；沒註冊的人，現場用 email 或 GitHub 帳號註冊。`],
-  [Section1, `10:00–10:30
+  [Section1, `08:00–08:30
 第一章：開一座花園。在 Forestry.md 種出自己的網址，先讓大家有一個打得開的網站。`],
   [WebsiteIs, `（課後自讀，上課不講。）
 你打一個網址，看到的網頁是從哪來的？這頁分三步看。
-第一個畫面：你在瀏覽器輸入網址。網址就像門牌，告訴瀏覽器去哪一台電腦拿東西。
-按一下：網址指向一台一直開著、連在網路上的電腦，叫主機。主機上放了很多檔案，主機找到〈劉備〉這一頁。
+第一個畫面：你在瀏覽器輸入網址。你的瀏覽器就是用戶端（client）。網址就像門牌，告訴瀏覽器去哪一台電腦拿東西。
+按一下：網址指向一台一直開著、連在網路上的電腦，叫伺服器（server）。伺服器上放了很多檔案，它找到〈劉備〉這一頁。
 按一下：檔案送回來，瀏覽器把它畫成網頁，看到標題、內文、可以點的連結。
 最後一下：今天做的網站，就是放在別台電腦上的檔案。今天要做的，就是把你的卡變成這種檔案，放到那台電腦上。`],
   [CiCd, `（課後自讀，上課不講。）
-這頁講一個工程師常說的詞：CI/CD。CI 是 Continuous Integration，持續整合；CD 是 Continuous Deployment，持續部署。名字不用背，記住它在做什麼就好。
-上面一排是沒有自動部署時的做法：改好檔案，自己把檔案上傳到主機，再自己重做網頁，才算上線。紅色的兩格都要人動手，人動手就可能漏掉其中一步。
-按一下：下面一排是 CI/CD。紫色那格是你唯一要做的：按發布，把改好的卡送到 Forestry，就像把信投進郵筒。綠色括號是自動的部分：Forestry 收到之後，建置、上線都自動執行，像郵差會把信送到。
-最後一下：你按發布之後，建置、上線都會自動完成。注意，按發布這一步還是要你自己做。`],
-  [BuildStep, `48:30–52:00
-剛才 Publish history 上的 Building，就是在建置。這頁看建置做了什麼。像照食譜做出一道菜：食譜是原始檔，菜是網頁。
-左邊是 人物/劉備.md 的原始檔：開頭三行是屬性，內文有 [[關羽]]、[[張飛]] 兩個連結。
-按一下：你只做一件事，按發布，把卡送到 Forestry。後面的事它自動跑：照 Digital Garden 的網站模板建置，做好就換掉網址上的舊網頁。這種「你只按發布，後面自動」的做法叫自動部署。
-按一下：做好的網頁。開頭三行不見了，標題變大，[[關羽]]、[[張飛]] 變成可以點的連結。
-最後一下：[[連結]] 是在建置時才變成網址。附錄第 ${pageOf(HtmlLinks)} 頁會再用到這件事：寫在 HTML 區塊裡的 [[ ]] 不會被轉換。自動部署的正式名稱 CI/CD，在附錄第 ${pageOf(CiCd)} 頁。`],
-  [Section2, `22:00–22:30
-第二章：讓 Obsidian 連上 Forestry。裝外掛、用 Garden Key 連線、選首頁，再關掉 Simple note URLs（卡名是中文就要關），然後發布第一次。`],
-  [Section3, `44:00–44:30
-第三章：網站怎麼更新。先動手改一句、再發布一次，看到網站變了，再來看背後發生什麼。`],
-  [ForestryAccount, `10:30–12:00
+這頁講一個工程師常說的詞：CI/CD。CI 是 Continuous Integration，持續整合：每次改動送進來，就自動檢查、建置一次，有錯馬上知道；CD 是 Continuous Deployment，持續部署：檢查、建置通過，就自動上線。名字不用背，記住它在做什麼就好。
+上面一排是沒有自動部署時的做法：改好檔案，自己把檔案上傳到伺服器，再自己重做網頁，才算上線。紅色的兩格都要人動手，人動手就可能漏掉其中一步。
+按一下：下面一排是 CI/CD。紫色那格是你唯一要做的：按發布，把改好的卡送到 Forestry，就像把信投進郵筒。綠色括號是自動的部分：Forestry 收到之後，檢查、建置、上線都自動執行，像郵差會把信送到。建置失敗就不會上線，第二章的 Failed 就是這樣。
+最後一下：你按發布之後，檢查、建置、上線都會自動完成。注意，按發布這一步還是要你自己做。`],
+  [BuildStep, `32:30–34:30
+Building 在做什麼？建置，就是把筆記做成網頁，像照食譜做出一道菜：食譜是原始檔，菜是網頁。
+左邊是 人物/劉備.md 的原始檔：開頭是屬性，內文有 [[關羽]]、[[張飛]] 兩個連結。
+按一下：你只做一件事，按發布，把卡送到 Forestry。後面它自動跑：照 Digital Garden 的網站模板建置，做好就換掉網址上的舊網頁。
+按一下：做好的網頁。屬性不會顯示，標題變大，[[關羽]]、[[張飛]] 變成可以點的連結。
+最後一下：[[連結]] 是在建置時才變成網址。建置時，每張卡都要分到一個自己的網址；下一頁的失敗就出在這裡。附錄第 ${pageOf(HtmlLinks)} 頁會再用到這件事；這種「你只按發布，後面自動」的做法，正式名稱 CI/CD，在附錄第 ${pageOf(CiCd)} 頁。`],
+  [PublishStatus, `31:00–32:30
+按了 Publish All，結果要回 Forestry 儀表板看：Publish history，發布紀錄，最新的一筆在最上面。這是講師的實際畫面。
+按一下：1，Building，建置中，它在做什麼下一頁看。旁邊寫 Running for 9s，已經跑了 9 秒。講師 2026-10-30 實測，從按發布到做好大約 22 到 24 秒，半分鐘左右。
+按一下：2，Published，上線了。旁邊寫 Live now，網址上現在看到的就是這一版。
+按一下：3，Failed，失敗，這次沒有上線，網址上還是上一版。右邊有個小箭頭，點開可以看錯誤訊息。卡名是中文的話，第一次發布多半會看到它，兩頁之後看原因。
+最後一下：最上面那一筆，就是你剛按的發布。`],
+  [Section2, `20:00–20:30
+第二章：連上 Obsidian，發布第一次。照真的做一遍的順序走：裝外掛、連線、看屬性、按發布、看結果，失敗就修好再發布。`],
+  [Section3, `50:00–50:30
+第三章：挑卡發布。網站上已經有〈三國演義〉，接下來決定還有哪些卡要公開：先讓第三堂的時間軸上線，再做一張導覽頁，讓讀者從首頁點得到每張卡。`],
+  [ForestryAccount, `08:30–10:00
 上週的課前作業：註冊 Forestry.md。它是 Digital Garden 外掛作者推出的代管服務，幫你把筆記建置成網站、給你一個網址。用它，就不用另外申請 GitHub、Vercel，也不用建 token。
 這是講師 2026-10-30 的實際畫面。
 按一下：1，打開 forestry.md，按 Sign up 註冊。
 按一下：2，填 email 和密碼。
 按一下：3，或者按最下面的 GitHub，用 GitHub 帳號登入，兩種都可以。
 最後一下：還沒註冊的同學，現在就註冊，註冊完照下一頁種一座花園。`],
-  [PlantGarden, `12:00–14:00
+  [PlantGarden, `10:00–12:00
 登入後的第一個畫面：Plant new garden，種一座花園。
 按一下：1，Garden name，Forestry 會先幫你取一個名字，例如 green-elm，想換就自己改。
 按一下：2，下面那行就是你的網址：名字.forestry.md。
 按一下：3，按 Plant。講師實測種好花了 23 秒。
 免費方案（講師帳號 2026-10-30 顯示）：一個網站、每月 30 次發布、100 MB 空間。上課和平常寫卡應該夠用。每月 30 次，指的是一個月可以按 30 次發布，所以改好幾張卡再一起發布，比較省次數。`],
-  [GardenLive, `14:00–16:00
+  [GardenLive, `12:00–14:00
 種好之後看到這個畫面：Your garden is live。
 按一下：1，中間這行就是你的網址，點了就打開。現在打開只會看到模板的空網站，因為我們還沒有發布任何卡。
-按一下：2，Copy address 複製網址，練習 4 開無痕視窗時會貼上。
-按一下：3，下面是 Forestry 給的步驟清單，畫面裡看得到前兩步。第一步 Connect Obsidian，連上你的 Obsidian；第二步 Choose your home page，選首頁，連上之後外掛會直接問你。這兩步都在第二章做。清單再往下還有一步 Publish more notes，發布更多卡，第二章試發布一次，第四章再挑卡發布。
+按一下：2，Copy address 複製網址，之後要打開自己的網站，就貼這個網址。
+按一下：3，下面是 Forestry 給的步驟清單，畫面裡看得到前兩步。第一步 Connect Obsidian，連上你的 Obsidian；第二步 Choose your home page，選首頁，連上之後外掛會直接問你。這兩步都在第二章做。清單再往下還有一步 Publish more notes，發布更多卡：第二章發布第一次，第三章再挑卡發布。
 這張是講師連好、也發布過之後截的，所以前兩步已經打勾。大家自己的畫面上，這兩步現在還沒打勾。`],
-  [Practice1, `16:00–22:00
+  [Practice1, `14:00–20:00
 練習 1，6 分鐘：驗收課前作業，還沒做的人現場補。這個練習沒有提示詞，照投影片三步做。
 登入 Forestry，確認你有一座花園，打開你的網址。看得到網頁就過關。
 還沒註冊、或還沒種花園的同學，現場照第 ${pageOf(ForestryAccount)}、${pageOf(PlantGarden)} 頁做，註冊和 Plant 都在瀏覽器裡完成。
 按一下：打得開，過關。打不開，多半是網址打錯：回 Forestry 儀表板按 Copy address（第 ${pageOf(GardenLive)} 頁）複製，再貼到瀏覽器；儀表板上沒有花園，照第 ${pageOf(PlantGarden)} 頁按 Plant。`],
-  [InstallPlugin, `22:30–25:00
+  [InstallPlugin, `20:30–23:00
 回到 Obsidian，裝 Digital Garden 外掛。這是講師的實際畫面，Obsidian 1.14.4。
-按一下：1，設定 → 第三方外掛程式。第一次會看到受限模式，按右邊的「離開受限模式」。
+按一下：1，設定 → 第三方外掛程式。第一次會看到受限模式：Obsidian 預設不執行別人寫的外掛，按右邊的「離開受限模式」，才能裝外掛。
 按一下：2，社群外掛程式按「瀏覽」，搜尋 Digital Garden，認明作者是 oleeskild，避免裝到名字相近的其他外掛。講師看到的版本是 2.103.0。
 按一下：3，按安裝，裝好再按啟用。
-外掛只會裝在目前打開的這個儲存庫，請確認你打開的是三國人物知識庫。官方說明：https://obsidian.md/help/community-plugins`],
-  [ConnectForestry, `25:00–28:00
+外掛只會裝在目前打開的這個知識庫，請確認你打開的是三國人物知識庫。官方說明：https://obsidian.md/help/community-plugins`],
+  [ConnectForestry, `23:00–25:30
 連線。左邊是 Obsidian 外掛的設定，右邊是 Forestry 儀表板。
 按一下：1，設定 → 左下的 Digital Garden，Publish to 選 Forestry.md。預設是 GitHub，要自己改。
-按一下：2，到 Forestry 儀表板右邊的 Garden Key，按 Reveal Garden Key，複製那串字。另一個做法：儀表板上的 Connect Obsidian 按鈕，會打開 Obsidian 幫你自動填好，外掛設定頁的說明也這樣寫。這條路講師沒有截圖，教室裡以 Garden Key 貼上為主。
-按一下：3，回 Obsidian，把 Key 貼進 Garden Key 欄位，按 Connect。出現「Connected to 你的花園名稱」就連上了。
-連上之後，外掛會請你選首頁。我們的〈三國演義〉開頭已經有 dg-home，選它就好；第 ${pageOf(HomeFlag)} 頁會看 dg-home 是什麼。`],
-  [KeySafety, `28:00–29:30
-Garden Key 就像你網站的密碼。Forestry 自己的說明寫：有了這組 Key，任何人都能發布到你的網站，所以要收好。
+按一下：2，到 Forestry 儀表板右邊的 Garden Key，按 Reveal Garden Key，複製那串字。外掛帶著它發布，Forestry 就知道要放到你的花園。另一個做法是儀表板上的 Connect Obsidian 按鈕，會打開 Obsidian 幫你自動填好；這條路講師沒有截圖，教室裡以貼上 Garden Key 為主。
+按一下：3，回 Obsidian，把 Key 貼進 Garden Key 欄位，按 Connect。出現「Connected to 你的花園名稱」就連上了。接著外掛會請你選網站首頁，選〈三國演義〉；為什麼選它，第 ${pageOf(HomeFlag)} 頁會看到。`],
+  [KeySafety, `25:30–26:30
+Garden Key 怎麼保管。Forestry 自己的說明寫：有了這組 Key，任何人都能發布到你的網站，所以要像密碼一樣收好。
 中間這個鑰匙圖示就是 Garden Key。
 按一下：它只該放在一個地方，外掛設定的 Garden Key 欄位。
 按一下：不要貼進筆記，筆記發布後會公開；不要出現在截圖、投影片；不要傳到 LINE 群組或 Email。
-按一下：萬一外流，到 Forestry 儀表板按 Regenerate Garden Key，產生一組新的，再貼進外掛。
-最後一下：按了 Regenerate 之後，舊的 Garden Key 就不能用了，所以新的要記得貼回外掛設定。`],
-  [SlugFail, `29:30–31:00
-這頁是講師準備課程時真的踩到的錯，你們的卡名也是中文，很可能遇到，所以先講。
-左邊是講師的 Publish history，發布紀錄，最新的在最上面。
-按一下：框起來的是最下面種花園之後，連續兩次 Publish failed，失敗。
+按一下：萬一外流，到 Forestry 儀表板按 Regenerate Garden Key，產生一組新的。
+最後一下：按了 Regenerate，舊的 Key 就不能用了。外掛裡還是舊的那組，所以要把新的 Key 貼回外掛設定，再按 Connect。`],
+  [SlugFail, `34:30–36:00
+Failed 的原因。這是講師準備課程時真的遇到的；你們的卡名也是中文，第一次發布很可能也會這樣。
+左邊是講師的 Publish history。
+按一下：框起來的是種好花園之後，連續兩次 Publish failed。
 按一下：右邊看原因。外掛有一個設定叫 Simple note URLs，預設開著，會把卡片路徑轉成英文小寫的網址，例如 My Folder/My Note 變成 my-folder/my-note。可是它轉不了中文字，會直接拿掉。講師用同一個轉換套件實測：人物/劉備、人物/關羽、關係/桃園結義，全部變成三條斜線。
-按一下：中文字被拿掉，每張卡的網址都一樣，網站分不出哪個網址是哪張卡，建置就失敗。錯誤訊息裡會出現 DuplicatePermalink，意思就是網址重複。
+按一下：中文字被拿掉，每張卡的網址都一樣。上一頁說建置時每張卡要分到自己的網址，網址撞在一起，建置就失敗。點開錯誤訊息會看到 DuplicatePermalink，意思就是網址重複。
 最後一下：卡名是中文，就要關掉 Simple note URLs。下一頁看在哪裡關。`],
-  [SlugFix, `31:00–32:00
-這個開關在外掛設定同一頁，往下捲到 Publishing。注意：要先連上 Forestry，這一段才會出現。
+  [SlugFix, `36:00–37:00
+這個開關在設定 → 第三方外掛 → Digital Garden，同一頁往下捲到 Publishing。要先連上 Forestry，這一段才會出現。
 按一下：1，說明裡就有寫：note names use non-Latin characters 就關掉，也就是卡名用的不是英文字母（例如中文），就把它關掉。
 按一下：2，截圖裡的開關是開著的（紫色），把它關掉。
-按一下：3，再發布一次，看 Publish history 有沒有變 Published。講師關掉之後再發布，就變成 Published，網址是 /人物/劉備/ 這樣的中文網址，瀏覽器打得開。
+按一下：3，再發布一次：Publish All，回 Publish history 等最上面那一筆變成 Published，再打開網址，首頁就是〈三國演義〉。講師關掉之後再發布，就變成 Published，網址是 /人物/劉備/ 這樣的中文網址，瀏覽器打得開。
 最後一下：開著是三條斜線，關掉是正常的中文網址。這張外掛畫面是講師另開一個測試用的 Obsidian 截的，為了讓沒連線的外掛也顯示 Publishing 這一段，只在記憶體裡暫時改了連線判斷，沒有存任何設定。`],
-  [Practice2, `34:00–44:00
-練習 2，10 分鐘：把 Obsidian 連上 Forestry，發布第一次。步驟在步驟手冊 prompts.md 練習 2。
-六步，和步驟手冊一樣：1 安裝外掛；2 設定 → Digital Garden，Publish to 選 Forestry.md；3 貼 Garden Key，按 Connect；4 外掛請你選首頁，選〈三國演義〉；沒選也發布得出去，但打開網址只會看到一串筆記清單；5 往下把 Simple note URLs 關掉；6 按 Ctrl／Cmd + P，搜 garden publish，選 Publish All Notes Marked for Publish。
-按一下：回 Forestry 看 Publish history，最上面那一筆變成 Published，再打開網址，首頁變成〈三國演義〉就成功了。出現 Failed，點右邊的箭頭展開看錯誤；看到 DuplicatePermalink，多半是第 5 步的開關沒關，所以先查它。`],
-  [EditAgain, `44:30–48:30
+  [Practice2, `37:00–50:00
+練習 2，13 分鐘：把剛才那一段自己做一遍。步驟在步驟手冊 prompts.md 練習 2，順序和投影片一樣。
+1，裝外掛、連線：照第 ${pageOf(InstallPlugin)}、${pageOf(ConnectForestry)} 頁，連上後首頁選〈三國演義〉。
+2，打開〈三國演義〉，看屬性有沒有 dg-publish 和 dg-home（第 ${pageOf(PublishFlag)}、${pageOf(HomeFlag)} 頁）。
+3，Ctrl／Cmd + P，Publish All。
+4，回 Forestry 看 Publish history，等最上面那一筆不再是 Building。
+5，如果是 Failed：照第 ${pageOf(SlugFix)} 頁關掉 Simple note URLs。
+6，再發布一次，等 Published，打開網址。
+按一下：第一次 Failed 是正常的（原因在第 ${pageOf(SlugFail)} 頁），照第 5 步關掉再發布就好。如果你先關了這個開關，第一次就會是 Published，直接跳到第 6 步打開網址。
+最後一下：打開網址，首頁是〈三國演義〉就過關。關掉之後還是 Failed，先回外掛設定確認開關真的關了；外掛設定沒有顯示 Connected，回第 1 步重新貼 Garden Key。`],
+  [EditAgain, `83:30–87:30
 小練習，4 分鐘，也當作休息：改一句，再發布一次。步驟在步驟手冊 prompts.md 的〈小練習〉。
 1，打開〈三國演義〉，在最後加一句你自己的話，例如「這是我的三國筆記」。
-2，Ctrl／Cmd + P，Publish All Notes Marked for Publish。
-3，回 Forestry 儀表板看 Publish history，等最上面那一筆變成 Published。
+2，Ctrl／Cmd + P，Publish All。
+3，回 Publish history，等最上面那一筆變成 Published（狀態怎麼看，第 ${pageOf(PublishStatus)} 頁）。
 4，重新整理你的網址，看那句有沒有出現。
-按一下：這是 Publish history 的實際畫面。最上面那筆標著 Building，旁邊寫 Running for 9s，代表網站還在建置；下面那筆是上一次的 Published，旁邊寫 Live now，網址上現在看到的就是它。等最上面那筆也變成 Published，新句子才會上線。講師 2026-10-30 實測，從按發布到 Published 大約 22 到 24 秒，也就是半分鐘左右。
-按一下：看到新句子，就是網站更新了；沒變，先等半分鐘再重新整理，沒變不一定是壞了，可能還在建置。做完的同學起來走走、喝水。下一頁看建置在做什麼。`],
-  [Section4, `52:00–52:30
-第四章：挑卡發布。先看 dg-publish 怎麼決定哪些卡上網站，再讓第三堂的時間軸卡上線，最後做一張導覽頁，讓讀者從首頁點得到每張卡。`],
-  [PublishFlag, `52:30–56:00
-誰決定哪些卡上網站？卡片開頭的 dg-publish。
-左邊是你的儲存庫，五張卡，三張打勾、兩張沒勾。中間像一個篩子，打勾的才放行。
-按一下：卡上的勾是什麼？上面這排：它就是 Obsidian 屬性面板裡 dg-publish 的勾選框（中間是實際畫面），也等於原始檔開頭寫 dg-publish: true。開頭這幾行叫 frontmatter，也叫屬性。不用自己打：打開那張卡，Ctrl／Cmd + P，執行 Add publish flag，它會幫你加上。
-按一下：按發布之後，網站上只出現打勾的三張。注意箭頭上的字：按發布才送出。勾完沒按發布，網站上不會有那張卡。
+按一下：看到新句子，就是網站更新了；沒變，先等半分鐘再重新整理，可能還在 Building。做完的同學起來走走、喝水。`],
+  [Section4, `83:00–83:30
+第四章：更新與檢查。之後每次改卡都是同一套：改、發布、看狀態、從首頁點一遍。先做一個小練習，再做最後一個練習。`],
+  [PublishFlag, `26:30–29:00
+連好了，先打開〈三國演義〉看最上面：兩條 --- 中間有兩行，dg-publish: true 和 dg-home: true。這一塊叫屬性，英文是 Frontmatter，是寫給程式看的設定，Obsidian 會把它顯示成屬性面板。這頁看第一行 dg-publish，下一頁看 dg-home。
+dg-publish 是「要公開」的勾。左邊是你的知識庫，五張卡，三張打勾、兩張沒勾；中間像一個篩子，打勾的才放行。
+按一下：卡上的勾是什麼？上面這排：它就是 Obsidian 屬性面板裡 dg-publish 的勾選框（中間是實際畫面），也等於原始檔開頭寫 dg-publish: true。在屬性面板打勾，和自己打這一行，結果一樣。
+按一下：按發布之後，網站上只出現打勾的三張。箭頭上寫著：按發布才送出。
 按一下：沒勾的〈我的草稿〉〈上課筆記〉留在你的電腦，不會上傳。
-最後一下：dg-publish 只負責選卡，按發布才會送出。勾了又按了發布，任何拿到網址的人都看得到，私人的東西不要勾。
+最後一下：勾了 dg-publish，還要按發布才會上網站。反過來說，勾了又發布，任何拿到網址的人都看得到，私人的東西不要勾。〈三國演義〉已經勾好了；其他卡要不要公開，第三章再挑。
 來源：https://docs.forestry.md/getting-started/01-getting-started/ 、https://obsidian.md/help/properties`],
-  [FrontmatterCheck, `56:00–58:30
+  [FrontmatterCheck, `50:30–52:30
+挑卡的第一件事：新卡發布前先看屬性，決定它要不要公開。
 第三堂我們用 eli5 把 人物/劉備.md 改寫成 5 歲小孩聽得懂的版本，存成 劉備-5歲版.md。改寫時，Codex 可能把開頭的屬性一起抄過去。
-按一下：如果 5 歲版開頭也有 dg-publish: true，它也會被發布。
+按一下：如果 5 歲版的屬性也有 dg-publish: true，它也會被發布。
 按一下：結果是一發布，網站上會多一張〈劉備-5歲版〉，和原本的〈劉備〉並排，讀者可能搞不清楚哪張才對。
-按一下：5 歲版那行被綠線劃掉，下面網站上那張〈劉備-5歲版〉也跟著淡掉：如果有 dg-publish、又不想公開，就刪掉那行，或在屬性取消勾選，下次發布它就不會出現。第三堂的 eli5 提示詞最後一句是「新檔不要加 dg-publish。」，所以 5 歲版通常本來就沒有這行；Codex 沒照做的話才會出現。
-按一下：反過來的情況也有，就是左下角這第三張卡。第三堂時間軸 Skill 產出的 時間軸.md，開頭沒有屬性，直接就是一段 HTML，所以它不會被發布。練習 3-1 會幫它補上 dg-publish: true。
-最後一下：新卡發布前，先看開頭三行。不想公開的卡刪掉 dg-publish，要公開的卡缺了就補上。`],
-  [Practice31, `58:30–66:30
+按一下：5 歲版那行被綠線劃掉，下面網站上那張也跟著淡掉：不想公開，就在屬性取消勾選，或刪掉那一行，下次 Publish All 之後網站上就不會有它。第三堂的 eli5 提示詞最後一句是「新檔不要加 dg-publish。」，所以 5 歲版通常本來就沒有這行；Codex 沒照做才會出現。
+最後一下：改寫出來的卡，可能連 dg-publish 一起抄過去，所以發布前先看一眼。要公開、卻缺勾的卡怎麼補，下一頁。`],
+  [AddFlag, `52:30–54:00
+反過來的情況：要公開，卡上卻沒有勾。第三堂時間軸 Skill 產出的 整理/時間軸.md 就是這樣，開頭直接是一段 HTML，沒有屬性，所以它不會被發布。
+按一下：不用自己打：打開那張卡，Ctrl／Cmd + P，選 Digital Garden: Add publish flag。
+按一下：屬性就多了一個 dg-publish，已經打勾，就是第 ${pageOf(PublishFlag)} 頁那個勾。指令清單裡也有 Remove publish flag，用來拿掉；在屬性面板取消勾選也可以。
+最後一下：練習 3-1 就用這個指令，替時間軸補上勾。`],
+  [Practice31, `54:00–62:00
 練習 3-1，8 分鐘：讓第三堂的時間軸卡上線。步驟在步驟手冊 prompts.md 練習 3-1。
-1，打開 整理/時間軸.md，先看開頭三行。第三堂的 Skill 產出的時間軸，開頭沒有屬性，直接就是一段 HTML。
-2，沒有 dg-publish 的話，Ctrl／Cmd + P，執行 Add publish flag。
-3，Ctrl／Cmd + P，Publish All Notes Marked for Publish，等 Publish history 變 Published。
+1，打開 整理/時間軸.md，看屬性。
+2，沒有 dg-publish 的話，Ctrl／Cmd + P，執行 Digital Garden: Add publish flag。
+3，Publish All，等 Publish history 變 Published。
 4，打開你的網址，後面接 /整理/時間軸/。
-按一下：看到橫向時間軸就過關；404 通常是沒勾，或勾了還沒發布。下一頁看時間軸在網站上的樣子。`],
-  [HomeFlag, `32:00–33:00
-發布之前先決定：網站打開的第一頁是哪一張？由 dg-home 決定。沒選首頁也發布得出去，但打開網址只會看到一串筆記清單，外掛會顯示 Live, no home page（外掛 2.103.0 的說明文字）。
-左邊是〈三國演義〉的開頭：第一行 dg-publish 第 ${pageOf(PublishFlag)} 頁再講；下面多一行 dg-home: true。教材裡的〈三國演義〉已經加好這一行。練習 2 連上 Forestry 之後，外掛會請你選首頁，選〈三國演義〉就好。
+按一下：看到橫向時間軸就過關。看到 404，意思是「找不到頁面」：網站上沒有這一頁。在我們的網站上，點了是 404，多半是那張卡沒勾，或勾了還沒發布、還沒等到 Published，回第 2、3 步補上。下一頁看時間軸在網站上的樣子。`],
+  [HomeFlag, `29:00–30:00
+第二行 dg-home: true：指定網站首頁。剛才連上 Forestry 時，外掛請你選首頁，選的就是〈三國演義〉；教材裡它本來就有這一行。沒有首頁也發布得出去，但打開網址只會看到一串筆記清單，外掛會顯示 Live, no home page（外掛 2.103.0 的說明文字）。
 按一下：打開網址，最後面是一個斜線，也就是網站的第一頁，顯示的就是〈三國演義〉。
-最後一下：整個網站只放一張 dg-home。如果有兩張卡都寫了 dg-home，哪一張會變成首頁就說不準。`],
-  [NavPage, `69:00–73:00
-第一次來的讀者可能不知道從哪開始，所以做一張導覽頁。這也是整個網站的入口：時間軸只有事件名稱、沒有連結，人物、事件的連結都放在這裡。
-左邊是 整理/知識庫導覽.md：開頭有 dg-publish: true，下面三個路標。時間連到 [[時間軸]]，人物連到每張人物卡，事件連到每張關係卡。導覽頁是一般的 Markdown 筆記，這些 [[連結]] 在網站上都點得開。下面那行橘色字：〈三英戰呂布〉先不放，留給練習 4 當新卡。導覽頁可以自己手打，也可以請 Codex 做，提示詞在 prompts.md 練習 3-2。
+最後一下：整個網站只放一張 dg-home。如果兩張卡都寫了 dg-home，哪一張會變成首頁就說不準。`],
+  [NavPage, `64:30–69:00
+第一次來的讀者可能不知道從哪開始，所以做一張導覽頁，人物、事件的連結都放在這裡。
+左邊是 整理/知識庫導覽.md：屬性有 dg-publish: true，下面三個路標。時間連到 [[時間軸]]，人物連到每張人物卡，事件連到每張關係卡。導覽頁是一般的 Markdown 筆記，這些 [[連結]] 在網站上都點得開。下面那行橘色字：〈三英戰呂布〉先不放，留給練習 4 當新卡。導覽頁可以自己手打，也可以請 Codex 做，提示詞在 prompts.md 練習 3-2。
 右上：再打開〈三國演義〉，在最後一行加 [[知識庫導覽]]。首頁連到導覽頁，讀者才點得到其他卡。這個紫色連結，指的就是左邊標題列也是紫色的那張導覽頁。
 接著一項一項按，對清單。清單上的編號，和圖上黃框旁的編號是同一個：
 按一下：1，導覽頁有 dg-publish: true，左邊黃框 1 那行。
 按一下：2，首頁最後一行連到 [[知識庫導覽]]，紫色箭頭從這個連結指到左邊的導覽頁。
-按一下：3，黃框 3 裡導覽頁連到的每張卡都要有 dg-publish。連到的卡不會自動一起發布，少勾一張，網站上那個連結就點不開。教材原本的 12 張卡都已經勾好。還沒勾的，通常是第三堂新增的〈白門樓〉〈草船借箭〉，和你第二堂自己寫的卡；時間軸在練習 3-1 已經勾好了。一張張打開太慢，練習 3-2 會請 Codex 只列清單，你再打開核對。不想公開的卡，就把它從導覽頁拿掉。
+按一下：3，黃框 3 裡，導覽頁連到的每張卡都要勾 dg-publish。連到的卡不會自動一起發布：外掛只送出有勾的卡，導覽頁連到一張沒勾的卡，網站上點那個連結就是 404。教材原本的 12 張卡都已經勾好。還沒勾的，通常是第三堂新增的〈白門樓〉〈草船借箭〉，和你第二堂自己寫的卡；時間軸在練習 3-1 已經勾好了。怎麼找出沒勾的卡，練習 3-2 再做。
 按一下：〈劉備-5歲版〉沒有公開，除非你本來就想公開它。
-最後一下：人物、事件的連結，都放在導覽頁。`],
-  [PublishCommand, `33:00–34:00
-發布要用命令面板。按 Ctrl／Cmd + P，打 garden，就會列出 Digital Garden 的所有指令。這是講師的實際畫面，外掛 2.103.0。
-按一下：1，第一行 Publish All Notes Marked for Publish，一次發布所有勾了 dg-publish 的卡。今天的練習都用它。
-按一下：2，Add publish flag，幫你現在打開的這張卡加上 dg-publish；dg-publish 是什麼，第 ${pageOf(PublishFlag)} 頁講。
-按一下：3，往下有 Publish Active Note，只發布打開的這一張。
-最後一下：先 Add publish flag，再 Publish All。另外，Forestry 的儀表板會提到 Publication Center，是左邊工具列的小幼苗圖示，可以看哪些卡要發布；今天用命令面板就夠了。
+最後一下：連到的卡不會自動發布，每張要自己勾。`],
+  [PublishCommand, `30:00–31:00
+屬性看過了，現在發布。發布要用命令面板：按 Ctrl／Cmd + P，打 garden，會列出 Digital Garden 的所有指令。這是講師的實際畫面，外掛 2.103.0。第二行 Add publish flag 標著「挑卡時再用」，第三章第 ${pageOf(AddFlag)} 頁再用。
+按一下：1，第一行 Publish All Notes Marked for Publish：一次發布所有勾了 dg-publish 的卡。今天的練習都用它，後面簡稱 Publish All。
+按一下：2，往下有 Publish Active Note，只發布打開的這一張。
+最後一下：練習 2 只要用 Publish All。
 來源：https://docs.forestry.md/getting-started/02-commands/`],
-  [HtmlTest, `66:30–69:00
+  [HtmlTest, `62:00–64:30
 這是範例網站上的〈時間軸〉，網址是 glowing-clearing.forestry.md/整理/時間軸/。它和第三堂 Skill 產出的 時間軸.md 是同一種寫法：一段 HTML 畫成橫向時間軸，下面一段「來源卡」。範例網站多補了幾張卡，所以有 12 件事；你第三堂做的是 6 件，畫面會短一點。
-按一下：1，HTML 照常顯示。模板預設允許筆記裡寫 HTML（markdown-it 的 html: true），所以第三堂讓 Skill 產出 HTML 可以直接發布。這段時間軸只用到排版和顏色設定，沒有 script。
-按一下：2，網站的內文欄比較窄，一開始只看得到前面幾件，右邊那件被切到。用觸控板往右滑，或拖曳時間軸下方的捲軸，就看得到後面的事件。發布後實際滑一次，確認每件都在。
-按一下：3，來源卡寫成純文字檔名，沒有做成連結，所以不會點到 404。第三堂在 SKILL.md 補了一條規則：來源卡只寫檔名純文字，不做連結。如果你的時間軸裡還有 <a href> 連結，重跑一次 Skill，或手動把那幾個 <a> 拿掉。
+按一下：1，HTML 照常顯示。模板預設允許筆記裡寫 HTML（markdown-it 的 html: true），所以第三堂 Skill 產出的 HTML 可以直接發布。
+按一下：2，事件名稱是純文字，點不了，這是對的；想點到人物和事件卡，下一頁做導覽頁。網站的內文欄比較窄，一開始只看得到前面幾件，右邊那件被切到：用觸控板往右滑，或拖曳時間軸下方的捲軸，就看得到後面的事件。發布後實際滑一次，確認每件都在。
+按一下：3，下面的來源卡也只寫檔名純文字，沒有做成連結，所以不會點到 404。這是第三堂在 SKILL.md 補的規則。如果你的時間軸裡還有 <a href> 連結，重跑一次 Skill，或手動把那幾個 <a> 拿掉。
 畫面是 2026-10-30 從 Obsidian 外掛發布到 Forestry 後擷取，時間軸頁和其他 29 頁都確認打得開。`],
   [HtmlLinks, `（課後自讀，上課不講。）
 時間軸是一段 HTML，想在裡面放連結，要知道這件事。回想第 ${pageOf(BuildStep)} 頁：[[連結]] 是建置時轉換的，但它只轉換一般的 Markdown 文字，HTML 區塊裡的 [[ ]] 不會被轉換。
@@ -2296,60 +2279,51 @@ Garden Key 就像你網站的密碼。Forestry 自己的說明寫：有了這組
 按一下：第三種：純文字，「第 1 回：關係/桃園結義」。
 按一下：不能點，但正常顯示，不會 404。
 最後一下：人名、來源卡用純文字；人物連結放在導覽頁。這就是今天網站的設計：時間軸用來看事件順序，可以點的連結都放在導覽頁。SKILL.md 裡的兩條規則：人名用純文字，不用 [[連結]]；來源卡只寫檔名純文字，不做連結。想讓讀者點得到來源卡，就在時間軸下面、HTML 區塊外，另外用一般的 [[桃園結義]] 列一行，那一行會正常轉換。`],
-  [Practice32, `73:00–87:00
+  [Practice32, `69:00–83:00
 練習 3-2，14 分鐘：做導覽頁，讓讀者從首頁點得到每張卡。兩段提示詞都在步驟手冊 prompts.md 練習 3-2，右上角就是連結，在筆電上複製：${PROMPTS_URL}
 1. 做導覽頁：在三國人物知識庫資料夾打開 Codex，貼上：
 「請在 整理/ 新增 知識庫導覽.md。分成時間、人物、事件三段：時間那段只放 [[時間軸]]；人物那段用 [[連結]] 列出 人物/ 裡的每張卡；事件那段用 [[連結]] 列出 關係/ 裡的每張卡，但先不要放〈三英戰呂布〉，練習 4 再加。只連到已有的卡，不要新增卡片，也不要改別的檔案。開頭加上 dg-publish: true。寫入前先給我看。」
-看過預覽：事件那段沒有三英戰呂布，也沒有筆記庫裡找不到的卡，再回「可以」。講師做的導覽頁放在線上，可以對照：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-sample-output/%E7%9F%A5%E8%AD%98%E5%BA%AB%E5%B0%8E%E8%A6%BD.md
+按一下：看過預覽：事件那段沒有三英戰呂布，也沒有知識庫裡找不到的卡，再回「可以」。講師做的導覽頁放在線上，可以對照：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-sample-output/%E7%9F%A5%E8%AD%98%E5%BA%AB%E5%B0%8E%E8%A6%BD.md
 2. 打開〈三國演義〉，在最後一行加 [[知識庫導覽]]。
 3. 找出還沒勾的卡。在同一個 Codex 貼上：
 「列出 整理/知識庫導覽.md 連到的每張卡，每張一行，寫出它開頭有沒有 dg-publish: true。只列清單，不要修改任何檔案。」
-拿清單去核對：打開標「沒有」的卡，看開頭三行，確定 Codex 沒看錯。要公開的，打開那張卡按 Ctrl／Cmd + P，執行 Digital Garden: Add publish flag；不想公開的，回導覽頁把那個連結刪掉。每張卡公不公開，由你自己決定（第 ${pageOf(PublishFlag)} 頁的篩子）。
-4. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish，等 Publish history 變 Published 再打開網址。
-按一下：成功的樣子：從首頁點到知識庫導覽，再點到時間軸和每張卡，每一頁都打得開；導覽頁上每個連結都點得開，包括你剛補勾的卡。點了是 404，回第 3 步查那張卡。
-講師實跑（2026-10-24，Codex 0.154.0，在範例筆記庫的副本上跑）：導覽頁的預覽確實沒放三英戰呂布，回「可以」才寫入；清單標出〈白門樓〉〈草船借箭〉沒有 dg-publish，其他都有，也沒改到任何檔案。每個人的清單會不一樣，例如第二堂自己寫的卡。
-時間軸裡的人名是純文字、點不了，這是對的。如果時間軸裡出現 [[ ]]，或點了會 404 的來源卡連結，回第三堂的 SKILL.md 補規則，再產生一次。`],
+按一下：拿清單去核對：打開標「沒有」的卡，看屬性，確定 Codex 沒看錯。要公開的，打開那張卡按 Ctrl／Cmd + P，執行 Digital Garden: Add publish flag；不想公開的，回導覽頁把那個連結刪掉。每張卡公不公開，由你自己決定（第 ${pageOf(FrontmatterCheck)} 頁）。
+按一下：4. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish，等 Publish history 變 Published 再打開網址。成功的樣子：從首頁點到知識庫導覽，再點到時間軸和每張卡，每一頁都打得開；導覽頁上每個連結都點得開，包括你剛補勾的卡。點了是 404，回第 3 步查那張卡。
+講師實跑（2026-10-24，Codex 0.154.0，在範例知識庫的副本上跑）：導覽頁的預覽確實沒放三英戰呂布，回「可以」才寫入；清單標出〈白門樓〉〈草船借箭〉沒有 dg-publish，其他都有，也沒改到任何檔案。每個人的清單會不一樣，例如第二堂自己寫的卡。
+時間軸裡的連結怎麼處理，見第 ${pageOf(HtmlTest)} 頁。`],
 
-  [Section5, `87:00–87:30
-最後一章：自己從首頁點一遍，確認網站真的發布成功；點不開，就照四個檢查一項一項查。最後看做完的樣子，和下課後可以做什麼。`],
-  [CheckSite, `87:30–89:30
-檢查的方法：從首頁依序點，每個連結都要打得開。路線和第 ${pageOf(SiteGoal)} 頁一樣：首頁 → 導覽頁，再分兩條，一條到時間軸，一條到導覽頁上的卡。四個圓圈一開始都是白的，還沒點過；打得開就變綠，打不開就變紅。
-按一下：首頁點得到導覽頁嗎？點得到，首頁和導覽頁都變綠。
-按一下：導覽頁點得到時間軸嗎？點得到，時間軸變綠。打開時間軸，人名是純文字、點不了，這是對的，不是壞掉；要點人物，回導覽頁點。
-按一下：最後一段故意示範打不開的情況：從導覽頁點〈白門樓〉打不開，白門樓變紅，網站給的是 404。先查這張卡有沒有勾 dg-publish，就是第 ${pageOf(NavPage)} 頁清單的第 3 項。
-最後一下：補勾之後，再發布一次，等到 Published，再從首頁點一次。`],
-  [Practice4, `89:30–99:30
-練習 4，10 分鐘：自己檢查。步驟在步驟手冊 prompts.md 練習 4。
+  [Practice4, `87:30–101:30
+練習 4，14 分鐘：自己檢查。步驟在步驟手冊 prompts.md 練習 4。
 1. 公開〈三英戰呂布〉：練習 3-2 故意沒把它放進導覽頁，它也還沒有 dg-publish。打開它，執行 Digital Garden: Add publish flag；在導覽頁的事件那段加上 [[三英戰呂布]]；再執行 Publish All Notes Marked for Publish。
 2. 等到 Published：打開 Forestry 儀表板的 Publish history，最上面那一筆變成 Published 再往下。
-3. 開無痕視窗，打開自己的網址。網址在 Forestry 儀表板最上面「Your garden is live」下面那行。用無痕視窗，比較不會看到瀏覽器留著的舊頁面。
-4. 只從首頁開始點：首頁 → 導覽頁 → 三英戰呂布，不直接打卡片的網址。這樣才知道讀者從首頁點不點得到。
-按一下：點到新卡就完成。點不到，常見有兩種情況。第一種，點了是 404：先查〈三英戰呂布〉有沒有勾 dg-publish。第二種，導覽頁上沒有新連結：可能是改了導覽頁還沒發布，或還沒等到 Published 就去看；下一頁照四個檢查一步一步查。`],
-  [NotUpdated, `99:30–102:30
-發布了，網站卻沒變：照順序查四個地方。右邊的畫面是示意，實際畫面依版本略有不同。
+3. 打開自己的網址（忘了就看第 ${pageOf(GardenLive)} 頁）。只從首頁開始點，不直接打卡片的網址，這樣才知道讀者從首頁點不點得到。下面這排就是要走的路線：首頁 → 導覽頁 → 三英戰呂布。三站現在是白的，代表還沒點過。
+按一下：每一站打得開就變綠；三站都綠，點到新卡，就完成。
+最後一下：點不到，紅框掛在出問題的那一站下面，常見兩種。左邊，導覽頁上沒有新連結：可能是改了導覽頁還沒發布，或還沒等到 Published 就去看；下一頁照四個檢查一步一步查。右邊，點新卡是 404：先查〈三英戰呂布〉有沒有勾 dg-publish。補好之後，再發布一次，等到 Published，再從首頁點一次。`],
+  [NotUpdated, `101:30–104:00
+發布了，網站卻沒變：照順序查四個地方。四項都是前面用過的，這頁只排順序。右邊的畫面是示意，實際畫面依版本略有不同。
 1. 有沒有按發布？Obsidian 按 Ctrl／Cmd + P，搜尋 garden publish。
 按一下：2. Forestry 收到了嗎？Publish history 最上面那一筆的時間，和你按發布的時間對得上，就是收到了。沒有新的一筆，回第 1 步，或到外掛設定看是不是還顯示 Connected。
-按一下：3. 那一筆的狀態。Building 就再等；Published 是完成（兩個狀態在第 ${pageOf(EditAgain)} 頁看過）。Failed：點右邊的箭頭展開看錯誤訊息，卡名是中文先查 Simple note URLs 關了沒（第 ${pageOf(SlugFix)} 頁）。
-按一下：4. 前面都對，網站還是舊的？瀏覽器可能留著舊頁面。按 Ctrl／Cmd + Shift + R 強制重新整理，或開無痕視窗看。
+按一下：3. 那一筆的狀態（第 ${pageOf(PublishStatus)} 頁）。Building 就再等；Published 就往第 4 步；Failed 點右邊箭頭看原因，對照第 ${pageOf(SlugFail)} 頁。
+按一下：4. 前面都對，網站還是舊的？瀏覽器可能還留著舊頁面。按 Ctrl／Cmd + Shift + R，略過快取重新載入，或開無痕視窗看。
 最後一下：從第 1 步往下查，不要跳步。`],
-  [FinalResult, `102:30–106:00
-最後回到大家自己的網站。請打開自己的網址，從首頁點，對照右邊三行：這三樣是今天第四、五章的練習放上去的。左邊是範例網站的時間軸，大家的事件數和外觀可能不一樣，線上只有事件名稱和回目、沒有連結，這點應該一樣。
-按一下：練習 3-1，時間軸上線。從首頁點到導覽頁，再點時間軸，打得開就打勾。
-按一下：練習 3-2，知識庫導覽。首頁點得到它，上面的連結都點得開，就打勾。
-按一下：練習 4，三英戰呂布。首頁 → 導覽頁 → 三英戰呂布，點得到就打勾。還沒打勾的，照第 ${pageOf(NotUpdated)} 頁的四個檢查一項一項查，課後再補也可以。
-最後一下：開場第 ${pageOf(FinalSite)} 頁的範例網站，從首頁點得到每一張卡；三項都打勾，你的網站也做到了。範例多了幾張卡和〈劉備的故事線〉，課後想對照，網址在第 ${pageOf(FinalSite)} 頁的參考列。`],
-  [CourseRecap, `106:00–109:00
-四堂課走一圈。上面是四個成果：大綱、筆記庫、時間軸、網站。
-按一下：RAG 這條線。第一堂知道 Web Search 是一種 RAG；第二堂在自己的筆記庫查資料、附出處；第三堂的時間軸只照卡片上寫的回目和年份排，沒寫的不補；今天，卡片上寫的出處會跟著卡片一起發布到網站上。
+  [FinalResult, `104:00–106:30
+最後對一下成果。右邊三行是今天第三、四章的練習放上去的，剛才練習 4 從首頁點過一遍，點得到的就打勾。左邊是範例網站的時間軸，大家的事件數和外觀可能不一樣。
+按一下：練習 3-1，時間軸。
+按一下：練習 3-2，知識庫導覽。
+按一下：練習 4，三英戰呂布。還沒打勾的，照第 ${pageOf(NotUpdated)} 頁的四個檢查一項一項查，課後再補也可以。
+最後一下：三項都打勾，今天的網站就完成了。範例多了幾張卡和〈劉備的故事線〉，課後想對照，網址在第 ${pageOf(FinalSite)} 頁的參考列。`],
+  [CourseRecap, `106:30–109:00
+四堂課走一圈。上面是四個成果：大綱、知識庫、時間軸、網站。
+按一下：RAG 這條線。第一堂知道 Web Search 是一種 RAG；第二堂在自己的知識庫查資料、附出處；第三堂的時間軸只照卡片上寫的回目和年份排，沒寫的不補；今天，卡片上寫的出處會跟著卡片一起發布到網站上。
 按一下：Obsidian 這條線。第一堂只預告；第二堂安裝、連結、畫關係圖；第三堂用卡片上的回目排出時間軸；今天用 Digital Garden 發布。
 按一下：Skills 這條線。第一堂預告 AGENTS.md；第三堂安裝熱門 Skill、自己寫一個；今天把 Skill 的產出放上網站。
 最後一下：四堂課都在擴充同一個三國知識庫，每一堂都用上一堂的成果。`],
   [NextSteps, `111:30–120:00
-最後是選修延伸，給想多做一點的人。llm-wiki 是一組整理筆記庫的 Skill，放在發布之前用：
+最後是選修延伸，給想多做一點的人。obsidian-wiki 是一組整理知識庫的 Skill（GitHub 專案和 pip 套件都叫 obsidian-wiki），放在發布之前用：
 $wiki-ingest：收新資料，整理成卡片，對應循環的第一步。
 按一下：$wiki-query：查答案，附出處，做法像第二堂的 RAG，對應第二步。
-按一下：$wiki-lint：健檢，找斷掉的連結、沒有任何卡連到的孤立頁、缺屬性的頁。它找到的斷連結，發布後在網站上多半也點不開。
-安裝（需要 Python 3）：pip install obsidian-wiki，再 obsidian-wiki setup --vault <筆記庫完整路徑>，最後 obsidian-wiki doctor 檢查。裝好後在 Codex 打開筆記庫，說「set up my wiki」。
+按一下：$wiki-lint：健檢，找斷掉的連結、沒有任何卡連到的頁、缺屬性的頁。它找到的斷連結，發布後在網站上多半也點不開。
+安裝（需要 Python 3）：pip install obsidian-wiki，再 obsidian-wiki setup --vault <知識庫完整路徑>，最後 obsidian-wiki doctor 檢查。裝好後在 Codex 打開知識庫，說「set up my wiki」。
 完整說明：https://github.com/Ar9av/obsidian-wiki/blob/main/docs/installation.md 、https://github.com/Ar9av/obsidian-wiki/blob/main/docs/skills.md
 最後一下：整理、查證、健檢完，再按發布。後面兩頁是參考資料，再後面是附錄，課後有興趣再看。114:00 之後的時間留給大家發問。謝謝大家這四堂課。`],
   [AppendixIndex, `（課後自讀，上課不講。）
