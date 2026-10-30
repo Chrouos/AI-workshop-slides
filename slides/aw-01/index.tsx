@@ -155,6 +155,7 @@ const display = 'var(--osd-font-display)';
 const LAB_URL = 'https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-01-lab';
 const LAB_ZIP_URL = 'https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-01-lab.zip';
 const PROMPTS_URL = 'https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-01-lab/prompts.md';
+const SAMPLE_OUTLINE_URL = 'https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-01-sample-output/三國演義大綱.md';
 
 // Text is authored in explicit span/tspan slots at each call site so inspector
 // edits can target one label, including repeated labels and forwarded props.
@@ -181,13 +182,14 @@ const FooterUrl = ({ href, children }: { href: string; children?: ReactNode }) =
 );
 
 // Top-right corner of a practice page where something is pasted: QR + link to prompts.md, naming the section.
-const PromptsCopy = ({ step }: { step: string }) => (
+// footerUrl swaps the URL line under the footer when the page needs another link there (the corner still opens prompts.md).
+const PromptsCopy = ({ step, footerUrl = PROMPTS_URL, footerLabel }: { step: string; footerUrl?: string; footerLabel?: string }) => (
   <>
     <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', top: 176, right: 144, display: 'flex', alignItems: 'center', gap: 18, color: muted, textDecoration: 'none' }}>
       <span style={{ textAlign: 'right', fontSize: 24, lineHeight: 1.4 }}>複製提示詞<br /><strong style={{ color: amber, fontFamily: mono }}>prompts.md</strong> 練習 {step}</span>
       <img src={promptsQr} alt="prompts.md 的 QR code" style={{ width: 120, height: 120, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 5 }} />
     </a>
-    <FooterUrl href={PROMPTS_URL} />
+    <FooterUrl href={footerUrl}>{footerLabel ? `${footerLabel}${footerUrl}` : undefined}</FooterUrl>
   </>
 );
 
@@ -1645,10 +1647,7 @@ const RagMiniPractice: Page = () => (
         <div>
           <div style={{ fontSize: 26, fontWeight: 600, color: amber, marginBottom: 20 }}>若能選 Thinking，先選好，再貼上這句</div>
           <div style={{ background: surface, borderLeft: `6px solid ${amber}`, padding: '38px 44px 42px' }}>
-            <div style={{ fontFamily: display, fontSize: 45, lineHeight: 1.48, color: ink }}><span>
-              「請上網搜尋：</span><span style={{ color: amber }}>＿＿＿＿？</span><br /><span>
-              用三句話回答，附上來源。」
-            </span></div>
+            <div style={{ fontFamily: display, fontSize: 45, lineHeight: 1.48, color: ink }}><span>請上網搜尋：</span><span style={{ color: amber }}>＿＿＿＿？</span><br /><span>用三句話回答，附上來源。</span></div>
           </div>
           <div style={{ fontSize: 26, color: quiet, lineHeight: 1.5, marginTop: 20 }}>把空格換成你的問題。</div>
         </div>
@@ -1668,7 +1667,12 @@ const RagMiniPractice: Page = () => (
           </div>
         </div></Step></Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={58}><span>來源裡找不到那句，這個答案就先別信</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 28, marginTop: 48, background: amberSoft, padding: '18px 32px' }}>
+          <StatusLine ok={false} size={30}><span>找不到那句，先別信</span></StatusLine>
+          <span style={{ fontSize: 30 }}>換一則來源再看，或請它「引用來源裡的原句」</span>
+        </div>
+      </Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1859,14 +1863,14 @@ const ChatGPTSelf: Page = () => (
     <Heading><span>給不給原文，答案差多少</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 32 }}>
-        <In i={0}><SelfStep n={1} kind="chat" title={<span>先不給原文直接問</span>} detail={<span>看 ChatGPT 憑記憶怎麼答</span>} /></In>
-        <In i={1}><SelfStep n={2} kind="search" title={<span>追問出自原文哪一句</span>} detail={<span>自己點開原文核對</span>} /></In>
-        <In i={2}><SelfStep n={3} kind="book" title={<span>附上原文再問</span>} detail={<span>比比看答案差在哪</span>} /></In>
+        <In i={0}><SelfStep n={1} kind="chat" title={<span>先不給資料問一次</span>} detail={<span>記下它說的做了什麼、為什麼</span>} /></In>
+        <In i={1}><SelfStep n={2} kind="search" title={<span>追問原因在原文哪一句</span>} detail={<span>自己點開原文核對</span>} /></In>
+        <In i={2}><SelfStep n={3} kind="book" title={<span>開新對話，只給一段原文</span>} detail={<span>和 1-1 的回答比一比</span>} /></In>
       </div>
       <In i={3} style={{ marginTop: 40, display: 'flex', alignItems: 'center', gap: 36, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '24px 32px' }}>
         <a href={PROMPTS_URL} target="_blank" rel="noreferrer" aria-label="打開 prompts.md"><img src={promptsQr} alt="prompts.md 的 QR code" style={{ width: 130, height: 130, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 5 }} /></a>
         <div style={{ display: 'grid', gap: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 32 }}><Icon kind="doc" size={40} color={amber} /><span>提示詞：</span><Path size={32}><span>prompts.md</span></Path><span>的「練習 1」</span></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 32 }}><Icon kind="doc" size={40} color={amber} /><span>提示詞：</span><Path size={32}><span>prompts.md</span></Path><span>的「練習 1-1～1-3」</span></div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 32 }}><Icon kind="folder" size={40} color={amber} /><span>參考結果：</span><Path size={32}><span>aw-01-lab/ChatGPT_練習/</span></Path></div>
         </div>
       </In>
@@ -2206,7 +2210,7 @@ const StatusPage: Page = () => (
               <div style={{ background: sage, padding: '22px 26px' }}><StatusLine ok size={32}><span>結尾是 Codex_練習</span></StatusLine><div style={{ fontSize: 28, marginTop: 10, marginLeft: 50 }}>對了，可以開始</div></div>
             </Step>
             <Step duration={STEP_MS}>
-              <div style={{ background: amberSoft, padding: '22px 26px' }}><StatusLine ok={false} size={32}><span>結尾是 aw-01-lab</span></StatusLine><div style={{ fontSize: 28, marginTop: 10, marginLeft: 50, lineHeight: 1.5 }}><span>還在外層：打 </span><Path size={28}><span>/quit</span></Path><span>，</span><Path size={28}><span>cd Codex_練習</span></Path><span>，再打 </span><Path size={28}><span>codex</span></Path></div></div>
+              <div style={{ background: amberSoft, padding: '22px 26px' }}><StatusLine ok={false} size={32}><span>結尾是 aw-01-lab</span></StatusLine><div style={{ fontSize: 28, marginTop: 10, marginLeft: 50, lineHeight: 1.5 }}><span>還在外層：打 </span><Path size={28}><span>/quit</span></Path><span>，</span><Path size={28}><span>cd Codex_練習</span></Path><span>，</span><br /><span>再打 </span><Path size={28}><span>codex</span></Path><span>，然後再 </span><Path size={28}><span>/status</span></Path><span> 一次</span></div></div>
             </Step>
           </Steps>
         </div>
@@ -2715,15 +2719,18 @@ const AgentsByHand: Page = () => (
         <In i={2}>
           <BuildStep n={3} title={<span>檔名叫做 <Path size={36}><span>AGENTS.md</span></Path></span>}>
             <OsHint os={<span>Mac</span>}><span>按 ⌘S，跳出視窗時選「使用 .md」</span></OsHint>
-            <OsHint os={<span>Windows</span>}><span>另存新檔，存檔類型選「所有檔案」</span></OsHint>
+            <OsHint os={<span>Windows</span>}><span>另存新檔，存檔類型選「所有檔案」</span><br /><span>編碼用 UTF-8</span></OsHint>
             <div style={{ fontSize: 27, lineHeight: 1.45, marginTop: 6 }}>存進 Codex_練習 資料夾</div>
           </BuildStep>
         </In>
       </div>
       <Steps><Step duration={STEP_MS}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 28, marginTop: 36, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '20px 32px' }}>
-          <span style={{ fontSize: 32 }}>檔名要剛好是</span><Path size={34}><span>AGENTS.md</span></Path>
-          <StatusLine ok={false} size={30}><span>不是 AGENTS.md.txt、AGENTS.rtf</span></StatusLine>
+        <div style={{ marginTop: 28, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '16px 32px 18px', display: 'grid', justifyItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+            <span style={{ fontSize: 32 }}>檔名要剛好是</span><Path size={34}><span>AGENTS.md</span></Path>
+            <StatusLine ok={false} size={30}><span>不是 AGENTS.md.txt、AGENTS.rtf</span></StatusLine>
+          </div>
+          <div style={{ fontSize: 28, color: muted }}><span>看不出副檔名：終端機 </span><Path size={28}><span>cd</span></Path><span> 進 Codex_練習，打 </span><Path size={28}><span>ls</span></Path><span> 確認</span></div>
         </div>
       </Step></Steps>
     </Fit>
@@ -2734,7 +2741,6 @@ const RulePractice: Page = () => (
   <Shell chapter={5} source={<span>{'Codex 文件：AGENTS.md developers.openai.com/codex/guides/agents-md；agents.md'}</span>}>
     <PracticeEyebrow time={<span>{"4 分鐘"}</span>}><span>練習 2-2｜第 2 步｜Codex</span></PracticeEyebrow>
     <Heading><span>練習（Memory）：換新 Session，規則還在</span></Heading>
-    <Lead><span>AGENTS.md 像貼在牆上的公告</span></Lead>
     <Fit>
       <Stage h={470}>
         <Steps>
@@ -2745,8 +2751,8 @@ const RulePractice: Page = () => (
               <text x="50" y="120" fontSize="34" fontFamily={mono} fontWeight="700" fill={ink}>AGENTS.md</text>
               <line x1="50" y1="144" x2="460" y2="144" stroke={amber} strokeWidth="2" />
               <text x="50" y="204" fontSize="30" fill={ink}>・只根據 原文/ 回答</text>
-              <text x="50" y="264" fontSize="30" fill={ink}>・最後一行寫出處</text>
-              <text x="50" y="324" fontSize="30" fill={ink}>・找不到就說找不到</text>
+              <text x="50" y="264" fontSize="30" fill={ink}>・找不到就說找不到</text>
+              <text x="50" y="324" fontSize="30" fill={ink}>・最後一行寫出處</text>
               <text x="50" y="378" fontSize="24" fill={quiet}>內容示意</text>
             </InG>
             <InG i={2}>
@@ -2755,7 +2761,7 @@ const RulePractice: Page = () => (
             </InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={470} label="第二步：/new 開新 Session 再問劉備，最後一行照規則寫出處">
-            <rect x="40" y="232" width="430" height="46" fill="none" stroke={okGreen} strokeWidth="3" className="aw1-build" style={buildDelay(0)} />
+            <rect x="40" y="292" width="430" height="46" fill="none" stroke={okGreen} strokeWidth="3" className="aw1-build" style={buildDelay(0)} />
             <g className="aw1-build" style={buildDelay(0)}>
               <AskDesk y={0} title={<tspan>{"② /new 開新 Session，再問"}</tspan>} h={146}>
                 <text x="692" y="110" fontSize="28" fontFamily={mono} fill="#E9B650">› 劉備第一次出場在第幾回？</text>
@@ -2764,24 +2770,24 @@ const RulePractice: Page = () => (
                 <text x="692" y="198" fontSize="28" fontFamily={mono} fill="#8DD4A0">出處：原文/第001回.md</text>
               </AskDesk>
             </g>
-            <g fill="none" stroke={okGreen} strokeWidth="4"><StepPath d="M470 255 C560 255 580 188 680 188" i={1} /></g>
+            <g fill="none" stroke={okGreen} strokeWidth="4"><StepPath d="M470 315 C560 315 580 188 680 188" i={1} /></g>
             <g className="aw1-build" style={buildDelay(2)}>
               <OkDot x={1340} y={126} r={22} />
               <text x="1378" y="122" fontSize="30" fontWeight="600" fill={okGreen}>最後一行</text>
               <text x="1378" y="162" fontSize="30" fontWeight="600" fill={okGreen}>照規則寫</text>
             </g>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={470} label="第三步：對照題問諸葛亮，原文 前 21 回沒有他，Codex 說找不到，沒有憑記憶報回數">
-            <rect x="40" y="292" width="430" height="46" fill="none" stroke={okGreen} strokeWidth="3" className="aw1-build" style={buildDelay(0)} />
+          <Step duration={STEP_MS}><Layer h={470} label="第三步：對照題問諸葛亮，原文前 21 回沒有他。Codex 說原文/ 裡找不到，只在第 9 回詩裡提到，最後一行照樣寫出處，沒有憑記憶報回數">
+            <rect x="40" y="232" width="430" height="46" fill="none" stroke={okGreen} strokeWidth="3" className="aw1-build" style={buildDelay(0)} />
             <g className="aw1-build" style={buildDelay(0)}>
-              <AskDesk y={242} title={<tspan>{"③ 對照題：前 21 回還沒有他"}</tspan>} h={108}>
+              <AskDesk y={242} title={<tspan>{"③ 對照題：前 21 回還沒有他"}</tspan>} h={146}>
                 <text x="692" y="352" fontSize="28" fontFamily={mono} fill="#E9B650">› 諸葛亮第一次出場在第幾回？</text>
-                <rect x="682" y="374" width="300" height="44" fill="none" stroke="#8DD4A0" strokeWidth="3" />
-                <text x="692" y="406" fontSize="28" fontFamily={mono} fill="#8DD4A0">原文/ 裡找不到</text>
+                <rect x="682" y="364" width="560" height="42" fill="none" stroke="#8DD4A0" strokeWidth="3" />
+                <text x="692" y="394" fontSize="28" fontFamily={mono} fill="#8DD4A0">原文/ 裡找不到，只在第 9 回詩裡提到。</text>
+                <text x="692" y="440" fontSize="28" fontFamily={mono} fill="#F5F5F4">出處：原文/第009回.md</text>
               </AskDesk>
             </g>
-            <g fill="none" stroke={okGreen} strokeWidth="4"><StepPath d="M470 315 C560 315 580 396 680 396" i={1} /></g>
-            <g className="aw1-build" style={buildDelay(2)}>
+            <g className="aw1-build" style={buildDelay(1)}>
               <OkDot x={1340} y={330} r={22} />
               <text x="1378" y="322" fontSize="30" fontWeight="600" fill={okGreen}>沒憑記憶</text>
               <text x="1378" y="362" fontSize="30" fontWeight="600" fill={okGreen}>報回數</text>
@@ -2790,9 +2796,12 @@ const RulePractice: Page = () => (
         </Steps>
       </Stage>
       <Steps><Step duration={STEP_MS}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 28, marginTop: 28, background: amberSoft, padding: '18px 32px' }}>
-          <StatusLine ok={false} size={30}><span>沒寫出處，或直接報「第 37 回」</span></StatusLine>
-          <span style={{ fontSize: 30 }}>打 <Path size={30}><span>/quit</span></Path>，再打 <Path size={30}><span>codex</span></Path> 重開，再問一次</span>
+        <div style={{ marginTop: 28, background: amberSoft, padding: '16px 32px 18px', display: 'grid', justifyItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+            <StatusLine ok={false} size={30}><span>沒寫出處，或報出原文沒有的「第 37 回」</span></StatusLine>
+            <span style={{ fontSize: 30 }}>打 <Path size={30}><span>/quit</span></Path>，再打 <Path size={30}><span>codex</span></Path> 重開，再問一次</span>
+          </div>
+          <div style={{ fontSize: 28 }}><span>還是沒有：檢查檔名是不是剛好 </span><Path size={28}><span>AGENTS.md</span></Path><span>、有沒有存在 Codex_練習</span></div>
         </div>
       </Step></Steps>
     </Fit>
@@ -2812,7 +2821,7 @@ const PromptTag = ({ color, children }: { color: string; children: ReactNode }) 
 const OutlinePrompt: Page = () => (
   <Shell chapter={5} source={<span>{'維基文庫《三國演義》第 1–21 回 zh.wikisource.org/wiki/三國演義'}</span>}>
     <PracticeEyebrow time={<span>{"5 分鐘"}</span>}><span>練習 2-3｜Codex</span></PracticeEyebrow>
-    <PromptsCopy step="2-3" />
+    <PromptsCopy step="2-3" footerUrl={SAMPLE_OUTLINE_URL} footerLabel="範例成果：" />
     <Heading><span>練習（RAG）：照原文寫大綱</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '860px 1fr', gap: 52, alignItems: 'start' }}>
@@ -2835,7 +2844,7 @@ const OutlinePrompt: Page = () => (
             <span>{'  寫入檔案前，先給我看內容，等我說可以再寫。'}</span>
           </Terminal>
         </In>
-        <div style={{ display: 'grid', gap: 26 }}>
+        <div style={{ display: 'grid', gap: 20 }}>
           <Steps>
             <Step duration={STEP_MS}>
               <CodexBeat n={2} title={<span>{"Codex 讀完 21 回，先貼草稿"}</span>}>
@@ -2851,9 +2860,10 @@ const OutlinePrompt: Page = () => (
               </CodexBeat>
             </Step>
             <Step duration={STEP_MS}>
-              <div style={{ background: amberSoft, padding: '18px 24px' }}>
+              <div style={{ background: amberSoft, padding: '16px 24px' }}>
                 <StatusLine ok={false} size={28}><span>跑不出來、時間不夠</span></StatusLine>
-                <div style={{ fontSize: 27, lineHeight: 1.45, marginTop: 8, marginLeft: 50 }}>「第 1 回到第 21 回」<br />改成「第 1 回到第 2 回」再跑</div>
+                <div style={{ fontSize: 27, lineHeight: 1.45, marginTop: 6, marginLeft: 50 }}>「第 1 回到第 21 回」<br />改成「第 1 回到第 2 回」再跑</div>
+                <div style={{ fontSize: 27, lineHeight: 1.45, marginTop: 4, marginLeft: 50 }}>還是不行：先用範例成果（網址在最下面）</div>
               </div>
             </Step>
           </Steps>
@@ -2908,7 +2918,7 @@ const TitleChip = ({ file, children }: { file: ReactNode; children: ReactNode })
 
 const CheckSource: Page = () => (
   <Shell chapter={5} source={<span>{'維基文庫《三國演義》第 1–21 回 zh.wikisource.org/wiki/三國演義'}</span>}>
-    <PracticeEyebrow time={<span>{"4 分鐘"}</span>}><span>練習 2-4｜核對</span></PracticeEyebrow>
+    <PracticeEyebrow time={<span>{"4 分鐘｜時間夠就挑兩段做"}</span>}><span>練習 2-4｜核對</span></PracticeEyebrow>
     <PromptsCopy step="2-4" />
     <Heading><span>練習（RAG）：請 Codex 指出原文哪一句</span></Heading>
     <Fit>
@@ -2967,16 +2977,22 @@ const CheckSource: Page = () => (
       </Stage>
       <Steps>
         <Step duration={STEP_MS}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 28 }}>
-            <TitleChip file={<span>{"三國演義大綱.md"}</span>}><span>## 第 21 回 曹操煮酒論英雄　關公賺城斬車胄</span></TitleChip>
-            <span style={{ fontSize: 40, color: okGreen, fontWeight: 600 }}>＝</span>
-            <TitleChip file={<span>{"回目.md"}</span>}><span>第 21 回　曹操煮酒論英雄　關公賺城斬車胄</span></TitleChip>
+          <div style={{ display: 'flex', marginTop: 28 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, background: sage, padding: '16px 24px' }}>
+              <StatusLine ok size={28}><span>搜得到</span></StatusLine>
+              <span style={{ fontSize: 28 }}>只代表原句在，再對摘要每件事</span>
+            </div>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, background: amberSoft, padding: '16px 24px' }}>
+              <StatusLine ok={false} size={28}><span>搜不到</span></StatusLine>
+              <span style={{ fontSize: 28 }}>回 Codex：「原文/第021回.md 裡找不到這句，請重新確認」</span>
+            </div>
           </div>
         </Step>
         <Step duration={STEP_MS}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24, marginTop: 24, background: amberSoft, padding: '16px 30px' }}>
-            <StatusLine ok={false} size={28}><span>原文搜不到這句</span></StatusLine>
-            <span style={{ fontSize: 28 }}>回 Codex：「原文/第021回.md 裡找不到這句，請重新確認」</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 24 }}>
+            <TitleChip file={<span>{"三國演義大綱.md"}</span>}><span>## 第 21 回 曹操煮酒論英雄　關公賺城斬車胄</span></TitleChip>
+            <span style={{ fontSize: 40, color: okGreen, fontWeight: 600 }}>＝</span>
+            <TitleChip file={<span>{"回目.md"}</span>}><span>第 21 回　曹操煮酒論英雄　關公賺城斬車胄</span></TitleChip>
           </div>
         </Step>
       </Steps>
@@ -3329,7 +3345,7 @@ const OpencodeSteps: Page = () => (
       <div style={{ display: 'grid', gridTemplateColumns: '880px 1fr', gap: 56, alignItems: 'center' }}>
         <In i={0}>
           <CmdRow n={<span>{1}</span>} cmd={<span style={{ fontSize: 26 }}>{"curl -fsSL https://opencode.ai/v2/install | bash"}</span>} note={<span>{"官方安裝指令，不需要 Node.js（Windows 要在 WSL 裡跑）"}</span>} />
-          <CmdRow n={<span>{2}</span>} cmd={<span>{"cd 練習資料夾 → opencode"}</span>} note={<span>{"不用登入"}</span>} />
+          <CmdRow n={<span>{2}</span>} cmd={<span>{"cd Codex_練習 → opencode"}</span>} note={<span>{"不用登入"}</span>} />
           <CmdRow n={<span>{3}</span>} cmd={<span>{"/models"}</span>} note={<span>{"挑一個免費模型"}</span>} />
           <CmdRow n={<span>{4}</span>} cmd={<span>{"貼上 prompts.md 的提示詞"}</span>} note={<span>{"和 Codex 練習一樣"}</span>} />
         </In>
@@ -3374,7 +3390,7 @@ const OpencodeRun: Page = () => (
             <Steps>
               <Step duration={STEP_MS}><div><Dim><span>{'$ ls -la …'}</span></Dim></div></Step>
               <Step duration={STEP_MS}><div>{'← Write hello.md\n'}<span style={{ color: '#8DD4A0' }}>Wrote file successfully.</span></div></Step>
-              <Step duration={STEP_MS}><div>{'檔案：README.md、prompts.md、原文/（目錄）、回目.md。\n已建立 hello.md，內容為「你好」。'}</div></Step>
+              <Step duration={STEP_MS}><div>{'檔案：原文/（目錄）、回目.md。\n已建立 hello.md，內容為「你好」。'}</div></Step>
             </Steps>
           </Terminal>
         </In>
@@ -3867,8 +3883,8 @@ ChatGPT 是對話框：你問一句，它回一段話，適合發想、請它解
 最後一下：這份作業的 21 回原文本來就是檔案，放在資料夾裡；Codex 能直接讀，寫好也直接存成檔案，所以在資料夾裡做。下一章就來安裝 Codex。`],
   [ChatGPTSelf, `38:00–39:00。
 練習 1 用 ChatGPT，課堂上不做，回家自己練，大約 15 分鐘。三步都問同一題：《三國演義》第 21 回，劉備聽完曹操說「天下英雄只有你我」，做了什麼？為什麼？
-第一步，先不給原文直接問，看 ChatGPT 憑記憶怎麼答。第二步，追問「你說的原因，原文哪一句寫的？」，自己點開維基文庫，用 Cmd+F 或 Ctrl+F 找那一句。第三步，開新對話，附上一小段原文再問，比比看答案差在哪。
-提示詞在 prompts.md 的「練習 1」，掃這個 QR code 或點連結就能打開：${PROMPTS_URL} 。等一下第三章會下載練習資料夾 aw-01-lab，做完可以對照裡面 ChatGPT_練習 資料夾的參考結果，有截圖和每題的重點。
+1-1，先不給資料問一次，記下它說劉備做了什麼、為什麼；這是它憑記憶或自己上網找的。1-2，追問原因在原文哪一句：「你說的原因，原文哪一句寫的？」，自己點開維基文庫，用 Cmd+F 或 Ctrl+F 找那一句。1-3，按「新對話」開一段新的對話，只給一段原文再問，和 1-1 的回答比一比。
+提示詞在 prompts.md 的「練習 1-1」到「練習 1-3」，掃這個 QR code 或點連結就能打開：${PROMPTS_URL} 。等一下第三章會下載練習資料夾 aw-01-lab，做完可以對照裡面 ChatGPT_練習 資料夾的參考結果，有截圖和每題的重點。
 今天課堂上的練習 2，用的是同一個概念：先找資料再回答，而且要回原文核對。`],
   [Section3, `50:00–50:30。
 第三章：安裝 Codex。前兩章都在瀏覽器裡；Codex 要裝在電腦上，才能讀你資料夾裡的檔案。課前已經裝好的同學，這幾頁當複習；卡住的同學看附錄第 ${pageOf(InstallErrors)} 頁的常見錯誤。`],
@@ -3996,8 +4012,8 @@ Windows 用「記事本」：按 Windows 鍵打「記事本」打開，貼上規
 練習 2-2 第 2 步。這頁延續第 ${pageOf(MemoryLayers)} 頁的比喻：AGENTS.md 是貼在牆上的公告，/new 是換一張新桌子。我們來驗證：開新 Session 後，Codex 還會不會照 AGENTS.md 的規則回答。
 規則最後那句「最後一行寫出處」是故意加的：Codex 憑記憶答題通常不會寫這行，所以看得出新的 Session 有沒有讀到規則。
 按一下：回到 Codex，輸入 /new，換一張新桌子，再問「劉備第一次出場在第幾回？」。最後一行是「出處：原文/第001回.md」這種格式，就代表新的 Session 讀了規則。
-按一下：對照題，問「諸葛亮第一次出場在第幾回？」。前 21 回他還沒出場，只有第 9 回一首詩提到「諸葛隆中臥」。照規則，Codex 要說原文/ 裡找不到，不能憑記憶報回數。講師試過：同一個資料夾拿掉 AGENTS.md 再問，Codex 直接答「第三十七回」，那是模型憑記憶說的，原文/ 裡沒有。
-最後一下：沒照規則怎麼辦。沒寫出處那行、或直接報「第 37 回」這種回數，打 /quit 離開，再打 codex 重開，再問一次。還是不行，回去檢查檔名是不是剛好 AGENTS.md、有沒有存在 Codex_練習 裡。重要的規則寫進 AGENTS.md，開新 Session 也照樣讀得到。
+按一下：對照題，問「諸葛亮第一次出場在第幾回？」。前 21 回他還沒出場，只有第 9 回一首詩提到「諸葛隆中臥」。照規則，Codex 要說原文/ 裡找不到，不能憑記憶報回數。規則寫的是「每次回答」最後一行都寫出處，所以找不到也會附一行出處，例如畫面上的「出處：原文/第009回.md」，指的是提到他的那首詩；說找不到、最後一行有出處，這樣就算照規則。講師試過：同一個資料夾拿掉 AGENTS.md 再問，Codex 直接答「第三十七回」，那是模型憑記憶說的，原文/ 裡沒有。
+最後一下：沒照規則怎麼辦。沒寫出處那行、或直接報一個原文/ 裡沒有的回數（例如第 37 回），就是憑記憶答。打 /quit 離開，再打 codex 重開，再問一次。還是不行，回去檢查檔名是不是剛好 AGENTS.md、有沒有存在 Codex_練習 裡。重要的規則寫進 AGENTS.md，開新 Session 也照樣讀得到。
 2026-10-24 實測（Codex 0.154.0 互動介面，Mac，gpt-5.6-luna）：當時是請 Codex 寫 AGENTS.md，內容和這三行一樣。輸入 /new 後問劉備，答「劉備第一次出場在第一回，文中以「姓劉，名備，字玄德」介紹。」，最後一行「出處：原文/第001回.md」；再問諸葛亮，答「原文／裡找不到諸葛亮正式出場；只在第九回詩句中提到「諸葛隆中臥」。」，最後一行「出處：原文/第009回.md」。找不到也照樣附出處，是規則寫了「每次回答」的關係。自己用文字編輯器建的檔案，Codex 讀法一樣；這個版本講師還沒在課堂流程實跑過。
 另外用 codex exec 試過（同一天）：同一個資料夾拿掉 AGENTS.md 再問諸葛亮，它直接答「第三十七回」。`],
   [OutlinePrompt, `105:30–110:30（練習 5 分鐘，Codex 跑約 1 分半）。
@@ -4019,7 +4035,7 @@ Windows 用「記事本」：按 Windows 鍵打「記事本」打開，貼上規
 按一下：第 2 步，Codex 一回一回讀完 21 個檔，先把 21 段草稿貼在畫面上，最後問你可不可以。這時資料夾裡還沒有檔案。
 按一下：第 3 步，看完草稿，回「可以」。Codex 就直接寫進資料夾，畫面出現 Added 三國演義大綱.md，不會再跳確認畫面。
 2026-10-24 實測（Codex 0.154.0 互動介面，Mac，gpt-5.6-luna）：它讀完 21 回，先把 21 段草稿貼在畫面上，最後一句是「如果內容可以，請回覆「可以」，我再建立 三國演義大綱.md。」，這時資料夾裡還沒有檔案。回「可以」之後，畫面出現「Added 三國演義大綱.md (+125 -0)」，沒有跳確認畫面；檔案 21 段，標題沒有連結。這次草稿裡的人名沒加 [[ ]]，存進檔案時才加上，所以看草稿時不用急著糾正，存好後打開檔案看就好。
-按一下：跑不出來、或時間不夠，先把提示詞裡的「第 1 回到第 21 回」改成「第 1 回到第 2 回」再跑一次，做出兩段並附出處。
+按一下：跑不出來、或時間不夠，先把提示詞裡的「第 1 回到第 21 回」改成「第 1 回到第 2 回」再跑一次，做出兩段並附出處。還是不行，先用範例成果，第二堂照樣接得上；這頁最下面那行就是範例成果的網址（複製提示詞的連結在右上角）。
 完成的樣子在下一頁：資料夾裡出現三國演義大綱.md，打開看每段最後都有出處。
 講師實測大約 1 分 38 秒寫完，這只是讓大家知道要等多久，快慢和寫得好不好無關。等的時候可以看 Codex 讀了哪些檔。
 人名一律用本名寫連結：玄德是劉備、雲長是關羽、翼德是張飛、孟德是曹操。
@@ -4033,11 +4049,11 @@ Windows：Codex 在 Windows 讀這些中文檔會不會變亂碼，講師沒有�
   [CheckSource, `112:30–116:30（練習 4 分鐘）。
 練習 2-4：核對大綱。先請 Codex 指出根據，貼上 prompts.md 的「練習 2-4」：三國演義大綱.md 第 N 回那段的第二句，根據原文哪一句？引用原句。N 換成你想查的回數。這裡用講師範例的第 21 回當例子，第二句是「劉備奉命出兵截擊袁術後脫離曹操，關羽又設計斬殺徐州刺史車冑，重新占據徐州」。
 按一下：Codex 引用了原句，例如「我有一計，可殺車冑：乘夜扮作曹軍到徐州，引車冑出迎，襲而殺之。」並寫出處。這是講師實測（2026-10-24，codex exec 對範例大綱），Codex 還多引了一句「術若投紹，必從徐州過……」。
-按一下：自己查。打開 原文/第021回.md：Mac 按右鍵，選「打開方式」再選「文字編輯」；Windows 按右鍵，選「開啟檔案」再選「記事本」。按 Cmd+F 或 Ctrl+F，貼上引用句裡的四、五個字，例如「可殺車冑」。畫面上左右兩邊用綠框框起來的三行，是同一句話：左邊是 Codex 引的，右邊是原文裡搜到的。找得到，這句就有根據；找不到，回 Codex 說「原文/第021回.md 裡找不到這句，請重新確認」。
-按一下：再看標題。把大綱那段的標題，和 回目.md 第 21 回比一比。講師舊版的大綱就是在這裡出錯：「張翼德」被改成 [[張飛]]。
-最後一下：原文搜不到這句，就回 Codex 說「原文/第021回.md 裡找不到這句，請重新確認」，再查一次。
-另外提醒：找到原句後，還要看它有沒有寫到摘要裡的每件事。搜得到，只證明這句原文真的存在。第二句講了四件事：截擊袁術、脫離曹操、斬殺車冑、占據徐州。這句引文只講到關羽獻計，車冑有沒有真的被殺，要往下讀原文才確認得了。人物、因果、先後都對，標題也和回目一字不差，這段才算核對過。抽查兩段對了，只代表這兩段；整份還是要分段核對，例如每次五回。回到自己的資料核對，是 RAG 的最後一步。
-時間不夠就先做一段，有時間再做第二段。`],
+按一下：自己查。打開 原文/第021回.md：Mac 按右鍵，選「打開方式」再選「文字編輯」；Windows 按右鍵，選「開啟檔案」再選「記事本」。按 Cmd+F 或 Ctrl+F，貼上引用句裡的四、五個字，例如「可殺車冑」。畫面上左右兩邊用綠框框起來的三行，是同一句話：左邊是 Codex 引的，右邊是原文裡搜到的。
+按一下：搜的結果分兩種。左邊綠色：搜得到，只證明這句原文真的存在，還要看它有沒有寫到摘要裡的每件事。第二句講了四件事：截擊袁術、脫離曹操、斬殺車冑、占據徐州。這句引文只講到關羽獻計，車冑有沒有真的被殺，要往下讀原文才確認得了。右邊：搜不到，就回 Codex 說「原文/第021回.md 裡找不到這句，請重新確認」，再查一次。
+最後一下：再看標題。把大綱那段的標題，和 回目.md 第 21 回比一比。講師舊版的大綱就是在這裡出錯：「張翼德」被改成 [[張飛]]。
+引用的句子找得到、也寫到了摘要裡的每件事，標題也和回目一字不差，這段才算核對過。抽查兩段對了，只代表這兩段；整份還是要分段核對，例如每次五回。回到自己的資料核對，是 RAG 的最後一步。
+時間夠就挑兩段做；時間不夠就先做一段，有時間再做第二段。`],
   [PracticeVideo, `91:30–96:30（影片約 5 分鐘）。
 開始練習前，先看講師做一次，再自己做。這段影片從頭到尾跑一遍等一下的流程：看規則、問兩個問題、寫大綱、存檔。按影片的播放鍵開始；右邊的時間可以直接跳段。影片沒有聲音，邊放邊講。
 先講一句：影片裡用的是 OpenCode 加免費的 DeepSeek 模型，不是 Codex。主要步驟一樣：cd 進 Codex_練習、打開工具、貼提示詞。你們就用剛才開著的 Codex 做。沒有 ChatGPT 方案的人，附錄有 OpenCode 的裝法。
@@ -4099,14 +4115,14 @@ Web Search、RAG、Agent：
   [OpencodeSteps, `附錄（備用）。備案 A：opencode 加免費模型。
 四步，都在終端機打：
 1. 安裝 opencode：貼上官網的 curl -fsSL https://opencode.ai/v2/install | bash，按 Enter。這個安裝程式直接下載 opencode 本體，和 Codex 的獨立安裝一樣，不需要 Node.js。裝完把終端機關掉重開，打 opencode --version 確認。講師當時實測的 1.19.3 是用 npm 裝的，這行是官網目前的安裝方式，講師還沒用它重跑。
-2. cd 進練習資料夾，打 opencode，不用登入。
+2. 打 cd Codex_練習 進練習資料夾（和 Codex 一樣，也可以打 cd 和空格再把資料夾拖進來），打 opencode，不用登入。
 3. 輸入 /models，選一個免費模型。
 4. 從 prompts.md 貼上提示詞，和 Codex 的練習一樣。
 按一下：/models 的清單（畫面為示意）。沒登入時 opencode models 就會列出免費模型，例如 deepseek-v4.1-flash-free、glm-5.3-flash-free、big-pickle（預設）。推薦 DeepSeek V4.1 Flash Free 或 GLM-5.3 Flash Free；依官方文件，這兩個不會拿提示詞去訓練，Big Pickle、LL Alpha、MiMo 可能會（文件說明，講師未驗證）。預設的 Big Pickle 寫大綱也對，但花了 148 秒。
 按一下：和 Codex 的對照。opencode 沒有 /status，模型名稱直接顯示在畫面上，用 /models 換模型；/new 開新 Session、/sessions 看舊的；/init 會建立 AGENTS.md（以上依文件）。講師實測：opencode 會讀 AGENTS.md，寫一條「最後一行寫——小助教」，它有照做；沒有 AGENTS.md 時會改讀 CLAUDE.md。
 Windows：這行是 bash 指令，PowerShell 不能直接跑。官方文件建議先裝 WSL，在 WSL 的終端機裡跑同一行；講師沒有在 Windows 上測過。
 來源：安裝 https://opencode.ai/ 、免費模型與隱私 https://opencode.ai/docs/zen/ 、指令 https://opencode.ai/docs/tui/ 、AGENTS.md https://opencode.ai/docs/rules/ 、Windows 用 WSL https://opencode.ai/docs/windows-wsl/`],
-  [OpencodeRun, `附錄（備用）。講師電腦 2026-10-17 實測，在 aw-01-lab 的複本裡跑。
+  [OpencodeRun, `附錄（備用）。講師電腦 2026-10-17 實測，在 aw-01-lab 的複本裡跑。畫面上的檔案清單改成同學在 Codex_練習 裡會看到的內容（原文/、回目.md）；講師當時跑的資料夾還多了 README.md 和 prompts.md，所以實際回答列了四項。
 指令：opencode run -m opencode/deepseek-v4.1-flash-free "列出這個資料夾的檔案，然後建立 hello.md，內容是：你好"
 按一下：它先執行 ls -la 看資料夾。
 按一下：寫入 hello.md，回報 Wrote file successfully.

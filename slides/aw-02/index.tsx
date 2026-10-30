@@ -439,6 +439,14 @@ const StatusLine = ({ ok, children, size = 28 }: { ok: boolean; children: ReactN
   </div>
 );
 
+// The 「不對就…」 box under a practice: what went wrong (red label), then the self-fix.
+const FixBox = ({ label, children, marginTop = 24, labelWidth }: { label: ReactNode; children: ReactNode; marginTop?: number; labelWidth?: number }) => (
+  <div style={{ marginTop, display: 'flex', alignItems: 'center', gap: 24, background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `8px solid ${warn}`, padding: '14px 28px' }}>
+    <span style={{ flex: '0 0 auto', width: labelWidth, fontSize: 27, fontWeight: 600, color: warn }}>{label}</span>
+    <span style={{ fontSize: 27, lineHeight: 1.45 }}>{children}</span>
+  </div>
+);
+
 // Card text as Obsidian renders it: [[links]] become purple, underlined names.
 const LinkText = ({ text }: { text: string }) => (
   <>{text.split(/(\[\[[^\]]+\]\])/).map((part, i) => part.startsWith('[[') ? <span key={i} style={{ color: link, textDecoration: 'underline' }}>{part.slice(2, -2)}</span> : <span key={i}>{part}</span>)}</>
@@ -1353,7 +1361,7 @@ const VaultCheck: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><div style={{ textAlign: 'center', fontSize: 32, marginTop: 36 }}>打開成外層 aw-02-lab 了：重新打開<strong>裡面那個</strong>「三國人物知識庫」</div></Step></Steps>
+      <Steps><Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center' }}><FixBox label="選到外層了" marginTop={36}>點左下角的儲存庫名稱 →「管理儲存庫」，重開<strong>裡面那層</strong>「三國人物知識庫」</FixBox></div></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1451,7 +1459,10 @@ const MergeOutline: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>原文和大綱搬進來，Obsidian 依卡名自動對上連結</Takeaway></Step></Steps>
+      <Steps>
+        <Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}><StatusLine ok size={32}>看結果：原文/ 有第 001–021 回，再加 037、038、046 回</StatusLine></div></Step>
+        <Step duration={STEP_MS}><FixBox label="拖成整個資料夾" marginTop={16}>Mac 按「停止」、Windows 選「略過這些檔案」，再全選裡面的檔重拖</FixBox></Step>
+      </Steps>
     </Fit>
   </Shell>
 );
@@ -1488,6 +1499,11 @@ const ClickLiubei: Page = () => (
                 <Crop src={liubeiCard} natW={1460} natH={800} x={0} y={420} w={1340} h={50} scale={0.9} alt="劉備卡第一句：劉備，字玄德，是中山靖王之後，家住涿縣樓桑村" />
               </div>
               <Caption>人物/劉備（範例卡，節選）</Caption>
+            </div>
+            {/* The fix for this click, in the space beside the card. */}
+            <div className="aw2-build" style={{ ...buildDelay(6), position: 'absolute', right: 0, top: 0, width: 360, boxSizing: 'border-box', background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `8px solid ${warn}`, padding: '14px 22px' }}>
+              <div style={{ fontSize: 27, fontWeight: 600, color: warn }}>點不過去</div>
+              <div style={{ fontSize: 26, lineHeight: 1.45, marginTop: 4 }}>檢查大綱有沒有放在<br /><span style={{ whiteSpace: 'nowrap' }}>「三國人物知識庫」裡面</span></div>
             </div>
           </Step>
         </Steps>
@@ -1627,7 +1643,7 @@ const PcNum = ({ n, top }: { n: number; top: number }) => <span style={{ ...BADG
 
 const Practice2Card: Page = () => (
   <Shell chapter={2} source={'維基文庫《三國演義》第 5 回 zh.wikisource.org/wiki/三國演義/第005回'}>
-    <PracticeEyebrow time="9 分鐘">練習 2｜寫卡</PracticeEyebrow>
+    <PracticeEyebrow time="3 分鐘">練習 2｜寫卡</PracticeEyebrow>
     <Heading>寫一張自己的關係卡</Heading>
     <PromptsCopy step="練習 2-2" />
     <PillRow>
@@ -1696,6 +1712,38 @@ const Practice2Card: Page = () => (
   </Shell>
 );
 
+// One event to choose from: its chapter, its name, who to link with [[ ]], and who stays plain text.
+const EventPick = ({ ch, name, links, plain }: { ch: string; name: string; links: string[]; plain?: ReactNode }) => (
+  <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderTop: `5px solid ${amber}`, padding: '24px 30px 26px', boxSizing: 'border-box', height: '100%' }}>
+    <div style={{ fontSize: 26, fontWeight: 600, color: amber }}>{ch}</div>
+    <div style={{ fontFamily: display, fontSize: 50, lineHeight: 1.25, marginTop: 6 }}>{name}</div>
+    <div style={{ fontSize: 24, color: quiet, marginTop: 22 }}>要連到</div>
+    <div style={{ fontFamily: mono, fontSize: 30, color: link, marginTop: 6, lineHeight: 1.5 }}>{links.map((n) => `[[${n}]]`).join('、')}</div>
+    {plain ? <div style={{ fontSize: 26, color: muted, marginTop: 14, lineHeight: 1.45 }}>{plain}</div> : null}
+  </div>
+);
+
+// 2-2, second half: the three events to pick from, then the check and its fix.
+const Practice2Pick: Page = () => (
+  <Shell chapter={2} source={'維基文庫《三國演義》第 5、16、20 回 zh.wikisource.org/wiki/三國演義'}>
+    <PracticeEyebrow time="6 分鐘">練習 2｜寫卡</PracticeEyebrow>
+    <Heading>從三個事件挑一個寫</Heading>
+    <PromptsCopy step="練習 2-2" />
+    <Fit>
+      <In i={0} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36 }}>
+        <EventPick ch="第 5 回" name="溫酒斬華雄" links={['關羽', '曹操']} plain="華雄寫純文字" />
+        <EventPick ch="第 16 回" name="轅門射戟" links={['劉備', '關羽', '張飛']} plain="呂布寫純文字，也列進參與人物" />
+        <EventPick ch="第 20 回" name="許田打圍" links={['曹操', '劉備', '關羽']} />
+      </In>
+      <In i={1} style={{ marginTop: 20, fontSize: 27, color: muted, textAlign: 'center' }}>「參與人物：」那一行照這樣列｜三英戰呂布、白門樓先不寫</In>
+      <Steps>
+        <Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', marginTop: 34 }}><StatusLine ok size={32}>看結果：打開〈關羽〉，反向連結裡有你寫的卡</StatusLine></div></Step>
+        <Step duration={STEP_MS}><FixBox label="沒有出現" marginTop={16}>回這張卡看「關羽」：淡紫或黑字，就改成 [[關羽]] 再看一次</FixBox></Step>
+      </Steps>
+    </Fit>
+  </Shell>
+);
+
 // One paragraph of the outline as Obsidian shows it; `linked` turns the event name into a link.
 const OutlinePara = ({ linked }: { linked: boolean }) => (
   <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '22px 30px', fontSize: 30, lineHeight: 1.7 }}>
@@ -1719,22 +1767,27 @@ const AddLinksBack: Page = () => (
     <Fit>
       <div style={{ width: 1400, margin: '0 auto' }}>
         <In i={0}>
-          <SmallLabel>補之前：範例大綱第 5 回，「溫酒斬華雄」是黑字</SmallLabel>
-          <div style={{ marginTop: 10 }}><OutlinePara linked={false} /></div>
-          <div style={{ display: 'flex', gap: 40, marginTop: 14, fontSize: 25, color: muted }}>
-            <Swatch color={link}>有卡的連結</Swatch>
-            <Swatch color={linkFaint}>還沒有卡</Swatch>
-            <Swatch color={ink} under={false} box={amber}>黑字：還沒連</Swatch>
+          {/* Label left, colour legend right, on one line to leave room for the result and the fix below. */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+            <SmallLabel>補之前：範例大綱第 5 回，「溫酒斬華雄」是黑字</SmallLabel>
+            <div style={{ display: 'flex', gap: 32, fontSize: 25, color: muted }}>
+              <Swatch color={link}>有卡的連結</Swatch>
+              <Swatch color={linkFaint}>還沒有卡</Swatch>
+              <Swatch color={ink} under={false} box={amber}>黑字：還沒連</Swatch>
+            </div>
           </div>
+          <div style={{ marginTop: 10 }}><OutlinePara linked={false} /></div>
         </In>
         <Steps>
           <Step duration={STEP_MS}>
-            <div style={{ marginTop: 30 }}>
+            <div style={{ marginTop: 26 }}>
               <SmallLabel color={okGreen}>補之後：改成 [[溫酒斬華雄]]，括號裡換成你寫的卡名</SmallLabel>
               <div style={{ marginTop: 10 }}><OutlinePara linked /></div>
+              <div style={{ marginTop: 10, fontSize: 27, color: muted }}>大綱沒有一樣的字：段尾加<span style={{ color: link }}>（[[卡名]]）</span>，例如第 20 回加<span style={{ color: link }}>（[[許田打圍]]）</span></div>
             </div>
           </Step>
-          <Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', marginTop: 34 }}><StatusLine ok size={34}>打開你寫的關係卡：反向連結出現〈三國演義大綱〉</StatusLine></div></Step>
+          <Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', marginTop: 22 }}><StatusLine ok size={32}>看結果：打開你寫的卡，反向連結出現〈三國演義大綱〉</StatusLine></div></Step>
+          <Step duration={STEP_MS}><FixBox label="變成淡紫色" marginTop={16}>[[ ]] 裡的名字跟你寫的卡名不一樣，改成一字不差再看一次</FixBox></Step>
         </Steps>
       </div>
     </Fit>
@@ -2017,8 +2070,8 @@ const VideoRag: Page = () => (
 // height so each tick lands between its pair on a click.
 const CK_COLS = '640px 1fr 640px';
 const CK_HEAD = 104;
-const CK_ROW = 76;
-const CK_GAP = 10;
+const CK_ROW = 66;
+const CK_GAP = 8;
 
 const CkSide = ({ title, sub, color }: { title: string; sub: string; color: string }) => (
   <div style={{ borderTop: `5px solid ${color}`, paddingTop: 10 }}>
@@ -2068,7 +2121,7 @@ const AskCheck: Page = () => (
       <In i={1} style={{ position: 'relative' }}>
         <div style={{ display: 'grid', gridTemplateColumns: CK_COLS, height: CK_HEAD - 14, marginBottom: 14 }}>
           <CkSide title="Codex 回答的" sub="事件和它引用的原句" color={amber} />
-          <div style={{ alignSelf: 'end', textAlign: 'center', fontSize: 24, color: muted, fontFamily: mono }}>Cmd/Ctrl+F</div>
+          <div style={{ alignSelf: 'end', textAlign: 'center', fontSize: 24, lineHeight: 1.35, color: muted }}><span style={{ fontFamily: mono }}>Cmd/Ctrl+F</span><br />人名開頭：跳過再搜</div>
           <CkSide title="卡片裡寫的" sub="關羽卡列的 3 張＋你寫的卡（例：許田打圍）" color={okGreen} />
         </div>
         <div style={{ display: 'grid', gap: CK_GAP }}>
@@ -2085,12 +2138,8 @@ const AskCheck: Page = () => (
         </Steps>
       </In>
       <Steps>
-        <Step duration={STEP_MS}>
-          <div style={{ marginTop: 24, display: 'flex', alignItems: 'center', gap: 24, background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `8px solid ${warn}`, padding: '14px 28px' }}>
-            <span style={{ flex: '0 0 auto', fontSize: 27, fontWeight: 600, color: warn }}>對不上才追問</span>
-            <span style={{ fontSize: 27, lineHeight: 1.45 }}>你引用的「<u>　　　</u>」跟 <u>　　　</u>.md 寫的不一樣。請照卡片原句改正；找不到就說找不到。</span>
-          </div>
-        </Step>
+        <Step duration={STEP_MS}><FixBox label="你寫的卡沒出現" labelWidth={200} marginTop={14}>檢查卡在不在 關係/ 資料夾、卡裡有沒有 [[關羽]]</FixBox></Step>
+        <Step duration={STEP_MS}><FixBox label="對不上才追問" labelWidth={200} marginTop={8}>你引用的「<u>　　　</u>」跟 <u>　　　</u>.md 寫的不一樣。請照卡片原句改正；找不到就說找不到。</FixBox></Step>
       </Steps>
     </Fit>
   </Shell>
@@ -2558,7 +2607,7 @@ const Practice3Ask: Page = () => (
     <PromptsCopy step="進階討論" />
     <Fit>
       <In i={0}>
-        <Terminal title="Codex 回覆（範例大綱，節錄）" width={1632} size={29}>
+        <Terminal title="Codex 回覆（範例大綱，節錄）" width={1632} size={27}>
           <div><AskLine>› 大綱第 5 回哪一句寫了曹操在汜水關或虎牢關上陣打仗？</AskLine></div>
           <div><AskLine>  只根據 整理/三國演義大綱.md，引用原句；沒寫就說沒寫。</AskLine></div>
           <Steps>
@@ -2572,10 +2621,15 @@ const Practice3Ask: Page = () => (
         </Terminal>
       </In>
       <Steps>
-        <Step duration={STEP_MS}><Takeaway marginTop={32}>要求引用原句，比較看得出哪項是模型自己補的</Takeaway></Step>
+        <Step duration={STEP_MS}><Takeaway marginTop={22}>要求引用原句，比較看得出哪項是模型自己補的</Takeaway></Step>
         <Step duration={STEP_MS}>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 20, marginTop: 30 }}>
-            <span style={{ fontSize: 28, color: muted }}>有時間，自己問一題：</span>
+          {/* The template's opening (the rest is in prompts.md), then two questions to put in its blank. */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, marginTop: 22, fontSize: 28 }}>
+            <span style={{ color: muted }}>有時間，自己問一題：</span>
+            <span style={{ background: term, color: '#F5F5F4', fontFamily: mono, fontSize: 27, padding: '8px 22px' }}><AskLine>（你的問題）</AskLine>只根據 人物/ 勢力/ 關係/ 整理/ 裡的卡回答……</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 20, marginTop: 20 }}>
+            <span style={{ fontSize: 28, color: muted }}>例如：</span>
             <QChip>白門樓上，劉備對曹操說了什麼原話？</QChip>
             <QChip>關羽在第 1 到 21 回斬了哪些人？</QChip>
           </div>
@@ -2824,12 +2878,7 @@ const AsciiAsk: Page = () => (
         </Steps>
       </div>
       <Steps>
-        <Step duration={STEP_MS}>
-          <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 24, background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `8px solid ${warn}`, padding: '14px 28px' }}>
-            <span style={{ flex: '0 0 auto', fontSize: 27, fontWeight: 600, color: warn }}>橘字那條沒出現</span>
-            <span style={{ fontSize: 27, lineHeight: 1.45 }}>檢查提示詞裡的卡名有沒有換對，再看那張卡「參與人物」那一行有沒有 [[關羽]]。</span>
-          </div>
-        </Step>
+        <Step duration={STEP_MS}><FixBox label="橘字那條沒出現" marginTop={28}>檢查提示詞裡的卡名有沒有換對，再看那張卡「參與人物」那一行有沒有 [[關羽]]。改好再貼一次。</FixBox></Step>
       </Steps>
     </Fit>
   </Shell>
@@ -3050,7 +3099,7 @@ export const meta: SlideMeta = {
 const deck: Page[] = [
   Cover, StartDownloads, LastLesson, TodayGoal, Agenda,
   Section1, FirstLaunch, GetVault, VaultCheck, VideoTour, LinkWalk, WikiLink, Backlinks, VaultFolder,
-  Section2, VideoCard, MergeOutline, ClickLiubei, Practice2Card, AddLinksBack, BreakTime,
+  Section2, VideoCard, MergeOutline, ClickLiubei, Practice2Card, Practice2Pick, AddLinksBack, BreakTime,
   Section3, OpenInCodex, AskWithFiles, RagIdea, FourthEvent, VideoRag, AskCheck,
   Section4, PointsLines, LocalGraph, AsciiAsk,
   Recap, NextSkills, ReferencesRag, ReferencesGraph,
@@ -3091,7 +3140,7 @@ ${VAULT_ZIP_URL}
 步驟也寫在 prompts.md 的〈練習 1〉：${PROMPTS_URL}`],
   [VaultCheck, `15:00–16:30（練習 1 分半）。這是講師電腦上的實際畫面。左邊：打開對的資料夾，左側有六個資料夾：人物、勢力、原文、整理、模板、關係，最下面是入口卡〈三國演義〉。原文/ 現在只有第 37、38、46 回的節選，練習 2 會把第一堂的 21 回搬進去。
 按一下：如果左邊只看到「三國人物知識庫」一個資料夾，加上 prompts，代表打開的是外層的 aw-02-lab。Windows 的「全部解壓縮」有時還會再多包一層 aw-02-lab，一樣往裡面找。
-按一下：解法：點左下角的儲存庫名稱，選「管理儲存庫」，重新「開啟資料夾為儲存庫」，這次選裡面那個「三國人物知識庫」。`],
+按一下：下面的框是解法：點左下角的儲存庫名稱，選「管理儲存庫」，重新「開啟資料夾為儲存庫」，這次選裡面那個「三國人物知識庫」。`],
   [VideoTour, `16:30–18:30（影片 51 秒）。打開筆記庫的人，先看一段影片：講師沿著連結點一圈。下一頁大家照著做。影片沒有聲音，邊放邊講；右邊的時間可以直接跳段。
 影片內容（講師的螢幕錄影）：0:00 左側打開 人物/劉備。0:07 在劉備卡點「桃園結義」。0:16 在〈桃園結義〉點「關羽」。0:19 打開右側欄，看反向連結。0:27 點反向連結裡的〈桃園結義〉走回去。0:32 切到〈桃園結義〉的關聯圖分頁：中間是這張卡，連出去的點就是卡裡寫到的人和事。0:47 在圖上點劉備，回到劉備卡。
 關聯圖分頁是講師事先開好的。自己開：打開那張卡，按右上角「⋯」選單，或按 Ctrl/Cmd+P 找「局部關聯圖」。第 ${pageOf(LocalGraph)} 頁會再講一次。`],
@@ -3115,29 +3164,33 @@ ${VAULT_ZIP_URL}
 影片裡要講的一點：影片是從模板按 Cmd+A 全選複製，Obsidian 不會選到最上面的「屬性」（回目、年份），所以貼上後沒有回目，1:50 示範補法：右上角 ⋯ →「新增檔案屬性」，名稱打 回目，值打 20。你們不用這樣做：prompts.md 練習 2-2 直接放了整段模板（從 --- 開始），複製貼進新筆記，回目、年份會自動變成屬性欄。
 影片內容（講師的螢幕錄影，3 分 07 秒，沒有聲音）：0:00 在 Finder 打開 Codex_練習/原文，Cmd+A 全選 21 個檔，拖到 Obsidian 左側的 原文/；再把大綱拖進 整理/。0:32 打開大綱，點第 1 回的劉備。0:44 在 關係/ 新增筆記〈許田打圍〉，貼上模板。1:08 寫兩三句（原文第 20 回），人名加 [[ ]]，參與人物寫曹操、劉備、關羽。1:50 補回目和出處。2:08 打開大綱第 20 回那段，最後加上（[[許田打圍]]）。2:30 打開〈許田打圍〉和〈關羽〉，看反向連結。`],
   [MergeOutline, `33:00–36:30（練習 3 分半）。剛才影片的第一段，現在自己做。左邊是第一堂的練習資料夾 aw-01-lab/Codex_練習，要搬兩樣東西：原文 資料夾裡的 21 個檔，和大家寫好的 三國演義大綱.md。
-按一下：藍色是原文，橘色是大綱，搬過去還是同一個顏色。打開第一堂的 原文/，按 Cmd+A（Windows 是 Ctrl+A）全選 21 個檔，拖進筆記庫的 原文/；那裡已經有第 37、38、46 回，合起來 24 個檔。拖的是裡面的檔案，不是 原文 資料夾本身。不小心拖了整個資料夾：Mac 跳出「要取代嗎」就按「停止」，Windows 跳出「取代或略過檔案」就選「略過這些檔案」，第 37、38、46 回才不會被蓋掉；然後打開 原文 資料夾，全選裡面的檔再拖一次。Windows 的對話框講師沒有實測。大綱拖進「整理」資料夾。可以在檔案總管（Mac 是 Finder）裡拖，也可以直接拖到 Obsidian 左側。原文放進來，大綱每段最後的「出處：原文/第001回.md」就找得到。旁邊的「人物」資料夾是講師的卡，不用動。
+按一下：藍色是原文，橘色是大綱，搬過去還是同一個顏色。打開第一堂的 原文/，按 Cmd+A（Windows 是 Ctrl+A）全選 21 個檔，拖進筆記庫的 原文/；那裡已經有第 37、38、46 回，合起來 24 個檔。拖的是裡面的檔案，不是 原文 資料夾本身。大綱拖進「整理」資料夾。可以在檔案總管（Mac 是 Finder）裡拖，也可以直接拖到 Obsidian 左側。原文放進來，大綱每段最後的「出處：原文/第001回.md」就找得到。旁邊的「人物」資料夾是講師的卡，不用動。
 按一下：大綱第 1 回寫的是 [[劉備]]，人物資料夾裡剛好有 劉備.md，Obsidian 會依卡名自動對上這個連結，不用改任何字。
-最後一下：原文和大綱搬進來，Obsidian 依卡名自動對上連結。
+按一下：看結果：打開筆記庫的 原文/，有第 001 到 021 回，再加第 037、038、046 回，一共 24 個檔。
+最後一下：不小心拖了整個資料夾：Mac 跳出「要取代嗎」就按「停止」，Windows 跳出「取代或略過檔案」就選「略過這些檔案」，第 37、38、46 回才不會被蓋掉；然後打開 原文 資料夾，全選裡面的檔再拖一次。Windows 的對話框講師沒有實測。
 有人第一堂另外讓 Codex 寫了自己的 劉備.md，這次先不要放進來：同一個筆記庫裡有兩張都叫劉備的卡，[[劉備]] 只會連到其中一張。`],
   [ClickLiubei, `36:30–41:00（練習 4 分半）。上面是合併後的實際畫面，講師的大綱第 1 回，你的大綱用字會不同，請看自己的。標 1 是劉備，深紫色，代表找得到卡。
-按一下：點它，就打開下面這張講師的人物卡 人物/劉備。請大家點自己大綱裡的劉備。點不過去的，檢查大綱是不是放在「三國人物知識庫」裡面，而不是旁邊。
+按一下：點它，就打開下面這張講師的人物卡 人物/劉備。請大家點自己大綱裡的劉備。點得過去，劉備卡右邊的反向連結會多一列「三國演義大綱」。點不過去的，看右邊的框：檢查大綱是不是放在「三國人物知識庫」裡面，而不是旁邊。
 同一段裡，董卓的顏色比較淡。
 最後一下，標 2：董卓是淡紫色，筆記庫裡還沒有這張卡，這叫「未解析連結」（Unresolved Link）。點了 Obsidian 會在筆記庫最外層新增一張空白的 董卓.md，不想新增就先別點。下面的圖例：1 深紫是有卡，點了會打開，關羽、張飛、曹操、〈桃園結義〉也一樣；2 淡紫是還沒有卡。淡色不一定是打錯字，多半是還沒寫卡。
 投影或螢幕分不出深淺時，按 Cmd+O（Windows 是 Ctrl+O）搜名字，找不到這個檔，就是還沒有卡。
 淡色的名字要不要補卡、怎麼數它出現幾次，是選做，放在附錄第 ${pageOf(GrayDecide)} 頁；之後可以照原文補卡；第三堂會直接給大家講師照原文寫好的三張卡。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：大綱放進 整理/，不用重開 Obsidian，點第 1 回的劉備就打開 人物/劉備。`],
-  [Practice2Card, `41:00–50:00（練習 9 分鐘）。練習 2 的重點：自己寫一張關係卡。條件在畫面上三個框：定位，第 5、16、20 回三個事件挑一個；期望輸出，照模板寫；限制，原文沒寫的不寫。模板從右上角的 prompts.md 練習 2-2 複製。步驟和可以挑的事件都在 prompts.md 的〈練習 2〉：${PROMPTS_URL}
+  [Practice2Card, `41:00–44:00（練習 2-2 前 3 分鐘，整個 2-2 共 9 分鐘）。練習 2 的重點：自己寫一張關係卡。條件在畫面上三個框：定位，第 5、16、20 回三個事件挑一個；期望輸出，照模板寫；限制，原文沒寫的不寫。模板從右上角的 prompts.md 練習 2-2 複製。步驟和可以挑的事件都在 prompts.md 的〈練習 2〉：${PROMPTS_URL}
 左邊是講師照模板寫的〈三英戰呂布〉，取材第 5 回，是 Obsidian 實際畫面的節選。一張卡至少要有：最上面的「回目」、用完整句子寫的內容、「參與人物」、最後一行「出處」。
 按一下，1：在左側「關係」資料夾按右鍵，選「新增筆記」，取名就是事件名稱；從 prompts.md 練習 2-2 複製整段模板（從第一行 --- 開始），貼進去，回目、年份會變成屬性欄。不要從模板檔按 Cmd+A 全選複製，會漏掉屬性。
 按一下，2：用完整的句子寫兩三句就好，大綱那一回的段落可以拿來當底稿。有卡的人名前後加兩對中括號，例如 [[劉備]]；打完 [[ 和第一個字，Obsidian 會跳出選單。看範例：標 2 的紫框，張飛加了 [[ ]]，變成連結；參與人物裡的呂布底下畫虛線，他還沒有卡，寫純文字。
 按一下，3：填上回目，例如 5；最後一行寫出處，例如「出處：原文/第005回.md」。範例卡上標 3 的兩個橘框就是這兩處。
-請從這三個事件挑一個，三個都連得到關羽，第三章會用到：第 5 回〈溫酒斬華雄〉，連到關羽、曹操；第 16 回〈轅門射戟〉，連到劉備、關羽、張飛（原文「關、張隨往」，呂布寫純文字，也要列進參與人物）；第 20 回〈許田打圍〉，連到曹操、劉備、關羽。不要寫三英戰呂布和白門樓：第三堂會直接發這兩張寫好的卡，同名的卡會撞在一起。
-忘了怎麼操作的，回第 ${pageOf(VideoCard)} 頁的示範影片，按 0:44 再看一次。不確定細節就查原文：在 Obsidian 左邊打開 原文/，點那一回就看得到。
-寫完怎麼知道成功：打開〈關羽〉，右邊的反向連結裡出現剛寫的卡。沒出現的話，回你寫的卡看關羽是不是深紫色：淡紫或黑字，就是 [[ ]] 沒加好或名字打錯，改成 [[關羽]] 再看一次。
+忘了怎麼操作的，回第 ${pageOf(VideoCard)} 頁的示範影片，按 0:44 再看一次。下一頁是可以挑的三個事件。`],
+  [Practice2Pick, `44:00–50:00（練習 2-2 後 6 分鐘）。請從這三個事件挑一個，三個都連得到關羽，第三章會用到：第 5 回〈溫酒斬華雄〉，連到關羽、曹操，華雄寫純文字；第 16 回〈轅門射戟〉，連到劉備、關羽、張飛（原文「關、張隨往」），呂布寫純文字，也要列進參與人物；第 20 回〈許田打圍〉，連到曹操、劉備、關羽。「參與人物：」那一行也照這樣列：有卡的加 [[ ]]，沒卡的寫純文字。
+不要寫三英戰呂布和白門樓：第三堂會直接發這兩張寫好的卡，同名的卡會撞在一起。不確定細節就查原文：在 Obsidian 左邊打開 原文/，點那一回就看得到。
+按一下：看結果：打開〈關羽〉，右邊的反向連結裡出現剛寫的卡，就成功了。
+最後一下：沒出現的話，回你寫的卡看關羽是不是深紫色：淡紫或黑字，就是 [[ ]] 沒加好或名字打錯，改成 [[關羽]] 再看一次。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：在「關係」按右鍵選「新增筆記」，標題已經選好，直接打「許田打圍」按 Enter 就改好名字。寫完、連到曹操、劉備、關羽後，〈關羽〉的反向連結馬上多一列「許田打圍」。`],
   [AddLinksBack, `50:00–55:00（練習 5 分鐘）。卡寫好了，現在大綱還連不到它：講師的大綱第 5 回，「溫酒斬華雄」是黑字。下面的圖例照 Obsidian 的顏色：紫色是有卡的連結，淡紫是還沒有卡，橘框框起來的是還沒連的黑字。
-按一下：在大綱裡改成 [[溫酒斬華雄]]，換成你那張卡的名字，就變成紫色連結。寫〈轅門射戟〉的，第 16 回改成「呂布在[[轅門射戟]]」。大綱裡沒有剛好一樣的字，例如第 20 回寫的是「許田打獵」，就在那一段最後加上「（[[許田打圍]]）」。
-最後一下：打開你寫的卡，反向連結出現〈三國演義大綱〉，這一步就完成了。沒出現：看大綱裡剛加的連結，淡紫色代表 [[ ]] 裡的名字跟你寫的卡名不一樣，改成一字不差再看一次。
+按一下：在大綱裡改成 [[溫酒斬華雄]]，換成你那張卡的名字，就變成紫色連結。寫〈轅門射戟〉的，第 16 回改成「呂布在[[轅門射戟]]」。下面那行：大綱裡沒有剛好一樣的字，例如第 20 回寫的是「許田打獵」，就在那一段最後加上「（[[許田打圍]]）」。
+按一下：看結果：打開你寫的卡，反向連結出現〈三國演義大綱〉，這一步就完成了。
+最後一下：沒出現：看大綱裡剛加的連結，淡紫色代表 [[ ]] 裡的名字跟你寫的卡名不一樣，改成一字不差再看一次。
 到這裡，主線的前兩站完成：你寫了一張卡，從關羽、從大綱都連得過去。
 2026-10-24 實測（Obsidian 1.10.3，Mac）：在大綱第 20 回那段最後加上「（[[許田打圍]]）」，〈許田打圍〉的反向連結就出現「三國演義大綱」。`],
   [BreakTime, `55:00–60:00（休息 5 分鐘）。休息 5 分鐘。回來前請大家對一下這三項：Obsidian 打開三國筆記庫；大綱在 整理/，點得到〈劉備〉；你寫的卡連到人物，也連回大綱。
@@ -3163,10 +3216,11 @@ R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係�
 影片裡四張都找到了（桃園結義、許田打圍、煮酒論英雄、赤壁之戰），原句也都對得上。搜到的原句在 Obsidian 會用框線標出來，影片另外加了橘框。
 影片內容（講師的螢幕錄影，1 分 48 秒，沒有聲音）：0:00 在「三國人物知識庫」打開 Codex，貼上練習 3 的提示詞。0:11 Codex 先搜尋 關係/ 裡的卡。0:23 回答列出四件事，每件附檔名和原句。0:43 切到 Obsidian，打開引用的卡，用 Cmd+F 搜原句。1:22 打開 人物/關羽.md，看最後一行「關係與事件」。1:36 對照完：關羽卡列的 3 張，加上講師寫的〈許田打圍〉，回答 4 張都有。`],
   [AskCheck, `70:30–90:00（練習 15 分鐘，Codex 跑約 1 分鐘；85:30–90:00 留給還沒做完的人補做）。換你在自己的筆記庫問同一題。從 prompts.md〈練習 3〉整段複製，貼進 Codex，按 Enter。全文：關羽參與了哪些事件？只根據 關係/ 資料夾裡的卡回答，每個事件附上檔名和一句卡片原句；卡片沒寫的就說找不到，不要自己補。畫面上那一行是它的重點：定位，關係/ 的卡；期望輸出，檔名加原句；限制，沒寫就說找不到。
-等它跑的時候講怎麼核對，跟剛才影片做的一樣。左邊是 Codex 回答的：事件和它引用的原句。右邊是卡片裡寫的：打開那張卡，按 Cmd+F（Windows 是 Ctrl+F）搜引號裡開頭四五個字。開頭是人名就跳過人名，搜後面的字：卡片裡人名是連結，連著搜會搜不到。
+等它跑的時候講怎麼核對，跟剛才影片做的一樣。左邊是 Codex 回答的：事件和它引用的原句。右邊是卡片裡寫的：打開那張卡，按 Cmd+F（Windows 是 Ctrl+F）搜引號裡開頭四五個字。中間那行小字：開頭是人名就跳過人名，搜後面的字，卡片裡人名是連結，連著搜會搜不到。
 右邊的清單從哪來：人物/關羽.md 最後一行「關係與事件」列了桃園結義、煮酒論英雄、赤壁之戰，再加上你寫的卡。這四張，回答裡都要有；少一列就是漏了。
 按一下：桃園結義，搜「誓畢拜劉備」，搜得到，對得上。按一下：煮酒論英雄，搜「衝進後園」，對得上。按一下：赤壁之戰，搜「念及當年」，對得上。畫面上這三句是從卡片挑的例子，大家的回答可能引用別句，一樣搜搜看。
-按一下：第四列是你在練習 2 寫的卡，畫面用講師的〈許田打圍〉當例子，原句「提刀拍馬要斬曹操」是影片裡實跑的回答。關羽卡最後一行沒有這張卡，它出現在回答裡，就是 Codex 自己搜到的。這是今天主線的第三站。你寫的卡沒出現，通常是卡不在 關係/ 資料夾，或卡裡沒有 [[關羽]]，先檢查這兩個。
+按一下：第四列是你在練習 2 寫的卡，畫面用講師的〈許田打圍〉當例子，原句「提刀拍馬要斬曹操」是影片裡實跑的回答。關羽卡最後一行沒有這張卡，它出現在回答裡，就是 Codex 自己搜到的。這是今天主線的第三站。
+按一下：你寫的卡沒出現，通常是卡不在 關係/ 資料夾，或卡裡沒有 [[關羽]]，先檢查這兩個，改好再貼一次。
 最後一下：全部對得上就做完了，不用追問。只有原句跟卡片寫的不一樣，才貼這句請 Codex 改正，提示詞在 prompts.md〈練習 3〉。它改完的那句，回 Obsidian 再搜一次。
 講完核對，大家自己做到 85:30。有人問「意思對、只是字不一樣，算不算對」：今天的規則是原句要一字不差搜得到，判斷才不會因人而異；意思對但不是原句的情況，附錄的進階討論再聊。
 你寫的卡沒連到關羽的人：把提示詞裡的關羽換成你寫的卡裡連到的人物，右邊的清單改看那個人的人物卡最後一行。
@@ -3279,7 +3333,7 @@ R，檢索。上面這行是 Codex 實際執行的搜尋指令：rg 是一個搜
   [Practice3Ask, `（附錄，進階討論，選做。）對第 1 列有疑問，就追問 Codex：「大綱第 5 回哪一句寫了曹操在汜水關或虎牢關上陣打仗？只根據 整理/三國演義大綱.md，引用原句；沒寫就說沒寫。」
 按一下：講師 2026-10-24 實跑，它回「沒寫」，把第 5 回那句整段引出來。
 按一下：要求引用原句，比較看得出哪一項是模型自己補的。但「沒寫上陣」是否等於「沒參與」，還是要自己判斷。
-最後一下：有時間自己問一題，提示詞範本在 prompts.md 的〈進階討論〉：「（你的問題）只根據 人物/ 勢力/ 關係/ 整理/ 裡的卡回答，每個說法附上檔名和一句原句；沒寫的就說找不到，不要自己補。」範圍不含 原文/，所以它引原文就算多寫。這兩題模型可能知道得比卡片多，正好看它有沒有多寫：「白門樓上，劉備對曹操說了什麼原話？」原話在 原文/第019回.md：「公不見丁建陽、董卓之事乎？」它直接說出這句卻沒引用檔案，就是範圍外補來的。「關羽在第 1 到 21 回斬了哪些人？」大綱沒寫第 1 回的程遠志，它照規則說找不到才對。`],
+最後一下：有時間自己問一題。畫面上是範本的開頭，整段在 prompts.md 的〈進階討論〉：「（你的問題）只根據 人物/ 勢力/ 關係/ 整理/ 裡的卡回答，每個說法附上檔名和一句原句；沒寫的就說找不到，不要自己補。」範圍不含 原文/，所以它引原文就算多寫。這兩題模型可能知道得比卡片多，正好看它有沒有多寫：「白門樓上，劉備對曹操說了什麼原話？」原話在 原文/第019回.md：「公不見丁建陽、董卓之事乎？」它直接說出這句卻沒引用檔案，就是範圍外補來的。「關羽在第 1 到 21 回斬了哪些人？」大綱沒寫第 1 回的程遠志，它照規則說找不到才對。`],
 ]);
 
 export const notes: (string | undefined)[] = deck.map(page => NOTES.get(page));
