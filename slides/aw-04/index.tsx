@@ -555,17 +555,36 @@ const SitePage = ({ x, kind, name, line, next }: { x: number; kind: string; name
 
 // The finished example site, before anything is explained: three real pages, left to right
 // in the order a reader clicks them.
+// One live page of the example site, large; each click lays the next one over it and adds its row on the right.
+const SITE_W = 1040;
+const LiveShot = ({ n, src, title, detail, alt }: { n: number; src: string; title: string; detail: string; alt: string }) => (
+  <>
+    <div style={{ position: 'absolute', left: 0, top: 0 }}>
+      <Screenshot src={src} aspect={1040 / 650} width={SITE_W} alt={alt} />
+    </div>
+    <div style={{ position: 'absolute', left: SITE_W + 56, top: (n - 1) * 150, right: 0, display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+      <NumDot n={n} />
+      <div>
+        <div style={{ fontSize: 32, fontWeight: 600, lineHeight: 1.3 }}>{title}</div>
+        <div style={{ fontSize: 26, color: muted, lineHeight: 1.4, marginTop: 6 }}>{detail}</div>
+      </div>
+    </div>
+  </>
+);
+
 const FinalSite: Page = () => (
   <Shell source={'範例網站 glowing-clearing.forestry.md；筆記庫 examples/final（GitHub）'}>
     <Eyebrow>範例網站｜實際畫面</Eyebrow>
     <Heading>四堂課的筆記，發布成網站</Heading>
     <Fit>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 50 }}>
-        <In i={0}><Screenshot src={siteHome} aspect={1040 / 650} width={510} caption="首頁〈三國演義〉" alt="範例網站首頁〈三國演義〉：亂世開場、各自的路兩個小標題，人名和事件都是可以點的連結" /></In>
-        <In i={1}><Screenshot src={siteGuide} aspect={1040 / 650} width={510} caption="導覽頁：時間軸、人物、事件" alt="範例網站的知識庫導覽：一段說明、一行引用框，時間段連到時間軸和劉備的故事線，人物段列出劉備、關羽、張飛等連結" /></In>
-        <In i={2}><Screenshot src={siteStory} aspect={1040 / 650} width={510} caption="〈劉備的故事線〉：遇到誰、經歷什麼" alt="範例網站的〈劉備的故事線〉：開頭引用第 21 回原文，下面是劉備走過的 12 站，每站列出同場的人，依關係上色，附圖例" /></In>
+      <div style={{ position: 'relative', height: Math.round(SITE_W / (1040 / 650)) }}>
+        <LiveShot n={1} src={siteHome} title="首頁〈三國演義〉" detail="打開網址，第一頁就是它" alt="範例網站首頁〈三國演義〉：亂世開場、各自的路兩個小標題，人名和事件都是可以點的連結" />
+        <Steps>
+          <Step duration={STEP_MS}><LiveShot n={2} src={siteGuide} title="導覽頁" detail="從這裡點到時間軸、人物、事件" alt="範例網站的知識庫導覽：一段說明、一行引用框，時間段連到時間軸和劉備的故事線，人物段列出劉備、關羽、張飛等連結" /></Step>
+          <Step duration={STEP_MS}><LiveShot n={3} src={siteStory} title="〈劉備的故事線〉" detail="劉備一路遇到誰、經歷什麼" alt="範例網站的〈劉備的故事線〉：劉備走過的各站由上往下排，每一站中間是事件，左邊是同伴，右邊是對手，名字依關係上色" /></Step>
+          <Step duration={STEP_MS}><div style={{ position: 'absolute', left: SITE_W + 56, right: 0, top: 470, fontFamily: display, fontSize: 40, lineHeight: 1.35, color: amber }}>從首頁點得到每一張卡</div></Step>
+        </Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={44}>從首頁點得到每一張卡</Takeaway></Step></Steps>
     </Fit>
     <FooterUrl href={FINAL_URL} />
   </Shell>
@@ -2140,9 +2159,9 @@ const NOTES = new Map<Page, string>([
 再按一下：今天把前三堂的成果放到一個網址上。請大家先打開 Obsidian，確認第三堂做的 整理/時間軸.md 和 關係/三英戰呂布.md 都在。`],
   [FinalSite, `04:00–05:30
 先看做完的樣子。這是範例網站 glowing-clearing.forestry.md 的實際畫面，用的是四堂課同一個三國筆記庫，另外照原文多補了幾張人物、事件卡。網址就在下面參考列，大家可以在筆電上打開點點看。
-左邊是首頁〈三國演義〉，打開網址第一頁就是它。
-按一下：中間是導覽頁，從這裡點到時間軸、人物、事件。
-按一下：右邊是〈劉備的故事線〉：照回目排出劉備一路遇到誰、和誰經歷了哪些事，每個人依那一站和劉備的關係上色。上面的圖是一段 HTML，下面再用一般的 [[連結]] 連到每張人物、事件卡。網頁上的小標題、引用框、表格，都是筆記裡的 Markdown 寫的。
+先看首頁〈三國演義〉，打開網址第一頁就是它。
+按一下：換成導覽頁，從這裡點到時間軸、人物、事件。
+按一下：再換成〈劉備的故事線〉：照回目排出劉備一路遇到誰、和誰經歷了哪些事。每一站中間是事件，左邊是同伴，右邊是對手，同一個人在不同站會換邊。上面的圖是一段 HTML，下面再用一般的 [[連結]] 連到每張人物、事件卡。網頁上的小標題、引用框、表格，都是筆記裡的 Markdown 寫的。
 最後一下：今天的目標是讀者從首頁點得到每一張卡。範例的筆記庫放在 GitHub，課後想對照可以看：${FINAL_URL}
 畫面是 2026-10-30 發布後擷取，網址逐頁確認打得開。`],
   [SiteGoal, `05:30–07:30
