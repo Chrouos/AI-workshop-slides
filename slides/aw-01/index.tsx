@@ -3725,7 +3725,7 @@ const NOTES = new Map<Page, string>([
 每一堂都接著上一堂的成果做，所以今天的大綱檔請一定要存好。`],
   [Agenda, `07:00–10:00。
 今天五章：第一章以 GPT 為例，說明 AI 怎麼生成文字、為什麼會錯，以及 CoT、工具和 RAG 怎麼補救；第二章比較 ChatGPT 和 Codex；第三章從打開終端機開始，安裝 Codex、下載練習資料夾，在資料夾裡登入 Codex；第四章看懂 Codex 的畫面、/status（練習 2-1 自己打一次）、模型大小、思考程度、Session 和 Memory；第五章是練習 2 的其餘部分，用 Codex 寫大綱。練習 1 用 ChatGPT，課後自己練，第一章講完會告訴你在哪裡。
-第五章大約 116 分結束，接著總結、預告下一堂，剩下的時間留給沒跑完的同學補做和提問。還沒裝好 Codex 的同學，現在就舉手，助教先過去協助安裝。`],
+第五章大約 116 分結束，接著總結、預告下一堂，剩下的時間留給沒跑完的同學補做。還沒裝好 Codex 的同學，照附錄第 ${pageOf(InstallErrors)} 頁對照錯誤訊息。`],
   [Section1, `10:00–10:30。
 第一章：AI 怎麼走到今天，以 GPT 為例。我們先講模型的限制，再講幾種補救方法。`],
   [Evolution, `37:00–38:00。
@@ -3760,12 +3760,11 @@ GPT 怎麼決定接哪個字？先看「下一個 Token 的機率分布」。左
 最後一下：隨機性會改變答案，有時會改成錯的。答案不同時，兩個都可能是對的；但抽到錯的字，答案就錯了，下一頁就講這件事。`],
   [WhatIsHallucination, `15:30–16:30。
 AI 幻覺，英文 Hallucination。像考試硬掰的學生：沒把握，還是寫得很順。
-上面是講師實測的回答：在自己電腦用小模型 qwen3:1.7b（附錄備案 C 那頁）問「劉備字什麼」，模型很肯定地說「劉備，字孔明」。語氣這一條是滿的。先問大家：對嗎？
+上面是講師實測的回答：在自己電腦用小模型 qwen3:1.7b（附錄備案 C 那頁）問「劉備字什麼」，模型很肯定地說「劉備，字孔明」。語氣這一條是滿的。
 按一下：和事實對不上。第 1 回原文寫「姓劉，名備，字玄德」；孔明是諸葛亮的字。答案拿了諸葛亮的字，還說得很順。
 最後一下：內容和事實對不上，語氣卻很肯定，就叫幻覺。注意：沒附來源、但內容是對的，不算幻覺；幻覺是指內容本身錯了。大模型比較少錯這種題目，但一樣會錯，下一頁看一個大模型的真實例子。`],
   [RealHallucination, `16:30–17:30。
 真實案例。左邊大字：題目是一長串加法，2+4+7……+7953+34+356。早期 GPT-3.5 很肯定地回答 8402。右邊小圖是當時的實際畫面。
-先問大家：你相信嗎？
 按一下：打叉，錯了。
 按一下：自己驗算，正確答案是 8484。
 最後一下：GPT-3.5 沒有計算，只預測出一個像答案的數字。現在的模型算術已經進步很多，後面幾頁講它們怎麼改進的。
@@ -3810,7 +3809,7 @@ AI 幻覺，英文 Hallucination。像考試硬掰的學生：沒把握，還是
 ChatGPT 也有寫程式的工具：畫面上出現「已分析」，點開看得到它跑的程式碼，就代表它用了這個工具。
 最後一下：同一個算式交給工具重跑，會得到一樣的結果。這一步是計算出來的，不是預測出來的；但算式是模型寫的，還是要看有沒有抄錯。`],
   [ToolCompare, `24:00–25:00。
-同一題長加法，三種做法排在一起：猜、心算、按計算機。先請大家猜：哪一種最可信？
+同一題長加法，三種做法排在一起：猜、心算、按計算機。一種一種看，哪一種最可信。
 按一下：左邊是直接回答，等於用猜的。卡片上是 2026 年 9 月 ChatGPT 的真實畫面：我故意要求它「不可以偷偷計算」，ChatGPT 就回答「我不算，純猜：8460」。錯，而且每次問可能都不一樣。
 按一下：CoT，也就是 Thinking，等於心算、列步驟：這次得到 8484，但步驟是模型自己寫的，可能錯，所以還是要核對，不能當成一定對。
 按一下：Tool Calling 像按計算機：8484，同一個算式重跑，結果相同。為什麼比較可信？可以重跑一次看結果一不一樣，也看得到模型輸入了什麼算式，數字有沒有抄錯。
@@ -3872,13 +3871,13 @@ ChatGPT 是對話框：你問一句，它回一段話，適合發想、請它解
 提示詞在 prompts.md 的「練習 1」，掃這個 QR code 或點連結就能打開：${PROMPTS_URL} 。等一下第三章會下載練習資料夾 aw-01-lab，做完可以對照裡面 ChatGPT_練習 資料夾的參考結果，有截圖和每題的重點。
 今天課堂上的練習 2，用的是同一個概念：先找資料再回答，而且要回原文核對。`],
   [Section3, `50:00–50:30。
-第三章：安裝 Codex。前兩章都在瀏覽器裡；Codex 要裝在電腦上，才能讀你資料夾裡的檔案。課前已經裝好的同學，這幾頁當複習；卡住的同學請舉手，助教過去協助。`],
+第三章：安裝 Codex。前兩章都在瀏覽器裡；Codex 要裝在電腦上，才能讀你資料夾裡的檔案。課前已經裝好的同學，這幾頁當複習；卡住的同學看附錄第 ${pageOf(InstallErrors)} 頁的常見錯誤。`],
   [OpenTerminal, `50:30–53:00。
 裝 Codex 之前，先打開終端機。很多人沒用過，沒關係，這頁跟著做。
 Mac：按 command 加空白鍵，叫出 Spotlight 搜尋框，打 terminal，按 return。中文介面的 App 叫「終端機」，打中文也找得到。找不到的話，從「應用程式 → 工具程式 → 終端機」打開。
 Windows：按鍵盤上的 Windows 鍵，或點左下角開始，打 powershell，選「Windows PowerShell」。不要選「以系統管理員身分執行」，一般開就好。也不要開到「命令提示字元」，它的開頭沒有 PS，等一下的安裝指令在那裡跑不動。
 按一下：打開後會看到這樣的視窗。Mac 的開頭是你的帳號名稱，最後一個符號是 %；Windows 的開頭是 PS。Mac 的終端機可能是白底黑字，跟畫面顏色不一樣沒關係。
-畫面下方這句：看到游標在閃，就能打字了。打開了的同學舉個手；還沒打開的，旁邊的人幫忙看一下。`],
+畫面下方這句：看到游標在閃，就能打字了。`],
   [TerminalAnatomy, `53:00–56:00。
 終端機就是 CLI，英文 Command Line Interface，命令列介面。平常的 App 用滑鼠點按鈕；這裡沒有按鈕，要打一行字告訴電腦做什麼。等一下的 Codex 也是在這種視窗裡用的。
 先看第一行。前面這段叫提示字元，代表電腦在等你打字。Mac 的 ~ 代表你現在在哪個資料夾，~ 是你的使用者資料夾；Windows 是 PS C:\\Users\\你的名字>，意思一樣。
@@ -3891,7 +3890,7 @@ Windows：按鍵盤上的 Windows 鍵，或點左下角開始，打 powershell�
 Mac 或 Linux：在剛才的終端機貼上 curl -fsSL https://chatgpt.com/codex/install.sh | sh，按 Enter。
 Windows：在剛才的 PowerShell 貼上 irm https://chatgpt.com/codex/install.ps1 | iex，按 Enter。這是官方 PowerShell 獨立安裝程式，Windows 也不必用 npm。
 等安裝完成，關掉並重新開啟終端機或 PowerShell，輸入 codex --version。看到 codex-cli 加版本號就表示裝好了，版本號每台電腦可能不同。
-如果找不到 codex 指令，先確認已重開視窗；仍不行，照附錄第 ${pageOf(PathFixMac)}（Mac）或第 ${pageOf(PathFixWin)}（Windows）頁把資料夾加進 PATH，其他錯誤訊息對照第 ${pageOf(InstallErrors)} 頁。公司電腦若有政策限制，請助教協助。
+如果找不到 codex 指令，先確認已重開視窗；仍不行，照附錄第 ${pageOf(PathFixMac)}（Mac）或第 ${pageOf(PathFixWin)}（Windows）頁把資料夾加進 PATH，其他錯誤訊息對照第 ${pageOf(InstallErrors)} 頁。公司電腦若有政策限制，請公司的 IT 協助。
 看到版本號就好，先不要打 codex：要先下載練習資料夾、cd 進去，再在那裡打 codex 登入。
 來源：https://learn.chatgpt.com/docs/codex/cli 、https://learn.chatgpt.com/docs/config-file/environment-variables 。這裡依官方文件列出指令，未在 Windows 實機測試。`],
   [DownloadLab, `59:00–61:30。
@@ -4193,7 +4192,7 @@ Claude Code：
 1. command not found／無法辨識 'codex' 詞彙：程式找不到。先重開視窗，還不行就看第 ${pageOf(PathFixMac)}（Mac）或第 ${pageOf(PathFixWin)}（Windows）頁。
 2. 'irm' 不是內部或外部命令：開到的是「命令提示字元」（提示字元前面沒有 PS）。從開始功能表搜尋 PowerShell 開新視窗再貼。或者留在命令提示字元，改貼官方 README 的 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"。Claude Code 則用 curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd。
 3. 找不到符合參數名稱 'fsSL' 的參數（英文：A parameter cannot be found that matches parameter name 'fsSL'）：在 Windows PowerShell 貼了 Mac 的 curl 那行。PowerShell 的 curl 是另一個指令，改貼 irm 那行。反過來，PowerShell 出現「語彙基元 '&&' 不是有效的陳述式分隔符號」，是把命令提示字元的指令貼到 PowerShell。
-4. 因為這個系統上已停用指令碼執行（running scripts is disabled on this system）：通常是以前用 npm 裝過，npm 產生的 codex.ps1、npm.ps1 被 PowerShell 的執行原則擋下。執行 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned（只改自己帳號，不用系統管理員），再重開視窗。公司電腦若不准改，請助教協助，或改用獨立安裝。
+4. 因為這個系統上已停用指令碼執行（running scripts is disabled on this system）：通常是以前用 npm 裝過，npm 產生的 codex.ps1、npm.ps1 被 PowerShell 的執行原則擋下。執行 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned（只改自己帳號，不用系統管理員），再重開視窗。公司電腦若不准改，請公司的 IT 協助，或改用獨立安裝。
 5. codex --version 版本很舊，或裝了新版還是跑舊版：以前照舊教學用 npm 裝過，PATH 先找到舊的。npm uninstall -g @openai/codex 移除後重開視窗。Mac 用 which -a codex、Windows 用 where.exe codex 看有幾份。Codex 的安裝程式偵測到 npm 版時，也會問要不要幫你移除。
 6. syntax error near unexpected token '<'、403、連線逾時：下載到的不是安裝腳本，是網頁或被擋的回應，常見於公司或學校網路、Proxy。改用手機熱點再跑一次。Codex 安裝程式會先從 releases.openai.com 下載，失敗時自動改從 GitHub 下載。
 Claude Code 的同類錯誤都一樣處理，把 codex 換成 claude；它還有 claude doctor 可以自我檢查。

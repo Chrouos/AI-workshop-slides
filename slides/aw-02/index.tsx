@@ -788,13 +788,13 @@ const TodayGoal: Page = () => (
             <g className="aw2-build" style={buildDelay(0)}><MapArrow x1={320} x2={496} y={130} hot /></g>
             <g className="aw2-build" style={buildDelay(1)}><GoalStop x={612} n={2} kind="link" label="連得過去" sub="卡片連回大綱｜練習 2" /></g>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={380} label="第 3 站：AI 找得到，Codex 回答時引用你的卡，練習 3">
+          <Step duration={STEP_MS}><Layer h={380} label="第 3 站：AI 找得到，Codex 回答時引用你寫的關係卡，練習 3">
             <g className="aw2-build" style={buildDelay(0)}><MapArrow x1={728} x2={904} y={130} hot /></g>
-            <g className="aw2-build" style={buildDelay(1)}><GoalStop x={1020} n={3} kind="search" label="AI 找得到" sub="Codex 引用你的卡｜練習 3" /></g>
+            <g className="aw2-build" style={buildDelay(1)}><GoalStop x={1020} n={3} kind="search" label="AI 找得到" sub="引用你寫的卡｜練習 3" /></g>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={380} label="第 4 站：畫成關係圖，Codex 把你的卡畫進去，練習 4">
+          <Step duration={STEP_MS}><Layer h={380} label="第 4 站：畫成關係圖，Codex 把你寫的關係卡畫進去，練習 4">
             <g className="aw2-build" style={buildDelay(0)}><MapArrow x1={1136} x2={1312} y={130} hot /></g>
-            <g className="aw2-build" style={buildDelay(1)}><GoalStop x={1428} n={4} kind="graph" label="畫成關係圖" sub="畫進你的卡｜練習 4" /></g>
+            <g className="aw2-build" style={buildDelay(1)}><GoalStop x={1428} n={4} kind="graph" label="畫成關係圖" sub="畫進你寫的卡｜練習 4" /></g>
           </Layer></Step>
         </Steps>
       </Stage>
@@ -1730,11 +1730,11 @@ const AddLinksBack: Page = () => (
         <Steps>
           <Step duration={STEP_MS}>
             <div style={{ marginTop: 30 }}>
-              <SmallLabel color={okGreen}>補之後：打成 [[你的卡名]]；大綱沒有一樣的字，就在段尾加（[[卡名]]）</SmallLabel>
+              <SmallLabel color={okGreen}>補之後：改成 [[溫酒斬華雄]]，括號裡換成你寫的卡名</SmallLabel>
               <div style={{ marginTop: 10 }}><OutlinePara linked /></div>
             </div>
           </Step>
-          <Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', marginTop: 34 }}><StatusLine ok size={34}>打開你的卡：反向連結出現〈三國演義大綱〉</StatusLine></div></Step>
+          <Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', marginTop: 34 }}><StatusLine ok size={34}>打開你寫的關係卡：反向連結出現〈三國演義大綱〉</StatusLine></div></Step>
         </Steps>
       </div>
     </Fit>
@@ -1751,7 +1751,7 @@ const BreakTime: Page = () => (
       <div style={{ display: 'grid', gap: 34, justifyContent: 'center' }}>
         <In i={0}><StatusLine ok size={44}>Obsidian 打開三國筆記庫</StatusLine></In>
         <In i={1}><StatusLine ok size={44}>大綱在 整理/，點得到〈劉備〉</StatusLine></In>
-        <In i={2}><StatusLine ok size={44}>你的卡連到人物，也連回大綱</StatusLine></In>
+        <In i={2}><StatusLine ok size={44}>你寫的關係卡連到人物，也連回大綱</StatusLine></In>
       </div>
     </Fit>
   </Shell>
@@ -1808,7 +1808,7 @@ const RagIdea: Page = () => (
     <Fit>
       <Stage h={440}>
         <Steps>
-          <Layer h={440} label="R 檢索：在關係資料夾找出寫到關羽的卡：桃園結義、煮酒論英雄、赤壁之戰和你寫的卡">
+          <Layer h={440} label="R 檢索：在關係資料夾找出寫到關羽的卡：桃園結義、煮酒論英雄、赤壁之戰和練習 2 寫的許田打圍">
             <InG i={0}><RagHead x={0} letter="R" term="檢索" english="Retrieval" /></InG>
             <InG i={1}>
               <rect x="0" y="86" width="500" height="320" fill={surface} />
@@ -1816,9 +1816,9 @@ const RagIdea: Page = () => (
               <text x="250" y="143" textAnchor="middle" fontSize="25" fill={ink}>關羽參與了哪些事件？只看 關係/</text>
             </InG>
             <InG i={2}><MiniCard x={24} y={192} name="桃園結義" /><MiniCard x={182} y={192} name="煮酒論英雄" /><MiniCard x={340} y={192} name="赤壁之戰" /></InG>
-            <InG i={3}><MiniCard x={182} y={268} name="你的卡" dash /></InG>
+            <InG i={3}><MiniCard x={182} y={268} name="許田打圍" dash /></InG>
             <PopG i={6}><MiniCard x={24} y={192} name="桃園結義" hot /><MiniCard x={182} y={192} name="煮酒論英雄" hot /><MiniCard x={340} y={192} name="赤壁之戰" hot /></PopG>
-            <PopG i={7}><MiniCard x={182} y={268} name="你的卡" hot dash /></PopG>
+            <PopG i={7}><MiniCard x={182} y={268} name="許田打圍" hot dash /></PopG>
             <InG i={8}><text x="250" y="378" textAnchor="middle" fontSize="26" fill={muted}>找出寫到關羽的卡</text></InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={440} label="A 增強：把問題和找到的卡一起交給模型">
@@ -1830,7 +1830,7 @@ const RagIdea: Page = () => (
               <text x="616" y="142" fontSize="24" fill={link}>一起交出去</text>
               <SvgChip x={616} y={156} w={400} h={42} label="問題：關羽參與了哪些事件？" size={24} />
               <SvgChip x={616} y={208} w={190} h={40} label="桃園結義.md…" fill={amberSoft} stroke={amber} />
-              <SvgChip x={826} y={208} w={190} h={40} label="你的卡.md" fill={amberSoft} stroke={amber} />
+              <SvgChip x={826} y={208} w={190} h={40} label="許田打圍.md" fill={amberSoft} stroke={amber} />
             </g>
             <g className="aw2-build" style={buildDelay(1)}>
               <DownArrowSvg x={816} y1={262} y2={296} color={link} />
@@ -1845,13 +1845,13 @@ const RagIdea: Page = () => (
             <rect x="1132" y="86" width="500" height="320" fill={sage} />
             <g className="aw2-build" style={buildDelay(0)}>
               <Bubble x={1160} y={110} w={444} h={120} />
-              <text x="1186" y="160" fontSize="30" fontWeight="600" fill={ink}>桃園結義、……、你的卡</text>
+              <text x="1186" y="160" fontSize="30" fontWeight="600" fill={ink}>桃園結義、……、許田打圍</text>
               <text x="1186" y="204" fontSize="24" fill={muted}>照筆記回答</text>
             </g>
             <g className="aw2-build" style={buildDelay(1)}>
               <text x="1160" y="296" fontSize="24" fill={amber} fontWeight="600">檔名</text>
               <SvgChip x={1222} y={268} w={170} label="桃園結義.md" fill={amberSoft} stroke={amber} />
-              <SvgChip x={1404} y={268} w={200} label="你的卡.md" fill={amberSoft} stroke={amber} />
+              <SvgChip x={1404} y={268} w={200} label="許田打圍.md" fill={amberSoft} stroke={amber} />
               <text x="1382" y="378" textAnchor="middle" fontSize="26" fill={muted}>回答附上檔名</text>
             </g>
           </Layer></Step>
@@ -2780,7 +2780,7 @@ const LocalGraph: Page = () => (
               </div>
             </Step>
             <Step duration={STEP_MS}><Takeaway marginTop={44}>劉備卡裡寫了 [[桃園結義]]，Obsidian 就畫這條線</Takeaway></Step>
-            <Step duration={STEP_MS}><div style={{ marginTop: 28, fontSize: 30, lineHeight: 1.5, color: muted, textAlign: 'center' }}>線上沒寫是什麼關係。練習 4 請 Codex 寫上關係和出處。</div></Step>
+            <Step duration={STEP_MS}><div style={{ marginTop: 28, fontSize: 30, lineHeight: 1.5, color: muted, textAlign: 'center' }}>{''}</div></Step>
           </Steps>
         </div>
       </div>
@@ -2826,8 +2826,8 @@ const AsciiAsk: Page = () => (
       <Steps>
         <Step duration={STEP_MS}>
           <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 24, background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `8px solid ${warn}`, padding: '14px 28px' }}>
-            <span style={{ flex: '0 0 auto', fontSize: 27, fontWeight: 600, color: warn }}>你的卡沒出現</span>
-            <span style={{ fontSize: 27, lineHeight: 1.45 }}>檢查提示詞裡的卡名有沒有換對，再看你的卡「參與人物」那一行有沒有 [[關羽]]。</span>
+            <span style={{ flex: '0 0 auto', fontSize: 27, fontWeight: 600, color: warn }}>橘字那條沒出現</span>
+            <span style={{ fontSize: 27, lineHeight: 1.45 }}>檢查提示詞裡的卡名有沒有換對，再看那張卡「參與人物」那一行有沒有 [[關羽]]。</span>
           </div>
         </Step>
       </Steps>
@@ -2851,12 +2851,12 @@ const Recap: Page = () => (
     <Eyebrow>總結</Eyebrow>
     <Heading>今天做完的四件事</Heading>
     <Fit>
-      <Figure h={290} label="四章：點連結看反向連結、寫卡連回大綱、Codex 讀筆記庫找到你的卡、Codex 把你的卡畫進關係圖">
+      <Figure h={290} label="四章：點連結看反向連結、寫卡連回大綱、Codex 讀筆記庫找到你寫的關係卡、Codex 把它畫進關係圖">
         <g fill="none" stroke={amber} strokeWidth="4"><DrawPath i={4} d="M260 90 H1372" /></g>
         <InG i={0}><RecapStop x={204} n={1} verb="點連結，看反向連結" /></InG>
         <InG i={1}><RecapStop x={612} n={2} verb="寫卡，連回大綱" /></InG>
-        <InG i={2}><RecapStop x={1020} n={3} verb="Codex 找到你的卡" /></InG>
-        <InG i={3}><RecapStop x={1428} n={4} verb="你的卡畫進圖裡" /></InG>
+        <InG i={2}><RecapStop x={1020} n={3} verb="Codex 找到你寫的卡" /></InG>
+        <InG i={3}><RecapStop x={1428} n={4} verb="你寫的卡畫進關係圖" /></InG>
       </Figure>
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={64}>筆記庫在你的電腦裡，Codex 讀得到，就能幫你找、幫你畫</Takeaway></Step></Steps>
     </Fit>
@@ -3051,7 +3051,7 @@ const deck: Page[] = [
   Cover, StartDownloads, LastLesson, TodayGoal, Agenda,
   Section1, FirstLaunch, GetVault, VaultCheck, VideoTour, LinkWalk, WikiLink, Backlinks, VaultFolder,
   Section2, VideoCard, MergeOutline, ClickLiubei, Practice2Card, AddLinksBack, BreakTime,
-  Section3, RagIdea, OpenInCodex, AskWithFiles, FourthEvent, VideoRag, AskCheck,
+  Section3, OpenInCodex, AskWithFiles, RagIdea, FourthEvent, VideoRag, AskCheck,
   Section4, PointsLines, LocalGraph, AsciiAsk,
   Recap, NextSkills, ReferencesRag, ReferencesGraph,
   AppendixIndex, CardTypes, StoryMap, GrayLink, GrayDecide, BacklinksReal, GraphView,
@@ -3074,12 +3074,12 @@ const NOTES = new Map<Page, string>([
 ${VAULT_ZIP_URL}
 先不用打開，也不用解壓縮。接下來我講上一堂的回顧，大家的下載和安裝就在背景跑；第一章再一起打開。官方安裝說明：https://obsidian.md/help/install`],
   [LastLesson, `04:00–07:00。先看上一堂的成果。左邊是講師用 Codex 跑出來的 三國演義大綱.md：一回一段，人名都寫成 [[劉備]] 這種連結，每段最後一行是出處。大家自己的大綱長得差不多，今天全程用自己那一份。
-先問大家：這些 [[ ]] 現在連到哪？按一下：哪裡都還沒連到。大綱是單獨一個檔案，旁邊沒有劉備卡，所以劉備是淡色的連結，點下去只會新增一張空白卡。
+這些 [[ ]] 現在連到哪裡？按一下：哪裡都還沒連到。大綱是單獨一個檔案，旁邊沒有劉備卡，所以劉備是淡色的連結，點下去只會新增一張空白卡。
 最後一下：大綱裡有連結，但還沒有對應的人物卡。今天就是要把它放進有人物卡的筆記庫。`],
   [TodayGoal, `07:00–09:00。今天只有一條主線，四站。第 1 站：寫一張自己的關係卡，例如第 5 回的溫酒斬華雄。
-按一下，第 2 站：連得過去。卡片連到關羽、曹操這些人物卡，也從大綱連回來。按一下，第 3 站：AI 找得到。請 Codex 查筆記回答，它要能找到你寫的那張卡，回答附的原句回卡片搜得到。按一下，第 4 站：畫成關係圖。請 Codex 把你的卡畫進關係圖。
+按一下，第 2 站：連得過去。卡片連到關羽、曹操這些人物卡，也從大綱連回來。按一下，第 3 站：AI 找得到。請 Codex 查筆記回答，它要能找到你寫的那張卡，回答附的原句回卡片搜得到。按一下，第 4 站：畫成關係圖。請 Codex 把你寫的卡畫進關係圖。
 最後一下：練習 2 到 4 用的都是你自己寫的那張卡，不會換教材。`],
-  [Agenda, `09:00–10:00。四章、四個練習。第一章認識 Obsidian：先打開筆記庫，沿連結點一圈，再解釋剛才用到的功能，10 到 29 分。第二章寫自己的關係卡：搬進大綱、寫卡、連回大綱，29 到 55 分。55 分休息 5 分鐘。第三章讓 Codex 讀筆記庫：它要找到你的卡，回答附的原句對得回卡片，60 到 90 分。第四章請 Codex 畫關係圖：把你的卡畫進去，90 到 100 分。最後預告第三堂、交代課前作業，留時間問答。
+  [Agenda, `09:00–10:00。四章、四個練習。第一章認識 Obsidian：先打開筆記庫，沿連結點一圈，再解釋剛才用到的功能，10 到 29 分。第二章寫自己的關係卡：搬進大綱、寫卡、連回大綱，29 到 55 分。55 分休息 5 分鐘。第三章讓 Codex 讀筆記庫：它要找到你寫的卡，回答附的原句對得回卡片，60 到 90 分。第四章請 Codex 畫關係圖：把你寫的卡畫進去，90 到 100 分。最後預告第三堂、交代課前作業，留時間問答。
 今天講師不現場跑，每個示範都是錄好的影片，大家照影片自己做。`],
   [Section1, `10:00–10:30。第一章：認識 Obsidian。這章先動手：裝好、打開筆記庫、沿連結點一圈。點完再告訴大家剛才用了哪些功能。還在安裝的同學，邊裝邊看。`],
   [FirstLaunch, `10:30–12:30（練習 2 分鐘）。安裝好就打開 Obsidian，第一次會看到這個畫面。標 1 的地方在最下面：語言選單選「繁體中文」，畫面當下就換成中文，不用重開。
@@ -3099,7 +3099,7 @@ ${VAULT_ZIP_URL}
 第一站：左側打開 人物/劉備，在第三段找到「桃園結義」，點下去。按一下：到了〈桃園結義〉，這張關係卡寫第 1 回三人結為兄弟。再點卡裡的「關羽」。按一下：到了〈關羽〉。打開右上角的右側欄，切到「反向連結」分頁。
 按一下：反向連結裡列著〈桃園結義〉，點它就走回去。也可以按左上角的 ← 回上一張。
 最後一下：做到了的標準：關羽卡的反向連結裡看得到〈桃園結義〉。新打開的筆記庫，右側欄預設是收起來的，找不到反向連結的人先檢查這個。
-給大家 4 分鐘，點完的人可以自己多逛幾張，也可以舉手問安裝的問題，講師下去看。`],
+給大家 4 分鐘，點完的人可以自己多逛幾張。`],
   [WikiLink, `23:00–25:00。剛才點的紫色字，就是 Obsidian 的內部連結，叫 Wiki Link（Obsidian 寫作 Wikilink）。左邊是檔案裡真正打的字：「拜 [[劉備]] 為兄」，人名包在兩對中括號裡。
 按一下：Obsidian 顯示時，中括號會藏起來，劉備變成紫色、有底線的字。按一下：點一下就打開 人物/劉備.md。打 [[ 的時候 Obsidian 會跳出選單讓你選卡名，不用整個打完，等一下寫卡會用到。
 最後一下：卡名放進 [[ ]]，就建立一條內部連結。官方說明：https://obsidian.md/help/links`],
@@ -3121,7 +3121,7 @@ ${VAULT_ZIP_URL}
 有人第一堂另外讓 Codex 寫了自己的 劉備.md，這次先不要放進來：同一個筆記庫裡有兩張都叫劉備的卡，[[劉備]] 只會連到其中一張。`],
   [ClickLiubei, `36:30–41:00（練習 4 分半）。上面是合併後的實際畫面，講師的大綱第 1 回，你的大綱用字會不同，請看自己的。標 1 是劉備，深紫色，代表找得到卡。
 按一下：點它，就打開下面這張講師的人物卡 人物/劉備。請大家點自己大綱裡的劉備。點不過去的，檢查大綱是不是放在「三國人物知識庫」裡面，而不是旁邊。
-接著問大家：同一段裡，董卓的顏色比較淡，點了會怎樣？
+同一段裡，董卓的顏色比較淡。
 最後一下，標 2：董卓是淡紫色，筆記庫裡還沒有這張卡，這叫「未解析連結」（Unresolved Link）。點了 Obsidian 會在筆記庫最外層新增一張空白的 董卓.md，不想新增就先別點。下面的圖例：1 深紫是有卡，點了會打開，關羽、張飛、曹操、〈桃園結義〉也一樣；2 淡紫是還沒有卡。淡色不一定是打錯字，多半是還沒寫卡。
 投影或螢幕分不出深淺時，按 Cmd+O（Windows 是 Ctrl+O）搜名字，找不到這個檔，就是還沒有卡。
 淡色的名字要不要補卡、怎麼數它出現幾次，是選做，放在附錄第 ${pageOf(GrayDecide)} 頁；之後可以照原文補卡；第三堂會直接給大家講師照原文寫好的三張卡。
@@ -3133,29 +3133,29 @@ ${VAULT_ZIP_URL}
 按一下，3：填上回目，例如 5；最後一行寫出處，例如「出處：原文/第005回.md」。範例卡上標 3 的兩個橘框就是這兩處。
 請從這三個事件挑一個，三個都連得到關羽，第三章會用到：第 5 回〈溫酒斬華雄〉，連到關羽、曹操；第 16 回〈轅門射戟〉，連到劉備、關羽、張飛（原文「關、張隨往」，呂布寫純文字，也要列進參與人物）；第 20 回〈許田打圍〉，連到曹操、劉備、關羽。不要寫三英戰呂布和白門樓：第三堂會直接發這兩張寫好的卡，同名的卡會撞在一起。
 忘了怎麼操作的，回第 ${pageOf(VideoCard)} 頁的示範影片，按 0:44 再看一次。不確定細節就查原文：在 Obsidian 左邊打開 原文/，點那一回就看得到。
-寫完怎麼知道成功：打開〈關羽〉，右邊的反向連結裡出現你的新卡。沒出現的話，回你的卡看關羽是不是深紫色：淡紫或黑字，就是 [[ ]] 沒加好或名字打錯，改成 [[關羽]] 再看一次。
+寫完怎麼知道成功：打開〈關羽〉，右邊的反向連結裡出現剛寫的卡。沒出現的話，回你寫的卡看關羽是不是深紫色：淡紫或黑字，就是 [[ ]] 沒加好或名字打錯，改成 [[關羽]] 再看一次。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：在「關係」按右鍵選「新增筆記」，標題已經選好，直接打「許田打圍」按 Enter 就改好名字。寫完、連到曹操、劉備、關羽後，〈關羽〉的反向連結馬上多一列「許田打圍」。`],
   [AddLinksBack, `50:00–55:00（練習 5 分鐘）。卡寫好了，現在大綱還連不到它：講師的大綱第 5 回，「溫酒斬華雄」是黑字。下面的圖例照 Obsidian 的顏色：紫色是有卡的連結，淡紫是還沒有卡，橘框框起來的是還沒連的黑字。
 按一下：在大綱裡改成 [[溫酒斬華雄]]，換成你那張卡的名字，就變成紫色連結。寫〈轅門射戟〉的，第 16 回改成「呂布在[[轅門射戟]]」。大綱裡沒有剛好一樣的字，例如第 20 回寫的是「許田打獵」，就在那一段最後加上「（[[許田打圍]]）」。
-最後一下：打開你的卡，反向連結出現〈三國演義大綱〉，這一步就完成了。沒出現：看大綱裡剛加的連結，淡紫色代表 [[ ]] 裡的名字跟你的卡名不一樣，改成一字不差再看一次。
+最後一下：打開你寫的卡，反向連結出現〈三國演義大綱〉，這一步就完成了。沒出現：看大綱裡剛加的連結，淡紫色代表 [[ ]] 裡的名字跟你寫的卡名不一樣，改成一字不差再看一次。
 到這裡，主線的前兩站完成：你寫了一張卡，從關羽、從大綱都連得過去。
 2026-10-24 實測（Obsidian 1.10.3，Mac）：在大綱第 20 回那段最後加上「（[[許田打圍]]）」，〈許田打圍〉的反向連結就出現「三國演義大綱」。`],
-  [BreakTime, `55:00–60:00（休息 5 分鐘）。休息 5 分鐘。回來前請大家對一下這三項：Obsidian 打開三國筆記庫；大綱在 整理/，點得到〈劉備〉；你的卡連到人物，也連回大綱。
-有一項沒過的，休息時舉手，講師下去看。下一章要用終端機開 Codex，休息時可以先把終端機打開。`],
+  [BreakTime, `55:00–60:00（休息 5 分鐘）。休息 5 分鐘。回來前請大家對一下這三項：Obsidian 打開三國筆記庫；大綱在 整理/，點得到〈劉備〉；你寫的卡連到人物，也連回大綱。
+下一章要用終端機開 Codex，休息時可以先把終端機打開。`],
   [Section3, `60:00–60:30。第三章：讓 Codex 讀你的筆記庫。筆記庫就是電腦裡的一個資料夾，Codex 在這個資料夾裡打開，就能先翻你的筆記再回答，包括你剛寫的那張卡。`],
-  [RagIdea, `60:30–63:00。RAG 是 Retrieval-Augmented Generation，檢索增強生成。三步：
-R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係資料夾把寫到關羽的卡找出來：桃園結義、煮酒論英雄、赤壁之戰，還有你寫的那張。
-按一下，A 增強：把問題和找到的卡一起交給模型。
-按一下，G 生成：照卡片回答，並附上檔名。橘色的就是 R 找到的那幾張卡，從頭到尾同一個顏色。
-最後一下：模型不變，變的是輸入多了筆記。所以等一下最想看的是：它有沒有找到你的卡。Codex 真正下了什麼搜尋指令、讀了幾行，講師的實跑紀錄放在附錄第 ${pageOf(RStep)}–${pageOf(GStep)} 頁，上課不講。來源：https://arxiv.org/abs/2005.11401`],
-  [OpenInCodex, `63:00–66:00（練習 3 分鐘）。大家一起做。打開終端機（Windows 是 PowerShell），打 cd 和一個空格，把「三國人物知識庫」資料夾拖進視窗，按 Enter。
+  [OpenInCodex, `60:30–63:30（練習 3 分鐘）。大家一起做。打開終端機（Windows 是 PowerShell），打 cd 和一個空格，把「三國人物知識庫」資料夾拖進視窗，按 Enter。
 按一下：打 codex。第一次在這個資料夾開，會問信不信任這個資料夾，選 Yes, continue，跟第一堂一樣。
 按一下：貼上「列出這個資料夾第一層的資料夾，不要讀或修改任何檔案。」提示詞在 prompts.md 的〈準備〉：${PROMPTS_URL}
 按一下：要看到人物、勢力、原文、整理、模板、關係，可能還有 .obsidian。只列出「三國人物知識庫」一個資料夾，就是 cd 到外層的 aw-02-lab 了：輸入 /quit，cd 進裡面那一層，再打 codex。
 實測（2026-10-24，Codex 0.154.0）：在多一層的資料夾，它回答「這個資料夾第一層只有一個資料夾：三國人物知識庫」。`],
-  [AskWithFiles, `66:00–67:00。這是練習 3 用的提示詞，整章都問這一題，一次看一行。第一行是問題：關羽參與了哪些事件？
+  [AskWithFiles, `63:30–64:30。這是練習 3 用的提示詞，整章都問這一題，一次看一行。第一行是問題：關羽參與了哪些事件？
 按一下：範圍，只根據 關係/ 資料夾裡的卡。範圍定在關係卡，大家的答案才比得起來，你寫的卡也在這個資料夾裡。按一下：出處，每個事件附上檔名和一句卡片原句，等一下核對靠的就是這兩樣。按一下：限制，卡片沒寫的就說找不到，不要自己補。
 最後一下：附上檔名和原句，回答才查得到根據。完整提示詞在 prompts.md 的〈練習 3〉。`],
+  [RagIdea, `64:30–67:00。這一題 Codex 是怎麼回答的？方法叫 RAG，Retrieval-Augmented Generation，檢索增強生成。三步：
+R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係資料夾把寫到關羽的卡找出來：桃園結義、煮酒論英雄、赤壁之戰，還有講師在練習 2 寫的〈許田打圍〉。大家的筆記庫裡，這一張就是自己寫的那張卡。
+按一下，A 增強：把問題和找到的卡一起交給模型。
+按一下，G 生成：照卡片回答，並附上檔名。橘色的就是 R 找到的那幾張卡，從頭到尾同一個顏色。
+最後一下：模型不變，變的是輸入多了筆記。下一頁就看 R 這一步：關羽卡沒列出〈許田打圍〉，Codex 為什麼還找得到。Codex 真正下了什麼搜尋指令、讀了幾行，講師的實跑紀錄放在附錄第 ${pageOf(RStep)}–${pageOf(GStep)} 頁，上課不講。來源：https://arxiv.org/abs/2005.11401`],
   [FourthEvent, `67:00–68:30。看影片之前，先講這一題怎麼算答對。左邊是 人物/關羽.md 的最後一行「關係與事件」，只連到三件事：桃園結義、煮酒論英雄、赤壁之戰。右邊是 關係/ 資料夾，裡面有四張卡，第四張〈許田打圍〉是講師在練習 2 寫的。關羽卡沒有連到它，虛線打叉就是這個意思。大家自己寫的卡也一樣，關羽卡最後一行不會有它。
 按一下：Codex 不是照關羽卡最後一行回答，它會自己搜 關係/ 裡的每一張卡。〈許田打圍〉的內文寫了 [[關羽]]，所以搜得到，回答會列出 4 件事。
 最後一下：判斷標準有兩個。第一，4 件事都要列出來，少一件就是漏了。第二，每件事附的原句，回卡片搜得到、意思也沒寫錯，才算正確。下一頁的影片就是照這兩個標準檢查。`],
@@ -3166,11 +3166,11 @@ R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係�
 等它跑的時候講怎麼核對，跟剛才影片做的一樣。左邊是 Codex 回答的：事件和它引用的原句。右邊是卡片裡寫的：打開那張卡，按 Cmd+F（Windows 是 Ctrl+F）搜引號裡開頭四五個字。開頭是人名就跳過人名，搜後面的字：卡片裡人名是連結，連著搜會搜不到。
 右邊的清單從哪來：人物/關羽.md 最後一行「關係與事件」列了桃園結義、煮酒論英雄、赤壁之戰，再加上你寫的卡。這四張，回答裡都要有；少一列就是漏了。
 按一下：桃園結義，搜「誓畢拜劉備」，搜得到，對得上。按一下：煮酒論英雄，搜「衝進後園」，對得上。按一下：赤壁之戰，搜「念及當年」，對得上。畫面上這三句是從卡片挑的例子，大家的回答可能引用別句，一樣搜搜看。
-按一下：第四列是你在練習 2 寫的卡，畫面用講師的〈許田打圍〉當例子，原句「提刀拍馬要斬曹操」是影片裡實跑的回答。關羽卡最後一行沒有這張卡，它出現在回答裡，就是 Codex 自己搜到的。這是今天主線的第三站。你的卡沒出現，通常是卡不在 關係/ 資料夾，或卡裡沒有 [[關羽]]，先檢查這兩個。
+按一下：第四列是你在練習 2 寫的卡，畫面用講師的〈許田打圍〉當例子，原句「提刀拍馬要斬曹操」是影片裡實跑的回答。關羽卡最後一行沒有這張卡，它出現在回答裡，就是 Codex 自己搜到的。這是今天主線的第三站。你寫的卡沒出現，通常是卡不在 關係/ 資料夾，或卡裡沒有 [[關羽]]，先檢查這兩個。
 最後一下：全部對得上就做完了，不用追問。只有原句跟卡片寫的不一樣，才貼這句請 Codex 改正，提示詞在 prompts.md〈練習 3〉。它改完的那句，回 Obsidian 再搜一次。
-講完核對，大家自己做到 85:30，講師下去看。有人問「意思對、只是字不一樣，算不算對」：今天的規則是原句要一字不差搜得到，判斷才不會因人而異；意思對但不是原句的情況，附錄的進階討論再聊。
-你的卡沒連到關羽的人：把提示詞裡的關羽換成你卡裡連到的人物，右邊的清單改看那個人的人物卡最後一行。
-85:30–90:00 留給還在跑的同學補做；做完的同學可以把題目換成你卡裡的另一位人物，再跑一次。`],
+講完核對，大家自己做到 85:30。有人問「意思對、只是字不一樣，算不算對」：今天的規則是原句要一字不差搜得到，判斷才不會因人而異；意思對但不是原句的情況，附錄的進階討論再聊。
+你寫的卡沒連到關羽的人：把提示詞裡的關羽換成你寫的卡裡連到的人物，右邊的清單改看那個人的人物卡最後一行。
+85:30–90:00 留給還在跑的同學補做；做完的同學可以把題目換成你寫的卡裡的另一位人物，再跑一次。`],
   [Section4, `90:00–90:30。第四章：請 Codex 畫關係圖。關係圖就是點和線。今天請 Codex 把你在練習 2 寫的那張關係卡畫進關羽的關係圖，講師的例子是〈許田打圍〉。`],
   [PointsLines, `90:30–92:00。知識圖譜（Knowledge Graph）就是點和線。點叫節點（Node）：人物是圓圈，劉備、關羽、張飛、曹操；事件是方框，桃園結義、煮酒論英雄。
 按一下：線叫邊（Edge）。關羽、張飛、劉備連到桃園結義；劉備、曹操連到煮酒論英雄。每一條灰色實線，都能在卡片裡找到一句原句。
@@ -3184,9 +3184,9 @@ R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係�
 三個框是提示詞的重點。定位：只讀〈桃園結義〉和你寫的卡。期望輸出：從關羽畫起，每條線編號、附來源檔名。限制：只畫兩張卡「參與人物」那一行的人，找不到原句就不畫。兩張卡都有關羽，所以從關羽畫起，兩張卡的人會畫在同一張圖上。
 大家貼上、按 Enter，讓它跑。
 按一下：會看到的樣子大概像這樣，這是格式示意，不是實跑。前兩條來自〈桃園結義〉；橘字那條來自〈許田打圍〉：原文第 20 回寫關羽「提刀拍馬便出，要斬曹操」。劉備已經在第 1 條畫過，提示詞要求每兩個人只畫一條，所以不會再畫一次。用詞、分支怎麼排，每個人會不一樣。
-最後一下：你寫的卡沒出現在圖上，先檢查兩件事：提示詞裡的卡名有沒有換對；你的卡「參與人物」那一行有沒有 [[關羽]]。改好再貼一次。
-做完的同學：把起點換成你卡裡的另一位人物，再畫一次。第三堂會用 Skill 把同樣的關係畫成 HTML 圖。`],
-  [Recap, `100:00–104:00。回顧四章。一，Obsidian：點連結往下讀，看反向連結找回來。二，寫一張自己的關係卡，連到人物，也從大綱連回來。三，讓 Codex 讀筆記庫：它先翻筆記再回答，回答裡有你的卡，原句回卡片搜得到。四，請 Codex 畫關係圖：你的卡接進圖裡。
+最後一下：你寫的卡沒出現在圖上，先檢查兩件事：提示詞裡的卡名有沒有換對；你寫的卡「參與人物」那一行有沒有 [[關羽]]。改好再貼一次。
+做完的同學：把起點換成你寫的卡裡的另一位人物，再畫一次。第三堂會用 Skill 把同樣的關係畫成 HTML 圖。`],
+  [Recap, `100:00–104:00。回顧四章。一，Obsidian：點連結往下讀，看反向連結找回來。二，寫一張自己的關係卡，連到人物，也從大綱連回來。三，讓 Codex 讀筆記庫：它先翻筆記再回答，回答裡有你寫的卡，原句回卡片搜得到。四，請 Codex 畫關係圖：你寫的卡接進圖裡。
 最後一下：筆記庫就是你電腦裡的資料夾，Codex 讀得到，就能幫你找、幫你畫。下一堂把這些做法存成 Skill。`],
   [NextSkills, `104:00–120:00（含問答）。下一堂講 Skill。Skill 就是一份寫好的做事說明，像食譜：照著做，每次的做法比較一致。
 第一步，把 Skill 裝進 Codex。按一下：第二步，用 Skill 做事：畫關係圖、把卡片改寫成好讀的版本。按一下：第三步，自己寫一個 Skill，把三國的事件排成時間軸。
@@ -3272,7 +3272,7 @@ R，檢索。上面這行是 Codex 實際執行的搜尋指令：rg 是一個搜
   [LimitMissing, `（附錄，課堂不講。）RAG 的限制之一，Barnett 等人叫它「缺少內容」（Missing Content）：筆記沒寫的內容，檢索不到。實跑提示詞：「官渡之戰是誰打贏的？請只根據這個筆記庫裡的 .md 卡片回答，附上檔名；筆記沒寫的就說找不到，不要自己補。」它搜尋「官渡、袁紹、曹操」，沒有任何卡提到官渡。
 按一下：它的回答是「找不到。筆記庫中的 .md 卡片沒有提到「官渡之戰」或其勝負。」
 最後一下：筆記沒寫時，正確的回答就是「找不到」。官渡之戰在第 30 回，不在第 1 到 21 回的大綱裡。`],
-  [Practice3, `（附錄，進階討論，選做；有時間或課後再聊。）這一題沒有一刀兩斷的答案，適合讓同學說理由。回答是「曹操在第 1 到 21 回參與了哪些戰役」在講師的大綱上的實跑結果，一共 7 項：${ADV3_URL}；對照的是講師的大綱：${SAMPLE_OUTLINE_URL}
+  [Practice3, `（附錄，進階討論，選做；有時間或課後再聊。）這一題沒有一刀兩斷的答案，重點是說得出依據哪一句。回答是「曹操在第 1 到 21 回參與了哪些戰役」在講師的大綱上的實跑結果，一共 7 項：${ADV3_URL}；對照的是講師的大綱：${SAMPLE_OUTLINE_URL}
 每一列問三件事：檔案在嗎、原句在嗎、有沒有多寫。
 按一下：第 1 列值得討論。大綱第 5 回只寫「曹操在陳留散家財招募義兵，發檄文召集各路諸侯討伐董卓」，汜水關是關羽溫酒斬華雄，虎牢關是劉關張戰呂布，沒寫曹操上陣。可是「參與」不一定要親自上陣：發檄文、出兵也算參與嗎？兩種判斷都說得通，重點是說得出依據哪一句。原文第 5 回還有一句「操引軍往來救應」，但那不在大綱裡。
 其他列講師的判斷：第 2 列滎陽（第 6 回「曹操獨自追擊，卻在滎陽被董卓軍擊敗」）、第 3 列徐州（第 10–12 回）、第 4 列濮陽（第 11 回「呂布在濮陽設計誘敵」）、第 5 列攻打呂布（第 13 回）、第 7 列下邳（第 18–19 回）都打勾。第 6 列「淯水」兩個字只在第 16 回的回目，內文沒有，回目算不算大綱寫的，也可以討論。`],

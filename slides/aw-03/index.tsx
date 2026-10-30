@@ -2777,7 +2777,7 @@ eli5 只做一件事：同一段內容，看是誰在聽，換一種講法。左
 按一下：接著它執行 cat .agents/skills/eli5/SKILL.md，把整份 SKILL.md 讀進來，同時讀劉備卡，再照 SKILL.md 的做法改寫。等一下大家自己跑的時候，也看這兩行。
 按一下：沒點名的話，Codex 會看每個 Skill 的 description 自己挑，可能挑對，也可能挑錯或沒用到，細節放附錄第 ${pageOf(CallByName)}–${pageOf(LoadOnUse)} 頁。今天的練習提示詞全部都有點名。
 最後一下：點名是明確告訴它；看到回報才算確認。正式的點名寫法也可以在提示詞打 $ 從選單挑，例如 $eli5。下一頁先看它改寫出來的結果。`],
-  [ResultTrace, `15:45–17:45。先看輸出。左邊是原卡第二段，右邊是 eli5 改寫的實際產出（講師 2026-10-30 實跑，範例檔 aw-03-sample-output/練習2/劉備-5歲版.md）。上面的顏色：橘底是換了說法的地方，綠底是原封不動的地方。請大家先自己找找看，哪裡不一樣？
+  [ResultTrace, `15:45–17:45。先看輸出。左邊是原卡第二段，右邊是 eli5 改寫的實際產出（講師 2026-10-30 實跑，範例檔 aw-03-sample-output/練習2/劉備-5歲版.md）。上面的顏色：橘底是換了說法的地方，綠底是原封不動的地方。改了哪裡，一點一點看。
 按一下：詞變簡單。榜文變成告示，投軍變成當兵。
 按一下：句子變短。原卡這一段是一整句，右邊拆成六個短句，一句只講一件事。
 按一下：多了比喻。整份改寫的開頭多了一句：「你可以把他想成一個想帶著大家一起做大事的隊長」，原卡沒有這句。
@@ -2824,7 +2824,7 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
 最後一下：Skill 告訴 Codex 怎麼做，MCP 讓 Codex 連到外部工具。今天的練習只用 Skill，MCP 知道是什麼就好。`],
   [CompareTable, `24:30–27:00。Skill 跟其他幾種交代 Codex 的方式差在哪？這張表從上往下念一次就好。Prompt 是這一次的要求，例如把劉備卡改短一點。AGENTS.md 是這個專案的規則，每次都要遵守，例如回答都附檔名。Skill 是一類工作的做法，常常重複做的事，例如用 eli5 改成 5 歲版。MCP 連到外部工具或資料，例如讀 GitHub 上的檔案。
 最後一下：常常重複做的事，寫成 Skill。只做一次的事打 Prompt 就好；每次都要遵守的規則放 AGENTS.md；要連外部系統，才需要 MCP。今天的練習只用 Skill，MCP 知道是什麼就好。三種方式的圖解和 Skill／MCP 判斷題放在附錄第 ${pageOf(PromptAgentsSkill)}–${pageOf(SkillOrMcp)} 頁。`],
-  [SkillOrMcp, `（附錄，課堂不講；可當課後自我檢查。）判斷題，請大家先舉手猜。情境 1：每次 Review PR，都要照公司的 10 條規範檢查。
+  [SkillOrMcp, `（附錄，課堂不講；可當課後自我檢查。）每個情境配一個答案。情境 1：每次 Review PR，都要照公司的 10 條規範檢查。
 按一下：Skill，因為這是固定的做法和檢查流程。
 情境 2：希望 AI 能查公司的 Jira 或資料庫。
 按一下：MCP，因為要連到外部系統拿資料。
@@ -2847,7 +2847,7 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
   [InstallNode, `10:00–11:00。這頁給還沒裝的同學：現在開始裝，裝的時候一邊聽第一章。先裝 git，再裝 Node.js。畫面上的網址都可以點，請在自己的筆電打開這份簡報點連結，或從 prompts.md 練習 1-1 點。
 第 1 步 git，照 git 官網 git-scm.com/install 的建議。Mac 先裝 Homebrew：點 brew.sh，複製首頁那一行貼進終端機，按 Enter；問密碼就打電腦的登入密碼，打字時畫面不會顯示。它會順便裝好 Apple 的命令列工具，要等幾分鐘。裝完畫面最後有「Next steps」，照它列的指令貼上，終端機才找得到 brew。接著打 brew install git，裝完打 git --version。官網也列了 xcode-select --install，但這個方法常常跳出「目前無法從軟體更新伺服器取得」而裝不起來，所以我們用 Homebrew。Windows 點 git-scm.com/install/windows，按 Click here to download，下載 x64 的安裝檔，選項都用預設，裝完把 PowerShell 關掉重開，再打 git --version。
 按一下：第 2 步 Node.js，照四步裝，npx 會跟著一起裝好。一，點 nodejs.org，按 Download。二，下載標著 LTS 的版本，LTS 是長期支援版，比較穩定；Mac 下載 .pkg，Windows 下載 .msi。三，雙擊安裝檔，選項都用預設，一路按「繼續」或 Next；Mac 最後會要你輸入電腦的登入密碼。四，把終端機整個關掉再打開，新的視窗才找得到 node，再打 node -v 和 npx -v 確認。Windows 這兩段講師沒有實測。
-裝好後重開終端機，再打一次 git --version、node -v、npx -v。第二章開始前還沒裝好的，舉手讓助教幫忙；真的裝不好，改用附錄第 ${pageOf(ZipFallback)} 頁下載 ZIP 自己放的做法，不用 Node.js（prompts.md 最後的「備用做法」）。`],
+裝好後重開終端機，再打一次 git --version、node -v、npx -v。第二章開始前還沒裝好的，改用附錄第 ${pageOf(ZipFallback)} 頁下載 ZIP 自己放的做法，不用 Node.js（prompts.md 最後的「備用做法」）。`],
   [CdVault, `33:00–34:30。剛才看講師做過一次，現在換大家自己做。練習 1 的第 2 到 5 步約 11 分鐘，做到 44:00。第二步，讓終端機走進筆記庫。等一下 npx skills add 會問要裝在哪裡，我們選 Project，意思是裝進終端機現在所在的資料夾。所以要先 cd 到三國人物知識庫，Skill 才會裝進筆記庫。
 打 cd 和一個空格，把「三國人物知識庫」資料夾從 Finder（Windows 是檔案總管）拖進終端機，路徑會自動填好，按 Enter。再打 ls，要看得到 人物、關係、原文、模板。只看到另一個「三國人物知識庫」，是解壓縮多包了一層，Windows 很常見，再打 cd 三國人物知識庫 進去一層。
 按一下：右邊是同一個資料夾畫成樹。最上面棕色那一列，就是 cd 進去的三國人物知識庫；灰色那一列，就是 ls 列出來的那些資料夾。Skill 會裝在筆記庫裡的 .agents/skills/，畫成虛線框，因為它是安裝後才出現的。.agents 前面有一個點，是隱藏資料夾，ls、Finder 和 Obsidian 平常都看不到，Codex 開在筆記庫時會讀它。練習 3 自己寫的 Skill 也放這裡。
@@ -2870,7 +2870,7 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
 按一下：看到 ./.agents/skills/diagram-design，就裝好了。diagram-design 除了 SKILL.md，還附了 references、scripts、assets 幾個資料夾，第一章看過；skills 會整個資料夾一起裝。
 最後一下：兩個 Skill 都裝進筆記庫的 .agents/skills/ 了。兩個是不是都在，下一頁直接在 Codex 裡確認。
 來源：https://github.com/cathrynlavery/diagram-design`],
-  [InstallErrors, `（附錄，裝不起來時翻到這頁。）裝不起來，先看錯誤訊息，常見的是這三種。先看左邊的訊息，猜猜看是什麼原因。
+  [InstallErrors, `（附錄，裝不起來時翻到這頁。）裝不起來，先看錯誤訊息，常見的是這三種。每一列先看錯誤訊息，再看原因和解法。
 按一下：第一種 command not found: npx，Windows 會寫「無法辨識 'npx'」：電腦找不到 npx，代表沒裝 Node.js，或是裝完沒把終端機關掉重開。
 按一下：第二種 Failed to clone，後面寫 spawn git ENOENT：skills 要用 git 下載，但找不到 git，照第 ${pageOf(InstallNode)} 頁的方法裝 git。這行是講師把 git 拿掉後實際跑出來的。
 按一下：第三種只有 Windows 會遇到：PowerShell 預設不執行 .ps1 指令檔，訊息裡會有 npx.ps1 和「已停用指令碼執行」。改打 npx.cmd skills add，後面接一樣的名稱，就能執行。這行是示意，講師沒有在 Windows 實測，實際文字可能不同。`],
@@ -2972,13 +2972,13 @@ npx 裝不起來：prompts.md 練習 3-1 最後有備用做法，用一行指令
 按一下：其餘五站分左右。這是講師 2026-10-30 用 Codex 0.165.0，在範例筆記庫的副本上實跑的結果，成品放在 aw-03-sample-output/練習3/劉備的故事線.md。白門樓時曹操和劉備同坐，在同一邊；到了煮酒論英雄和赤壁之戰，曹操在作對那一邊。侯成、宋憲、魏續的卡片沒有交代和劉備的關係，Codex 寫成敵友未明。煮酒論英雄的曹操放哪一邊，每個人跑出來可能不一樣：劉備當時寄身在曹操底下，卻防著他。看 Codex 寫的理由合不合卡片就好。
 按一下：核對方法：打開每張關係卡，看「參與人物」那一行，左右兩邊的名字都要在裡面；不在裡面的名字，是 Codex 自己加的，要刪掉。第二堂自己寫過〈轅門射戟〉或〈許田打圍〉的同學會多一站，這是對的。
 還有時間的同學，下一頁換一個畫圖 Skill。`],
-  [TimelineStyles, `106:00–112:00。進階選做第二題：同一份 整理/時間軸.md，換一個畫圖 Skill 畫。先問大家：交給不同的 Skill 畫，會長一樣嗎？接下來一張一張看，都是講師 10-30 實跑的成品，整條時間軸截下來，六件事都在；每按一下換一張，放在同一個位置比較。
+  [TimelineStyles, `106:00–112:00。進階選做第二題：同一份 整理/時間軸.md，換一個畫圖 Skill 畫，畫出來的樣子不一樣。接下來一張一張看，都是講師 10-30 實跑的成品，整條時間軸截下來，六件事都在；每按一下換一張，放在同一個位置比較。
 按一下：diagram-design，練習 1-4 已經裝好，畫得很素：灰底、細線、小圓點，六件事平均排開。
 按一下：archify，要另外裝：米色底、大號襯線字、紅色圓點，一樣平均排開。archify 原本要每件事都有完整日期，三國卡片只有回目，Codex 沒有硬套它的格式，改寫了一份自己的 HTML。兩份都沒有自己補年份，只有桃園結義有中平元年；你畫出來的如果別的事件也出現年份，就是它自己補的，請它拿掉。
 同樣叫做「畫圖」的 Skill，每個人寫的 SKILL.md 不一樣，畫出來的風格就不一樣，沒有哪一個是標準答案，挑你喜歡的。
 按一下：去哪裡找？在終端機打 npx skills find，後面接英文關鍵字，例如 timeline。講師 10-30 搜過，archify 有 18.3 萬次安裝、diagram-design 有 2.2 萬次，都在結果裡。也可以上 skills.sh 這個網站搜。找到喜歡的，跟第二章一樣用 npx skills add 裝；裝之前先到 GitHub 打開它的 SKILL.md 看一眼，Skill 執行時有 Codex 的完整權限。
 提示詞在 prompts.md 練習 3-5，用 archify 的話把開頭的 diagram-design 換成 archify。成品放在線上的 aw-03-sample-output/練習3/，下載回去用瀏覽器打開比一比。
-最後 2 分鐘，留給還在補練習 3-3 的同學，或舉手提問。`],
+最後 2 分鐘，留給還在補練習 3-3 的同學。`],
   [Recap, `112:00–116:00。回顧四件事。一、Skill 是交給 Agent 的做事說明，提示詞寫出 Skill 名稱就能用。二、用 npx skills add 加上 GitHub 的「帳號/專案」安裝，選 Project 就裝進筆記庫的 .agents/skills；指令不行時，下載 ZIP 自己放進去。三、diagram-design 把卡片畫成關係圖，eli5 把難懂的說法改成白話，都是一句話叫 Skill 做事。四、結果不滿意，改 SKILL.md 再跑，這是今天的重點。
 按一下：下一堂把筆記庫發布成網站。`],
   [NextLesson, `116:00–120:00。第四堂：把筆記庫發布成網站。在 Obsidian 勾好要公開的卡，按發布，Forestry 會把它建成網站，給你一個「名字.forestry.md」的網址；今天做的 時間軸.md 也會放上去。

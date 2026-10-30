@@ -41,7 +41,7 @@
 
 看結果：回 Forestry 儀表板看 Publish history，最上面那一筆從 Building 變成 Published（大約半分鐘），再打開你的網址，首頁變成〈三國演義〉就成功了。
 
-出現 Failed：點右邊箭頭展開看錯誤訊息。看到 DuplicatePermalink，多半是第 5 步的 Simple note URLs 沒關：關掉後再發布一次。其他錯誤訊息，拍照給助教看。
+出現 Failed：點右邊箭頭展開看錯誤訊息。看到 DuplicatePermalink，多半是第 5 步的 Simple note URLs 沒關：關掉後再發布一次。
 
 Garden Key 像密碼：有了它就能發布到你的網站。只貼在外掛設定，不貼進筆記、截圖或群組；不小心外流，到 Forestry 儀表板按 Regenerate Garden Key 換一把新的。
 
