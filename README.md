@@ -11,7 +11,7 @@ Slides as React components. Each slide lives under `slides/<id>/index.tsx` and d
 | 堂 | 主題 | 下載 |
 | --- | --- | --- |
 | 第一堂 | 認識 AI，學會用 Codex | [aw-01-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-01-lab.zip) |
-| 第二堂 | Obsidian 與 RAG | [aw-02-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip)（筆記庫、參考結果、提示詞） |
+| 第二堂 | Obsidian 與 AI Agent | [aw-02-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip)（筆記庫、參考結果、提示詞） |
 | 第三堂 | Skills | [aw-03-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-03-lab.zip)（提示詞、備用 Skill、參考結果） |
 | 第四堂 | 發布到網站 | [aw-04-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip)（提示詞、第三堂完成版、參考結果） |
 

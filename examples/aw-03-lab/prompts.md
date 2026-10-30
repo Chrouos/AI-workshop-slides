@@ -97,13 +97,7 @@ npx skills add cathrynlavery/diagram-design
 
 後面四題跟練習 1-3 一樣：Agent 不用選、`Project`、`Symlink`、`Yes`，都按 Enter。這個專案比較大，下載要等十幾秒。
 
-裝完確認兩個都在：
-
-```text
-ls .agents/skills
-```
-
-看結果：看到 `diagram-design` 和 `eli5`。Windows 的 PowerShell 會一行一個列出來，也是對的。
+看結果：最後出現 `Installed 1 skill` 和 `✓ ./.agents/skills/diagram-design`，就裝好了。兩個 Skill 是不是都在，下一步在 Codex 裡確認。
 
 ## 練習 1-5：在筆記庫打開 Codex，確認看得到 Skill
 
@@ -152,7 +146,21 @@ ls .agents/skills
 請使用 eli5 skill，把 人物/劉備.md 用 5 歲小孩聽得懂的方式重新說一次，存成 整理/劉備-5歲版.md。只用卡片裡有的內容，不要加新的事實；保留 [[連結]]。不要修改原本的卡片。新檔不要加 dg-publish。
 ```
 
-看結果：在 Obsidian 打開兩張卡左右對照。販屨織蓆、匙箸這類古文詞改成小孩聽得懂的話，句子變短，可能還多了比喻；`[[連結]]` 還在；新檔最上面沒有 `dg-publish`。
+看結果：在 Obsidian 打開 `整理/劉備-5歲版.md`，自己檢查三件事。每一件都可能沒過，沒過就照後面的方法改，改完再檢查一次，三件都過才算做完。
+
+1. 古文詞改成白話了：按 `Cmd+F`（Windows 是 `Ctrl+F`），分別搜 `販屨`、`匙箸`、`投軍`，都搜不到才算過。搜得到，在同一個 Session 貼「還有古文詞」這句：
+
+```text
+整理/劉備-5歲版.md 裡還有古文詞，例如販屨、匙箸、投軍。請改成 5 歲小孩聽得懂的話，其他內容和 [[連結]] 不變，存回同一個檔案。
+```
+
+2. `[[連結]]` 都還在：原卡的每個 `[[連結]]`，新檔都搜得到才算過。範例原卡有 8 個：張飛、關羽、桃園結義、曹操、煮酒論英雄、孫權、赤壁之戰、蜀漢。少了，貼「補回連結」這句：
+
+```text
+整理/劉備-5歲版.md 少了原卡的 [[連結]]。請對照 人物/劉備.md，把少掉的 [[連結]] 加回對應的句子，其他內容不變，存回同一個檔案。
+```
+
+3. 新檔沒有 dg-publish：看新檔最上面的屬性，沒有 `dg-publish` 這一行才算過。有的話自己刪掉那一行（或在 Obsidian 的屬性欄把它刪掉），不然第四堂發布時，5 歲版會跟原卡一起公開。
 
 ## 練習 3-1：用 npx skills add 安裝時間軸 Skill 骨架
 
@@ -284,11 +292,10 @@ diagram-design 如果先問要用哪種樣式，回答：
 
 看結果：在 Finder（Windows 是檔案總管）雙擊 `圖/三國時間軸.html`，用瀏覽器打開。按住時間軸往左拉，要拉得到第 49 回赤壁之戰。只有桃園結義有年份（中平元年）；別的事件也出現年份，就是它自己補的，請它拿掉。
 
-兩個 Skill 都畫得出來，也都沒有自己補年份。範例成品和另一份自訂 HTML 放在線上的 [aw-03-sample-output/練習3/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output/%E7%B7%B4%E7%BF%923)，下載回去用瀏覽器打開比一比：
+兩個 Skill 都畫得出來，也都沒有自己補年份。範例成品放在線上的 [aw-03-sample-output/練習3/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output/%E7%B7%B4%E7%BF%923)，下載回去用瀏覽器打開比一比：
 
 - `三國時間軸-diagram-design.html`
 - `三國時間軸-archify.html`：archify 畫時間軸要每件事都有完整日期，三國卡片只有回目，所以 Codex 沒有硬套 archify 的格式，改寫一份自己的 HTML。
-- `三國時間軸-自訂.html`：不用畫圖 Skill，請 Codex 照需求另外寫的 HTML，把第 1 到第 120 回整條畫出來，可以切換「只看劉備」。
 
 想找別的畫圖 Skill：在終端機打下面這行，後面接英文關鍵字，會列出相關的 Skill 和安裝次數（archify 和 diagram-design 都在裡面）；也可以到 https://skills.sh 搜尋。找到喜歡的，用練習 1-3 的方法裝。裝之前先到它的 GitHub 打開 SKILL.md 看一眼。
 
@@ -332,7 +339,7 @@ mkdir -Force .agents\skills; explorer .agents\skills
 
 裝完一樣回練習 1-5，重開 Codex 確認清單裡有 eli5、diagram-design。
 
-diagram-design 還是裝不起來：練習 2-1 跟旁邊的同學一起看他的圖，或下載範例成品 [aw-03-sample-output/練習2/三國關係圖.html](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output/%E7%B7%B4%E7%BF%922)，用瀏覽器打開。
+diagram-design 還是裝不起來：練習 2-1 改看範例成品，下載 [aw-03-sample-output/練習2/三國關係圖.html](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output/%E7%B7%B4%E7%BF%922)，用瀏覽器打開。
 
 ### SKILL.md 沒改好
 

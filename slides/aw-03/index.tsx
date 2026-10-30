@@ -7,7 +7,6 @@ import dgHtmlTest from './assets/digital-garden-html-test.png';
 import timelineFirstRun from './assets/timeline-first-run.png';
 import tlDiagram from './assets/timeline-diagram-design.png';
 import tlArchify from './assets/timeline-archify.png';
-import tlInstructor from './assets/timeline-instructor.png';
 import timelineFixed from './assets/timeline-fixed.png';
 import promptsQr from './assets/prompts-qr.svg';
 
@@ -1541,7 +1540,7 @@ const InstallNode: Page = () => (
     <Eyebrow>沒有 git 或 Node.js｜邊聽邊裝</Eyebrow>
     <Heading>安裝 git &amp; Node.js</Heading>
     <PromptsCopy step="1-1" />
-    <Fit z={0.9}>
+    <Fit z={0.96}>
       <In i={0}><SmallLabel>第 1 步｜git</SmallLabel></In>
       <In i={1} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36, marginTop: 12 }}>
         <OsFix os="MAC">先到 <WebLink href="https://brew.sh">brew.sh</WebLink> 裝 Homebrew<br />再打 <Path size={30}>brew install git</Path></OsFix>
@@ -1591,7 +1590,7 @@ const lsBand = (dark: boolean): CSSProperties => ({ background: dark ? 'rgba(255
 
 const CdVault: Page = () => (
   <Shell chapter={2} source={'skills 安裝工具：Project 裝在目前資料夾 github.com/vercel-labs/skills'}>
-    <PracticeEyebrow time="練習 1 第 2 步">練習 1｜走進筆記庫</PracticeEyebrow>
+    <PracticeEyebrow time="11 分鐘（第 2–5 步）">練習 1｜走進筆記庫</PracticeEyebrow>
     <Heading>練習（安裝）：先 cd 到筆記庫</Heading>
     <PromptsCopy step="1-2" />
     <Fit>
@@ -1701,13 +1700,9 @@ const AddDiagram: Page = () => (
             <TL tone="dim">◇  Installed 1 skill</TL>
             <TL hot>│  ✓ ./.agents/skills/diagram-design</TL>
           </div></Step>
-          <Step duration={STEP_MS}><div>
-            <TL><Typed>$</Typed> ls .agents/skills</TL>
-            <TL hot>diagram-design  eli5</TL>
-          </div></Step>
         </Steps>
       </TermBox>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>兩個 Skill 都在筆記庫的 .agents/skills/ 裡</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>兩個 Skill 都裝進筆記庫了，下一步在 Codex 確認</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1791,7 +1786,7 @@ const SkillsList: Page = () => (
       <ChipStep n={2}><Path size={28}>codex</Path></ChipStep><ChipArrow />
       <ChipStep n={3}>問 Codex 有哪些 Skill</ChipStep>
     </In>
-    <Fit z={0.96}>
+    <Fit>
       <TermBox title="Codex 實際輸出（節錄）" size={25}>
         <Steps>
           <TL tone="ask">› 列出你現在可以使用的 skills 名稱，每個一行，附一句用途。不要讀或修改任何檔案。</TL>
@@ -1875,34 +1870,18 @@ const VideoPage = ({ chapter, eyebrow, title, src, file, parts }: { chapter: Cha
 };
 
 const InstallVideo: Page = () => (
-  <VideoPage chapter={2} eyebrow="練習 1｜示範錄影" title="錄影：npx 裝好兩個 Skill" src={INSTALL_VIDEO} file="skills-install.mp4"
+  <VideoPage chapter={2} eyebrow="練習 1｜先看示範，再自己做" title="錄影：npx 裝好兩個 Skill" src={INSTALL_VIDEO} file="skills-install.mp4"
     parts={[[0, '裝 eli5：一路按 Enter'], [44, '裝 diagram-design'], [92, '開 Codex，列出 Skill']]} />
 );
 
 const UseVideo: Page = () => (
-  <VideoPage chapter={3} eyebrow="練習 2｜示範錄影" title="錄影：畫關係圖、改寫劉備卡" src={USE_VIDEO} file="skills-use.mp4"
+  <VideoPage chapter={3} eyebrow="練習 2｜先看示範，再自己做" title="錄影：畫關係圖、改寫劉備卡" src={USE_VIDEO} file="skills-use.mp4"
     parts={[[0, '貼上練習 2-1'], [42, 'Codex 問配色'], [52, '回答：用預設'], [166, '存好關係圖'], [180, '重開 Codex，貼上練習 2-3']]} />
 );
 
 const TimelineVideo: Page = () => (
-  <VideoPage chapter={4} eyebrow="練習 3｜示範錄影" title="錄影：跑時間軸、補規則、再跑" src={TIMELINE_VIDEO} file="timeline-skill.mp4"
+  <VideoPage chapter={4} eyebrow="練習 3｜先看示範，再自己做" title="錄影：跑時間軸、補規則、再跑" src={TIMELINE_VIDEO} file="timeline-skill.mp4"
     parts={[[0, 'npx 裝骨架'], [38, '第一次跑'], [72, '搜到 6 處「未記載」'], [82, '自己加兩行規則'], [88, '重開再跑'], [130, '再搜：0 處']]} />
-);
-
-// ---------- Break ----------
-
-const BreakPage: Page = () => (
-  <Shell chapter={3}>
-    <Eyebrow>中場</Eyebrow>
-    <Heading>休息 5 分鐘</Heading>
-    <Fit>
-      <Figure h={300} label="休息時間可以做三件事：補做練習 2、舉手提問、喝水走動">
-        <InG i={0}><HowStop x={300} n={1} kind="edit" label="補做練習 2" sub="關係圖、5 歲版" /></InG>
-        <InG i={1}><HowStop x={816} n={2} kind="chat" label="舉手提問" sub="卡住的地方" /></InG>
-        <InG i={2}><HowStop x={1332} n={3} kind="ok" label="回來接第四章" sub="寫自己的 Skill" /></InG>
-      </Figure>
-    </Fit>
-  </Shell>
 );
 
 // ---------- 03 用 Skill 做好讀的筆記 ----------
@@ -1911,7 +1890,7 @@ const Section3: Page = () => <SectionPage chapter={3} label="03 / 使用" lead="
 
 const DiagramRun: Page = () => (
   <Shell chapter={3} source={'diagram-design github.com/cathrynlavery/diagram-design'}>
-    <PracticeEyebrow time="20 分鐘（三步）">練習 2｜diagram-design</PracticeEyebrow>
+    <PracticeEyebrow time="15 分鐘（三步）">練習 2｜diagram-design</PracticeEyebrow>
     <Heading>練習（Skill）：畫人物關係圖</Heading>
     <PromptsCopy step="2-1" />
     <PillRow>
@@ -1945,7 +1924,7 @@ const DiagramResult: Page = () => (
     <Eyebrow>練習 2｜看結果</Eyebrow>
     <Heading>diagram-design 畫出的關係圖</Heading>
     <PromptsCopy step="2-2（線太亂時）" />
-    <Fit z={0.92}>
+    <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1080px 1fr', gap: 64, alignItems: 'center', position: 'relative' }}>
         <In i={0}>
           <Crop src={ddResult} alt="diagram-design 產生的三國關係圖：左邊蜀漢框裡是劉備、關羽、張飛，中間三個事件依回目由上到下，右邊是曹魏的曹操和東吳的孫權；十二條平滑曲線上只寫結義、守護、聯手這類關係" iw={2090} ih={1180} crop={[0, 0, 2090, 1180]} width={1080} />
@@ -1974,34 +1953,43 @@ const RewritePanel = ({ label, file, tone, children }: { label: string; file: st
   </div>
 );
 
+// One self-check on the student's own 5 歲版: what to look for, and what to do when it fails.
+const CheckCard = ({ n, title, how, fix }: { n: number; title: ReactNode; how: ReactNode; fix: ReactNode }) => (
+  <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderTop: `5px solid ${amber}`, padding: '20px 26px 24px', height: '100%', boxSizing: 'border-box' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+      <NumDot n={n} size={40} />
+      <span style={{ fontSize: 32, fontWeight: 600 }}>{title}</span>
+    </div>
+    <div style={{ marginTop: 18 }}><SmallLabel color={okGreen}>怎麼看</SmallLabel></div>
+    <div style={{ fontSize: 27, lineHeight: 1.5, marginTop: 4 }}>{how}</div>
+    <div style={{ marginTop: 16 }}><SmallLabel color={warn}>沒過就</SmallLabel></div>
+    <div style={{ fontSize: 27, lineHeight: 1.5, marginTop: 4 }}>{fix}</div>
+  </div>
+);
+
 const Eli5Rewrite: Page = () => (
-  <Shell chapter={3} source={'eli5 github.com/dreambigou/eli5；卡片原文：維基文庫《三國演義》第 1 回'}>
+  <Shell chapter={3} source={'eli5 github.com/dreambigou/eli5；Obsidian Properties help.obsidian.md/properties'}>
     <PracticeEyebrow time="練習 2 第 3 步">練習 2｜eli5</PracticeEyebrow>
     <Heading>練習（Skill）：用 eli5 改寫劉備卡</Heading>
     <PromptsCopy step="2-3" />
     <PillRow>
       <Pill tag="定位">人物/劉備.md</Pill>
-      <Pill tag="期望輸出">5 歲版</Pill>
+      <Pill tag="期望輸出">整理/劉備-5歲版.md</Pill>
       <Pill tag="限制">不加新事實</Pill>
     </PillRow>
     <Fit>
-      <In i={1} style={{ display: 'flex', gap: 40, fontSize: 28, marginBottom: 20 }}>
-        <span><Mk ok>綠底</Mk>＝保留下來的事實</span>
-        <span><Mk>橘底</Mk>＝換成白話的說法</span>
-      </In>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
+      <In i={1}><TermBox title="Codex｜貼上練習 2-3（節錄）" size={27}>
+        <TL tone="ask">› 請使用 eli5 skill，把 人物/劉備.md 用 5 歲小孩聽得懂的方式重新說一次……</TL>
+        <TL tone="ask">  ……保留 [[連結]]。不要修改原本的卡片。新檔不要加 dg-publish。</TL>
+      </TermBox></In>
+      <In i={2} style={{ marginTop: 28 }}><SmallLabel>跑完，打開 整理/劉備-5歲版.md 自己檢查</SmallLabel></In>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 28, marginTop: 14 }}>
         <Steps>
-          <RewritePanel label="原卡" file="人物/劉備.md" tone="plain">
-            三人<Mk>越談越投合</Mk>，<Mk ok>隔天</Mk>就在<Mk ok>張飛莊後的桃園</Mk><Mk>立誓</Mk>，留下著名的 <Mk ok>[[桃園結義]]</Mk>；誓畢拜劉備為兄，<Mk ok>從此他成了關、張的大哥</Mk>
-          </RewritePanel>
-          <Step duration={STEP_MS}>
-            <RewritePanel label="eli5 改寫後" file="整理/劉備-5歲版.md" tone="ok">
-              三個人<Mk>越聊越合得來</Mk>。<Mk ok>隔天</Mk>，他們就在<Mk ok>張飛家後面的桃園</Mk>裡，<Mk>一起許下約定，成為兄弟</Mk>。這就是 <Mk ok>[[桃園結義]]</Mk>。<Mk ok>劉備成了關羽和張飛的大哥</Mk>。
-            </RewritePanel>
-          </Step>
+          <Step duration={STEP_MS}><CheckCard n={1} title="古文詞改成白話" how="搜「販屨」「匙箸」「投軍」，都搜不到" fix="貼 2-3 的「還有古文詞」那句" /></Step>
+          <Step duration={STEP_MS}><CheckCard n={2} title="[[連結]] 都還在" how="原卡的每個 [[連結]]，新檔都搜得到" fix="貼 2-3 的「補回連結」那句" /></Step>
+          <Step duration={STEP_MS}><CheckCard n={3} title="沒有 dg-publish" how="看新檔最上面的屬性" fix={<>自己刪掉那一行（附錄第 {pageOf(DgPublishCopied)} 頁）</>} /></Step>
         </Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={30}>難懂的說法改成白話，事實和 [[連結]] 都留著</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2235,7 +2223,7 @@ const TreePanel = ({ title, sub, children }: { title: string; sub: string; child
 
 const SaveSkill: Page = () => (
   <Shell chapter={4} source={'skills 安裝工具（本機資料夾也能裝）github.com/vercel-labs/skills；Codex Skills developers.openai.com/codex/skills'}>
-    <PracticeEyebrow time="38 分鐘（五步，後兩步選做）">練習 3｜安裝骨架</PracticeEyebrow>
+    <PracticeEyebrow time="35 分鐘（五步，後兩步選做）">練習 3｜安裝骨架</PracticeEyebrow>
     <Heading>練習（Skill）：npx skills add 裝骨架</Heading>
     <PromptsCopy step="3-1" />
     <Fit>
@@ -2417,11 +2405,11 @@ const EditExample: Page = () => (
         </Steps>
         <Steps>
           <Step duration={STEP_MS}><div style={{ display: 'grid', gap: 14, justifyItems: 'start' }}>
-            <SmallLabel>換你補</SmallLabel>
+            <SmallLabel>搜得到「未記載」，就補</SmallLabel>
             <ChipStep n={1}><Path size={26}>/quit</Path></ChipStep>
-            <ChipStep n={2}><Path size={26}>open -e …/SKILL.md</Path></ChipStep>
+            <ChipStep n={2}><Path size={26}>open -e</Path>／<Path size={26}>notepad</Path></ChipStep>
             <ChipStep n={3}>貼兩行、存檔</ChipStep>
-            <ChipStep n={4}><Path size={26}>codex</Path> 再跑</ChipStep>
+            <ChipStep n={4}><Path size={26}>codex</Path> 再跑、再搜</ChipStep>
           </div></Step>
         </Steps>
       </div>
@@ -2450,8 +2438,8 @@ const PersonFilter: Page = () => (
       <CodeDoc title="自己在 SKILL.md 的步驟加第 4 步" size={24} lh={1.4}>
         <CL band={sage} color={okGreen}>{'+ 4. 使用者指定人物時，改畫成他的故事線：'}</CL>
         <CL band={sage} color={okGreen}>{'     只留下參與人物有他的事件，由上往下排；'}</CL>
-        <CL band={sage} color={okGreen}>{'     中間放事件，左邊同一邊、右邊作對的人，'}</CL>
-        <CL band={sage} color={okGreen}>{'     說不上敵友的寫在事件下面'}</CL>
+        <CL band={sage} color={okGreen}>{'     每一站中間放事件，左邊放和他同一邊的人，'}</CL>
+        <CL band={sage} color={okGreen}>{'     右邊放和他作對的人，說不上敵友的寫在事件下面'}</CL>
       </CodeDoc>
       <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `6px solid ${amber}`, padding: '16px 26px' }}>
         <SmallLabel>你輸入</SmallLabel>
@@ -2522,7 +2510,6 @@ const TimelineStyles: Page = () => (
         <Steps>
           <Step duration={STEP_MS}><StyleRow src={tlDiagram} name="diagram-design" sub="練習 1-4 已裝" alt="diagram-design 畫的時間軸：灰底、細黑線、小圓點，六件事平均排開，事件名稱在線上，回目在線下" /></Step>
           <Step duration={STEP_MS}><StyleRow cover src={tlArchify} name="archify" sub="要另外裝" alt="archify 畫的時間軸：米色底、大號襯線字，紅色圓點，六件事平均排開" /></Step>
-          <Step duration={STEP_MS}><StyleRow cover src={tlInstructor} name="自訂 HTML" sub="照需求另外寫" alt="自訂 HTML 時間軸：橘色粗線照第 1 到 120 回的比例排（圖只截到第 50 回），事件名稱放在黃色標籤裡，看得出第 21 到 46 回中間空了一大段" /></Step>
         </Steps>
       </div>
       <Steps><Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 20, marginTop: 40, fontSize: 30 }}>
@@ -2734,9 +2721,9 @@ export const meta: SlideMeta = {
 const deck: Page[] = [
   Cover, Review, Agenda, ToolCheck, InstallNode,
   Section1, Eli5Intro, TaskPrompt, PickSkill, ResultTrace, Eli5Front, Eli5Body, WhySkill, SkillFolder, CompareTable,
-  Section2, SkillsAddCmd, RepoName, CdVault, AddEli5, AddEli5Scope, AddDiagram, SkillsList, InstallVideo,
-  Section3, DiagramRun, DiagramResult, UseVideo, Eli5Rewrite, BreakPage,
-  Section4, TimelineGoal, SkillSkeleton, SaveSkill, RunTimeline, TimelineResult, EditLoop, EditExample, TimelineVideo, PersonFilter, TimelineStyles,
+  Section2, SkillsAddCmd, RepoName, InstallVideo, CdVault, AddEli5, AddEli5Scope, AddDiagram, SkillsList,
+  Section3, UseVideo, DiagramRun, DiagramResult, Eli5Rewrite,
+  Section4, TimelineGoal, SkillSkeleton, TimelineVideo, SaveSkill, RunTimeline, TimelineResult, EditLoop, EditExample, PersonFilter, TimelineStyles,
   Recap, NextLesson, ReferencesSkills, ReferencesTools,
   AppendixIndex, InstallErrors, ZipFallback, CallByName, DescriptionTrigger, LoadOnUse, PromptAgentsSkill, McpPlug, SkillOrMcp, DgPublishCopied, HtmlLinkTest,
 ];
@@ -2773,7 +2760,7 @@ const NOTES = new Map<Page, string>([
 按一下：這 12 條線（桃園結義 3 條、煮酒論英雄 4 條、赤壁之戰 5 條），都是關係卡最後一行「參與人物」寫出來的，上一堂我們請 Codex 照這個規則畫過 ASCII 關係圖。
 請大家打開上一堂的筆記庫，確認卡片都還在。今天全部接著用這一個筆記庫。
 最後一下：今天用 Skill 畫一張關係圖、改寫一張卡，最後自己寫 Skill 排出時間軸。`],
-  [Agenda, `06:00–08:00。今天四章、三個練習。先看懂一份 SKILL.md，再安裝兩個熱門 Skill，接著用 Skill 畫一張關係圖、改寫一張卡，最後跑自己的 sanguo-timeline，補一條規則再跑一次。做得快的同學有加碼題：標籤疊到就請 Codex 修、畫劉備的故事線、換一個畫圖 Skill 畫同一條時間軸，到那一頁再說。第三章做完，64 分休息 5 分鐘。
+  [Agenda, `06:00–08:00。今天四章、三個練習。先看懂一份 SKILL.md，再安裝兩個熱門 Skill，接著用 Skill 畫一張關係圖、改寫一張卡，最後跑自己的 sanguo-timeline，補一條規則再跑一次。做得快的同學有加碼題：標籤疊到就請 Codex 修、畫劉備的故事線、換一個畫圖 Skill 畫同一條時間軸，到那一頁再說。
 第四章花的時間最多：跑自己的 Skill、看結果、改 SKILL.md、再跑一次，這是今天的重點。裝不起來時的解法、想多懂一點的內容，都放在最後的附錄，需要時再翻。最後 8 分鐘總結、預告第四堂；第四堂前請先註冊 Forestry.md。
 下一頁先做練習 1 的第一步：檢查電腦有沒有 Node.js 和 git。`],
   [Section1, `11:00–11:15。第一章：什麼是 Skill。先認識今天要用的 eli5，再跟著一個任務走一遍：下提示詞、看 Codex 有沒有用到它、看改寫結果，最後打開 eli5 的 SKILL.md，看那些改法是從哪裡來的。接著講為什麼要存成 Skill、Skill 資料夾長什麼樣子，最後用一張表和 Prompt、AGENTS.md、MCP 比一比。還在裝 Node.js 的同學，邊裝邊聽。`],
@@ -2802,7 +2789,7 @@ eli5 只做一件事：同一段內容，看是誰在聽，換一種講法。左
 按一下：description 的後半，說什麼時候用：使用者說「explain like I am」「ELI5」「explain this to my」「break this down for」「simplify this for」這類話的時候。原文後面還有一句：就算只說了「explain to my wife」「tell my boss」這種半句，也要用。
 最後一下：Codex 開 Session 時，只先讀每個 Skill 的這兩欄，當成一張清單；被點名，或比對 description 選中了，才讀下面的全文。所以 description 要寫清楚做什麼、何時用。沒點名時怎麼挑、裝很多 Skill 會不會塞滿上下文，在附錄第 ${pageOf(CallByName)}–${pageOf(LoadOnUse)} 頁。`],
   [Eli5Body, `19:45–22:00。再看本文，這段才是做法。畫面只節錄幾行，完整原文在頁面最下面的連結，筆電上點開就是 GitHub。
-按一下：第一塊，Step 1 先認出聽眾。裡面有四張對照表：年齡、年級、職業、家人朋友。提示詞寫了「5 歲小孩」，對上 Age 5 那一列：用很簡單的詞、拿玩具和動物打比方、句子要短。這對得上上一頁的「詞變簡單」「句子變短」。表格下面還有一句：沒說聽眾是誰，就當成 5 歲。Step 2 是先讀懂要講的內容，這次就是劉備卡。
+按一下：第一塊，Step 1 先認出聽眾。裡面有四張對照表：年齡、年級、職業、家人朋友。提示詞寫了「5 歲小孩」，對上 Age 5 那一列：用很簡單的詞、拿玩具和動物打比方、句子要短。這對得上前面看輸出那一頁的「詞變簡單」「句子變短」。表格下面還有一句：沒說聽眾是誰，就當成 5 歲。Step 2 是先讀懂要講的內容，這次就是劉備卡。
 按一下：第二塊，Step 3 照做法寫。Structure 規定順序：先用一句話說是什麼、打比方、補細節、最後說跟你有什麼關係；Language Calibration 說不用艱深的詞、一句只講一件事。開頭那句「隊長」的比喻，對得上這裡的「打比方」。我們只能說「對得上」，看不到模型內部是不是因為這一條才這樣改。
 按一下：那 [[連結]] 為什麼還在？翻遍 eli5 都沒有這條規則。保留連結、存到 整理/劉備-5歲版.md、只用卡片裡有的內容，都是我們寫在提示詞裡的，就是任務頁的藍底。提示詞沒寫的話，連結可能就不見了。
 最後一下：改法對得上 Skill，這次的要求寫在提示詞。name 和 description 每份 Skill 都要寫；下面的做法沒有固定格式，依任務寫。eli5 用 Step 1、2、3，第四章我們自己寫的時間軸 Skill 會用「步驟」和「輸出格式」兩段。`],
@@ -2861,28 +2848,27 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
 第 1 步 git，照 git 官網 git-scm.com/install 的建議。Mac 先裝 Homebrew：點 brew.sh，複製首頁那一行貼進終端機，按 Enter；問密碼就打電腦的登入密碼，打字時畫面不會顯示。它會順便裝好 Apple 的命令列工具，要等幾分鐘。裝完畫面最後有「Next steps」，照它列的指令貼上，終端機才找得到 brew。接著打 brew install git，裝完打 git --version。官網也列了 xcode-select --install，但這個方法常常跳出「目前無法從軟體更新伺服器取得」而裝不起來，所以我們用 Homebrew。Windows 點 git-scm.com/install/windows，按 Click here to download，下載 x64 的安裝檔，選項都用預設，裝完把 PowerShell 關掉重開，再打 git --version。
 按一下：第 2 步 Node.js，照四步裝，npx 會跟著一起裝好。一，點 nodejs.org，按 Download。二，下載標著 LTS 的版本，LTS 是長期支援版，比較穩定；Mac 下載 .pkg，Windows 下載 .msi。三，雙擊安裝檔，選項都用預設，一路按「繼續」或 Next；Mac 最後會要你輸入電腦的登入密碼。四，把終端機整個關掉再打開，新的視窗才找得到 node，再打 node -v 和 npx -v 確認。Windows 這兩段講師沒有實測。
 裝好後重開終端機，再打一次 git --version、node -v、npx -v。第二章開始前還沒裝好的，舉手讓助教幫忙；真的裝不好，改用附錄第 ${pageOf(ZipFallback)} 頁下載 ZIP 自己放的做法，不用 Node.js（prompts.md 最後的「備用做法」）。`],
-  [CdVault, `30:30–32:00。第二步，讓終端機走進筆記庫。等一下 npx skills add 會問要裝在哪裡，我們選 Project，意思是裝進終端機現在所在的資料夾。所以要先 cd 到三國人物知識庫，Skill 才會裝進筆記庫。
+  [CdVault, `33:00–34:30。剛才看講師做過一次，現在換大家自己做。練習 1 的第 2 到 5 步約 11 分鐘，做到 44:00。第二步，讓終端機走進筆記庫。等一下 npx skills add 會問要裝在哪裡，我們選 Project，意思是裝進終端機現在所在的資料夾。所以要先 cd 到三國人物知識庫，Skill 才會裝進筆記庫。
 打 cd 和一個空格，把「三國人物知識庫」資料夾從 Finder（Windows 是檔案總管）拖進終端機，路徑會自動填好，按 Enter。再打 ls，要看得到 人物、關係、原文、模板。只看到另一個「三國人物知識庫」，是解壓縮多包了一層，Windows 很常見，再打 cd 三國人物知識庫 進去一層。
 按一下：右邊是同一個資料夾畫成樹。最上面棕色那一列，就是 cd 進去的三國人物知識庫；灰色那一列，就是 ls 列出來的那些資料夾。Skill 會裝在筆記庫裡的 .agents/skills/，畫成虛線框，因為它是安裝後才出現的。.agents 前面有一個點，是隱藏資料夾，ls、Finder 和 Obsidian 平常都看不到，Codex 開在筆記庫時會讀它。練習 3 自己寫的 Skill 也放這裡。
 最後一下：選 Project，Skill 會裝進終端機所在的資料夾。這一步沒進對資料夾，Skill 會裝到別的地方，Codex 開在筆記庫時找不到。`],
-  [AddEli5, `32:00–34:00。第三步，裝 eli5。裝別人寫的 Skill 之前，先到它的 GitHub 頁面打開 SKILL.md，看它要 Codex 做什麼：Skill 執行時有 Codex 的完整權限。eli5 我們第一章已經看過了。貼上 prompts.md 練習 1-3 的 npx skills add dreambigou/eli5，按 Enter。接下來會連續問幾題，每題看清楚再按。
+  [AddEli5, `34:30–36:30。第三步，裝 eli5。裝別人寫的 Skill 之前，先到它的 GitHub 頁面打開 SKILL.md，看它要 Codex 做什麼：Skill 執行時有 Codex 的完整權限。eli5 我們第一章已經看過了。貼上 prompts.md 練習 1-3 的 npx skills add dreambigou/eli5，按 Enter。接下來會連續問幾題，每題看清楚再按。
 按一下：第一次用 npx 跑 skills，它會問要不要先下載 skills 這個程式：Need to install the following packages: skills@1.7.4，Ok to proceed? 括號裡的 y 是預設答案，直接按 Enter 就是同意。版本號不同沒關係。
 按一下：它從 GitHub 抓下專案，找到 1 個 Skill，就是 eli5。接著問要裝給哪些 Agent。清單第一區叫 Universal，標著 always included，表示一定會裝；這一區共用 .agents/skills 這個資料夾，Codex 就在裡面，不用另外選。
 按一下：下面是其他 Agent，例如 Claude Code，各有自己的資料夾。最下面一行是操作說明：上下鍵移動、空白鍵勾選、Enter 確認。只用 Codex 的話，什麼都不用勾，直接按 Enter。
-最後一下：有用 Claude Code 的同學，按向下鍵移到 Claude Code，按空白鍵打勾，再按 Enter，它會一起裝到 .claude/skills。畫面上的 Claude Code 是空心圓（沒勾），跟你們多數人的畫面一樣；講師電腦實際上預先勾好了，錄影裡會看到。
+最後一下：有用 Claude Code 的同學，按向下鍵移到 Claude Code，按空白鍵打勾，再按 Enter，它會一起裝到 .claude/skills。畫面上的 Claude Code 是空心圓（沒勾），跟你們多數人的畫面一樣；講師電腦實際上預先勾好了，剛才的錄影裡看到的是打勾的。
 這是講師 2026-10-30 在 Mac 實跑的輸出（skills 1.7.4），清單很長，只節錄這幾行。`],
-  [AddEli5Scope, `34:00–36:00。接著還有三題。第一題 Installation scope，裝在哪裡。Project 裝在終端機現在的資料夾，也就是筆記庫；Global 裝在家目錄，在哪個資料夾開 Codex 都用得到。今天選 Project，它本來就是預設，按 Enter。
+  [AddEli5Scope, `36:30–38:30。接著還有三題。第一題 Installation scope，裝在哪裡。Project 裝在終端機現在的資料夾，也就是筆記庫；Global 裝在家目錄，在哪個資料夾開 Codex 都用得到。今天選 Project，它本來就是預設，按 Enter。
 按一下：第二題 Installation method，安裝方式。預設的 Symlink 是推薦選項：檔案只放一份在 .agents/skills，其他 Agent 的資料夾用捷徑指過去。直接按 Enter。
 按一下：它會先列出 Installation Summary 和安全檢查 Security Risk Assessments，再問 Proceed with installation?，要不要開始裝。停在 Yes，按 Enter。
 按一下：看到 Installed 1 skill 和 ./.agents/skills/eli5，就裝好了。最後一行提醒：Skill 執行時有 Agent 的完整權限，使用前先看過。
 最後一下：選 Project，eli5 就裝在筆記庫的 .agents/skills/。Skill 是寫給 Codex 的做事說明，Codex 會照著做，能動的檔案和指令跟 Codex 原本的權限一樣。不認識的 Skill，先打開 SKILL.md 看它要 Codex 做什麼，再決定裝不裝。
 筆記庫裡還會多一個 skills-lock.json，記錄裝了哪些 Skill、從哪裡來，不用動它。
 來源：https://github.com/dreambigou/eli5`],
-  [AddDiagram, `36:00–38:00。第四步，用同樣的方法裝 diagram-design。貼上 prompts.md 練習 1-4 的 npx skills add cathrynlavery/diagram-design。這個專案比較大，下載要等十幾秒。
+  [AddDiagram, `38:30–40:30。第四步，用同樣的方法裝 diagram-design。貼上 prompts.md 練習 1-4 的 npx skills add cathrynlavery/diagram-design。這個專案比較大，下載要等十幾秒。
 按一下：一樣找到 1 個 Skill，後面四題跟剛才一模一樣：Agent 不用選、Project、Symlink、Yes，全部按 Enter。這次 npx 通常不會再問要不要下載 skills，第一次已經下載過了。
 按一下：看到 ./.agents/skills/diagram-design，就裝好了。diagram-design 除了 SKILL.md，還附了 references、scripts、assets 幾個資料夾，第一章看過；skills 會整個資料夾一起裝。
-按一下：打 ls .agents/skills 確認，看得到 diagram-design 和 eli5 兩個資料夾。
-最後一下：兩個 Skill 都在筆記庫的 .agents/skills/ 裡。
+最後一下：兩個 Skill 都裝進筆記庫的 .agents/skills/ 了。兩個是不是都在，下一頁直接在 Codex 裡確認。
 來源：https://github.com/cathrynlavery/diagram-design`],
   [InstallErrors, `（附錄，裝不起來時翻到這頁。）裝不起來，先看錯誤訊息，常見的是這三種。先看左邊的訊息，猜猜看是什麼原因。
 按一下：第一種 command not found: npx，Windows 會寫「無法辨識 'npx'」：電腦找不到 npx，代表沒裝 Node.js，或是裝完沒把終端機關掉重開。
@@ -2893,48 +2879,48 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
 按一下：拖到右邊這裡。
 按一下：放進筆記庫的 .agents/skills/，Codex 讀這裡；用 Claude Code 的放 .claude/skills/。放好後打開 eli5 資料夾，要直接看到 SKILL.md。網路上舊的教學會寫家目錄的 ~/.codex/skills，現在 Codex 文件寫的位置是 .agents/skills。
 最後一下：.agents 是隱藏資料夾，Finder 不讓你建點開頭的資料夾，也看不到它。在筆記庫的終端機打 mkdir -p .agents/skills && open .agents/skills，會建好資料夾並用 Finder 打開，把 eli5 拖進去就好。Windows 打 mkdir -Force .agents\\skills; explorer .agents\\skills。prompts.md 的「備用做法」都有這兩行。`],
-  [SkillsList, `38:00–41:00。第五步，確認 Codex 看得到這兩個 Skill。終端機還在筆記庫裡，不用再 cd，直接打 codex。已經開著 Codex 的同學，先輸入 /quit 關掉再開。不確定終端機在哪，開了 Codex 打 /status，Directory 的結尾要是三國人物知識庫。第一次在筆記庫開 Codex，會先問要不要信任這個資料夾，選 Yes, continue。
+  [SkillsList, `40:30–44:00。第五步，確認 Codex 看得到這兩個 Skill。終端機還在筆記庫裡，不用再 cd，直接打 codex。已經開著 Codex 的同學，先輸入 /quit 關掉再開。不確定終端機在哪，開了 Codex 打 /status，Directory 的結尾要是三國人物知識庫。第一次在筆記庫開 Codex，會先問要不要信任這個資料夾，選 Yes, continue。
 然後貼上 prompts.md 練習 1-5 這句：列出你現在可以使用的 skills 名稱，每個一行，附一句用途。不要讀或修改任何檔案。
 按一下：這是講師 2026-10-30 的實際輸出（Codex 0.165.0），中間省略了一些。找兩行：diagram-design 和 eli5。用途那句是 Codex 自己摘要的，每次寫法可能不一樣。
 按一下：兩個都在，就裝好了。講師電腦裝了比較多 Skill，你的清單會短一點，這是正常的。講師電腦另外裝過 diagram-design 的 Codex 外掛版，所以清單還多一行 diagram-design:diagram-design；你們只用 npx 裝，不會有這行。
-最後一下：清單只表示已安裝；下一章實際執行一次，確認能用。剩下的時間，幫旁邊的同學確認。
+最後一下：清單只表示已安裝；下一章實際執行一次，確認能用。
 少一個 Skill，或 npx 出現錯誤訊息：翻附錄第 ${pageOf(InstallErrors)} 頁對照常見錯誤；指令怎麼試都不行，附錄第 ${pageOf(ZipFallback)} 頁是下載 ZIP 自己放的做法。`],
-  [InstallVideo, `41:00–44:00。這是講師事先錄好的完整安裝過程，課堂上不現場跑。按播放鍵開始，影片沒有聲音，邊放邊講；右邊的時間可以直接跳段。
-還在裝的同學，跟著影片一步一步做：裝 eli5 時一路按 Enter，裝 diagram-design 一樣，最後開 Codex 列出 Skill。已經裝好的同學，這三分鐘幫旁邊的人看畫面，或舉手提問。
+  [InstallVideo, `30:30–33:00。先看講師做一次，再自己做。這是講師事先錄好的完整安裝過程，課堂上不現場跑。按播放鍵開始，影片沒有聲音，邊放邊講；右邊的時間可以直接跳段。
+請大家先看，不用跟著打：看它問了哪幾題、每題怎麼按。裝 eli5 時一路按 Enter，裝 diagram-design 一樣，最後開 Codex 列出 Skill。影片從裝 eli5 開始；看完，下一頁先 cd 進筆記庫，再一步一步自己裝。
 影片約 2 分半（講師 2026-10-30 錄，skills 1.7.4、Codex 0.165.0）。0:00 裝 eli5：第一次會問 Ok to proceed，之後每題都直接按 Enter；0:44 裝 diagram-design，下載要等十幾秒；1:32 開 Codex 列出 Skill。講師電腦裝了很多 Skill，清單很長，eli5 和 diagram-design 會先閃過、被捲到上面；你們的清單短很多。講師電腦有裝 Claude Code，所以安裝完成時寫著 symlinked: Claude Code；你們沒裝的話不會有這行。`],
   [Section3, `44:00–44:15。第三章：用 Skill 做好讀的筆記。兩個練習：用 diagram-design 把關係卡畫成圖，用 eli5 把劉備卡改成 5 歲版。`],
-  [DiagramRun, `44:15–49:00。練習 2 共 20 分鐘。Codex 還開在筆記庫裡，直接貼上 prompts.md 練習 2-1，跟畫面上這段一樣。這段提示詞把圖的樣子講清楚：人物放進勢力的框、事件依回目由上到下、平滑曲線、線上只寫兩三個字的關係，檔名改列在圖下方的表。講師用舊版提示詞實跑時沒寫這些，Codex 在每條線旁邊都標了兩個檔名，線又直角轉來轉去，整張圖很亂。
+  [DiagramRun, `49:00–52:00。剛才看講師做過一次，現在換大家自己做。練習 2 自己做約 15 分鐘，做到 64:00。Codex 還開在筆記庫裡，直接貼上 prompts.md 練習 2-1，跟畫面上這段一樣。這段提示詞把圖的樣子講清楚：人物放進勢力的框、事件依回目由上到下、平滑曲線、線上只寫兩三個字的關係，檔名改列在圖下方的表。講師用舊版提示詞實跑時沒寫這些，Codex 在每條線旁邊都標了兩個檔名，線又直角轉來轉去，整張圖很亂。
 按一下：Codex 讀完卡片，第一次用 diagram-design 會停下來問樣式。這是講師 2026-10-30 實跑的畫面（Codex 0.165.0，diagram-design 2.6.136），這次是三個選項。選項的寫法可能跟著版本變，不用背，找「預設」那一項。
 按一下：回答「保留預設樣式，請直接產生並存檔。」
 按一下：存好了，Codex 回報 12 條平滑曲線，附逐線來源表。實測這一步要一兩分鐘；寫檔前如果問 Yes, proceed，看過再按。`],
-  [DiagramResult, `49:00–53:00。這是講師 2026-10-30 實跑畫出來的圖。打開的方法：在 Finder（Windows 是檔案總管）進到筆記庫的 圖/ 資料夾，雙擊 三國關係圖.html，會用瀏覽器打開。Obsidian 的檔案列表看不到 .html，這是正常的。
+  [DiagramResult, `52:00–56:00。這是講師 2026-10-30 實跑畫出來的圖。打開的方法：在 Finder（Windows 是檔案總管）進到筆記庫的 圖/ 資料夾，雙擊 三國關係圖.html，會用瀏覽器打開。Obsidian 的檔案列表看不到 .html，這是正常的。
 按一下：人物放在勢力的框裡：左邊蜀漢是劉備、關羽、張飛，右邊是曹魏的曹操和東吳的孫權。框是照 勢力/ 的卡片排的。
 按一下：中間是三個事件，依回目由上到下：第 1 回桃園結義、第 21 回煮酒論英雄、第 49 到 50 回赤壁之戰。
 按一下：線上只寫兩三個字的關係，例如結義、守護、放行。每條線是哪張卡寫的，列在圖下方的「逐線來源」表，往下捲就看得到。線的數量每次可能不一樣，這次是 12 條；你第二堂自己寫過關係卡的話，還會再多，這是正常的。
 你的圖如果線疊在一起、看不出是誰的，在同一個 Session 接著貼 prompts.md 練習 2-2：「圖上的線太亂，看不出哪條是誰的。請改用平滑曲線，不要直角轉折；標籤不要互相蓋住。人物、事件、關係和來源表不變，存回同一個檔案。」講師實測過，直角線會改成平滑曲線。Codex 改完會說「確認標籤互不重疊」，還是要自己在瀏覽器重新整理，再看一次。`],
-  [UseVideo, `53:00–57:00。講師錄好的練習 2 完整過程：貼上練習 2-1，Codex 停下來問樣式，回答用預設，存好關係圖；再貼上練習 2-3，eli5 改寫劉備卡。課堂上不現場跑。
+  [UseVideo, `44:15–49:00。先看講師做一次，再自己做。這是講師錄好的練習 2 完整過程：貼上練習 2-1，Codex 停下來問樣式，回答用預設，存好關係圖；再貼上練習 2-3，eli5 改寫劉備卡。課堂上不現場跑。請大家先看，不用跟著打，注意兩件事：Codex 停下來問樣式時怎麼回答，和每一步要等多久。
 影片約 4 分 14 秒（講師 2026-10-30 錄，Codex 0.165.0，diagram-design 2.6.136），等待的空檔剪掉了。0:42 Codex 停下來問「沿用預設配色，還是指定配色？」；0:52 回答用預設，畫圖實際花了快 2 分鐘；2:46 存好，回報 5 位人物、3 個事件、12 條曲線和來源表；3:00 重開 Codex，貼上練習 2-3，請 eli5 把劉備卡講給 5 歲小孩聽，不到一分鐘就存好 整理/劉備-5歲版.md，回報保留了所有連結、沒加 dg-publish、原卡沒改（這一段是講師換成 5 歲版後補錄的，Codex 讀的是講師家目錄那份 eli5，內容跟筆記庫裡的一樣）。
 影片中間有一行紅字 Used computer … Failed：講師電腦的 Codex 想開瀏覽器檢查圖，被安全設定擋下，不影響存檔；你們的 Codex 多半不會出現這行。
-同學自己的 Codex 在跑的時候，正好看影片對照下一步，或舉手提問。影片最後是 eli5 改寫劉備卡，下一頁直接看改寫前後的比對。`],
-  [Eli5Rewrite, `57:00–64:00。影片最後貼的就是 prompts.md 練習 2-3 的提示詞：
+看完，下一頁開始自己做：先畫關係圖，再改寫劉備卡。做到 2-3 時忘了步驟，可以點右邊的 3:00 回來看那一段。`],
+  [Eli5Rewrite, `56:00–64:00。練習 2 第 3 步：用 eli5 改寫劉備卡。任務跟第一章看過的一樣，這次大家自己跑，跑完自己檢查。Codex 一樣開在筆記庫，貼上 prompts.md 練習 2-3：
 請使用 eli5 skill，把 人物/劉備.md 用 5 歲小孩聽得懂的方式重新說一次，存成 整理/劉備-5歲版.md。只用卡片裡有的內容，不要加新的事實；保留 [[連結]]。不要修改原本的卡片。新檔不要加 dg-publish。
-最後一句是為第四堂準備的：原卡最上面有 dg-publish: true，eli5 改寫時可能照抄，5 歲版就會跟原卡一起公開。細節在附錄第 ${pageOf(DgPublishCopied)} 頁，第四堂發布前也會講。
-我們只看一段：桃園結義那段。綠底是保留下來的事實：隔天、張飛莊後的桃園、[[桃園結義]] 這個連結、劉備成了關、張的大哥。橘底是要換成白話的說法：越談越投合、立誓。
-按一下：右邊是 eli5 的實際產出（講師 2026-10-30，範例檔 aw-03-sample-output/練習2/劉備-5歲版.md 就是這一份）。綠底的事實都還在：隔天、張飛家後面的桃園、[[桃園結義]]、劉備成了關羽和張飛的大哥；橘底的換成 5 歲小孩聽得懂的話：越聊越合得來、一起許下約定，成為兄弟。
-最後一下：難懂的說法改成白話，事實和 [[連結]] 都留著；保留連結是提示詞要求的。其他段落請大家打開兩張卡自己對照，例如販屨織蓆變成賣鞋子、編席子，匙箸變成湯匙和筷子。
-接下來到 64:00，把練習 2 的三步做完：畫圖、線太亂就重排、改寫劉備卡。`],
+最後一句是為第四堂準備的：原卡最上面有 dg-publish: true，eli5 改寫時可能照抄，5 歲版就會跟原卡一起公開。
+跑完後，在 Obsidian 打開 整理/劉備-5歲版.md，自己檢查三件事。每一件都可能沒過，沒過就照卡片最下面那行做。
+按一下：第一件，古文詞改成白話了沒有。按 Cmd+F（Windows 是 Ctrl+F），分別搜「販屨」「匙箸」「投軍」，這三個詞原卡都有，在 5 歲版都搜不到才算過。搜得到，就在同一個 Session 貼 prompts.md 2-3 下面「還有古文詞」那句，請 Codex 改成白話、存回同一個檔案。
+按一下：第二件，[[連結]] 都還在。範例原卡有 8 個連結：張飛、關羽、桃園結義、曹操、煮酒論英雄、孫權、赤壁之戰、蜀漢，在 5 歲版一個一個搜，都搜得到才算過。保留連結是我們寫在提示詞裡的，eli5 自己沒有這條規則，Codex 還是可能漏掉。少了，貼 2-3 下面「補回連結」那句。
+按一下：第三件，新檔最上面沒有 dg-publish。有的話自己刪掉那一行，或在 Obsidian 的屬性欄把它刪掉；為什麼要刪，附錄第 ${pageOf(DgPublishCopied)} 頁有實測的例子，第四堂發布前也會講。
+改完再檢查一次，三件都過才算做完。接下來到 64:00，把練習 2 的三步做完：畫圖、線太亂就重排、改寫劉備卡並自己檢查。`],
   [DgPublishCopied, `（附錄，第四堂發布前再看；第四堂也會講。講師早期用舊提示詞實測時遇到的，當時是改寫給國中生。）實測時發現一件事。原卡最上面有 dg-publish: true，這是第四堂發布用的開關。eli5 改寫時，把這一行也照抄過去了：兩張卡上標棕色的那一行一模一樣，右邊粗框的是新做出來的 5 歲版。
 按一下：第四堂發布時，兩張劉備卡都會公開，網站上先出現劉備，再出現標棕色的劉備-5歲版，等於有兩個劉備。
 按一下：不想公開 5 歲版，就刪掉 dg-publish 那一行（改成 dg-publish: false，或在 Obsidian 的屬性欄取消勾選也可以）。下次請 Codex 改寫時，提示詞最後多加一句：「新檔不要加 dg-publish」，新檔就不會帶著公開設定。
 最後一下：發布前，先看最上面的 frontmatter。`],
-  [BreakPage, `64:00–69:00。中場休息 5 分鐘。練習 2 還沒做完的同學，可以利用這段時間補做；有問題就舉手，講師和助教過去看。回來接第四章：寫自己的 Skill。`],
   [Section4, `69:00–69:15。第四章：寫自己的 Skill。把排時間軸的做法寫成 SKILL.md，以後一句話就能重排。`],
   [TimelineGoal, `69:15–71:00。先想清楚這個 Skill 要做什麼：把事件按小說回目排在一條橫線上。回目是小說的章回順序，大致跟著故事走，不是精確的年代；年份卡片有寫才標。像整理相簿，把照片照順序排好。左邊是筆記庫裡的六張關係卡：第二堂就有的三張，加上 aw-03-lab 給的三張（三英戰呂布、白門樓、草船借箭），回目順序是亂的。
 綠色的卡是關係卡，左上角棕色的數字是回目。
 按一下：依回目由小到大，一張一張排到線上：第 1 回桃園結義、第 5 回三英戰呂布、第 19 回白門樓、第 21 回煮酒論英雄、第 46 回草船借箭、第 49 回赤壁之戰。排上去的那張，左邊就變淡，六張都上線就排好了。
 按一下：寫成一頁 整理/時間軸.md，內容是一段 HTML 畫的橫向時間軸，第四堂可以直接放上網站。
 最後一下：讀卡片欄位、依回目排序、寫進 整理/時間軸.md，就是這個 Skill 的三個步驟。`],
-  [SkillSkeleton, `71:00–74:00。這是講師給的骨架，一段一段看。最上面是 name 和 description：description 寫何時用，把同學可能會說的話寫進去，例如「三國時間軸」「排時間軸」。完整內容如下；下一頁用 npx skills add 把它裝進筆記庫，不用自己複製存檔：
+  [SkillSkeleton, `71:00–74:00。這是講師給的骨架，一段一段看。最上面是 name 和 description：description 寫何時用，把同學可能會說的話寫進去，例如「三國時間軸」「排時間軸」。完整內容如下；等一下用 npx skills add 把它裝進筆記庫，不用自己複製存檔。下一頁先看講師跑一次完整過程：
 ${SKELETON}
 按一下：步驟三步：讀、排、寫，可以照自己的話改，但不要少步驟。
 按一下：輸出格式寫的是時間軸長什麼樣：橫向、線上只寫事件名稱、線下寫回目和年份；事件多了比畫面寬，可以左右拖曳看完整條。其中跟第四堂有關的一條：HTML 裡的名字用純文字，不加 [[ ]]。放上網站後，HTML 裡的 [[ ]] 不會變成連結，會原封不動顯示；講師的實測在附錄第 ${pageOf(HtmlLinkTest)} 頁，第四堂會實際看到。
@@ -2944,7 +2930,7 @@ name 只能用小寫英文、數字和連字號，所以叫 sanguo-timeline，�
 按一下：HTML、style、script 都能正常顯示和執行，所以時間軸用 HTML 沒問題。
 最後一下：所以人名用純文字。真的想要點得到，<a href> 裡要放網站上的網址；直接連 ../關係/*.md 這種筆記庫裡的路徑，放上網站可能 404，要看網站模板的版本；第四章的時間軸結果就遇過這種連結。
 另外，獨立的 .html 檔不會被 Obsidian 外掛上傳，所以我們把 HTML 直接寫在筆記裡，跟著卡片一起發布。第四堂會用 Forestry 實際發布一次。`],
-  [SaveSkill, `74:00–78:00。練習 3 開始。第一步先補資料：時間軸要有事件可以排，筆記庫只有第二堂的三張關係卡，太少了。aw-03-lab 裡的 關係/ 資料夾有講師照原文寫好的三張：三英戰呂布、白門樓、草船借箭，回目、年份、出處都填好了。在 Finder（Windows 是檔案總管）打開 aw-03-lab/關係/，全選三個檔案，拖進 Obsidian 筆記庫的 關係/，就是右邊框的第一行。拖檔案，不要拖整個資料夾。
+  [SaveSkill, `77:00–81:00。練習 3 開始，剛才錄影裡的步驟，現在換大家自己做。第一步先補資料：時間軸要有事件可以排，筆記庫只有第二堂的三張關係卡，太少了。aw-03-lab 裡的 關係/ 資料夾有講師照原文寫好的三張：三英戰呂布、白門樓、草船借箭，回目、年份、出處都填好了。在 Finder（Windows 是檔案總管）打開 aw-03-lab/關係/，全選三個檔案，拖進 Obsidian 筆記庫的 關係/，就是右邊框的第一行。拖檔案，不要拖整個資料夾。
 接著裝骨架。骨架是 aw-03-lab.zip 裡的 sanguo-timeline 資料夾，裡面只有一個 SKILL.md，安裝方法跟第二章一樣用 npx skills add；差別是這次不是從 GitHub 下載，而是裝自己電腦上的資料夾，所以名稱那一段換成資料夾的路徑。指令在 prompts.md 練習 3-1。
 先在 Codex 輸入 /quit 離開，回到終端機。這時終端機還在筆記庫裡，不用再 cd。打 npx skills add 和一個空格，把 aw-03-lab 裡的 sanguo-timeline 資料夾從 Finder（Windows 是檔案總管）拖進終端機，路徑會自動填好，按 Enter。還沒解壓縮 aw-03-lab.zip 的同學，先解壓縮。Windows 被擋的話一樣改打 npx.cmd。
 按一下：它認得這是本機資料夾（Local path validated），找到一個 Skill，名字是 sanguo-timeline。接下來四題跟第二章一樣：Agent 不用選按 Enter、Project、Symlink、Yes。本機資料夾不用 git。
@@ -2953,31 +2939,32 @@ name 只能用小寫英文、數字和連字號，所以叫 sanguo-timeline，�
 最後一下：打 codex 重開，問「列出你現在可以使用的 skills…」，清單裡看到 sanguo-timeline 就對了。沒看到，先輸入 /status，確認 Directory 的結尾是三國人物知識庫。
 講師 2026-10-30 實測（skills 1.7.4、Codex 0.165.0）：用本機路徑裝好後，Codex 列出 sanguo-timeline：「將三國筆記依回目排列成時間軸」。
 npx 裝不起來：prompts.md 練習 3-1 最後有備用做法，用一行指令建好並打開 .agents/skills，把 sanguo-timeline 資料夾拖進去，跟附錄第 ${pageOf(ZipFallback)} 頁的做法一樣。不要請 Codex 建：Codex 0.165 預設不讓自己寫進 .agents/，會回「.agents 設為唯讀」。`],
-  [RunTimeline, `78:00–81:00。練習 3 共 38 分鐘，先跑第一次。步驟：骨架剛裝好、Codex 也重開了；貼上 prompts.md 練習 3-2：「請使用 sanguo-timeline skill，排出三國時間軸。」；寫檔前如果問 Yes，看過再按；最後在 Obsidian 打開 整理/時間軸.md。上面三個小框就是這幾步。下面是講師實測的紀錄，第一行是我們貼進去的那句。
+  [RunTimeline, `81:00–84:00。練習 3 自己做共 35 分鐘，先跑第一次。步驟：骨架剛裝好、Codex 也重開了；貼上 prompts.md 練習 3-2：「請使用 sanguo-timeline skill，排出三國時間軸。」；寫檔前如果問 Yes，看過再按；最後在 Obsidian 打開 整理/時間軸.md。上面三個小框就是這幾步。下面是講師實測的紀錄，第一行是我們貼進去的那句。
 按一下：Codex 說「我會使用 sanguo-timeline skill」，接著用 sed 讀進我們寫的 SKILL.md，這次讀的是筆記庫裡的 .agents/skills。點名後，Codex 照這份 SKILL.md 做。
 按一下：最後回報「依回目由小到大排列，共 6 張關係卡」，寫好了 整理/時間軸.md。你第二堂自己寫過一張關係卡，線上會多一件事，變成 7 件，正常。
 最後一下：Codex 照 SKILL.md 寫的內容執行；SKILL.md 沒寫的地方，Codex 會自己決定，下一頁就會看到。
 提醒：aw-03-lab 的三張關係卡沒拖進 關係/，只會排出 3 件；回練習 3-1 第一步補拖。`],
-  [TimelineResult, `81:00–85:00。這是講師 10-30 用這份骨架第一次跑出的 整理/時間軸.md，用瀏覽器打開的樣子：一條橫線，事件依回目由左到右排。全班先一起看這一份，等一下再看自己的。
+  [TimelineResult, `84:00–88:00。這是講師 10-30 用這份骨架第一次跑出的 整理/時間軸.md，用瀏覽器打開的樣子：一條橫線，事件依回目由左到右排。全班先一起看這一份，等一下再看自己的。
 按一下：6 件事，第 1、5、19、21、46、49 回，照小說的順序，不是精確年代。線上只有事件名稱，乾淨好讀。
 按一下：再看黃框，線下的年份：只有桃園結義寫中平元年，其他五件都寫「年份：未記載」。回頭看 SKILL.md：輸出格式只說線下寫回目和年份，沒說卡片沒寫年份時要怎麼辦；這次 Codex 自己填了「未記載」。
 按一下：下面的來源卡變成藍色底線的連結，連到 ../關係/桃園結義.md 這種筆記庫裡的路徑；SKILL.md 也沒說要不要連結。放上網站可能點下去是 404，等一下一起修。
 同一份骨架，每次錯法不一樣：舊版骨架（表格）講師 10-17 跑出「未標註」、10-24 跑出「—」和 [[關係/桃園結義]]。`],
-  [EditLoop, `85:00–87:00。結果不滿意怎麼辦？像改食譜：菜不好吃，就改食譜，不用每次站在廚師旁邊重新口述。
+  [EditLoop, `88:00–90:00。結果不滿意怎麼辦？像改食譜：菜不好吃，就改食譜，不用每次站在廚師旁邊重新口述。
 第一步執行。按一下：第二步看結果。
 按一下：第三步改 SKILL.md。
 按一下：第四步再跑一次，回到第一步。
 按一下：中間這個劃掉的，是我們不做的事：重打一長串提示詞。
 最後一下：改一次 SKILL.md，之後執行都會讀到新規則。下一頁就是講師實際跑出來的兩個問題，我們照這個循環修。`],
-  [EditExample, `87:00–99:00。上一頁的兩個問題，都出在 SKILL.md 沒寫到的地方：沒說卡片沒寫年份時要怎麼辦，Codex 就寫「年份：未記載」；沒說來源卡要不要連結，Codex 就做成 <a href="../關係/桃園結義.md">，放上網站可能點下去是 404。修法就是在 SKILL.md 的輸出格式最後補兩行，畫面上綠底那兩行。不用重打提示詞，改說明書就好。
+  [EditExample, `90:00–102:00。剛才時間軸結果的兩個問題，都出在 SKILL.md 沒寫到的地方：沒說卡片沒寫年份時要怎麼辦，Codex 就寫「年份：未記載」；沒說來源卡要不要連結，Codex 就做成 <a href="../關係/桃園結義.md">，放上網站可能點下去是 404。修法就是在 SKILL.md 的輸出格式最後補兩行，畫面上綠底那兩行。不用重打提示詞，改說明書就好。
 同一份骨架，每次錯法不一樣：舊版骨架講師跑過「未標註」「—」和 [[關係/桃園結義]]，所以第一行把這幾種都寫進去了。
 按一下：這是講師 10-30 補了這兩行、同一句再跑一次的結果。框 1：線下只剩回目，「未記載」不見了；只有桃園結義的卡寫了年份，所以多一行中平元年。框 2：來源卡變成「桃園結義.md」這樣的純文字，沒有連結，放上網站不會點到 404。
 按一下：換你們。先檢查自己的時間軸：在 Obsidian 打開 整理/時間軸.md，切到編輯模式（右上角的筆圖示；閱讀模式會把 HTML 畫成圖，搜不到 <a href），按 Cmd+F 或 Ctrl+F，分別搜「未標註」「未記載」「—」「<a href」「[[」。搜得到哪一個，就補對應的那一行。
-補的方法就是這四步：在 Codex 輸入 /quit 回到終端機；Mac 打 open -e .agents/skills/sanguo-timeline/SKILL.md，用「文字編輯」打開，Windows 打 notepad .agents\\skills\\sanguo-timeline\\SKILL.md，用記事本打開；把 prompts.md 練習 3-3 的兩行貼在檔案最後，存檔、關掉；再打 codex 重開、重跑。這些在 prompts.md 3-3 都有，照著貼就好。
+補的方法就是這四步：在 Codex 輸入 /quit 回到終端機；Mac 打 open -e .agents/skills/sanguo-timeline/SKILL.md，用「文字編輯」打開，Windows 打 notepad .agents\\skills\\sanguo-timeline\\SKILL.md，用記事本打開；把 prompts.md 練習 3-3 的兩行貼在檔案最後，存檔、關掉；再打 codex 重開、重跑。最後再搜一次那五個字：都搜不到才算修好；還搜得到，看是哪一個，回 SKILL.md 檢查那一行有沒有存到。這些在 prompts.md 3-3 都有，照著貼就好。
 為什麼不請 Codex 改？講師 2026-10-30 用 Codex 0.165.0 實測：請 Codex 改 SKILL.md，它回「目前環境將 .agents 設為唯讀，寫入遭拒」。Codex 預設不讓自己改 .agents/ 裡的檔案。說明書由人來改，Codex 照著做，這也正是今天的重點。
+改的過程卡住，可以翻回第 ${pageOf(TimelineVideo)} 頁的錄影，點 1:12 那段對照。
 五個都搜不到的同學，一樣有事做：挑一個你不滿意的地方，例如顏色、事件名稱的字太小、想在線下多寫參與人物，寫成一句規則，用同樣的方式加在輸出格式最後，存檔，再跑一次。`],
-  [TimelineVideo, `99:00–102:00。講師錄好的練習 3 完整過程（2026-10-30，Codex 0.165.0，約 2 分鐘，等待的空檔剪掉了），課堂上不現場跑。0:00 npx 裝骨架；0:38 第一次跑，Codex 回報「未填年份均標示『未記載』」；1:12 /quit 後用 grep 數，整理/時間軸.md 裡有 6 處「未記載」；1:22 SKILL.md 最後多了兩行規則（影片略過編輯畫面，用 tail 顯示檔案最後四行；你們用 open -e 或 notepad 打開來貼）；1:28 重開 Codex，同一句再跑一次；2:10 再搜，0 處。
-重點就是這一段：同一句提示詞，改了 SKILL.md，結果跟著變。影片開頭有一行 Codex 有新版的提示，不用理它；中間有一行讀到 superpowers 的 SKILL.md，是講師電腦另外裝的 Skill，你們不會有。還在改規則的同學，跟著影片做。`],
+  [TimelineVideo, `74:00–77:00。先看講師做一次，再自己做。這是講師錄好的練習 3 完整過程（2026-10-30，Codex 0.165.0，約 2 分鐘，等待的空檔剪掉了），課堂上不現場跑。0:00 npx 裝骨架；0:38 第一次跑，Codex 回報「未填年份均標示『未記載』」；1:12 /quit 後用 grep 數，整理/時間軸.md 裡有 6 處「未記載」；1:22 SKILL.md 最後多了兩行規則（影片略過編輯畫面，用 tail 顯示檔案最後四行；你們用 open -e 或 notepad 打開來貼）；1:28 重開 Codex，同一句再跑一次；2:10 再搜，0 處。
+請大家先看，不用跟著打。重點是 1:12 之後這一段：同一句提示詞，改了 SKILL.md，結果跟著變。為什麼會出現「未記載」、那兩行規則怎麼寫，等一下自己跑完再一頁一頁講。影片開頭有一行 Codex 有新版的提示，不用理它；中間有一行讀到 superpowers 的 SKILL.md，是講師電腦另外裝的 Skill，你們不會有。看完，下一頁開始自己做。`],
   [PersonFilter, `102:00–106:00。做完的人挑戰進階選做：畫出劉備的故事線。照練習 3-3 的方法打開 SKILL.md，在步驟的第 3 步下面加一行第 4 步，內容在 prompts.md 練習 3-4，整段複製，存檔。這一行告訴 Skill：指定人物時，只留下有他的事件，由上往下排，中間放事件，左邊放和他同一邊的人，右邊放和他作對的人，說不上敵友的寫在事件下面。
 /quit、重開 Codex 後輸入：「請使用 sanguo-timeline skill，畫劉備的故事線，存成 整理/劉備的故事線.md」。
 下面先列出第三堂的六件事，照回目往下排。
@@ -2987,12 +2974,11 @@ npx 裝不起來：prompts.md 練習 3-1 最後有備用做法，用一行指令
 還有時間的同學，下一頁換一個畫圖 Skill。`],
   [TimelineStyles, `106:00–112:00。進階選做第二題：同一份 整理/時間軸.md，換一個畫圖 Skill 畫。先問大家：交給不同的 Skill 畫，會長一樣嗎？接下來一張一張看，都是講師 10-30 實跑的成品，整條時間軸截下來，六件事都在；每按一下換一張，放在同一個位置比較。
 按一下：diagram-design，練習 1-4 已經裝好，畫得很素：灰底、細線、小圓點，六件事平均排開。
-按一下：archify，要另外裝：米色底、大號襯線字、紅色圓點，一樣平均排開。archify 原本要每件事都有完整日期，三國卡片只有回目，Codex 沒有硬套它的格式，改寫了一份自己的 HTML。
-按一下：自訂 HTML，不用畫圖 Skill，請 Codex 照需求另外寫的。它照第 1 到 120 回的比例排，畫面只截到第 50 回，看得出第 21 回到第 46 回中間空了一大段；網頁上還能切換「只看劉備」。三份都沒有自己補年份，只有桃園結義有中平元年。
+按一下：archify，要另外裝：米色底、大號襯線字、紅色圓點，一樣平均排開。archify 原本要每件事都有完整日期，三國卡片只有回目，Codex 沒有硬套它的格式，改寫了一份自己的 HTML。兩份都沒有自己補年份，只有桃園結義有中平元年；你畫出來的如果別的事件也出現年份，就是它自己補的，請它拿掉。
 同樣叫做「畫圖」的 Skill，每個人寫的 SKILL.md 不一樣，畫出來的風格就不一樣，沒有哪一個是標準答案，挑你喜歡的。
 按一下：去哪裡找？在終端機打 npx skills find，後面接英文關鍵字，例如 timeline。講師 10-30 搜過，archify 有 18.3 萬次安裝、diagram-design 有 2.2 萬次，都在結果裡。也可以上 skills.sh 這個網站搜。找到喜歡的，跟第二章一樣用 npx skills add 裝；裝之前先到 GitHub 打開它的 SKILL.md 看一眼，Skill 執行時有 Codex 的完整權限。
 提示詞在 prompts.md 練習 3-5，用 archify 的話把開頭的 diagram-design 換成 archify。成品放在線上的 aw-03-sample-output/練習3/，下載回去用瀏覽器打開比一比。
-最後 2 分鐘，請一兩位同學分享自己改了 SKILL.md 哪一行。`],
+最後 2 分鐘，留給還在補練習 3-3 的同學，或舉手提問。`],
   [Recap, `112:00–116:00。回顧四件事。一、Skill 是交給 Agent 的做事說明，提示詞寫出 Skill 名稱就能用。二、用 npx skills add 加上 GitHub 的「帳號/專案」安裝，選 Project 就裝進筆記庫的 .agents/skills；指令不行時，下載 ZIP 自己放進去。三、diagram-design 把卡片畫成關係圖，eli5 把難懂的說法改成白話，都是一句話叫 Skill 做事。四、結果不滿意，改 SKILL.md 再跑，這是今天的重點。
 按一下：下一堂把筆記庫發布成網站。`],
   [NextLesson, `116:00–120:00。第四堂：把筆記庫發布成網站。在 Obsidian 勾好要公開的卡，按發布，Forestry 會把它建成網站，給你一個「名字.forestry.md」的網址；今天做的 時間軸.md 也會放上去。

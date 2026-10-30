@@ -16,7 +16,7 @@
 | 堂 | 提示詞 | 下載 |
 | --- | :---: | :---: |
 | 第一堂：認識 AI，學會用 Codex | <img src="aw-01-prompts.svg" width="180" alt="第一堂提示詞 QR"><br>aw-01-lab/prompts.md | <img src="aw-01-lab-zip.svg" width="180" alt="第一堂練習資料夾 QR"><br>ZIP：aw-01-lab.zip（練習資料夾） |
-| 第二堂：Obsidian 與 RAG | <img src="aw-02-prompts.svg" width="180" alt="第二堂提示詞 QR"><br>aw-02-lab/prompts.md | <img src="aw-02-lab-zip.svg" width="180" alt="第二堂 ZIP QR"><br>ZIP：aw-02-lab.zip（筆記庫＋參考結果） |
+| 第二堂：Obsidian 與 AI Agent | <img src="aw-02-prompts.svg" width="180" alt="第二堂提示詞 QR"><br>aw-02-lab/prompts.md | <img src="aw-02-lab-zip.svg" width="180" alt="第二堂 ZIP QR"><br>ZIP：aw-02-lab.zip（筆記庫＋參考結果） |
 | 第三堂：Skills | <img src="aw-03-prompts.svg" width="180" alt="第三堂提示詞 QR"><br>aw-03-lab/prompts.md | <img src="aw-03-lab-zip.svg" width="180" alt="第三堂 ZIP QR"><br>ZIP：aw-03-lab.zip（備用 Skill＋參考結果） |
 | 第四堂：發布到網站 | <img src="aw-04-prompts.svg" width="180" alt="第四堂提示詞 QR"><br>aw-04-lab/prompts.md（含課前作業） | <img src="aw-04-lab-zip.svg" width="180" alt="第四堂 ZIP QR"><br>ZIP：aw-04-lab.zip（第三堂完成版＋參考結果） |
 

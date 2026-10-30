@@ -13,7 +13,7 @@
 - 下載：[aw-01-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-01-lab.zip)，練習資料夾，裡面有第 1–21 回原文、回目、提示詞
 - 卡住時：[aw-01-sample-output/](aw-01-sample-output/) 是大綱範例。第一堂沒做完的人，第二堂直接用這份
 
-## 第二堂：Obsidian 與 RAG
+## 第二堂：Obsidian 與 AI Agent
 
 - 簡報：[aw-02](https://chrouos.github.io/AI-workshop-slides/s/aw-02/)
 - 下載：[aw-02-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip)，這堂的東西都在裡面：
@@ -21,7 +21,7 @@
   - `prompts.md`：[線上看](aw-02-lab/prompts.md)
 - 另外要用第一堂的 `aw-01-lab/Codex_練習/`：`原文/` 和自己寫的大綱，練習 2 搬進筆記庫
 - 說明：[aw-02-lab/README.md](aw-02-lab/README.md)，含筆記庫裡每張卡的介紹（只放在 GitHub，不在 ZIP 裡）
-- 練習 3 第 1 輪全班核對的回答，和附錄進階討論用的範例結果：[aw-02-sample-output/](aw-02-sample-output/README.md)
+- 附錄進階討論用的範例結果：[aw-02-sample-output/](aw-02-sample-output/README.md)
 
 ## 第三堂：Skills
 

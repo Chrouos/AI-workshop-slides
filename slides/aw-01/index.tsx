@@ -180,7 +180,18 @@ const FooterUrl = ({ href, children }: { href: string; children?: ReactNode }) =
   <a href={href} target="_blank" rel="noreferrer" style={{ position: 'absolute', left: 144, bottom: 18, fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', fontSize: 22, lineHeight: '26px', color: amber, textDecoration: 'underline', textUnderlineOffset: 3, whiteSpace: 'nowrap' }}>{children ?? href}</a>
 );
 
-const Eyebrow = ({ children }: { children: ReactNode }) => (
+// Top-right corner of a practice page where something is pasted: QR + link to prompts.md, naming the section.
+const PromptsCopy = ({ step }: { step: string }) => (
+  <>
+    <a href={PROMPTS_URL} target="_blank" rel="noreferrer" style={{ position: 'absolute', top: 176, right: 144, display: 'flex', alignItems: 'center', gap: 18, color: muted, textDecoration: 'none' }}>
+      <span style={{ textAlign: 'right', fontSize: 24, lineHeight: 1.4 }}>複製提示詞<br /><strong style={{ color: amber, fontFamily: mono }}>prompts.md</strong> 練習 {step}</span>
+      <img src={promptsQr} alt="prompts.md 的 QR code" style={{ width: 120, height: 120, display: 'block', background: '#FFFFFF', border: `1px solid ${rule}`, padding: 5 }} />
+    </a>
+    <FooterUrl href={PROMPTS_URL} />
+  </>
+);
+
+const Eyebrow =({ children }: { children: ReactNode }) => (
   <div style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', fontSize: 24, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#78716C' }}>{children}</div>
 );
 
@@ -284,7 +295,7 @@ const Callout = ({ n, title, detail }: { n: ReactNode; title: ReactNode; detail?
 );
 
 // A terminal window. Lines are plain text; "$" lines are what the learner types.
-const Terminal = ({ title, children, width, size = 29 }: { title: ReactNode; children: ReactNode; width?: number; size?: number }) => (
+const Terminal = ({ title, children, width, size = 29, lh = 1.6 }: { title: ReactNode; children: ReactNode; width?: number; size?: number; lh?: number }) => (
   <div style={{ width, boxSizing: 'border-box', background: term, color: '#F5F5F4', border: '1px solid #555B60' }}>
     <div style={{ height: 52, display: 'flex', alignItems: 'center', gap: 12, background: '#30343A', padding: '0 26px', boxSizing: 'border-box' }}>
       <span style={{ width: 13, height: 13, borderRadius: 20, background: '#DF6A63' }} />
@@ -292,7 +303,7 @@ const Terminal = ({ title, children, width, size = 29 }: { title: ReactNode; chi
       <span style={{ width: 13, height: 13, borderRadius: 20, background: '#73BB78' }} />
       <span style={{ fontFamily: mono, color: '#BCC3CC', fontSize: 24, marginLeft: 16 }}>{title}</span>
     </div>
-    <div style={{ padding: '28px 38px 34px', fontFamily: mono, fontSize: size, lineHeight: 1.6, whiteSpace: 'pre' }}>{children}</div>
+    <div style={{ padding: '28px 38px 34px', fontFamily: mono, fontSize: size, lineHeight: lh, whiteSpace: 'pre' }}>{children}</div>
   </div>
 );
 const Typed = ({ children }: { children: ReactNode }) => <span style={{ color: '#8DD4A0' }}>{children}</span>;
@@ -578,7 +589,7 @@ const CourseMap: Page = () => (
         </InG>
         <InG i={1}><MapArrow x1={360} x2={456} y={155} /></InG>
         <InG i={2}>
-          <LessonStop x={612} n={2} name={<tspan>{"筆記庫"}</tspan>} sub={<tspan>{"Obsidian 連起來"}</tspan>}>
+          <LessonStop x={612} n={2} name={<tspan>{"筆記庫"}</tspan>} sub={<tspan>{"用 Obsidian 連筆記"}</tspan>}>
             <g stroke={link} strokeWidth="3"><line x1="542" y1="110" x2="682" y2="120" /><line x1="542" y1="110" x2="602" y2="205" /><line x1="682" y1="120" x2="602" y2="205" /><line x1="682" y1="120" x2="692" y2="200" /></g>
             <circle cx="542" cy="110" r="24" fill={linkSoft} stroke={link} strokeWidth="3" />
             <circle cx="682" cy="120" r="24" fill={linkSoft} stroke={link} strokeWidth="3" />
@@ -588,7 +599,7 @@ const CourseMap: Page = () => (
         </InG>
         <InG i={3}><MapArrow x1={768} x2={864} y={155} /></InG>
         <InG i={4}>
-          <LessonStop x={1020} n={3} name={<tspan>{"時間軸"}</tspan>} sub={<tspan>{"Skill 幫忙排"}</tspan>}>
+          <LessonStop x={1020} n={3} name={<tspan>{"時間軸"}</tspan>} sub={<tspan>{"用 Skill 排時間軸"}</tspan>}>
             <line x1="910" y1="155" x2="1130" y2="155" stroke={ink} strokeWidth="4" />
             <circle cx="920" cy="155" r="13" fill={amber} />
             <circle cx="990" cy="155" r="13" fill={amber} />
@@ -629,17 +640,17 @@ const AgendaRow = ({ i, numberLabel, name, time, page }: { i: number; n: Chapter
 
 const Agenda: Page = () => (
   <Shell>
-    <Eyebrow><span>AGENDA｜120 分鐘｜練習 1 課後自己練</span></Eyebrow>
+    <Eyebrow><span>AGENDA｜120 分鐘｜練習 1 留到課後做</span></Eyebrow>
     <Heading><span>今天的五章</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, paddingBottom: 12, borderBottom: `1px solid ${rule}` }}>
         <span /><SmallLabel><span>章節</span></SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel><span>時間｜頁</span></SmallLabel></span>
       </div>
-      <AgendaRow i={0} n={1} numberLabel={<span>01</span>} name={<span>{"AI 怎麼走到今天"}</span>} time={<span>{"10–38 分"}</span>} page={Section1} />
-      <AgendaRow i={1} n={2} numberLabel={<span>02</span>} name={<span>{"ChatGPT 與 Codex"}</span>} time={<span>{"38–50 分"}</span>} page={Section2} />
+      <AgendaRow i={0} n={1} numberLabel={<span>01</span>} name={<span>{"AI 怎麼走到今天"}</span>} time={<span>{"10–39 分"}</span>} page={Section1} />
+      <AgendaRow i={1} n={2} numberLabel={<span>02</span>} name={<span>{"ChatGPT 與 Codex"}</span>} time={<span>{"39–50 分"}</span>} page={Section2} />
       <AgendaRow i={2} n={3} numberLabel={<span>03</span>} name={<span>{"安裝 Codex"}</span>} time={<span>{"50–67 分"}</span>} page={Section3} />
-      <AgendaRow i={3} n={4} numberLabel={<span>04</span>} name={<span>{"看懂 Codex"}</span>} time={<span>{"67–84 分"}</span>} page={Section4} />
-      <AgendaRow i={4} n={5} numberLabel={<span>05</span>} name={<span>{'使用 Codex'}</span>} time={<span>{"84–112 分"}</span>} page={Section5} />
+      <AgendaRow i={3} n={4} numberLabel={<span>04</span>} name={<span>{"看懂 Codex"}</span>} time={<span>{"67–91 分"}</span>} page={Section4} />
+      <AgendaRow i={4} n={5} numberLabel={<span>05</span>} name={<span>{'用 Codex 寫大綱'}</span>} time={<span>{"91–116 分"}</span>} page={Section5} />
     </Fit>
   </Shell>
 );
@@ -691,7 +702,7 @@ const Section1: Page = () => (
     <In i={0}><Eyebrow><span>01 / GPT</span></Eyebrow></In>
     <In i={1} style={{ marginTop: 63 }}><Title><span>AI 怎麼走到今天？</span></Title></In>
     <In i={2} style={{ fontSize: 36, lineHeight: 1.5, color: muted, marginTop: 30, maxWidth: 1500 }}><span>
-      以 GPT 為例：它怎麼寫字、為什麼會錯、有哪些補救
+      以 GPT 為例，看它怎麼寫字、為什麼會錯、怎麼補救
     </span></In>
     <div style={{ marginTop: 96 }}><ChapterTrack chapter={1} /></div>
   </Shell>
@@ -713,7 +724,7 @@ const MapNode = ({ x, y, kind, label, sub, tone, r = 56 }: { x: number; y: numbe
 
 const Evolution: Page = () => (
   <Shell chapter={1} source={<span>{'Vaswani et al. 2017（Transformer）；Brown et al. 2020（GPT-3）；Ouyang et al. 2022（InstructGPT）'}</span>}>
-    <Eyebrow><span>先看全貌｜本章地圖</span></Eyebrow>
+    <Eyebrow><span>本章整理｜限制與補救</span></Eyebrow>
     <Heading><span>大型語言模型（LLM）的限制與補救</span></Heading>
     <Fit>
       <Stage h={500}>
@@ -742,7 +753,7 @@ const Evolution: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}><span>上層是模型的限制，下層是補救方法</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}><span>模型靠猜字回答，用 Thinking、工具、搜尋來減少出錯</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -753,9 +764,9 @@ const WordTile = ({ children, hot = false }: { children: ReactNode; hot?: boolea
 
 const NextWordGame: Page = () => (
   <Shell chapter={1} source={<span>{'Radford et al. 2018, Improving Language Understanding by Generative Pre-Training（GPT-1, OpenAI）'}</span>}>
-    <Eyebrow><span>GPT＝生成式預訓練模型</span></Eyebrow>
+    <Eyebrow><span>GPT 是生成式預訓練模型</span></Eyebrow>
     <Heading><span>下一個 Token 預測（Next-Token Prediction）</span></Heading>
-    <Lead><span>看前面的字，挑一個通順的字接上</span></Lead>
+    <Lead><span>模型看前面的字，接一個通順的字</span></Lead>
     <Fit z={1.1}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: 36 }}>
         <In i={0}>
@@ -857,7 +868,7 @@ const OneByOne: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={64}><span>一次產生一個 Token，再接回前文繼續產生</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={64}><span>模型一次產生一個 Token，放進前文，再產生下一個</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -902,7 +913,7 @@ const SameQuestion: Page = () => (
         </In>
       </div>
       <Caption><span>{'\n'}</span></Caption>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}><span>答案不同，是因為每次抽到的字不一樣</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}><span>答案不同，是因為每次抽到的字可能不一樣</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -918,7 +929,7 @@ const Randomness: Page = () => (
   <Shell chapter={1} source={<span>{'Holtzman et al. 2020, The Curious Case of Neural Text Degeneration（取樣與溫度）, arXiv:1904.09751'}</span>}>
     <Eyebrow><span>隨機性｜Temperature</span></Eyebrow>
     <Heading><span>溫度參數（Temperature）</span></Heading>
-    <Lead><span>Temperature 高，隨機性高；Temperature 低，隨機性低</span></Lead>
+    <Lead><span>Temperature 調得越高，模型挑字越隨機</span></Lead>
     <Fit>
       <Stage h={520}>
         <Steps>
@@ -988,7 +999,7 @@ const WhatIsHallucination: Page = () => (
   <Shell chapter={1} source={<span>{'Ji et al. 2023, Survey of Hallucination in Natural Language Generation, arXiv:2202.03629'}</span>}>
     <Eyebrow><span>猜出來的字，可能是錯的</span></Eyebrow>
     <Heading><span>AI 幻覺（Hallucination）</span></Heading>
-    <Lead><span>像考試硬掰：沒把握，也寫得很順</span></Lead>
+    <Lead><span>像考試硬掰的學生，沒把握也寫得很順</span></Lead>
     <Fit>
       <In i={0} style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 56 }}>
         <Icon kind="chat" size={64} color={muted} />
@@ -1000,7 +1011,7 @@ const WhatIsHallucination: Page = () => (
           <In i={1}><Meter label={<span>{"語氣"}</span>} value={<span>{"很肯定"}</span>} pct={96} tone={amber} grow /></In>
           <Step duration={STEP_MS}>
             <Meter label={<span>{"事實"}</span>} value={<span>{"對不上"}</span>} pct={0} tone={warn} empty />
-            <div style={{ marginTop: 16, marginLeft: 178, fontSize: 30, color: warn }}><span>原文第 1 回：「姓劉，名備，字</span><strong>玄德</strong><span>」；孔明是諸葛亮</span></div>
+            <div style={{ marginTop: 16, marginLeft: 178, fontSize: 30, color: warn }}><span>第 1 回原文寫「姓劉，名備，字</span><strong>玄德</strong><span>」，孔明是諸葛亮的字</span></div>
           </Step>
         </Steps>
       </div>
@@ -1061,7 +1072,7 @@ const WhyHallucinate: Page = () => (
   <Shell chapter={1} source={<span>{'Kalai et al. 2025, Why Language Models Hallucinate, arXiv:2509.04664'}</span>}>
     <Eyebrow><span>幻覺從哪裡來</span></Eyebrow>
     <Heading><span>幻覺的成因：從資料到回答</span></Heading>
-    <Lead><span>像聽人轉述：大家都這樣說，就照說</span></Lead>
+    <Lead><span>像聽人轉述，大家常這樣說，模型就跟著說</span></Lead>
     <Fit>
       <Stage h={440}>
         <Steps>
@@ -1109,7 +1120,7 @@ const WhyHallucinate: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}><span>補救方法：讓模型先寫步驟、用工具、查資料</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}><span>讓模型先寫步驟、用工具、查資料，可以減少幻覺</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1144,7 +1155,7 @@ const CotWhat: Page = () => (
   <Shell chapter={1} source={<span>{'Wei et al. 2022, Chain-of-Thought Prompting Elicits Reasoning in Large Language Models, arXiv:2201.11903'}</span>}>
     <Eyebrow><span>解法一｜Thinking 背後的做法</span></Eyebrow>
     <Heading><span>思維鏈（Chain of Thought, CoT）是什麼</span></Heading>
-    <Lead><span>先寫過程，再寫答案</span></Lead>
+    <Lead><span>模型先寫推理過程，再寫答案</span></Lead>
     <QuestionCard><span>雞兔同籠：35 個頭、94 隻腳。直接答和先寫過程差在哪？</span></QuestionCard>
     <Fit>
       <Stage h={330}>
@@ -1170,12 +1181,12 @@ const CotWhat: Page = () => (
               <FlowBox x={1206} y={170} w={300} label={<tspan>{"答案"}</tspan>} tone="ok" />
             </g>
             <g className="aw1-build" style={buildDelay(7)}>
-              <text x="230" y="306" fontSize="28" fill={muted}>思維（想）＋ 鏈（一環扣一環）＝ 一步接一步的推理過程</text>
+              <text x="230" y="306" fontSize="28" fill={muted}>「思維」是想，「鏈」是一環扣一環，合起來就是一步接一步的推理</text>
             </g>
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}><span>CoT：讓模型回答前，先把推理步驟一步一步寫出來</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}><span>CoT 是讓模型回答前，先把推理步驟一步步寫出來</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1236,10 +1247,10 @@ const CotWhy: Page = () => (
         <Steps>
           <Step duration={STEP_MS}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-              <SmallLabel><span>讓它寫步驟的三種方法</span></SmallLabel>
+              <SmallLabel><span>讓模型寫步驟的三種方法</span></SmallLabel>
               <div className="aw1-build" style={buildDelay(0)}><WayChip n={<span>{1}</span>}><span>提示詞加「請一步一步想」</span></WayChip></div>
               <div className="aw1-build" style={buildDelay(1)}><WayChip n={<span>{2}</span>}><span>給一題有步驟的範例</span></WayChip></div>
-              <div className="aw1-build" style={buildDelay(2)}><WayChip n={<span>{3}</span>}><span>Thinking 模型自動做</span></WayChip></div>
+              <div className="aw1-build" style={buildDelay(2)}><WayChip n={<span>{3}</span>}><span>Thinking 模型自動寫步驟</span></WayChip></div>
             </div>
           </Step>
         </Steps>
@@ -1302,7 +1313,7 @@ const CotPage: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}><span>先想清楚步驟（CoT），計算交給工具（Tool Calling）</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}><span>Codex 先用 CoT 列步驟，再用 Tool Calling 算答案</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1357,7 +1368,7 @@ const ToolCalc: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}><span>工具執行計算，同一個算式重跑，結果相同</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}><span>同一個算式交給工具重跑，會得到一樣的結果</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1371,7 +1382,7 @@ const WayCard = ({ kind, name, like, result, verdict, why, tone, shot }: { kind:
   return (
     <div style={{ background: soft, borderTop: `6px solid ${c}`, padding: '26px 30px 30px', height: '100%', boxSizing: 'border-box', display: 'grid', justifyItems: 'center', alignContent: 'start', gap: 16, textAlign: 'center' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}><Icon kind={kind} size={60} color={c} /><span style={{ fontSize: 40, fontWeight: 600 }}>{name}</span></div>
-      <div style={{ fontSize: 32, background: '#FFFFFF', padding: '6px 22px', borderRadius: 24 }}><span>＝</span>{like}</div>
+      <div style={{ fontSize: 32, background: '#FFFFFF', padding: '6px 22px', borderRadius: 24 }}><span>像</span>{like}</div>
       <div style={{ width: '100%', borderTop: `2px dashed ${c}`, opacity: 0.5 }} />
       <Steps>
         <Step duration={STEP_MS}>
@@ -1393,9 +1404,9 @@ const ToolCompare: Page = () => (
     <Heading><span>三種解法：直接答、CoT、工具</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, alignItems: 'stretch' }}>
-        <In i={1}><WayCard kind="dice" name={<span>{"直接回答"}</span>} like={<span>{"猜"}</span>} result={<span>{"8460"}</span>} verdict={<span>{"✗ 錯，每次可能不同"}</span>} why="ChatGPT 實際畫面｜不准它算" tone="bad" shot={<Crop src={guess8460} alt="ChatGPT 被要求不可以偷偷計算，回答：我不算，純猜：8460" iw={1794} ih={456} crop={[118, 268, 364, 78]} width={460} />} /></In>
+        <In i={1}><WayCard kind="dice" name={<span>{"直接回答"}</span>} like={<span>{"隨口猜"}</span>} result={<span>{"8460"}</span>} verdict={<span>{"✗ 錯，每次可能不同"}</span>} why="ChatGPT 實際畫面｜不准它算" tone="bad" shot={<Crop src={guess8460} alt="ChatGPT 被要求不可以偷偷計算，回答：我不算，純猜：8460" iw={1794} ih={456} crop={[118, 268, 364, 78]} width={460} />} /></In>
         <In i={2}><WayCard kind="think" name={<span>{"CoT（Thinking）"}</span>} like={<span>{"心算、列步驟"}</span>} result={<span>{"8484"}</span>} verdict={<span>{"△ 可能錯，步驟要核對"}</span>} why="還是心算" tone="mid" /></In>
-        <In i={3}><WayCard kind="calc" name={<span>{"Tool Calling"}</span>} like={<span>{"按計算機"}</span>} result={<span>{"8484"}</span>} verdict={<span>{"✓ 同一算式，結果相同"}</span>} why="可以重跑，也看得到算式" tone="tool" /></In>
+        <In i={3}><WayCard kind="calc" name={<span>{"Tool Calling"}</span>} like={<span>{"按計算機"}</span>} result={<span>{"8484"}</span>} verdict={<span>{"✓ 同一算式重跑，結果相同"}</span>} why="可以重跑，也看得到算式" tone="tool" /></In>
       </div>
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}><span>需要精確計算時，交給 Tool Calling</span></Takeaway></Step></Steps>
     </Fit>
@@ -1404,7 +1415,7 @@ const ToolCompare: Page = () => (
 
 const WebSearch: Page = () => (
   <Shell chapter={1} source={<span>{'Nakano et al. 2021, WebGPT: Browser-assisted Question-answering, arXiv:2112.09332'}</span>}>
-    <Eyebrow><span>Web Search＝另一種工具</span></Eyebrow>
+    <Eyebrow><span>Web Search 是另一種工具</span></Eyebrow>
     <Heading><span>Web Search 會先上網找資料</span></Heading>
     <Lead><span>搜尋也是一種 Tool Calling，用來查資料</span></Lead>
     <Fit>
@@ -1432,7 +1443,7 @@ const WebSearch: Page = () => (
           </div>
         </Step>
       </Steps>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={56}><span>先查再答叫 RAG，搜到的內容就是「檢索來的資料」</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={56}><span>先查資料再回答，這種做法叫 RAG</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1492,7 +1503,7 @@ const RagA: Page = () => (
   <Shell chapter={1} source={<span>{'Lewis et al. 2020, Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks, arXiv:2005.11401'}</span>}>
     <Eyebrow><span>RAG 第 2 步｜Augmented</span></Eyebrow>
     <Heading><span>A：增強（Augmented）</span></Heading>
-    <Lead><span>題目和資料裝同一箱，一起交出去</span></Lead>
+    <Lead><span>把問題和找到的資料一起交給模型</span></Lead>
     <Fit>
       <Stage h={460}>
         <Steps>
@@ -1515,7 +1526,7 @@ const RagA: Page = () => (
             <g className="aw1-build" style={buildDelay(2)}>
               <rect x="690" y="110" width="400" height="260" fill={blueSoft} stroke={blue} strokeWidth="3" strokeDasharray="12 9" />
               <path d="M690 110 L750 70 H1030 L1090 110" fill="none" stroke={blue} strokeWidth="3" />
-              <text x="890" y="170" textAnchor="middle" fontSize="31" fontWeight="600" fill={blue}>一起交出去</text>
+              <text x="890" y="170" textAnchor="middle" fontSize="31" fontWeight="600" fill={blue}>一起交給模型</text>
               <SvgChip x={730} y={200} w={320} h={56} label={<tspan>{"問題"}</tspan>} size={28} />
               <SvgChip x={730} y={276} w={320} h={56} label={<tspan>{"資料：第 21 回"}</tspan>} size={28} fill={amberSoft} stroke={amber} />
             </g>
@@ -1537,7 +1548,7 @@ const RagG: Page = () => (
   <Shell chapter={1} source={<span>{'Lewis et al. 2020, arXiv:2005.11401；原文：維基文庫《三國演義》第 21 回'}</span>}>
     <Eyebrow><span>RAG 第 3 步｜Generation</span></Eyebrow>
     <Heading><span>G：生成（Generation）</span></Heading>
-    <Lead><span>照找到的資料回答，附上出處</span></Lead>
+    <Lead><span>模型照找到的資料回答，並附上出處</span></Lead>
     <Fit>
       <In i={0} style={{ display: 'flex', alignItems: 'flex-start', gap: 28 }}>
         <Icon kind="chat" size={72} color={muted} />
@@ -1559,7 +1570,7 @@ const RagG: Page = () => (
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
         <Steps><Step duration={STEP_MS}><StatusLine ok size={36}><span>點開出處，找得到同一句</span></StatusLine></Step></Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}><span>有來源 ≠ 一定正確：點開來源逐字核對</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}><span>附了來源也可能出錯，要點開來源逐字核對</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1619,7 +1630,7 @@ const OpenBookPage: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}><span>今天的大綱練習也用 RAG：Codex 先讀原文再寫</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}><span>今天的大綱練習也用 RAG，Codex 會先讀原文再寫</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1628,7 +1639,7 @@ const RagMiniPractice: Page = () => (
   <Shell chapter={1}>
     <PracticeEyebrow time={<span>{"3 分鐘"}</span>}><span>小練習｜自己的 ChatGPT</span></PracticeEyebrow>
     <Heading><span>小練習：Web Search 找來源</span></Heading>
-    <Lead><span>挑一件你最近好奇的事：球賽、旅行、科技，都可以。</span></Lead>
+    <Lead><span>挑一件最近好奇的事，像球賽、旅行</span></Lead>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1.08fr 0.92fr', gap: 76, alignItems: 'start' }}>
         <div>
@@ -1642,7 +1653,7 @@ const RagMiniPractice: Page = () => (
           <div style={{ fontSize: 26, color: quiet, lineHeight: 1.5, marginTop: 20 }}>把空格換成你的問題。</div>
         </div>
         <Steps><Step duration={STEP_MS}><div>
-          <div style={{ fontSize: 26, fontWeight: 600, color: muted, marginBottom: 14 }}>回答後，找三個地方</div>
+          <div style={{ fontSize: 26, fontWeight: 600, color: muted, marginBottom: 14 }}>回答出來後，看這三個地方</div>
           <div style={{ borderTop: `1px solid ${rule}`, padding: '18px 0 20px', display: 'grid', gridTemplateColumns: '68px 1fr', alignItems: 'start' }}>
             <span style={{ fontFamily: display, fontSize: 37, color: amber }}>01</span>
             <div><strong style={{ fontSize: 34 }}>思考</strong><div style={{ fontSize: 27, color: muted, marginTop: 4 }}>有顯示「已思考」嗎？</div></div>
@@ -1653,11 +1664,11 @@ const RagMiniPractice: Page = () => (
           </div>
           <div style={{ borderTop: `1px solid ${rule}`, borderBottom: `1px solid ${rule}`, padding: '18px 0 20px', display: 'grid', gridTemplateColumns: '68px 1fr', alignItems: 'start' }}>
             <span style={{ fontFamily: display, fontSize: 37, color: amber }}>03</span>
-            <div><strong style={{ fontSize: 34 }}>來源</strong><div style={{ fontSize: 27, color: muted, marginTop: 4 }}>點開一則，對照答案。</div></div>
+            <div><strong style={{ fontSize: 34 }}>來源</strong><div style={{ fontSize: 27, color: muted, marginTop: 4 }}>點開一則，找支持答案的那句</div></div>
           </div>
         </div></Step></Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={58}><span>親自檢查來源以及檢查生成內容是否正確是很重要的環節</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={58}><span>來源裡找不到那句，這個答案就先別信</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1679,7 +1690,7 @@ const ArrowTip = ({ x, y, dx, dy, color = amber }: { x: number; y: number; dx: n
 
 const AgentPage: Page = () => (
   <Shell chapter={2} source={<span>{'Yao et al. 2023, ReAct, arXiv:2210.03629；Anthropic 2024, Building Effective Agents'}</span>}>
-    <Eyebrow><span>Agent＝會用工具、執行任務</span></Eyebrow>
+    <Eyebrow><span>Agent 會用工具幫你執行任務</span></Eyebrow>
     <Heading><span>AI 代理（Agent）</span></Heading>
     <Fit>
       <Stage h={500}>
@@ -1717,7 +1728,7 @@ const AgentPage: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={56}><span>Codex 是一種 Agent：執行動作，做完回報結果</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={56}><span>Codex 是一種 Agent，會執行動作，做完再回報結果</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1819,7 +1830,7 @@ const SameTaskTwoWays: Page = () => (
           </In>
           <Step duration={STEP_MS}>
             <Lane name={<span>{"Codex"}</span>} kind="terminal" tint={amberSoft} stroke={amber} count={<span>{'動手 1 次'}</span>}>
-              <LaneStep kind="chat" text={<span>{"一句交代"}</span>} you />
+              <LaneStep kind="chat" text={<span>{"交代一句話"}</span>} you />
               <LaneArrow />
               <LaneStep kind="folder" text={<span>{"讀取 原文/"}</span>} hot />
               <LaneArrow />
@@ -1828,7 +1839,7 @@ const SameTaskTwoWays: Page = () => (
           </Step>
         </Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway><span>Codex 可以直接讀檔案，寫檔案</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway><span>Codex 自己讀檔、存檔，不用你上傳和下載</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1843,13 +1854,13 @@ const SelfStep = ({ n, kind, title, detail }: { n: number; kind: IconKind; title
 );
 
 const ChatGPTSelf: Page = () => (
-  <Shell chapter={2}>
+  <Shell chapter={1}>
     <PracticeEyebrow time={<span>{"約 15 分鐘"}</span>}><span>練習 1｜ChatGPT｜課後自己練</span></PracticeEyebrow>
-    <Heading><span>課後自己練：給不給原文，答案差多少</span></Heading>
+    <Heading><span>給不給原文，答案差多少</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 32 }}>
-        <In i={0}><SelfStep n={1} kind="chat" title={<span>先不給資料問</span>} detail={<span>看 ChatGPT 憑記憶怎麼答</span>} /></In>
-        <In i={1}><SelfStep n={2} kind="search" title={<span>追問原文哪一句</span>} detail={<span>自己點開原文核對</span>} /></In>
+        <In i={0}><SelfStep n={1} kind="chat" title={<span>先不給原文直接問</span>} detail={<span>看 ChatGPT 憑記憶怎麼答</span>} /></In>
+        <In i={1}><SelfStep n={2} kind="search" title={<span>追問出自原文哪一句</span>} detail={<span>自己點開原文核對</span>} /></In>
         <In i={2}><SelfStep n={3} kind="book" title={<span>附上原文再問</span>} detail={<span>比比看答案差在哪</span>} /></In>
       </div>
       <In i={3} style={{ marginTop: 40, display: 'flex', alignItems: 'center', gap: 36, background: '#FFFFFF', border: `1px solid ${rule}`, padding: '24px 32px' }}>
@@ -1952,11 +1963,11 @@ const TerminalAnatomy: Page = () => (
           </Terminal>
         </In>
         <div style={{ display: 'grid', gap: 30 }}>
-          <In i={1}><Callout n={1} title={<span>提示字元：在等你打字</span>} detail={<span>Windows 長這樣：<Path size={27}><span>{'PS C:\\Users\\you>'}</span></Path></span>} /></In>
+          <In i={1}><Callout n={1} title={<span>這是提示字元，表示在等你打字</span>} detail={<span>Windows 長這樣：<Path size={27}><span>{'PS C:\\Users\\you>'}</span></Path></span>} /></In>
           <Steps>
             <Step duration={STEP_MS}><Cue n={1}><Callout n={2} title={<span>打指令，按 Enter</span>} detail={<span>貼上：Mac ⌘V／Windows Ctrl+V</span>} /></Cue></Step>
             <Step duration={STEP_MS}><Cue n={2}><Callout n={3} title={<span>結果印在下一行</span>} /></Cue></Step>
-            <Step duration={STEP_MS}><Cue n={3}><Callout n={4} title={<span>提示字元再出現＝做完了</span>} detail={<span>還沒出現，就先等</span>} /></Cue></Step>
+            <Step duration={STEP_MS}><Cue n={3}><Callout n={4} title={<span>提示字元再出現，就是做完了</span>} detail={<span>還沒出現，就先等</span>} /></Cue></Step>
           </Steps>
         </div>
       </div>
@@ -1983,7 +1994,7 @@ const InstallCodex: Page = () => (
         </In>
         <In i={2}>
           <div style={{ padding: '18px 28px', background: surface, borderLeft: `5px solid ${amber}`, fontSize: 32, lineHeight: 1.5 }}>
-            <div>重開視窗，輸入 <Path size={32}>codex --version</Path><span style={{ color: muted }}>：看到版本號就成功，先不用打 </span><Path size={32}>codex</Path></div>
+            <div>重開視窗，輸入 <Path size={32}>codex --version</Path><span style={{ color: muted }}>，看到版本號就是裝好了。還不用打 </span><Path size={32}>codex</Path></div>
             <div style={{ marginTop: 6, fontSize: 26, color: quiet }}><span>出現 command not found？看附錄第 </span>{pageOf(PathFixMac)}<span>–</span>{pageOf(InstallErrors)}<span> 頁</span></div>
           </div>
         </In>
@@ -1994,7 +2005,7 @@ const InstallCodex: Page = () => (
 
 const CdFolder: Page = () => (
   <Shell chapter={3}>
-    <Eyebrow><span>步驟 5／7｜cd＝換到別的資料夾</span></Eyebrow>
+    <Eyebrow><span>步驟 5／7｜cd 是換資料夾的指令</span></Eyebrow>
     <Heading><span>用 cd 切換到練習資料夾</span></Heading>
     <Lead><span>Codex 從你所在的資料夾開始讀檔、存檔</span></Lead>
     <Fit>
@@ -2009,10 +2020,10 @@ const CdFolder: Page = () => (
           </Terminal>
         </In>
         <div style={{ display: 'grid', gap: 30 }}>
-          <In i={1}><Callout n={<span>{1}</span>} title={<span>打 cd 和空格，拖進資料夾</span>} detail={<span>拖 Codex_練習，再按 Enter</span>} /></In>
+          <In i={1}><Callout n={<span>{1}</span>} title={<span>打 cd 和空格，把資料夾拖進來</span>} detail={<span>拖 Codex_練習，再按 Enter</span>} /></In>
           <Steps>
             <Step duration={STEP_MS}><Cue n={1}><Callout n={<span>{2}</span>} title={<span>提示字元變成 Codex_練習</span>} detail={<span>Windows：<Path size={27}><span>{'PS …\\Codex_練習>'}</span></Path></span>} /></Cue></Step>
-            <Step duration={STEP_MS}><Cue n={2}><Callout n={<span>{3}</span>} title={<span>打 ls，看得到 原文 就對了</span>} detail={<span>看到 Codex_練習？再 cd 一次</span>} /></Cue></Step>
+            <Step duration={STEP_MS}><Cue n={2}><Callout n={<span>{3}</span>} title={<span>打 ls，看得到 原文 就對了</span>} detail={<span>ls 只列出 Codex_練習？再 cd 一次</span>} /></Cue></Step>
           </Steps>
         </div>
       </div>
@@ -2090,10 +2101,10 @@ const CodexTrust: Page = () => (
           </Terminal>
         </In>
         <div style={{ display: 'grid', gap: 28 }}>
-          <In i={1}><Callout n={<span>{1}</span>} title={<span>You are in：Codex 在哪個資料夾</span>} detail={<span>要是剛才 cd 進去的那個</span>} /></In>
+          <In i={1}><Callout n={<span>{1}</span>} title={<span>You are in：Codex 在哪個資料夾</span>} detail={<span>應該是剛才 cd 進去的那個</span>} /></In>
           <Steps>
             <Step duration={STEP_MS}><Cue n={1}><TrustCard ok when={<span>結尾是 Codex_練習</span>} path={<Path size={26}><span>{'…/aw-01-lab/Codex_練習'}</span></Path>} pick={<span>直接按 Enter：1. Yes, continue</span>} /></Cue></Step>
-            <Step duration={STEP_MS}><Cue n={2}><TrustCard ok={false} when={<span>只有 /Users/you：忘了 cd</span>} path={<Path size={26}><span>{'/Users/you　C:\\Users\\you'}</span></Path>} pick={<span>按 ↓ 選 2. No, quit，回去 cd</span>} /></Cue></Step>
+            <Step duration={STEP_MS}><Cue n={2}><TrustCard ok={false} when={<span>只有 /Users/you，是忘了 cd</span>} path={<Path size={26}><span>{'/Users/you　C:\\Users\\you'}</span></Path>} pick={<span>按 ↓ 選 2. No, quit，回去 cd</span>} /></Cue></Step>
           </Steps>
         </div>
       </div>
@@ -2103,7 +2114,7 @@ const CodexTrust: Page = () => (
 
 // ---------- 04 看懂 Codex ----------
 
-const Section4: Page = () => <SectionPage chapter={4} title={<span>{"看懂 Codex"}</span>} label={<span>{"04 / CODEX CLI"}</span>} lead="啟動畫面、/status、Session、Memory" />;
+const Section4: Page = () => <SectionPage chapter={4} title={<span>{"看懂 Codex"}</span>} label={<span>{"04 / CODEX CLI"}</span>} lead="啟動畫面、模型大小、Effort、Session、Memory" />;
 
 const StartScreen: Page = () => (
   <Shell chapter={4} source={<span>{'Codex CLI 文件 developers.openai.com/codex/cli'}</span>}>
@@ -2121,9 +2132,9 @@ const StartScreen: Page = () => (
         </In>
         <div style={{ display: 'grid', gap: 40 }}>
           <Steps>
-            <Step duration={STEP_MS}><Cue n={1}><Callout n={<span>{1}</span>} title={<><Path size={32}><span>model</span></Path><span>：用哪個模型</span></>} detail="名稱會變，不用背" /></Cue></Step>
+            <Step duration={STEP_MS}><Cue n={1}><Callout n={<span>{1}</span>} title={<><Path size={32}><span>model</span></Path><span>：用哪個模型</span></>} detail="名稱會隨版本變，後面的 high 是思考程度" /></Cue></Step>
             <Step duration={STEP_MS}><Cue n={2}><Callout n={<span>{2}</span>} title={<><Path size={32}><span>directory</span></Path><span>：在哪個資料夾</span></>} detail="Codex 在這裡讀檔、存檔" /></Cue></Step>
-            <Step duration={STEP_MS}><Cue n={3}><Callout n={<span>{3}</span>} title={<><Path size={32}><span>›</span></Path><span> 後面：打字的地方</span></>} detail="中文直接打" /></Cue></Step>
+            <Step duration={STEP_MS}><Cue n={3}><Callout n={<span>{3}</span>} title={<><Path size={32}><span>›</span></Path><span> 後面是打字的地方</span></>} detail="可以直接打中文" /></Cue></Step>
           </Steps>
         </div>
       </div>
@@ -2142,9 +2153,9 @@ const DeskCard = ({ x, y, kind, label, eg }: { x: number; y: number; kind: IconK
 
 const SessionDesk: Page = () => (
   <Shell chapter={4}>
-    <Eyebrow><span>Session＝一次工作階段</span></Eyebrow>
+    <Eyebrow><span>Session 就是一次工作階段</span></Eyebrow>
     <Heading><span>Session（工作階段）</span></Heading>
-    <Lead><span>像一張工作桌：桌上的東西 Codex 都看得到</span></Lead>
+    <Lead><span>Session 像一張工作桌，Codex 看得到桌上的東西</span></Lead>
     <Fit>
       <Stage h={400}>
         <Steps>
@@ -2167,7 +2178,7 @@ const SessionDesk: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}><span>同一件事，留在同一個 Session</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}><span>同一件事別開新 Session，Codex 才記得剛剛的對話</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2176,8 +2187,9 @@ const STATUS_COLS = '250px 1fr';
 
 const StatusPage: Page = () => (
   <Shell chapter={4} source={<span>{'Codex 斜線指令 developers.openai.com/codex/cli/slash-commands'}</span>}>
-    <Eyebrow><span>指令｜在 Codex 裡輸入 /status</span></Eyebrow>
-    <Heading><span>用 /status 確認 Directory</span></Heading>
+    <PracticeEyebrow time={<span>{"3 分鐘"}</span>}><span>練習 2-1｜Codex</span></PracticeEyebrow>
+    <Heading><span>練習：用 /status 確認資料夾</span></Heading>
+    <Lead><span>在 › 後面打 /status，看 Directory 這行</span></Lead>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '780px 1fr', gap: 56, alignItems: 'center' }}>
         <In i={0}>
@@ -2188,23 +2200,18 @@ const StatusPage: Page = () => (
           </Shot>
           <Caption><span>教材範例｜你的 Directory 會是自己的資料夾</span></Caption>
         </In>
-        <div>
+        <div style={{ display: 'grid', gap: 30 }}>
           <Steps>
             <Step duration={STEP_MS}>
-              <div style={{ background: amberSoft, borderLeft: `6px solid ${amber}`, padding: '26px 30px' }}>
-                <span style={{ background: amber, color: '#FFFFFF', fontSize: 24, fontWeight: 600, padding: '4px 14px' }}>今天必看</span>
-                <div style={{ fontFamily: mono, fontSize: 44, fontWeight: 700, marginTop: 18 }}>Directory</div>
-                <div style={{ fontSize: 34, marginTop: 10 }}>Codex 在哪個資料夾工作</div>
-                <div style={{ fontSize: 28, color: muted, marginTop: 10 }}>結尾要是你的練習資料夾</div>
-              </div>
+              <div style={{ background: sage, padding: '22px 26px' }}><StatusLine ok size={32}><span>結尾是 Codex_練習</span></StatusLine><div style={{ fontSize: 28, marginTop: 10, marginLeft: 50 }}>對了，可以開始</div></div>
             </Step>
             <Step duration={STEP_MS}>
-              <div style={{ fontSize: 27, color: quiet, marginTop: 26, lineHeight: 1.6 }}><span>其他欄位先知道就好：</span><br /><Path size={26}><span>Model</span></Path><span> 模型・</span><Path size={26}><span>Permissions</span></Path><span> 改檔權限・</span><Path size={26}><span>Session</span></Path><span> 編號</span></div>
+              <div style={{ background: amberSoft, padding: '22px 26px' }}><StatusLine ok={false} size={32}><span>結尾是 aw-01-lab</span></StatusLine><div style={{ fontSize: 28, marginTop: 10, marginLeft: 50, lineHeight: 1.5 }}><span>還在外層：打 </span><Path size={28}><span>/quit</span></Path><span>，</span><Path size={28}><span>cd Codex_練習</span></Path><span>，再打 </span><Path size={28}><span>codex</span></Path></div></div>
             </Step>
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway><span>動手前，先看 Directory 對不對</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway><span>Directory 對了，Codex 開著別關</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2229,7 +2236,7 @@ const UsageToken: Page = () => (
   <Shell chapter={4} source={<span>{'Codex 方案與額度 developers.openai.com/codex/pricing'}</span>}>
     <Eyebrow><span>Usage 與 Token｜簡單分清楚</span></Eyebrow>
     <Heading><span>Usage（額度）與 Token</span></Heading>
-    <Lead><span>像手機方案：月租額度，和用掉的流量</span></Lead>
+    <Lead><span>Usage 像月租額度，Token 像用掉的流量</span></Lead>
     <Fit>
       <Stage h={480}>
         <Steps>
@@ -2269,6 +2276,232 @@ const UsageToken: Page = () => (
   </Shell>
 );
 
+// ---------- Model size, memory and reasoning effort ----------
+
+// Model-size chart: one gridline per ×10, from 0.1B at SIZE_X0 to 1T.
+const SIZE_X0 = 360;
+const SIZE_DECADE = 300;
+const sizeX = (billions: number) => SIZE_X0 + SIZE_DECADE * (Math.log10(billions) + 1);
+
+const SizeGrid = ({ x, label }: { x: number; label: ReactNode }) => (
+  <g>
+    <line x1={x} y1="34" x2={x} y2="476" stroke={rule} strokeWidth="2" strokeDasharray="6 8" />
+    <text x={x} y="24" textAnchor="middle" fontSize="26" fontFamily={mono} fill={quiet}>{label}</text>
+  </g>
+);
+
+// One model: its name, a bar on the ×10 scale, and the published size inside the bar's end.
+const SizeRow = ({ y, name, b, size }: { y: number; name: ReactNode; b: number; size: ReactNode }) => (
+  <g>
+    <text x={SIZE_X0 - 24} y={y + 33} textAnchor="end" fontSize="29" fill={ink}>{name}</text>
+    <rect x={SIZE_X0} y={y + 8} width={sizeX(b) - SIZE_X0} height="34" fill={blueSoft} stroke={blue} strokeWidth="2" />
+    <text x={sizeX(b) - 14} y={y + 35} textAnchor="end" fontSize="28" fontWeight="600" fontFamily={mono} fill={blue}>{size}</text>
+  </g>
+);
+
+// The largest model a 24 GB card holds once quantized to 4-bit (about 0.6 GB per 1B, plus room for the conversation).
+const VRAM_24_LIMIT = 35;
+
+const ModelSize: Page = () => (
+  <Shell chapter={4} source={<span>{'Meta Llama、Qwen3 模型卡；GPT-3 論文；DeepSeek-V3 技術報告；Kimi K2；Ollama 模型頁；RTX 4090 規格'}</span>}>
+    <Eyebrow><span>模型大小｜B 是 Billion</span></Eyebrow>
+    <Heading><span>參數量（Parameters）與顯示卡記憶體</span></Heading>
+    <Lead><span>參數是模型學到的數字，1B 就是 10 億個</span></Lead>
+    <Fit>
+      <Stage h={480}>
+        <Steps>
+          <Layer h={480} label="參數量長條圖，每一格大 10 倍：Llama 3.2 1B、Qwen3 4B、Qwen3 32B、Llama 3.3 70B">
+            <text x={SIZE_X0 - 24} y="24" textAnchor="end" fontSize="24" fill={quiet}>刻度：每格 ×10</text>
+            <SizeGrid x={sizeX(1)} label={<tspan>{"1B"}</tspan>} />
+            <SizeGrid x={sizeX(10)} label={<tspan>{"10B"}</tspan>} />
+            <SizeGrid x={sizeX(100)} label={<tspan>{"100B"}</tspan>} />
+            <SizeGrid x={sizeX(1000)} label={<tspan>{"1T"}</tspan>} />
+            <line x1={SIZE_X0} y1="34" x2={SIZE_X0} y2="430" stroke={ink} strokeWidth="2" />
+            <InG i={0}><SizeRow y={36} name={<tspan>{"Llama 3.2"}</tspan>} b={1} size={<tspan>{"1B"}</tspan>} /></InG>
+            <InG i={1}><SizeRow y={80} name={<tspan>{"Qwen3"}</tspan>} b={4} size={<tspan>{"4B"}</tspan>} /></InG>
+            <InG i={2}><SizeRow y={124} name={<tspan>{"Qwen3"}</tspan>} b={32} size={<tspan>{"32B"}</tspan>} /></InG>
+            <InG i={3}><SizeRow y={168} name={<tspan>{"Llama 3.3"}</tspan>} b={70} size={<tspan>{"70B"}</tspan>} /></InG>
+          </Layer>
+          <Step duration={STEP_MS}><Layer h={480} label="更大的模型：GPT-3 175B、Llama 3.1 405B、DeepSeek-V3 671B、Kimi K2 1T">
+            <g className="aw1-build" style={buildDelay(0)}><SizeRow y={212} name={<tspan>{"GPT-3（2020）"}</tspan>} b={175} size={<tspan>{"175B"}</tspan>} /></g>
+            <g className="aw1-build" style={buildDelay(1)}><SizeRow y={256} name={<tspan>{"Llama 3.1"}</tspan>} b={405} size={<tspan>{"405B"}</tspan>} /></g>
+            <g className="aw1-build" style={buildDelay(2)}><SizeRow y={300} name={<tspan>{"DeepSeek-V3"}</tspan>} b={671} size={<tspan>{"671B"}</tspan>} /></g>
+            <g className="aw1-build" style={buildDelay(3)}><SizeRow y={344} name={<tspan>{"Kimi K2"}</tspan>} b={1000} size={<tspan>{"1T"}</tspan>} /></g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={480} label="GPT-4 以後的 GPT：OpenAI 沒有公布參數量">
+            <g className="aw1-build" style={buildDelay(0)}>
+              <text x={SIZE_X0 - 24} y={421} textAnchor="end" fontSize="29" fill={ink}>GPT-4 以後</text>
+              <rect x={SIZE_X0} y={396} width={sizeX(1000) - SIZE_X0} height="34" fill="none" stroke={faint} strokeWidth="2" strokeDasharray="10 8" />
+              <text x={sizeX(1)} y={422} textAnchor="middle" fontSize="27" fill={quiet}>OpenAI 沒有公布參數量</text>
+              <AskMark x={sizeX(1000) + 34} y={413} r={20} />
+            </g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={480} label="RTX 4090 的 24 GB 記憶體，量化成 4-bit 後大約跑到 30B 左右；70B 以上放不下">
+            <g className="aw1-build" style={buildDelay(0)}>
+              <line x1={sizeX(VRAM_24_LIMIT)} y1="34" x2={sizeX(VRAM_24_LIMIT)} y2="446" stroke={okGreen} strokeWidth="4" strokeDasharray="12 8" />
+              <rect x={SIZE_X0} y="446" width={sizeX(VRAM_24_LIMIT) - SIZE_X0} height="30" fill={sage} stroke={okGreen} strokeWidth="2" />
+              <text x={(SIZE_X0 + sizeX(VRAM_24_LIMIT)) / 2} y="469" textAnchor="middle" fontSize="25" fontWeight="600" fill={okGreen}>RTX 4090（24 GB）跑得動：約 30B 以內</text>
+              <text x={sizeX(VRAM_24_LIMIT) + 20} y="469" fontSize="25" fill={warn}>放不下 →</text>
+            </g>
+          </Layer></Step>
+        </Steps>
+      </Stage>
+      <Steps>
+        <Step duration={STEP_MS}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 24, marginTop: 20, fontSize: 27 }}>
+            <span style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '6px 18px' }}><span style={{ color: muted }}>粗估｜原始 16-bit：</span><strong>1B ≈ 2 GB</strong></span>
+            <span style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '6px 18px' }}><span style={{ color: muted }}>4-bit 量化：</span><strong>1B ≈ 0.6 GB</strong></span>
+            <span style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '6px 18px', color: muted }}>對話越長，也越佔記憶體</span>
+          </div>
+          <Takeaway marginTop={16}><span>參數越多通常越強，也越吃記憶體</span></Takeaway>
+        </Step>
+      </Steps>
+    </Fit>
+  </Shell>
+);
+
+// One row of the low-vs-xhigh run: level, seconds, reasoning tokens.
+const EffortRunRow = ({ level, time, think, head = false }: { level: ReactNode; time: ReactNode; think: ReactNode; head?: boolean }) => (
+  <div style={{ display: 'grid', gridTemplateColumns: '120px 120px 1fr', alignItems: 'center', padding: '8px 0', borderBottom: `1px solid ${rule}`, fontSize: head ? 24 : 29, color: head ? quiet : ink, fontWeight: head ? 400 : 600 }}>
+    <span>{level}</span><span>{time}</span><span style={{ textAlign: 'right' }}>{think}</span>
+  </div>
+);
+
+// One effort level: its name, then the draft sheets it writes before answering (count is illustrative).
+const DraftSheet = ({ x, y }: { x: number; y: number }) => <DocShape x={x} y={y} w={46} h={60} fill="#FFFFFF" stroke={faint} />;
+
+const EffortRow = ({ y, name, hot = false, children }: { y: number; name: ReactNode; hot?: boolean; children: ReactNode }) => (
+  <g>
+    <SvgChip x={0} y={y + 8} w={190} h={64} label={name} size={32} weight={600} fill={hot ? amberSoft : '#FFFFFF'} stroke={hot ? amber : rule} color={hot ? amber : ink} />
+    {children}
+  </g>
+);
+
+const EffortLevels: Page = () => (
+  <Shell chapter={4} source={<span>{'Codex 設定說明 learn.chatgpt.com/docs/config-file/config-reference；Artificial Analysis GPT-5 分析（2025-08）'}</span>}>
+    <Eyebrow><span>啟動畫面的 high｜回答前想多久</span></Eyebrow>
+    <Heading><span>Reasoning Effort（思考程度）</span></Heading>
+    <Lead><span>模型回答前會先想一段，Effort 決定想多久</span></Lead>
+    <Fit>
+      <div style={{ display: 'grid', gridTemplateColumns: '1060px 1fr', gap: 48, alignItems: 'center' }}>
+        <Stage w={1060} h={460}>
+        <Steps>
+        <Layer w={1060} h={460} label="四個檔位 low、medium、high、xhigh，草稿張數 1、2、4、7（示意）">
+          <text x="0" y="28" fontSize="26" fill={quiet}>檔位</text>
+          <text x="240" y="28" fontSize="26" fill={quiet}>回答前寫的草稿（示意）</text>
+          <InG i={0}><EffortRow y={50} name={<tspan>{"low"}</tspan>}>
+            <DraftSheet x={240} y={60} />
+          </EffortRow></InG>
+          <InG i={1}><EffortRow y={150} name={<tspan>{"medium"}</tspan>}>
+            <DraftSheet x={240} y={160} /><DraftSheet x={300} y={160} />
+          </EffortRow></InG>
+          <InG i={2}><EffortRow y={250} name={<tspan>{"high"}</tspan>} hot>
+            <DraftSheet x={240} y={260} /><DraftSheet x={300} y={260} /><DraftSheet x={360} y={260} /><DraftSheet x={420} y={260} />
+          </EffortRow></InG>
+          <InG i={3}><EffortRow y={350} name={<tspan>{"xhigh"}</tspan>}>
+            <DraftSheet x={240} y={360} /><DraftSheet x={300} y={360} /><DraftSheet x={360} y={360} /><DraftSheet x={420} y={360} /><DraftSheet x={480} y={360} /><DraftSheet x={540} y={360} /><DraftSheet x={600} y={360} />
+          </EffortRow></InG>
+        </Layer>
+          <Step duration={STEP_MS}><Layer w={1060} h={460} label="GPT-5 實測：minimal 用 350 萬 Token、44 分、約 7 秒；medium 67 分；high 用 8,200 萬 Token、68 分、約 80 秒">
+              <g className="aw1-build" style={buildDelay(0)}>
+                <rect x="686" y="0" width="374" height="460" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+                <text x="712" y="40" fontSize="25" fontWeight="600" fill={amber}>GPT-5 實測｜同一套測驗</text>
+                <DownArrowSvg x={724} y1={70} y2={436} color={amber} />
+                <text x="752" y="96" fontSize="29" fontWeight="600" fill={ink}>minimal｜44 分</text>
+                <text x="752" y="132" fontSize="26" fill={muted}>350 萬 Token</text>
+                <text x="752" y="166" fontSize="26" fill={muted}>約 7 秒</text>
+              </g>
+              <g className="aw1-build" style={buildDelay(2)}>
+                <text x="752" y="262" fontSize="29" fontWeight="600" fill={ink}>medium｜67 分</text>
+              </g>
+              <g className="aw1-build" style={buildDelay(4)}>
+                <text x="752" y="354" fontSize="29" fontWeight="600" fill={ink}>high｜68 分</text>
+                <text x="752" y="390" fontSize="26" fill={muted}>8,200 萬 Token</text>
+                <text x="752" y="424" fontSize="26" fill={muted}>約 80 秒</text>
+              </g>
+          </Layer></Step>
+        </Steps>
+        </Stage>
+        <div>
+          <Steps>
+            <Step duration={STEP_MS}>
+              <div style={{ background: '#FFFFFF', border: `1px solid ${rule}`, padding: '24px 28px' }}>
+                <SmallLabel><span>同一題實際跑</span></SmallLabel>
+                <div style={{ fontSize: 30, marginTop: 10 }}>第 1 回裡，劉備字什麼？</div>
+                <div style={{ marginTop: 16 }}>
+                  <EffortRunRow head level={<span>檔位</span>} time={<span>時間</span>} think={<span>思考 Token</span>} />
+                  <EffortRunRow level={<Path size={28}><span>low</span></Path>} time={<span>15 秒</span>} think={<span>0</span>} />
+                  <EffortRunRow level={<Path size={28}><span>xhigh</span></Path>} time={<span>13 秒</span>} think={<span>123</span>} />
+                </div>
+                <div style={{ fontSize: 26, color: muted, marginTop: 14, lineHeight: 1.45 }}><span>兩個都答對。</span><br /><span>讀進去的 Token 約有 4 萬個</span></div>
+              </div>
+            </Step>
+          </Steps>
+          <div style={{ fontSize: 24, color: quiet, marginTop: 22 }}>輸入 <Path size={24}><span>/model</span></Path> 可以換檔，可選的檔位依模型不同</div>
+        </div>
+      </div>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}><span>調高 Effort 會多花 Token 和時間，答案不一定比較好</span></Takeaway></Step></Steps>
+    </Fit>
+  </Shell>
+);
+
+// Cost chart: two bars per factor, Kimi K2 Thinking (amber) next to GPT-5 high (blue).
+const COST_BASE = 390;
+const CostBar = ({ x, h, color, soft, value }: { x: number; h: number; color: string; soft: string; value: ReactNode }) => (
+  <g>
+    <rect x={x} y={COST_BASE - h} width="120" height={h} fill={soft} stroke={color} strokeWidth="2" />
+    <text x={x + 60} y={COST_BASE - h - 14} textAnchor="middle" fontSize="29" fontWeight="600" fill={color}>{value}</text>
+  </g>
+);
+
+const CostGroup = ({ cx, kimi, gpt, kimiValue, gptValue, l1, l2 }: { cx: number; kimi: number; gpt: number; kimiValue: ReactNode; gptValue: ReactNode; l1: ReactNode; l2: ReactNode }) => (
+  <g>
+    <CostBar x={cx - 136} h={kimi} color={amber} soft={amberSoft} value={kimiValue} />
+    <CostBar x={cx + 16} h={gpt} color={blue} soft={blueSoft} value={gptValue} />
+    <line x1={cx - 170} y1={COST_BASE} x2={cx + 170} y2={COST_BASE} stroke={ink} strokeWidth="2" />
+    <text x={cx} y={COST_BASE + 42} textAnchor="middle" fontSize="29" fontWeight="600" fill={ink}>{l1}</text>
+    <text x={cx} y={COST_BASE + 78} textAnchor="middle" fontSize="26" fill={muted}>{l2}</text>
+  </g>
+);
+
+const LegendKey = ({ x, color, soft, label }: { x: number; color: string; soft: string; label: ReactNode }) => (
+  <g><rect x={x} y="6" width="30" height="30" fill={soft} stroke={color} strokeWidth="2" /><text x={x + 44} y="32" fontSize="28" fill={ink}>{label}</text></g>
+);
+
+const EffortCost: Page = () => (
+  <Shell chapter={4} source={<span>{'Artificial Analysis：Kimi K2 Thinking 分析（2025-11）；OpenAI API 價格'}</span>}>
+    <Eyebrow><span>Effort 與花費｜實際案例</span></Eyebrow>
+    <Heading><span>推理成本＝Token 單價 × Token 數</span></Heading>
+    <Lead><span>像搭計程車：單價乘上用量才是總花費</span></Lead>
+    <Fit>
+      <Stage h={480}>
+        <Steps>
+        <Layer h={480} label="Token 單價：輸出每百萬 Token，Kimi K2 Thinking 2.5 美元，GPT-5（high）10 美元">
+        <InG i={0}>
+          <LegendKey x={0} color={amber} soft={amberSoft} label={<tspan>{"Kimi K2 Thinking"}</tspan>} />
+          <LegendKey x={330} color={blue} soft={blueSoft} label={<tspan>{"GPT-5（high）"}</tspan>} />
+        </InG>
+        <InG i={1}><CostGroup cx={300} kimi={70} gpt={280} kimiValue={<tspan>{"$2.5"}</tspan>} gptValue={<tspan>{"$10"}</tspan>} l1={<tspan>{"Token 單價"}</tspan>} l2={<tspan>{"輸出每百萬 Token"}</tspan>} /></InG>
+        </Layer>
+          <Step duration={STEP_MS}><Layer h={480} label="Token 數：跑完同一套測驗，Kimi 用了 1.4 億，GPT-5 約一半">
+            <g className="aw1-build" style={buildDelay(0)}>
+              <text x="558" y="290" textAnchor="middle" fontSize="64" fill={faint}>×</text>
+              <CostGroup cx={816} kimi={280} gpt={140} kimiValue={<tspan>{"1.4 億"}</tspan>} gptValue={<tspan>{"約一半"}</tspan>} l1={<tspan>{"Token 數"}</tspan>} l2={<tspan>{"跑完同一套測驗"}</tspan>} />
+            </g>
+          </Layer></Step>
+          <Step duration={STEP_MS}><Layer h={480} label="總花費：Kimi 356 美元，GPT-5（high）913 美元；單價差 4 倍，總花費差 2.5 倍">
+            <g className="aw1-build" style={buildDelay(0)}>
+              <text x="1074" y="290" textAnchor="middle" fontSize="64" fill={faint}>＝</text>
+              <CostGroup cx={1332} kimi={109} gpt={280} kimiValue={<tspan>{"$356"}</tspan>} gptValue={<tspan>{"$913"}</tspan>} l1={<tspan>{"總花費"}</tspan>} l2={<tspan>{"單價差 4 倍，總花費差 2.5 倍"}</tspan>} />
+            </g>
+          </Layer></Step>
+        </Steps>
+      </Stage>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}><span>單價便宜的模型，Token 用得多，總花費也會變高</span></Takeaway></Step></Steps>
+    </Fit>
+  </Shell>
+);
+
 const SessionBox = ({ x, title, children }: { x: number; title: ReactNode; children: ReactNode }) => (
   <g>
     <rect x={x} y="40" width="540" height="170" fill="#FFFFFF" stroke={ink} strokeWidth="2" />
@@ -2279,9 +2512,9 @@ const SessionBox = ({ x, title, children }: { x: number; title: ReactNode; child
 
 const MemoryLayers: Page = () => (
   <Shell chapter={4} source={<span>{'Codex 文件：AGENTS.md developers.openai.com/codex/guides/agents-md；agents.md'}</span>}>
-    <Eyebrow><span>Memory＝留下來的上下文</span></Eyebrow>
+    <Eyebrow><span>Memory 是 Codex 記得住的內容</span></Eyebrow>
     <Heading><span>Memory 的兩層</span></Heading>
-    <Lead><span>像口頭交代，和貼在牆上的公告</span></Lead>
+    <Lead><span>一層像口頭交代，一層像貼在牆上的公告</span></Lead>
     <Fit>
       <Stage h={460}>
         <Steps>
@@ -2306,17 +2539,17 @@ const MemoryLayers: Page = () => (
             <g className="aw1-build" style={buildDelay(0)}>
               <DocShape x={646} y={290} w={340} h={160} fill={amberSoft} stroke={amber} sw={3} />
               <text x="816" y="364" textAnchor="middle" fontSize="36" fontFamily={mono} fontWeight="600" fill={ink}>AGENTS.md</text>
-              <text x="816" y="412" textAnchor="middle" fontSize="26" fill={muted}>每次開都會讀</text>
+              <text x="816" y="412" textAnchor="middle" fontSize="26" fill={muted}>每個 Session 都會讀</text>
             </g>
             <g className="aw1-build" style={buildDelay(3)}>
               <rect x="1036" y="114" width="480" height="76" fill="#FFFFFF" />
               <OkDot x={1064} y={150} r={24} />
-              <text x="1104" y="160" fontSize="30" fill={okGreen}>讀了檔案，照規則做</text>
+              <text x="1104" y="160" fontSize="30" fill={okGreen}>讀了 AGENTS.md，照著做</text>
             </g>
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}><span>聊天只在這個 Session 有效；AGENTS.md 每次開都會讀</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}><span>規則要寫進 AGENTS.md，開新 Session 才還在</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2385,7 +2618,7 @@ const AgentsFile: Page = () => (
 
 // ---------- 05 用 Codex 寫大綱 ----------
 
-const Section5: Page = () => <SectionPage chapter={5} title={<span>{"用 Codex 寫大綱"}</span>} label={<span>{"05 / 實作"}</span>} lead="只看原文，寫出前 21 回的大綱" />;
+const Section5: Page = () => <SectionPage chapter={5} title={<span>{"用 Codex 寫大綱"}</span>} label={<span>{"05 / 實作"}</span>} lead="請 Codex 只根據原文，寫出前 21 回的大綱" />;
 
 const LabRow = ({ y, kind, name, note, indent = 0, hot = false }: { y: number; kind: IconKind; name: ReactNode; note: ReactNode; indent?: number; hot?: boolean }) => {
   const x = 120 + indent;
@@ -2433,40 +2666,6 @@ const DownloadLab: Page = () => (
   </Shell>
 );
 
-const OpenLab: Page = () => (
-  <Shell chapter={5}>
-    <PracticeEyebrow time={<span>{"3 分鐘"}</span>}><span>練習 2-1｜Codex</span></PracticeEyebrow>
-    <Heading><span>練習（/status）：確認資料夾對不對</span></Heading>
-    <Fit z={1.08}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1060px 1fr', gap: 56, alignItems: 'center' }}>
-        <In i={0}>
-          {/* The terminal lines appear with the cues of the steps on the right, so command, output and check alternate. */}
-          <Terminal title={<span>{"終端機（示意，路徑依電腦而定）"}</span>} size={30}>
-            <Typed><span>$</span></Typed><span>{' cd '}</span><Dim><span>{'〔打空格，再把 Codex_練習 資料夾拖進來〕\n'}</span></Dim>
-            <CueSpan n={1}><Typed><span>$</span></Typed><span>{' ls\n'}</span></CueSpan>
-            <CueSpan n={1} delay={260}><HotLine><span>原文</span></HotLine><span>{'  '}</span><HotLine><span>回目.md</span></HotLine><span>{'\n'}</span></CueSpan>
-            <CueSpan n={2}><Typed><span>$</span></Typed><span>{' codex\n'}</span><AskLine><span>{'› /status\n'}</span></AskLine></CueSpan>
-            <CueSpan n={2} delay={260}><span>{'Directory:    '}</span><HotLine><span>~/…/Codex_練習</span></HotLine></CueSpan>
-          </Terminal>
-        </In>
-        <div style={{ display: 'grid' }}>
-          <Steps>
-            <Step duration={STEP_MS}><Cue n={1} /></Step>
-            <Step duration={STEP_MS}>
-              <div style={{ display: 'grid', gap: 30 }}>
-                <div className="aw1-build" style={{ ...buildDelay(0), background: sage, padding: '22px 26px' }}><StatusLine ok size={32}><span>ls 看得到 原文</span></StatusLine><div style={{ fontSize: 28, marginTop: 10, marginLeft: 50 }}><span>再打 </span><Path size={28}><span>codex</span></Path></div></div>
-                <div className="aw1-build" style={{ ...buildDelay(1), background: amberSoft, padding: '22px 26px' }}><StatusLine ok={false} size={32}><span>看到 Codex_練習</span></StatusLine><div style={{ fontSize: 28, marginTop: 10, marginLeft: 50 }}><span>還在外層：</span><Path size={28}><span>cd Codex_練習</span></Path></div></div>
-              </div>
-            </Step>
-            <Step duration={STEP_MS}><Cue n={2} /></Step>
-            <Step duration={STEP_MS}><div style={{ background: sage, padding: '22px 26px', marginTop: 30 }}><StatusLine ok size={32}><span>Directory 結尾對</span></StatusLine><div style={{ fontSize: 28, marginTop: 10, marginLeft: 50 }}>可以開始了</div></div></Step>
-          </Steps>
-        </div>
-      </div>
-    </Fit>
-  </Shell>
-);
-
 // One desk (Session) in the memory practice: what you ask, and what Codex answers.
 const AskDesk = ({ y, title, h, children }: { y: number; title: ReactNode; h: number; children: ReactNode }) => (
   <g>
@@ -2478,35 +2677,47 @@ const AskDesk = ({ y, title, h, children }: { y: number; title: ReactNode; h: nu
 );
 
 // Practice 2-2, step 1: students make AGENTS.md themselves in a plain text editor.
-const EditorCard = ({ os, app, steps }: { os: ReactNode; app: ReactNode; steps: ReactNode }) => (
-  <div style={{ background: surface, borderTop: `5px solid ${amber}`, padding: '22px 34px 30px', height: '100%', boxSizing: 'border-box' }}>
-    <div style={{ display: 'flex', alignItems: 'baseline', gap: 18 }}><span style={{ fontSize: 40, fontWeight: 600 }}>{os}</span><span style={{ fontSize: 30, color: amber, fontWeight: 600 }}>{app}</span></div>
-    <div style={{ display: 'grid', gap: 10, marginTop: 18 }}>{steps}</div>
+// One of the three steps for writing AGENTS.md: the step itself, then what it means on each system.
+const OsHint = ({ os, children }: { os: ReactNode; children: ReactNode }) => (
+  <div style={{ fontSize: 27, lineHeight: 1.45 }}>
+    <div style={{ fontSize: 24, fontWeight: 600, color: quiet }}>{os}</div><div>{children}</div>
+  </div>
+);
+
+const BuildStep = ({ n, title, children }: { n: number; title: ReactNode; children: ReactNode }) => (
+  <div style={{ background: surface, borderTop: `5px solid ${amber}`, padding: '24px 30px 30px', height: '100%', boxSizing: 'border-box' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}><NumDot n={n} /><span style={{ fontSize: 38, fontWeight: 600 }}>{title}</span></div>
+    <div style={{ display: 'grid', gap: 12, marginTop: 22 }}>{children}</div>
   </div>
 );
 
 const AgentsByHand: Page = () => (
   <Shell chapter={5}>
     <PracticeEyebrow time={<span>{"5 分鐘"}</span>}><span>練習 2-2｜第 1 步｜文字編輯器</span></PracticeEyebrow>
+    <PromptsCopy step="2-2" />
     <Heading><span>練習（Memory）：自己建 AGENTS.md</span></Heading>
-    <Lead><span>AGENTS.md 是普通文字檔，貼上 prompts.md 的三行規則</span></Lead>
+    <Lead><span>AGENTS.md 是普通文字檔，內建編輯器就能寫</span></Lead>
     <Fit>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 36 }}>
         <In i={0}>
-          <EditorCard os={<span>Mac</span>} app={<span>文字編輯</span>} steps={<>
-            <OpenStep n={1} size={30}><span>打開「文字編輯」，新增文件</span></OpenStep>
-            <OpenStep n={2} size={30}><span>格式 → 製作純文字</span></OpenStep>
-            <OpenStep n={3} size={30}><span>貼上規則，按</span><Key><span>⌘ S</span></Key></OpenStep>
-            <OpenStep n={4} size={30}><span>存進 Codex_練習，選「使用 .md」</span></OpenStep>
-          </>} />
+          <BuildStep n={1} title={<span>建立新檔案</span>}>
+            <OsHint os={<span>Mac</span>}><span>打開「文字編輯」，按「新增文件」</span></OsHint>
+            <OsHint os={<span>Windows</span>}><span>打開「記事本」</span></OsHint>
+          </BuildStep>
         </In>
         <In i={1}>
-          <EditorCard os={<span>Windows</span>} app={<span>記事本</span>} steps={<>
-            <OpenStep n={1} size={30}><span>打開「記事本」</span></OpenStep>
-            <OpenStep n={2} size={30}><span>貼上規則</span></OpenStep>
-            <OpenStep n={3} size={30}><span>檔案 → 另存新檔，存進 Codex_練習</span></OpenStep>
-            <OpenStep n={4} size={30}><span>存檔類型選「所有檔案」</span></OpenStep>
-          </>} />
+          <BuildStep n={2} title={<span>編輯純文字</span>}>
+            <OsHint os={<span>Mac</span>}><span>先按「格式 → 製作純文字」</span></OsHint>
+            <OsHint os={<span>Windows</span>}><span>記事本本來就是純文字</span></OsHint>
+            <div style={{ fontSize: 27, lineHeight: 1.45, marginTop: 6 }}>貼上 prompts.md 的三行規則</div>
+          </BuildStep>
+        </In>
+        <In i={2}>
+          <BuildStep n={3} title={<span>檔名叫做 <Path size={36}><span>AGENTS.md</span></Path></span>}>
+            <OsHint os={<span>Mac</span>}><span>按 ⌘S，跳出視窗時選「使用 .md」</span></OsHint>
+            <OsHint os={<span>Windows</span>}><span>另存新檔，存檔類型選「所有檔案」</span></OsHint>
+            <div style={{ fontSize: 27, lineHeight: 1.45, marginTop: 6 }}>存進 Codex_練習 資料夾</div>
+          </BuildStep>
         </In>
       </div>
       <Steps><Step duration={STEP_MS}>
@@ -2523,12 +2734,12 @@ const RulePractice: Page = () => (
   <Shell chapter={5} source={<span>{'Codex 文件：AGENTS.md developers.openai.com/codex/guides/agents-md；agents.md'}</span>}>
     <PracticeEyebrow time={<span>{"4 分鐘"}</span>}><span>練習 2-2｜第 2 步｜Codex</span></PracticeEyebrow>
     <Heading><span>練習（Memory）：換新 Session，規則還在</span></Heading>
-    <Lead><span>規則貼上牆，換新桌子也看得到</span></Lead>
+    <Lead><span>AGENTS.md 像貼在牆上的公告</span></Lead>
     <Fit>
       <Stage h={470}>
         <Steps>
           <Layer h={470} label="第一步：自己建好的 AGENTS.md，像在牆上貼一張公告">
-            <InG i={0}><text x="20" y="36" fontSize="30" fontWeight="600" fill={amber}>① 建好規則檔＝貼上牆</text></InG>
+            <InG i={0}><text x="20" y="36" fontSize="30" fontWeight="600" fill={amber}>① 建好規則檔（牆上的公告）</text></InG>
             <InG i={1}>
               <DocShape x={20} y={60} w={470} h={340} fill={amberSoft} stroke={amber} sw={3} />
               <text x="50" y="120" fontSize="34" fontFamily={mono} fontWeight="700" fill={ink}>AGENTS.md</text>
@@ -2572,91 +2783,81 @@ const RulePractice: Page = () => (
             <g fill="none" stroke={okGreen} strokeWidth="4"><StepPath d="M470 315 C560 315 580 396 680 396" i={1} /></g>
             <g className="aw1-build" style={buildDelay(2)}>
               <OkDot x={1340} y={330} r={22} />
-              <text x="1378" y="341" fontSize="30" fontWeight="600" fill={okGreen}>沒憑記憶</text>
-              <text x="1320" y="398" fontSize="24" fill={quiet}>拿掉公告再問：</text>
-              <text x="1320" y="434" fontSize="24" fontWeight="600" fill={warn}>答「第三十七回」</text>
+              <text x="1378" y="322" fontSize="30" fontWeight="600" fill={okGreen}>沒憑記憶</text>
+              <text x="1378" y="362" fontSize="30" fontWeight="600" fill={okGreen}>報回數</text>
             </g>
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}><span>開新 Session，Codex 仍照 AGENTS.md 的規則回答</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 28, marginTop: 28, background: amberSoft, padding: '18px 32px' }}>
+          <StatusLine ok={false} size={30}><span>沒寫出處，或直接報「第 37 回」</span></StatusLine>
+          <span style={{ fontSize: 30 }}>打 <Path size={30}><span>/quit</span></Path>，再打 <Path size={30}><span>codex</span></Path> 重開，再問一次</span>
+        </div>
+      </Step></Steps>
     </Fit>
   </Shell>
 );
 
-const FlowStation = ({ x, label, children }: { x: number; label: ReactNode; children: ReactNode }) => (
-  <g>
-    {children}
-    <text x={x} y={330} textAnchor="middle" fontSize="31" fontWeight="600" fill={ink}>{label}</text>
-  </g>
+// One beat of practice 2-3 on the right: what happens next in Codex, as a small terminal.
+const CodexBeat = ({ n, title, children }: { n: number; title: ReactNode; children: ReactNode }) => (
+  <div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}><NumDot n={n} size={40} /><span style={{ fontSize: 30, fontWeight: 600 }}>{title}</span></div>
+    <div style={{ marginTop: 12, background: term, color: '#F5F5F4', fontFamily: mono, fontSize: 24, lineHeight: 1.45, padding: '16px 24px', whiteSpace: 'pre' }}>{children}</div>
+  </div>
 );
+
+const PromptTag = ({ color, children }: { color: string; children: ReactNode }) => <span style={{ color, fontWeight: 700 }}>{children}</span>;
 
 const OutlinePrompt: Page = () => (
   <Shell chapter={5} source={<span>{'維基文庫《三國演義》第 1–21 回 zh.wikisource.org/wiki/三國演義'}</span>}>
     <PracticeEyebrow time={<span>{"5 分鐘"}</span>}><span>練習 2-3｜Codex</span></PracticeEyebrow>
+    <PromptsCopy step="2-3" />
     <Heading><span>練習（RAG）：照原文寫大綱</span></Heading>
-    <PillRow>
-      <Pill tag={<span>{"定位"}</span>}><span>原文第 1–21 回</span></Pill>
-      <Pill tag={<span>{"期望輸出"}</span>} color={okGreen}><span>三國演義大綱.md</span></Pill>
-      <Pill tag={<span>{"限制"}</span>} color={muted}><span>原文沒寫的不加</span></Pill>
-    </PillRow>
     <Fit>
-      <Stage h={360}>
-        <Steps>
-          <Layer h={360} label="Codex 讀原文資料夾的 21 個檔">
-            <InG i={1}>
-              <FlowStation x={150} label={<tspan>{"原文/ 21 回"}</tspan>}>
-                <DocShape x={70} y={110} w={120} h={150} fill={amberSoft} stroke={amber} />
-                <DocShape x={100} y={125} w={120} h={150} fill={amberSoft} stroke={amber} />
-                <DocShape x={130} y={140} w={120} h={150} fill={amberSoft} stroke={amber} />
-              </FlowStation>
-            </InG>
-            <InG i={2}><MapArrow x1={264} x2={362} y={200} /></InG>
-            <InG i={3}>
-              <FlowStation x={470} label={<tspan>{"Codex 讀完"}</tspan>}>
-                <rect x="380" y="130" width="180" height="140" fill={term} />
-                <text x="470" y="212" textAnchor="middle" fontSize="30" fontFamily={mono} fill="#F5F5F4">&gt;_ Codex</text>
-              </FlowStation>
-            </InG>
-          </Layer>
-          <Step duration={STEP_MS}><Layer h={360} label="先給你看草稿">
-            <g className="aw1-build" style={buildDelay(0)}><MapArrow x1={572} x2={670} y={200} /></g>
-            <g className="aw1-steppop" style={buildDelay(1)}>
-              <FlowStation x={790} label={<tspan>{"先給你看"}</tspan>}>
-                <Bubble x={690} y={110} w={200} h={150} />
-                <rect x="714" y="140" width="150" height="12" fill={rule} />
-                <rect x="714" y="170" width="120" height="12" fill={rule} />
-                <rect x="714" y="200" width="140" height="12" fill={linkSoft} />
-                <rect x="714" y="230" width="100" height="12" fill={sage} />
-              </FlowStation>
-            </g>
-          </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={360} label="你說可以，Codex 直接存成三國演義大綱.md">
-            <g className="aw1-build" style={buildDelay(0)}><MapArrow x1={904} x2={1002} y={200} /></g>
-            <g className="aw1-steppop" style={buildDelay(1)}>
-              <rect x="1016" y="120" width="208" height="64" rx="32" fill={raised} stroke={rule} strokeWidth="2" />
-              <text x="1120" y="163" textAnchor="middle" fontSize="30" fill={ink}>可以，存檔</text>
-            </g>
-            <g className="aw1-build" style={buildDelay(1)}><text x="1120" y="330" textAnchor="middle" fontSize="31" fontWeight="600" fill={ink}>你說「可以」</text></g>
-            <g className="aw1-steppop" style={buildDelay(2)}>
-              <rect x="1016" y="206" width="208" height="60" fill={sage} stroke={okGreen} strokeWidth="2" />
-              <text x="1120" y="246" textAnchor="middle" fontSize="28" fontWeight="700" fill={ink}>直接存檔</text>
-            </g>
-            <g className="aw1-build" style={buildDelay(3)}><MapArrow x1={1238} x2={1336} y={200} /></g>
-            <g className="aw1-steppop" style={buildDelay(4)}>
-              <FlowStation x={1470} label={<tspan>{"三國演義大綱.md"}</tspan>}>
-                <DocShape x={1390} y={110} w={160} h={180} fill={sage} stroke={okGreen} sw={3} />
-                <SvgIcon kind="save" x={1470} y={200} size={64} color={okGreen} />
-              </FlowStation>
-            </g>
-          </Layer></Step>
-        </Steps>
-      </Stage>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginTop: 8 }}>
-        <Steps>
-          <Step duration={STEP_MS}><span style={{ display: 'inline-block', background: sage, border: `2px solid ${okGreen}`, padding: '10px 22px', fontSize: 28, fontWeight: 600 }}>完成：檔案出現，每段都有出處</span></Step>
-          <Step duration={STEP_MS}><span style={{ display: 'inline-block', background: amberSoft, border: `2px solid ${amber}`, padding: '10px 22px', fontSize: 28, fontWeight: 600 }}>最低：先做第 1–2 回，再擴到 21 回</span></Step>
-        </Steps>
+      <div style={{ display: 'grid', gridTemplateColumns: '860px 1fr', gap: 52, alignItems: 'start' }}>
+        <In i={0}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}><NumDot n={1} size={40} /><span style={{ fontSize: 30, fontWeight: 600 }}>在 Codex 貼上整段提示詞</span></div>
+          <Terminal title={<span>{"Codex（Codex_練習）"}</span>} size={24} lh={1.42}>
+            <AskLine><span>{'› '}</span></AskLine><PromptTag color="#E9B650"><span>{'【定位】\n'}</span></PromptTag>
+            <span>{'  請讀 原文/ 資料夾裡第 1 回到第 21 回的文字。\n'}</span>
+            <PromptTag color="#8DD4A0"><span>{'  【期望輸出】\n'}</span></PromptTag>
+            <span>{'  寫成一個檔案：三國演義大綱.md。\n'}</span>
+            <span>{'  每一回一個段落，標題寫成「## 第 N 回 回目」。\n'}</span>
+            <span>{'  每段寫 2 到 3 句，說這一回發生了什麼事。\n'}</span>
+            <span>{'  內文的人名都寫成 Obsidian 連結，例如 [[劉備]]；\n'}</span>
+            <span>{'  標題裡的人名不用加連結。\n'}</span>
+            <span>{'  事件名稱如果第二堂的筆記庫已經有卡，\n'}</span>
+            <span>{'  也寫成連結：[[桃園結義]]、[[煮酒論英雄]]。\n'}</span>
+            <span>{'  每段最後一行寫「出處：原文/第00N回.md」。\n'}</span>
+            <PromptTag color="#BCC3CC"><span>{'  【限制】\n'}</span></PromptTag>
+            <span>{'  只能用原文裡的內容，原文沒寫的事情不要加。\n'}</span>
+            <span>{'  寫入檔案前，先給我看內容，等我說可以再寫。'}</span>
+          </Terminal>
+        </In>
+        <div style={{ display: 'grid', gap: 26 }}>
+          <Steps>
+            <Step duration={STEP_MS}>
+              <CodexBeat n={2} title={<span>{"Codex 讀完 21 回，先貼草稿"}</span>}>
+                <span>{'## 第 1 回 宴桃園豪傑三結義…\n'}</span>
+                <Dim><span>{'……（共 21 段）\n'}</span></Dim>
+                <AskLine><span>{'如果內容可以，請回覆「可以」，\n我再建立 三國演義大綱.md。'}</span></AskLine>
+              </CodexBeat>
+            </Step>
+            <Step duration={STEP_MS}>
+              <CodexBeat n={3} title={<span>{"看完草稿，回「可以」"}</span>}>
+                <AskLine><span>{'› 可以\n'}</span></AskLine>
+                <HotLine><Typed><span>Added 三國演義大綱.md</span></Typed></HotLine>
+              </CodexBeat>
+            </Step>
+            <Step duration={STEP_MS}>
+              <div style={{ background: amberSoft, padding: '18px 24px' }}>
+                <StatusLine ok={false} size={28}><span>跑不出來、時間不夠</span></StatusLine>
+                <div style={{ fontSize: 27, lineHeight: 1.45, marginTop: 8, marginLeft: 50 }}>「第 1 回到第 21 回」<br />改成「第 1 回到第 2 回」再跑</div>
+              </div>
+            </Step>
+          </Steps>
+        </div>
       </div>
     </Fit>
   </Shell>
@@ -2675,21 +2876,21 @@ const OutlineResult: Page = () => (
             <Icon kind="doc" size={30} color={muted} /><span>三國演義大綱.md
           </span></div>
           <div style={{ padding: '20px 34px 24px', fontSize: 28, lineHeight: 1.6 }}>
-            <div style={{ fontSize: 36, fontWeight: 600 }}># 三國演義大綱</div>
+            <div style={{ fontSize: 36, fontWeight: 600 }}># 《三國演義》第 1–21 回大綱</div>
             <div style={{ fontSize: 30, fontWeight: 600, marginTop: 10 }}>## 第 1 回 宴桃園豪傑三結義　斬黃巾英雄首立功</div>
-            <div><span>……</span><L><span>[[劉備]]</span></L><span>在涿縣遇到</span><L><span>[[張飛]]</span></L><span>、</span><L><span>[[關羽]]</span></L><span>，三人在桃園結義……</span></div>
+            <div><span>……</span><L><span>[[劉備]]</span></L><span>、</span><L><span>[[關羽]]</span></L><span>、</span><L><span>[[張飛]]</span></L><span>在桃園祭告天地，結為兄弟……</span></div>
             <div style={{ color: okGreen, fontWeight: 600 }}><Ring n={2} inline><span>出處：原文/第001回.md</span></Ring></div>
-            <div style={{ fontSize: 30, fontWeight: 600, marginTop: 14 }}><span>## 第 2 回 </span><Ring n={3} inline><L><span>[[張飛]]</span></L><span>怒鞭督郵　</span><L><span>[[何進]]</span></L><span>謀誅宦豎</span></Ring></div>
-            <div><span>……督郵索賄陷害</span><L><span>[[劉備]]</span></L><span>，</span><L><span>[[張飛]]</span></L><span>怒鞭督郵，三人棄官離去……</span></div>
+            <div style={{ fontSize: 30, fontWeight: 600, marginTop: 14 }}><span>## 第 2 回 </span><Ring n={3} inline><span>張翼德怒鞭督郵　何國舅謀誅宦豎</span></Ring></div>
+            <div><span>……</span><L><span>[[劉備]]</span></L><span>任安喜縣尉，因督郵索賄欺壓而被</span><L><span>[[張飛]]</span></L><span>鞭打……</span></div>
             <div style={{ color: okGreen, fontWeight: 600 }}><Ring n={2} inline><span>出處：原文/第002回.md</span></Ring></div>
             <div style={{ color: quiet, marginTop: 10 }}>⋮　第 3–21 回，同樣格式</div>
           </div>
         </In>
         <div style={{ display: 'grid', gap: 40 }}>
           <Steps>
-            <Step duration={STEP_MS}><Callout n={<span>{1}</span>} title={<><span>人名變成 </span><span style={{ color: link }}>[[連結]]</span></>} detail="第二堂就能連到人物卡" /></Step>
+            <Step duration={STEP_MS}><Callout n={<span>{1}</span>} title={<><span>人名變成 </span><span style={{ color: link }}>[[連結]]</span></>} detail="一律用本名：玄德也寫成 [[劉備]]" /></Step>
             <Step duration={STEP_MS}><Cue n={2}><Callout n={<span>{2}</span>} title={<span>{"每段最後附出處"}</span>} detail="21 段，21 個出處" /></Cue></Step>
-            <Step duration={STEP_MS}><Cue n={3}><Callout n={<span>{3}</span>} title={<span>{"小毛病：回目被改了"}</span>} detail="「張翼德」變成 [[張飛]]" /></Cue></Step>
+            <Step duration={STEP_MS}><Cue n={3}><Callout n={<span>{3}</span>} title={<span>{"標題照回目，沒加連結"}</span>} detail="內文寫 [[張飛]]，標題仍是張翼德" /></Cue></Step>
           </Steps>
         </div>
       </div>
@@ -2708,6 +2909,7 @@ const TitleChip = ({ file, children }: { file: ReactNode; children: ReactNode })
 const CheckSource: Page = () => (
   <Shell chapter={5} source={<span>{'維基文庫《三國演義》第 1–21 回 zh.wikisource.org/wiki/三國演義'}</span>}>
     <PracticeEyebrow time={<span>{"4 分鐘"}</span>}><span>練習 2-4｜核對</span></PracticeEyebrow>
+    <PromptsCopy step="2-4" />
     <Heading><span>練習（RAG）：請 Codex 指出原文哪一句</span></Heading>
     <Fit>
       <Stage h={400}>
@@ -2746,6 +2948,7 @@ const CheckSource: Page = () => (
               <text x="910" y="232" fontSize="30" fill={ink}>乘夜扮作曹軍到徐州，</text>
               <text x="910" y="282" fontSize="30" fill={ink}>引車冑出迎，襲而殺之。」</text>
               <text x="910" y="332" fontSize="30" fill={muted}>飛然其言。</text>
+              <text x="910" y="384" fontSize="24" fill={quiet}>右鍵用文字編輯／記事本打開，⌘F／Ctrl+F 搜尋</text>
             </g>
             <g fill="none" stroke={okGreen} strokeWidth="3">
               <rect className="aw1-steppop" style={buildDelay(3)} x="22" y="215" width="352" height="40" rx="6" />
@@ -2770,7 +2973,12 @@ const CheckSource: Page = () => (
             <TitleChip file={<span>{"回目.md"}</span>}><span>第 21 回　曹操煮酒論英雄　關公賺城斬車胄</span></TitleChip>
           </div>
         </Step>
-        <Step duration={STEP_MS}><Takeaway marginTop={24}><span>搜得到原句，還要確認原句支持摘要的每件事</span></Takeaway></Step>
+        <Step duration={STEP_MS}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24, marginTop: 24, background: amberSoft, padding: '16px 30px' }}>
+            <StatusLine ok={false} size={28}><span>原文搜不到這句</span></StatusLine>
+            <span style={{ fontSize: 28 }}>回 Codex：「原文/第021回.md 裡找不到這句，請重新確認」</span>
+          </div>
+        </Step>
       </Steps>
     </Fit>
   </Shell>
@@ -2802,8 +3010,8 @@ const PracticeVideo: Page = () => {
   };
   return (
     <Shell chapter={5}>
-      <Eyebrow><span>示範影片｜OpenCode｜約 5 分鐘</span></Eyebrow>
-      <Heading><span>實作影片：從 cd 到大綱存檔</span></Heading>
+      <Eyebrow><span>示範影片｜OpenCode｜看完再自己做</span></Eyebrow>
+      <Heading><span>先看一次：從 cd 到大綱存檔</span></Heading>
       <Fit>
         <div style={{ display: 'grid', gridTemplateColumns: '979px 1fr', gap: 48, alignItems: 'center' }}>
           <In i={0}>
@@ -2859,7 +3067,7 @@ const Recap: Page = () => (
     <Fit>
       <Figure h={320} label="五章回顧">
         <g fill="none" stroke={amber} strokeWidth="4"><DrawPath i={5} d="M240 100 H1392" /></g>
-        <InG i={0}><RecapStop x={163} n={1} name={<tspan>{"AI 怎麼走到今天"}</tspan>} verb={<tspan>{"逐字預測，可能出錯"}</tspan>} /></InG>
+        <InG i={0}><RecapStop x={163} n={1} name={<tspan>{"AI 怎麼走到今天"}</tspan>} verb={<tspan>{"猜下一個字，可能猜錯"}</tspan>} /></InG>
         <InG i={1}><RecapStop x={489} n={2} name={<tspan>{"ChatGPT 與 Codex"}</tspan>} verb={<tspan>{"Codex 讀寫資料夾"}</tspan>} /></InG>
         <InG i={2}><RecapStop x={816} n={3} name={<tspan>{"安裝 Codex"}</tspan>} verb={<tspan>{"裝好並驗證 Codex"}</tspan>} /></InG>
         <InG i={3}><RecapStop x={1143} n={4} name={<tspan>{"看懂 Codex"}</tspan>} verb={<tspan>{"/status、AGENTS.md"}</tspan>} /></InG>
@@ -2879,7 +3087,7 @@ const GraphNode = ({ x, y, name, empty = false }: { x: number; y: number; name: 
 
 const NextLesson: Page = () => (
   <Shell>
-    <Eyebrow><span>預告｜第 2 堂 Obsidian 與 RAG</span></Eyebrow>
+    <Eyebrow><span>預告｜第 2 堂 Obsidian 與 AI Agent</span></Eyebrow>
     <Heading><span>下一堂：大綱放進 Obsidian</span></Heading>
     <Fit>
       <Stage h={440}>
@@ -2986,7 +3194,7 @@ const RefGroup = ({ label, children }: { label: ReactNode; children: ReactNode }
 );
 
 const RefHint = () => (
-  <div style={{ fontSize: 25, color: quiet, marginTop: 14 }}>arXiv 編號：到 arxiv.org/abs/ 後面接編號，就能打開論文</div>
+  <div style={{ fontSize: 25, color: quiet, marginTop: 14 }}>論文旁的數字是 arXiv 編號，接在 arxiv.org/abs/ 後面就能打開</div>
 );
 
 const ReferencesModel: Page = () => (
@@ -3056,22 +3264,22 @@ const NoPlan: Page = () => (
           <Layer h={470} label="起點：沒有含 Codex 的 ChatGPT 方案">
             <InG i={0}>
               <rect x="0" y="175" width="300" height="120" fill={warnSoft} stroke={warn} strokeWidth="2" />
-              <text x="150" y="227" textAnchor="middle" fontSize="30" fontWeight="600" fill={warn}>沒有含 Codex</text>
-              <text x="150" y="269" textAnchor="middle" fontSize="30" fontWeight="600" fill={warn}>的方案</text>
+              <text x="150" y="227" textAnchor="middle" fontSize="30" fontWeight="600" fill={warn}>ChatGPT 方案</text>
+              <text x="150" y="269" textAnchor="middle" fontSize="30" fontWeight="600" fill={warn}>不含 Codex</text>
             </InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={470} label="備案 A：opencode 加免費雲端模型，不用登入，首選">
             <g fill="none" stroke={okGreen} strokeWidth="4"><StepPath d="M300 235 C350 235 350 76 400 76" /></g>
             <g className="aw1-build" style={buildDelay(1)}>
               <RouteCard y={10} kind="cloud" title={<tspan>{"A｜opencode＋免費模型"}</tspan>} sub={<tspan>{"不用登入、不用信用卡"}</tspan>} tag={<tspan>{"首選"}</tspan>} tone="ok" />
-              <RouteWhy y={10}><tspan>可用｜第 </tspan>{pageOf(OpencodeSteps)}<tspan> 頁</tspan></RouteWhy>
+              <RouteWhy y={10}><tspan>能做練習｜第 </tspan>{pageOf(OpencodeSteps)}<tspan> 頁</tspan></RouteWhy>
             </g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={470} label="備案 B：Codex 加 OpenRouter，要帳號和 API Key">
             <g fill="none" stroke={faint} strokeWidth="3"><StepPath d="M300 235 H400" /></g>
             <g className="aw1-build" style={buildDelay(1)}>
               <RouteCard y={169} kind="key" title={<tspan>{"B｜Codex＋OpenRouter"}</tspan>} sub={<tspan>{"要帳號和 API Key"}</tspan>} tag={<tspan>{"備用"}</tspan>} tone="plain" />
-              <RouteWhy y={169}><tspan>和 Codex 一樣｜第 </tspan>{pageOf(OpenRouterRoute)}<tspan> 頁</tspan></RouteWhy>
+              <RouteWhy y={169}><tspan>操作和 Codex 一樣｜第 </tspan>{pageOf(OpenRouterRoute)}<tspan> 頁</tspan></RouteWhy>
             </g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={470} label="備案 C：自己電腦跑模型，只能示範">
@@ -3083,7 +3291,7 @@ const NoPlan: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}><span>先走 A，不行再試 B；C 只拿來示範</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}><span>建議先用 A，A 用不了再改用 B</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -3120,7 +3328,7 @@ const OpencodeSteps: Page = () => (
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '880px 1fr', gap: 56, alignItems: 'center' }}>
         <In i={0}>
-          <CmdRow n={<span>{1}</span>} cmd={<span style={{ fontSize: 26 }}>{"curl -fsSL https://opencode.ai/v2/install | bash"}</span>} note={<span>{"官方安裝，不需要 Node.js；Windows 在 WSL 裡跑"}</span>} />
+          <CmdRow n={<span>{1}</span>} cmd={<span style={{ fontSize: 26 }}>{"curl -fsSL https://opencode.ai/v2/install | bash"}</span>} note={<span>{"官方安裝指令，不需要 Node.js（Windows 要在 WSL 裡跑）"}</span>} />
           <CmdRow n={<span>{2}</span>} cmd={<span>{"cd 練習資料夾 → opencode"}</span>} note={<span>{"不用登入"}</span>} />
           <CmdRow n={<span>{3}</span>} cmd={<span>{"/models"}</span>} note={<span>{"挑一個免費模型"}</span>} />
           <CmdRow n={<span>{4}</span>} cmd={<span>{"貼上 prompts.md 的提示詞"}</span>} note={<span>{"和 Codex 練習一樣"}</span>} />
@@ -3232,8 +3440,8 @@ const LocalLadder: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <div style={{ fontSize: 24, color: quiet, textAlign: 'center' }}>任務：列檔、建檔、寫大綱</div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}><span>最少要 gemma4:e2b，而且只能拿來示範</span></Takeaway></Step></Steps>
+      <div style={{ fontSize: 24, color: quiet, textAlign: 'center' }}>每個模型都試了列出檔案、建立檔案、寫大綱</div>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}><span>本機模型至少要 gemma4:e2b，也只夠拿來示範</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -3261,7 +3469,7 @@ const OllamaRoute: Page = () => (
             <CtxTick label={<span>{"4k"}</span>} bad /><CtxTick label={<span>{"8k"}</span>} /><CtxTick label={<span>{"16k"}</span>} /><CtxTick label={<span>{"32k"}</span>} hot /><CtxTick label={<span>{"64k"}</span>} /><CtxTick label={<span>{"128k"}</span>} />
           </div>
           <div style={{ display: 'grid', gap: 16, marginTop: 34 }}>
-            <StatusLine ok={false} size={28}><span>預設 4k：提示詞被默默截斷</span></StatusLine>
+            <StatusLine ok={false} size={28}><span>預設 4k 太小，提示詞會被默默截斷</span></StatusLine>
             <StatusLine ok size={28}><span>調到 32k 以上</span></StatusLine>
           </div>
         </In>
@@ -3279,7 +3487,7 @@ const OllamaRoute: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}><span>16 GB 的電腦才示範，8 GB 不要跑</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={40}><span>電腦記憶體要 16 GB 以上，才適合拿來示範</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -3306,8 +3514,8 @@ const OpenRouterRoute: Page = () => (
         <div style={{ display: 'grid', gap: 26 }}>
           <Steps>
             <Step duration={STEP_MS}><ErrorCard msg={<span>{'ERROR: Missing environment variable: OPENROUTER_API_KEY.'}</span>} fix={<span>{"先設定 API Key"}</span>} /></Step>
-            <Step duration={STEP_MS}><ErrorCard msg={<span>{'wire_api = "chat" is no longer supported.'}</span>} fix={<span>{"改成 responses"}</span>} /></Step>
-            <Step duration={STEP_MS}><div style={{ background: amberSoft, padding: '16px 22px', fontSize: 29, fontWeight: 600, color: amber }}>免費：每分鐘 20 次、每天 50 次</div></Step>
+            <Step duration={STEP_MS}><ErrorCard msg={<span>{'wire_api = "chat" is no longer supported.'}</span>} fix={<span>{"把 wire_api 改成 responses"}</span>} /></Step>
+            <Step duration={STEP_MS}><div style={{ background: amberSoft, padding: '16px 22px', fontSize: 29, fontWeight: 600, color: amber }}>免費模型每分鐘限 20 次、每天限 50 次</div></Step>
           </Steps>
         </div>
       </div>
@@ -3364,7 +3572,7 @@ const InstallCompare: Page = () => (
 // PATH drawn as a short list of folders; the green row is the one to add.
 const PathList = ({ rows, add }: { rows: ReactNode[]; add: ReactNode }) => (
   <div style={{ background: '#FFFFFF', border: `1px solid ${rule}` }}>
-    <div style={{ padding: '12px 20px', background: raised, fontSize: 25, fontWeight: 600, color: muted }}>PATH＝電腦找指令的資料夾清單</div>
+    <div style={{ padding: '12px 20px', background: raised, fontSize: 25, fontWeight: 600, color: muted }}>PATH 是電腦找指令的資料夾清單</div>
     {rows.map((r, i) => (
       <div key={i} style={{ padding: '10px 20px', borderTop: `1px solid ${rule}`, fontFamily: mono, fontSize: 24, color: quiet }}>{r}</div>
     ))}
@@ -3382,7 +3590,7 @@ const PathFixMac: Page = () => (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 500px', gap: 40, alignItems: 'center' }}>
         <In i={1}>
           <Terminal title={<span>{"終端機（zsh）｜照順序，好了就停"}</span>} size={26}>
-            <Dim><span>{"# 1 關掉終端機（含 VS Code）重開，再試一次\n\n# 2 檔案在不在？看到 codex 或 claude＝有裝\n"}</span></Dim>
+            <Dim><span>{"# 1 關掉終端機（含 VS Code）重開，再試一次\n\n# 2 檔案在不在？看到 codex 或 claude 就是有裝\n"}</span></Dim>
             <Typed><span>{"ls ~/.local/bin\n\n"}</span></Typed>
             <Dim><span>{"# 3 把資料夾加進 PATH（只做一次）\n"}</span></Dim>
             <Typed><span>{"echo 'export PATH=\"$HOME/.local/bin:$PATH\"' >> ~/.zshrc\nsource ~/.zshrc\n\n"}</span></Typed>
@@ -3407,7 +3615,7 @@ const PathFixWin: Page = () => (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 470px', gap: 36, alignItems: 'center' }}>
         <In i={1}>
           <Terminal title={<span>{"PowerShell｜照順序，好了就停"}</span>} size={24}>
-            <Dim><span>{"# 1 關掉所有 PowerShell 和 VS Code，重開再試\n\n# 2 檔案在不在？True＝有裝\n"}</span></Dim>
+            <Dim><span>{"# 1 關掉所有 PowerShell 和 VS Code，重開再試\n\n# 2 檔案在不在？出現 True 就是有裝\n"}</span></Dim>
             <Typed><span>{"$bin = \"$env:LOCALAPPDATA\\Programs\\OpenAI\\Codex\\bin\"\nTest-Path \"$bin\\codex.exe\"\n\n"}</span></Typed>
             <Dim><span>{"# 3 加進使用者 PATH（只做一次）\n"}</span></Dim>
             <Typed><span>{"$p = [Environment]::GetEnvironmentVariable('Path','User')\n[Environment]::SetEnvironmentVariable('Path',\"$p;$bin\",'User')\n\n"}</span></Typed>
@@ -3418,7 +3626,7 @@ const PathFixWin: Page = () => (
         <div style={{ display: 'grid', gap: 24 }}>
           <In i={0}><ErrorCard msg={<span>{"codex : 無法辨識 'codex' 詞彙是否為 Cmdlet、函數、指令檔或可執行程式的名稱。"}</span>} fix={<span>{"PATH 裡沒有安裝資料夾"}</span>} /></In>
           <In i={2}><PathList rows={[<span>{"C:\\Windows\\system32"}</span>]} add={<span>{"…\\OpenAI\\Codex\\bin"}</span>} /></In>
-          <In i={3}><div style={{ background: amberSoft, padding: '14px 20px', fontSize: 25, lineHeight: 1.45 }}><strong style={{ color: amber }}>Claude Code</strong><span>：$bin 改成 </span><Path size={24}>{"$env:USERPROFILE\\.local\\bin"}</Path><span>，檔名 claude.exe</span></div></In>
+          <In i={3}><div style={{ background: amberSoft, padding: '14px 20px', fontSize: 25, lineHeight: 1.45 }}><strong style={{ color: amber }}>Claude Code</strong><span>：$bin 改成 </span><Path size={24}>{"$env:USERPROFILE\\.local\\bin"}</Path><span>，codex.exe 換成 claude.exe</span></div></In>
         </div>
       </div>
     </Fit>
@@ -3441,11 +3649,11 @@ const InstallErrors: Page = () => (
         <div style={{ display: 'grid', gridTemplateColumns: '760px 1fr', background: raised, fontSize: 24, fontWeight: 600, color: muted }}>
           <div style={{ padding: '12px 22px' }}>你看到</div><div style={{ padding: '12px 24px' }}>這樣做</div>
         </div>
-        <ErrLine i={0} see={<span>{"command not found: codex\n無法辨識 'codex' 詞彙"}</span>} fix={<span><span>先重開視窗；還不行看第 </span>{pageOf(PathFixMac)}<span>（Mac）、</span>{pageOf(PathFixWin)}<span>（Windows）頁</span></span>} />
-        <ErrLine i={1} see={<span>{"'irm' 不是內部或外部命令"}</span>} fix={<span>{"這是「命令提示字元」，改開 PowerShell 再貼"}</span>} />
-        <ErrLine i={2} see={<span>{"找不到符合參數名稱 'fsSL' 的參數"}</span>} fix={<span>{"在 Windows 貼了 Mac 那行，改貼 irm 那行"}</span>} />
+        <ErrLine i={0} see={<span>{"command not found: codex\n無法辨識 'codex' 詞彙"}</span>} fix={<span><span>先重開視窗，還不行再看第 </span>{pageOf(PathFixMac)}<span>（Mac）或 </span>{pageOf(PathFixWin)}<span>（Windows）頁</span></span>} />
+        <ErrLine i={1} see={<span>{"'irm' 不是內部或外部命令"}</span>} fix={<span>{"你開到的是「命令提示字元」，改開 PowerShell 再貼"}</span>} />
+        <ErrLine i={2} see={<span>{"找不到符合參數名稱 'fsSL' 的參數"}</span>} fix={<span>{"在 Windows 貼到 Mac 的 curl 那行，改貼 irm 那行"}</span>} />
         <ErrLine i={3} see={<span>{"因為這個系統上已停用指令碼執行"}</span>} fix={<span><Path size={24}>{"Set-ExecutionPolicy -Scope CurrentUser RemoteSigned"}</Path></span>} />
-        <ErrLine i={4} see={<span>{"codex --version 版本很舊"}</span>} fix={<span><span>以前用 npm 裝過：</span><Path size={24}>{"npm uninstall -g @openai/codex"}</Path></span>} />
+        <ErrLine i={4} see={<span>{"codex --version 版本很舊"}</span>} fix={<span><span>先移除 npm 裝的舊版：</span><Path size={24}>{"npm uninstall -g @openai/codex"}</Path></span>} />
         <ErrLine i={5} see={<span>{"syntax error near unexpected token '<'\n403、連線逾時"}</span>} fix={<span>{"網路擋住下載，改用手機熱點再跑一次"}</span>} />
       </div>
     </Fit>
@@ -3487,12 +3695,12 @@ const slot = (page: Page) => { ORDER.push(page); return page; };
 // Page order. The dev UI's reorder rewrites this literal and the notes literal below together.
 export default [
   slot(Cover), slot(SpeakerIntro), slot(CourseMap), slot(Agenda),
-  slot(Section1), slot(Evolution), slot(NextWordGame), slot(ProbTable), slot(OneByOne), slot(SameQuestion), slot(Randomness),
-  slot(WhatIsHallucination), slot(RealHallucination), slot(WhyHallucinate), slot(CotWhat), slot(CotWhy), slot(ToolCalc), slot(ToolCompare), slot(CotPage), slot(WebSearch), slot(RagR), slot(RagA), slot(RagG), slot(OpenBookPage), slot(RagMiniPractice),
-  slot(Section2), slot(AgentPage), slot(ChatVsCodex), slot(SameTaskTwoWays), slot(ChatGPTSelf),
+  slot(Section1), slot(NextWordGame), slot(ProbTable), slot(OneByOne), slot(SameQuestion), slot(Randomness), slot(WhatIsHallucination),
+  slot(RealHallucination), slot(WhyHallucinate), slot(CotWhat), slot(CotWhy), slot(ToolCalc), slot(ToolCompare), slot(CotPage), slot(WebSearch), slot(RagR), slot(RagA), slot(RagG), slot(OpenBookPage), slot(RagMiniPractice), slot(Evolution),
+  slot(ChatGPTSelf), slot(Section2), slot(AgentPage), slot(ChatVsCodex), slot(SameTaskTwoWays),
   slot(Section3), slot(OpenTerminal), slot(TerminalAnatomy), slot(InstallCodex), slot(DownloadLab), slot(CdFolder), slot(CodexLogin), slot(CodexTrust),
-  slot(Section4), slot(StartScreen), slot(StatusPage), slot(UsageToken), slot(SessionDesk), slot(MemoryLayers), slot(AgentsFile),
-  slot(Section5), slot(OpenLab), slot(AgentsByHand), slot(RulePractice), slot(OutlinePrompt), slot(OutlineResult), slot(CheckSource), slot(PracticeVideo),
+  slot(Section4), slot(StartScreen), slot(StatusPage), slot(UsageToken), slot(ModelSize), slot(EffortLevels), slot(EffortCost), slot(SessionDesk), slot(MemoryLayers), slot(AgentsFile),
+  slot(Section5), slot(PracticeVideo), slot(AgentsByHand), slot(RulePractice), slot(OutlinePrompt), slot(OutlineResult), slot(CheckSource),
   slot(Recap), slot(NextLesson), slot(ReferencesModel), slot(ReferencesMethods),
   slot(NoPlan), slot(OpencodeSteps), slot(OpencodeRun), slot(OpenRouterRoute), slot(LocalLadder), slot(OllamaRoute),
   slot(InstallCompare), slot(PathFixMac), slot(PathFixWin), slot(InstallErrors),
@@ -3516,66 +3724,66 @@ const NOTES = new Map<Page, string>([
 第 4 堂：發布成網站，同學可以從首頁一路點進每張卡。
 每一堂都接著上一堂的成果做，所以今天的大綱檔請一定要存好。`],
   [Agenda, `07:00–10:00。
-今天五章：第一章以 GPT 為例，說明 AI 怎麼生成文字、為什麼會錯，以及 CoT、工具和 RAG 怎麼補救；第二章比較 ChatGPT 和 Codex；第三章從打開終端機開始，安裝 Codex、下載練習資料夾，在資料夾裡登入 Codex；第四章看懂 Codex 的畫面、Session、/status 和 Memory；第五章是練習 2，用 Codex 寫大綱。練習 1 用 ChatGPT，課後自己練，第二章結尾會告訴你在哪裡。
-第五章大約 112 分結束，接著總結、預告下一堂，剩下的時間留給沒跑完的同學補做和提問。還沒裝好 Codex 的同學，現在就舉手，助教先過去協助安裝。`],
+今天五章：第一章以 GPT 為例，說明 AI 怎麼生成文字、為什麼會錯，以及 CoT、工具和 RAG 怎麼補救；第二章比較 ChatGPT 和 Codex；第三章從打開終端機開始，安裝 Codex、下載練習資料夾，在資料夾裡登入 Codex；第四章看懂 Codex 的畫面、/status（練習 2-1 自己打一次）、模型大小、思考程度、Session 和 Memory；第五章是練習 2 的其餘部分，用 Codex 寫大綱。練習 1 用 ChatGPT，課後自己練，第一章講完會告訴你在哪裡。
+第五章大約 116 分結束，接著總結、預告下一堂，剩下的時間留給沒跑完的同學補做和提問。還沒裝好 Codex 的同學，現在就舉手，助教先過去協助安裝。`],
   [Section1, `10:00–10:30。
 第一章：AI 怎麼走到今天，以 GPT 為例。我們先講模型的限制，再講幾種補救方法。`],
-  [Evolution, `10:30–11:30。
-先看這一章的地圖，分上下兩層。
+  [Evolution, `37:00–38:00。
+回頭看這一章的全貌，分上下兩層。
 上層是模型的限制：模型只會猜下一個字；猜，所以有隨機性；猜錯了也說得很肯定，這叫幻覺。
 按一下：下層是三種補救方法。Thinking，背後的做法叫 CoT 思維鏈，先列步驟；用工具，英文叫 Tool Calling，算數學就寫程式去算，像按計算機；Web Search，先查資料再回答，這就是 RAG。三種可以一起用，不是一個接一個。
 按一下：Agent 把這些工具串起來，幫你把一件事做完。今天要用的 Codex 就是 Agent。
-最後一下：上層是模型的限制，下層是補救方法。接下來一個一個拆開看。`],
-  [NextWordGame, `11:30–12:30。
+最後一下：模型靠猜字回答，用 Thinking、工具、搜尋來減少出錯。下一頁是課後自己練的練習 1，用的就是這一章的 RAG。`],
+  [NextWordGame, `10:30–11:30。
 GPT 是 Generative Pre-trained Transformer，生成式預訓練模型，名字不用背。這頁的專有名詞是「下一個 Token 預測」，GPT 做的事很像文字接龍。
 畫面上是「今天、天氣、很」，請大家喊一下，下一個字你會接什麼？
 按一下：大部分人會接「好」。GPT 也類似：看前面的字，接一個很順的字。
 最後一下：GPT 根據前面的內容，預測下一個 Token。不管 GPT 看起來多聰明，底下一直在做的就是這件事。
 畫面下方那行小字：這裡先用「字」講，比較好懂；模型實際切的單位叫 Token，可能是一個字、半個詞或幾個字母，第 ${pageOf(OneByOne)} 頁會再講。`],
-  [ProbTable, `12:30–13:30。
+  [ProbTable, `11:30–12:30。
 GPT 怎麼決定接哪個字？先看「下一個 Token 的機率分布」。左邊是已經寫出來的「今天天氣很」。
 按一下：模型會算出一張機率表。這些數字是示意，不是真的模型輸出：「好」58%、「熱」22%、「冷」11%、「不錯」9%。
 最後一下：機率最高的字，最常被挑中。注意我說「最常」，不是「每次」，等一下講隨機性會用到。`],
-  [OneByOne, `13:30–14:30。
+  [OneByOne, `12:30–13:30。
 這叫「自迴歸生成」：一句話是一格一格接出來的。第 1 輪接出「天氣」；按一下，第 2 輪拿「今天天氣」當前文，再接「很」；按一下，第 3 輪接「好」；按一下，第 4 輪接句號，結束。
 按一下：每一格叫一個 Token，是 AI 讀寫文字的單位。中文的切法不一定剛好一字一格，這裡是示意。第四章講額度時還會用到這個詞。
-最後一下：一次產生一個 Token，再接回前文繼續產生。再長的回答，也是這樣一格一格接出來。`],
-  [SameQuestion, `14:30–15:30。
+最後一下：模型一次產生一個 Token，放進前文，再產生下一個。再長的回答，也是這樣一格一格接出來。`],
+  [SameQuestion, `13:30–14:30。
 這頁講「隨機取樣」。現場示範：打開 ChatGPT，問「用一句話介紹劉備」。
 按一下：第一次的答案。（畫面上是示意。）
 接著按 ChatGPT 的「重新產生」，按一下：第二次的答案不一樣。兩句都說得通，只是挑的字不同。
 最後一下：答案不同，是因為每次抽到的字不一樣，不代表 ChatGPT 壞掉了，這是設計上就有的隨機性。請大家自己也按兩次「重新產生」看看。`],
-  [Randomness, `15:30–16:30。
+  [Randomness, `14:30–15:30。
 為什麼會不一樣？取樣有個「溫度參數」，可以調整變化程度。先把機率表畫成轉盤：「好」占 58%，「熱」22%，「冷」11%，「不錯」9%（示意）。每次接字就轉一次。
 按一下：這次停在「熱」。「好」的機率最高，還是可能轉到別的。
 按一下：轉盤的隨機程度有個旋鈕，叫溫度。調低比較穩，調高比較多變。網頁版的 ChatGPT 不能調，知道有這個詞就好。
 最後一下：隨機性會改變答案，有時會改成錯的。答案不同時，兩個都可能是對的；但抽到錯的字，答案就錯了，下一頁就講這件事。`],
-  [WhatIsHallucination, `16:30–17:30。
+  [WhatIsHallucination, `15:30–16:30。
 AI 幻覺，英文 Hallucination。像考試硬掰的學生：沒把握，還是寫得很順。
 上面是講師實測的回答：在自己電腦用小模型 qwen3:1.7b（附錄備案 C 那頁）問「劉備字什麼」，模型很肯定地說「劉備，字孔明」。語氣這一條是滿的。先問大家：對嗎？
 按一下：和事實對不上。第 1 回原文寫「姓劉，名備，字玄德」；孔明是諸葛亮的字。答案拿了諸葛亮的字，還說得很順。
 最後一下：內容和事實對不上，語氣卻很肯定，就叫幻覺。注意：沒附來源、但內容是對的，不算幻覺；幻覺是指內容本身錯了。大模型比較少錯這種題目，但一樣會錯，下一頁看一個大模型的真實例子。`],
-  [RealHallucination, `17:30–18:30。
+  [RealHallucination, `16:30–17:30。
 真實案例。左邊大字：題目是一長串加法，2+4+7……+7953+34+356。早期 GPT-3.5 很肯定地回答 8402。右邊小圖是當時的實際畫面。
 先問大家：你相信嗎？
 按一下：打叉，錯了。
 按一下：自己驗算，正確答案是 8484。
 最後一下：GPT-3.5 沒有計算，只預測出一個像答案的數字。現在的模型算術已經進步很多，後面幾頁講它們怎麼改進的。
 圖片來源：IT 邦幫忙 https://ithelp.ithome.com.tw/articles/10315994`],
-  [WhyHallucinate, `18:30–19:30。
+  [WhyHallucinate, `17:30–18:30。
 幻覺的原因不只一個，這裡先講其中一個。回到模型產生答案的流程：模型讀過大量文字，整理成一張機率表。
 按一下：然後挑最常見的說法，直接說出口。
 按一下：中間少了一步：查證。只靠接字，模型不會停下來確認這句話對不對，所以很順的句子也可能是錯的。
 其他原因，提一句就好：訓練資料裡本來就沒有、或寫錯的內容；資料有截止日期，比較新的事模型不知道；題目問得太模糊，模型就自己補上內容。
-最後一下：補救方法：讓模型先寫步驟、用工具、查資料。接下來幾頁一個一個看。`],
-  [CotWhat, `19:30–21:00。
+最後一下：讓模型先寫步驟、用工具、查資料，可以減少幻覺。接下來幾頁一個一個看。`],
+  [CotWhat, `18:30–20:00。
 解法一：Thinking。Thinking 背後的做法有個名字，叫思維鏈，英文 Chain of Thought，簡稱 CoT。像考試用草稿紙：先把過程寫出來，再寫答案。
 先看題目：雞兔同籠，籠子裡有 35 個頭、94 隻腳。直接寫答案，和先寫過程，差在哪？
 按一下：上面這排是直接寫答案：從題目一下子跳到「雞 20、兔 15」，這是示意的猜測，而且是錯的。
 按一下：下面這排是先寫過程：先判斷題型、想公式、把數字套進去、計算，最後才是答案，一環扣一環。名字本身就在說這件事：思維是「想」，鏈是「一環扣一環」，合起來就是一步接一步的推理過程。
 最後一下：一句話定義，CoT 就是讓模型在回答前，先把中間的推理步驟一步一步寫出來。
 可以順帶一提：雞兔同籠是很老的題目，最早見於《孫子算經》。`],
-  [CotWhy, `21:00–23:00。
+  [CotWhy, `20:00–22:00。
 這頁是重點。上面那行就是要回答的問題：前面說模型只會猜下一個字，寫步驟為什麼會有用？用一題簡單的應用題來看：一盒鉛筆 12 枝，買 3 盒，送掉 5 枝，還剩幾枝？
 按一下：回到猜下一個字。上面這排沒寫步驟：前文只有題目，模型要猜的下一步就直接是答案，跳得很遠，可能隨手猜個 30（示意）。
 按一下：下面這排寫了步驟：模型先寫下「12×3＝36」，這行字就變成前文；接著寫「36－5＝」，下一步只要接出「31」。36 已經寫在紙上了，36 減 5 是很小、很好猜的一步。每一步都是一個好猜的小步。
@@ -3585,7 +3793,7 @@ AI 幻覺，英文 Hallucination。像考試硬掰的學生：沒把握，還是
 三、Thinking、推理模型（像 ChatGPT 的 Thinking、OpenAI 的 o 系列）是產品功能：回答前會自動先做一次 CoT，你可能會看到「已思考 N 秒」。分清楚：CoT 是方法，Thinking 是幫你自動做這個方法的功能。
 口頭補一句限制（畫面不放，下一頁接著講）：步驟也是模型自己寫的，寫錯一步，後面就跟著錯；算術還是在心算。
 最後一下：寫下的步驟變成前文，下一步比較好預測。但算術還是心算，所以下一頁讓模型改用計算機。`],
-  [CotPage, `26:00–28:00。
+  [CotPage, `25:00–27:00。
 例子：雞兔同籠，把剛剛兩個概念串起來。藍色是 CoT（想步驟），橘色是 Tool Calling（工具算），每張卡右上角都標了是哪一種。用 Codex 實際跑一次。2026-10-18 在講師電腦上，codex-cli 0.154.0、模型 gpt-5.6-luna。提示詞：「雞兔同籠：籠子裡有 35 個頭、94 隻腳。雞和兔各有幾隻？請一步一步寫出你的想法：先判斷這是什麼題型、列出算式，最後的計算請用程式算。」
 先看題目。
 按一下：第 ① 步，判斷題型，這是 CoT。它說：「這是『雞兔同籠』題型，也就是用二元一次方程式解題。」
@@ -3594,77 +3802,77 @@ AI 幻覺，英文 Hallucination。像考試硬掰的學生：沒把握，還是
 按一下：第 ④ 步，按計算機，這就是 Tool Calling。Codex 真的執行了一行 Python，印出「23 12」。原始紀錄裡同一行指令還順便讀了講師電腦上一個無關的外掛說明檔，另有幾行 macOS 系統警告，畫面上都刪掉了，只留 Python 的部分。
 按一下：第 ⑤ 步，答案：雞 23 隻，兔 12 隻。自己驗算：23×2＋12×4＝46＋48＝94，對。
 最後一下：先想清楚步驟，這是 CoT；計算交給工具，這是 Tool Calling。兩個一起用，步驟看得懂，這次計算結果也正確。下一頁換另一種工具：搜尋。`],
-  [ToolCalc, `23:00–25:00。
+  [ToolCalc, `22:00–24:00。
 解法二：用工具，英文叫 Tool Calling，工具呼叫。CoT 會想，但算術還是在心算；所以現在的 AI 遇到計算，常會不硬算，改成寫一行程式、或呼叫一個工具，讓工具算出結果，就像把算式輸入計算機、按下等號。標題下那行就是定義：模型寫一行程式或呼叫工具，讓工具算出結果。
 先看題目，一長串加法。
 按一下：計算機。寫程式算，就是把數字輸進去、按「＝」。
 按一下：這是 Codex 的實際輸出，2026-10-18 在講師電腦上跑的，codex-cli 0.154.0、模型 gpt-5.6-luna。提示詞是：「2 + 4 + 7 + 9 + 23 + 1 + 5 + 7 + 2 + 5 + 74 + 2 + 7953 + 34 + 356 = ? 請用程式算出來，告訴我答案。」Codex 執行了一行 Python：print(sum([...]))，2.8 秒得到 8484，最後回答「用 Python 程式計算結果是：8484」。原始紀錄裡還有幾行 macOS xcodebuild 和沙盒的系統警告，和題目無關，畫面上刪掉了。
 ChatGPT 也有寫程式的工具：畫面上出現「已分析」，點開看得到它跑的程式碼，就代表它用了這個工具。
-最後一下：工具執行計算，同一個算式重跑，結果相同。這一步是計算出來的，不是預測出來的；但算式是模型寫的，還是要看有沒有抄錯。`],
-  [ToolCompare, `25:00–26:00。
+最後一下：同一個算式交給工具重跑，會得到一樣的結果。這一步是計算出來的，不是預測出來的；但算式是模型寫的，還是要看有沒有抄錯。`],
+  [ToolCompare, `24:00–25:00。
 同一題長加法，三種做法排在一起：猜、心算、按計算機。先請大家猜：哪一種最可信？
 按一下：左邊是直接回答，等於用猜的。卡片上是 2026 年 9 月 ChatGPT 的真實畫面：我故意要求它「不可以偷偷計算」，ChatGPT 就回答「我不算，純猜：8460」。錯，而且每次問可能都不一樣。
 按一下：CoT，也就是 Thinking，等於心算、列步驟：這次得到 8484，但步驟是模型自己寫的，可能錯，所以還是要核對，不能當成一定對。
 按一下：Tool Calling 像按計算機：8484，同一個算式重跑，結果相同。為什麼比較可信？可以重跑一次看結果一不一樣，也看得到模型輸入了什麼算式，數字有沒有抄錯。
 最後一下：需要精確計算時，交給 Tool Calling。下一頁用一個例子，把 CoT 和 Tool Calling 串起來：雞兔同籠。`],
-  [WebSearch, `28:00–29:30。
+  [WebSearch, `27:00–28:30。
 解法三：搜尋也是一種工具，一樣是 Tool Calling：模型呼叫搜尋工具去查資料。這是 ChatGPT 的實際畫面：問「最近的台灣新聞」，ChatGPT 先顯示「正在搜尋 2 個網站」，標 1 的地方：中央社和路透社。
 按一下：回答裡附了來源標籤，像這裡的「中央社 CNA」，可以點開原網頁核對。
 最後一下：先查資料再回答，這個做法有個名字叫 RAG。在這一課，搜尋找到的網頁內容，就是 RAG 裡「檢索來的資料」；第五章換成資料夾裡的原文。接下來拆成三步：R、A、G。`],
-  [RagR, `29:30–31:00。
+  [RagR, `28:30–30:00。
 剛剛說搜尋是一種工具，R 就是用這個工具的那一步。
 RAG 全名 Retrieval-Augmented Generation，檢索增強生成。第一步 R，檢索。像去圖書館，先找到那本書。
 問題是：曹操說「天下英雄」那句在哪一回？
 按一下：去哪裡找？可以是網路、你上傳的檔案，或你電腦裡的資料夾。今天的練習用的就是資料夾。
 按一下：找到第 21 回〈曹操煮酒論英雄〉，而且找到相關的那一段。
 最後一下：檢索到的段落，就是回答的根據。`],
-  [RagA, `31:00–32:30。
+  [RagA, `30:00–31:30。
 工具查回來的東西，要交給 AI 才有用。
 第二步 A，增強。手上有兩樣東西：問題，和 R 找到的那一段原文。
 按一下：把兩樣東西裝進同一個包裹，一起交出去，像寄包裹題目和資料放同一箱。
 按一下：AI 收到的就不只是題目，還有資料可以照著讀。
 最後一下：模型拿到問題和資料，照資料回答，不用只靠記憶。`],
-  [RagG, `32:30–34:00。
+  [RagG, `31:30–33:00。
 最後一步，AI 照工具查回來的資料回答。
 第三步 G，生成：照資料回答。畫面上是示意的回答，引的句子是真的：第 21 回，曹操說「今天下英雄，惟使君與操耳。」
 按一下：回答附上出處，維基文庫第 21 回。
 按一下：點開出處，找得到同一句，就代表這句不是模型編出來的。
 最後一下：有來源不等於一定正確。來源可能被誤讀，引的句子也可能被改過一兩個字。第五章的練習，最後一步就是請 Codex 指出大綱根據原文哪一句，再自己打開原文核對。`],
-  [OpenBookPage, `34:00–35:00。
+  [OpenBookPage, `33:00–34:00。
 把三步合起來，RAG 就像開書考。
 左邊是閉書考：一般 GPT 只靠記憶作答，記錯了也會寫得很順。
 按一下：右邊是開書考：R 先翻到那一頁，A 把書上那段和題目對照著看，G 照書作答，答案還附頁碼，老師可以翻回去對。
-最後一下：今天的大綱練習也用 RAG：Codex 先讀原文再寫。資料就是資料夾裡的 21 回原文，等於開書考的那本書。
+最後一下：今天的大綱練習也用 RAG，Codex 會先讀原文再寫。資料就是資料夾裡的 21 回原文，等於開書考的那本書。
 來源：https://arxiv.org/abs/2005.11401`],
-  [RagMiniPractice, `35:00–38:00（小練習 3 分鐘）。
+  [RagMiniPractice, `34:00–37:00（小練習 3 分鐘）。
 請大家打開自己的 ChatGPT，挑一個自己真的有興趣、最近可能有新資訊的問題。可以問最近的球賽、想去的地方，或一項科技的最新進展。
 如果介面能選 Thinking，先選好。輸入畫面上的提示詞，把空格換成你的問題。
 按一下：回答後看畫面上三個地方：一，有沒有顯示「已思考」；二，有沒有顯示搜尋活動；三，有沒有可以點開的來源。點開其中一個來源，找出支持答案的那一句。
 提醒：不同版本的介面名稱會不同；來源連結只能說明 ChatGPT 查過資料，不能證明它用了 Thinking。若找不到 Thinking，就記下你看到什麼，不用硬湊。
-最後一下：看得到來源，還要親自點開核對。請一兩位分享：你問了什麼？來源真的支持答案嗎？`],
-  [AgentPage, `38:30–40:30。
+最後一下：看得到來源，還要親自點開核對。來源裡找不到支持答案的那句，這個答案就先別信：換一則來源再看，或請它「引用來源裡的原句」。`],
+  [AgentPage, `39:30–41:30。
 第二章先認識 AI 代理，英文 Agent。它能規劃步驟、使用工具，像會自己動手的實習生。這裡示範需要你確認的操作。
 你交代任務，Agent 提出要做的動作，例如「我要建立 hello.md，內容是……」。
 按一下：你檢查。當 Codex 跳出確認畫面時，看過它要做的事，再選 Yes, proceed。是否詢問取決於權限設定：預設在練習資料夾裡建檔、改檔多半直接做，不會問；要動到資料夾外面才會跳出來（第三章會再看到）。
 按一下：Agent 執行，再回報結果，等你決定下一步。提出動作、你檢查、執行、回報，這整個循環就是 Agent 在做的事。
-最後一下：Codex 是一種 Agent：執行動作，做完回報結果。遇到確認畫面時，先看清楚 Codex 要做什麼，再選 Yes, proceed。下一頁比較 Codex 和 ChatGPT。`],
-  [Section2, `38:00–38:30。
+最後一下：Codex 是一種 Agent，會執行動作，做完再回報結果。遇到確認畫面時，先看清楚 Codex 要做什麼，再選 Yes, proceed。下一頁比較 Codex 和 ChatGPT。`],
+  [Section2, `39:00–39:30。
 第二章：ChatGPT 與 Codex。先看 Codex 所屬的 Agent 怎麼執行任務，再比較兩個產品的用法。`],
-  [ChatVsCodex, `40:30–45:00。
+  [ChatVsCodex, `41:30–46:00。
 ChatGPT 是對話框：你問一句，它回一段話，適合發想、請它解釋、找資料。
 按一下：Codex 在你電腦的資料夾裡工作：你交代一件事，Codex 自己打開資料夾裡的檔案來讀，做完再存成新檔。
 最後一下：ChatGPT 在對話框回答，Codex 讀寫資料夾裡的檔案。這是本課的分工方式，不是規定：ChatGPT 也能上傳檔案，Codex 也能聊天。Claude 也有類似的分工：Claude 對話，和 Claude Code。`],
-  [SameTaskTwoWays, `45:00–49:00。
+  [SameTaskTwoWays, `46:00–50:00。
 用今天的作業來比。如果用 ChatGPT 寫 21 回的大綱：你先把 21 個檔上傳（或一段一段貼上），打字交代要做什麼，ChatGPT 寫好給你，你再下載、放回資料夾，你動手 3 次。ChatGPT 可以收檔案，也能給你下載檔，只是一次能上傳的數量和大小有限制，成品也要自己搬回資料夾。
 按一下：用 Codex：你交代一句，Codex 自己去讀 原文/ 資料夾，寫完直接存好檔案，你只動手 1 次。
-最後一下：這份作業的 21 回原文本來就是檔案，放在資料夾裡；Codex 能直接讀，寫好也直接存成檔案，所以在資料夾裡做。下一頁先交代一個回家自己練的 ChatGPT 練習。`],
-  [ChatGPTSelf, `49:00–50:00。
+最後一下：這份作業的 21 回原文本來就是檔案，放在資料夾裡；Codex 能直接讀，寫好也直接存成檔案，所以在資料夾裡做。下一章就來安裝 Codex。`],
+  [ChatGPTSelf, `38:00–39:00。
 練習 1 用 ChatGPT，課堂上不做，回家自己練，大約 15 分鐘。三步都問同一題：《三國演義》第 21 回，劉備聽完曹操說「天下英雄只有你我」，做了什麼？為什麼？
-第一步，先不給資料問，看 ChatGPT 憑記憶怎麼答。第二步，追問「你說的原因，原文哪一句寫的？」，自己點開維基文庫，用 Cmd+F 或 Ctrl+F 找那一句。第三步，開新對話，附上一小段原文再問，比比看答案差在哪。
+第一步，先不給原文直接問，看 ChatGPT 憑記憶怎麼答。第二步，追問「你說的原因，原文哪一句寫的？」，自己點開維基文庫，用 Cmd+F 或 Ctrl+F 找那一句。第三步，開新對話，附上一小段原文再問，比比看答案差在哪。
 提示詞在 prompts.md 的「練習 1」，掃這個 QR code 或點連結就能打開：${PROMPTS_URL} 。等一下第三章會下載練習資料夾 aw-01-lab，做完可以對照裡面 ChatGPT_練習 資料夾的參考結果，有截圖和每題的重點。
 今天課堂上的練習 2，用的是同一個概念：先找資料再回答，而且要回原文核對。`],
   [Section3, `50:00–50:30。
-第三章：安裝 Codex。前兩章都在瀏覽器裡；Codex 要裝在電腦上，才能讀你資料夾裡的檔案。課前已經裝好的同學，這幾頁當複習，順便幫旁邊的人看一下。`],
+第三章：安裝 Codex。前兩章都在瀏覽器裡；Codex 要裝在電腦上，才能讀你資料夾裡的檔案。課前已經裝好的同學，這幾頁當複習；卡住的同學請舉手，助教過去協助。`],
   [OpenTerminal, `50:30–53:00。
 裝 Codex 之前，先打開終端機。很多人沒用過，沒關係，這頁跟著做。
 Mac：按 command 加空白鍵，叫出 Spotlight 搜尋框，打 terminal，按 return。中文介面的 App 叫「終端機」，打中文也找得到。找不到的話，從「應用程式 → 工具程式 → 終端機」打開。
@@ -3707,66 +3915,93 @@ Codex 裝好了，先把等一下要用的練習資料夾下載下來，Codex �
 講師 2026-10-29 用 Codex 0.154.0 在 Mac 上擷取：登入選單是在沒登入的全新設定下拍的；成功頁是 Codex 內建的那一頁。`],
   [CodexTrust, `66:00–67:00。
 登入之後，Codex 接著問：Do you trust the contents of this directory? 你信不信任這個資料夾？
-先看第一行 You are in，後面是 Codex 現在所在的資料夾，要是剛才 cd 進去的那個。
+先看第一行 You are in，後面是 Codex 現在所在的資料夾，應該是剛才 cd 進去的那個。
 按一下：結尾是 Codex_練習，它本來就停在 1. Yes, continue，直接按 Enter。信任之後，Codex 在這個資料夾裡建檔、改檔多半不會再問你；要動到資料夾外面的檔案時，會跳出 Would you like to make the following edits?，看過再選 Yes, proceed。
-按一下：如果 You are in 後面只有 /Users/你的名字（Windows 是 C:\\Users\\你的名字），代表忘了 cd，Codex 開在家目錄。家目錄裡什麼都有，不要信任這個資料夾：按 ↓ 移到 2. No, quit，按 Enter 離開，回上一頁 cd 進練習資料夾，再打一次 codex。
-看到 Codex 的輸入列，› 後面可以打字，第三章就完成了。輸入 /quit 可以先離開，第五章再回來；畫面怎麼看，下一章講。
+按一下：如果 You are in 後面只有 /Users/你的名字（Windows 是 C:\\Users\\你的名字），代表忘了 cd，Codex 開在家目錄。家目錄裡什麼都有，不要信任這個資料夾：按 ↓ 移到 2. No, quit，按 Enter 離開，回第 ${pageOf(CdFolder)} 頁 cd 進練習資料夾，再打一次 codex。
+看到 Codex 的輸入列，› 後面可以打字，第三章就完成了。Codex 先開著別關：下一章要在這個畫面上打 /status，第五章的練習也在這裡做。
 講師 2026-10-29 實測（Codex 0.154.0，Mac）：在全新的資料夾打 codex，選項就是 1. Yes, continue、2. No, quit。`],
   [Section4, `67:00–67:30。
-第四章：看懂 Codex。依序看啟動畫面、/status、額度和 Token、Session、Memory。`],
+第四章：看懂 Codex。Codex 還開著，依序看啟動畫面、/status（練習 2-1，自己打一次）、額度和 Token、模型大小、思考程度和花費、Session、Memory。`],
   [StartScreen, `67:30–69:30。
 這是 Codex 0.154 的啟動畫面（教材範例，帳號已隱藏）。
-按一下：model，現在用哪個模型。名稱會隨版本和帳號變，不用背。
+按一下：model，現在用哪個模型。名稱會隨版本和帳號變，不用背。名稱後面的 high 是思考程度（Reasoning Effort），第 ${pageOf(EffortLevels)} 頁會講；模型大小在第 ${pageOf(ModelSize)} 頁。
 按一下：directory，Codex 在哪個資料夾工作，讀檔、存檔都從這裡開始。這張圖是講師的另一個練習資料夾，你的會不一樣。
 按一下：下面有「›」的那一列，是打字的地方，中文直接打，按 Enter 送出。`],
-  [SessionDesk, `75:30–78:00。
-/status 裡有一行 Session，現在來講它是什麼。Session 是一次工作階段，像一張工作桌。你交代的任務（例如寫第 1 回大綱）、Codex 讀過的檔案（原文/第001回.md）、Codex 的回答、你的追問，都在同一張桌上，所以你說「剛剛那段改短」，Codex 知道你指哪段。
+  [EffortLevels, `78:30–80:30。
+回到啟動畫面：model 那一行最後的 high，就是 Reasoning Effort，思考程度。第一章講過 CoT：回答前先把步驟寫出來，像考試用草稿紙。Effort 決定的是草稿要寫多少。
+檔位由低到高：low、medium、high、xhigh。草稿張數是示意，不是實際比例。
+按一下：想得越多，Token 越多，也等得越久。看 GPT-5 的實測：Artificial Analysis 拿同一套測驗跑 GPT-5 的四個檔位（GPT-5 的檔位叫 minimal、low、medium、high）。minimal 總共用了 350 萬個 Token，high 用了 8,200 萬個，差 23 倍，花費也差 23 倍。回應時間，他們的比較頁量到 minimal 約 7 秒、high 約 80 秒。分數呢？minimal 44 分，medium 67 分，high 68 分。從 minimal 到 medium 進步很多，medium 到 high 只多 1 分，報告原文也說 medium 到 high 的提升比較小。Codex 文件的說法一樣：effort 控制模型回答前產生多少推理 Token，低檔重速度、省 Token，高檔想得比較深。
+按一下：想得多不一定答得比較好，也不一定比較慢。同一題「根據 原文/第001回.md，劉備字什麼」，用 Codex 實際跑 low 和 xhigh（2026-10-30，codex-cli 0.165.0，兩次分開跑）：兩個都答「字玄德」，也都附了原句。時間 low 15 秒、xhigh 13 秒。
+為什麼差不多？看 Token 的明細：思考用的 Token，low 是 0，xhigh 只有 123；但讀進去的 Token 有 3.8 萬到 4.5 萬，裡面大部分是 Codex 自己的說明、設定，加上讀到的原文。所以這題的時間主要花在讀資料和跑指令，不在思考。Effort 是讓模型「最多可以想多深」，題目簡單時，開 xhigh 它也只想一下。
+再難一點的題目也試了：「第 1 到 3 回，劉備、關羽、張飛各自親手斬殺了誰，列表附原句」。low 21.6 秒、思考 0 Token；xhigh 29.3 秒、思考 175 Token，多讀了一次檔，所以讀進去的 Token 從 7.5 萬變成 11.4 萬。兩個答案內容幾乎一樣：關羽斬程遠志等兩筆，劉備、張飛只有「落馬」沒寫死，都有標出來。慢的那幾秒主要來自多讀檔，不是多想。
+（講師電腦的 Codex 多裝了一些 skill，開場說明比較長，學生電腦讀進去的 Token 會少一些。）
+最後一下：調高 Effort 會多花 Token 和時間，答案不一定比較好。GPT-5 從 medium 到 high 只多 1 分，劉備那題開 xhigh 也只多想 123 個 Token。所以先用平常的檔位，遇到要推理很多步、答錯了的題目，再往上調。換檔：在 Codex 裡輸入 /model，先選模型，再選 effort。能選哪幾檔要看模型，有些模型還有更高的檔位。
+來源：Codex 設定說明 learn.chatgpt.com/docs/config-file/config-reference（model_reasoning_effort，可選檔位依模型而定）；Artificial Analysis, GPT-5 Benchmarks and Analysis（2025-08-07，artificialanalysis.ai/articles/gpt-5-benchmarks-and-analysis）；回應時間取自 artificialanalysis.ai/models/comparisons/gpt-5-minimal-vs-gpt-5（2026-10-31 查詢，7.07 秒對 79.98 秒）。`],
+  [EffortCost, `80:30–82:30。
+花費怎麼算？像搭計程車：跳表單價乘上開了多遠。AI 也一樣：每個 Token 的單價，乘上用掉的 Token 數。
+這是 Artificial Analysis 在 2025 年 11 月公布的實測：用同一套測驗跑兩個推理模型，Kimi K2 Thinking 和開 high 的 GPT-5。
+先看單價：輸出每一百萬個 Token，Kimi 2.5 美元，GPT-5 10 美元，Kimi 便宜 4 倍。比較強的模型，單價通常也比較高。
+按一下：再看用量。Kimi 跑完這套測驗用了 1.4 億個 Token，是他們測過最多的，大約是 GPT-5 的 2 倍。它想得多、寫得長。
+按一下：乘起來的總花費：Kimi 356 美元，GPT-5（high）913 美元。單價差 4 倍，總花費只差 2.5 倍，便宜的單價被用量吃掉一大半。Token 多，等待時間也跟著變長。同一份報告裡，DeepSeek V3.2 只花了 41 美元，Kimi 是它的 9 倍。
+最後一下：看花費要看總數，也就是單價乘上 Token 數。強模型的單價本來就貴，簡單的事不必開高的 Effort；單價便宜的模型如果 Token 用得多，總花費和等待時間也會變高。補充：Kimi K2 其實不算小模型，總參數 1T，但每次只用 32B，單價便宜，是「單價便宜、但想很多」的例子。
+用 ChatGPT 帳號登入的 Codex，扣的是 /status 裡的額度，不是一個 Token 一個 Token 算錢；道理一樣，Token 用得多，額度扣得快。
+來源：Artificial Analysis, Kimi K2 Thinking: Everything you need to know（2025-11-07，artificialanalysis.ai/articles/kimi-k2-thinking-everything-you-need-to-know）；GPT-5 API 價格（openai.com/api/pricing，輸出每百萬 Token 10 美元）。`],
+  [SessionDesk, `82:30–85:00。
+回到 /status，裡面有一行 Session，現在來講它是什麼。Session 是一次工作階段，像一張工作桌。你交代的任務（例如寫第 1 回大綱）、Codex 讀過的檔案（原文/第001回.md）、Codex 的回答、你的追問，都在同一張桌上，所以你說「剛剛那段改短」，Codex 知道你指哪段。
 按一下：輸入 /new 會換一張新桌子，新的桌子是空的，前面講過的 Codex 都看不到。這時候說「剛剛那段改短」，Codex 不知道是哪段。
-最後一下：同一件事，留在同一個 Session 做完；換一件事，就開新的。下一頁接著看：換了 Session，你交代過的規則要怎麼留下來。`],
-  [StatusPage, `69:30–72:30。
-這頁我示範，大家先看就好；練習 2-1 進到練習資料夾以後，再自己打一次。在 Codex 輸入 /status，畫面上的欄位很多，今天只看一行。
-按一下：Directory，Codex 在哪個資料夾工作。結尾要是你的練習資料夾 Codex_練習。Codex 讀檔、存檔都從這裡開始，資料夾錯了，後面讀到的檔案就不對。
-按一下：其他欄位先知道就好：Model 是用哪個模型；Permissions 是能不能改你的檔案，Workspace 代表 Codex 能直接改這個資料夾裡的檔案，要動到資料夾外面才會先問你（依 Codex 文件）；Session 是這次工作階段的編號，後面再講。最下面兩行是額度，下一頁講。
-2026-10-24 實測（Codex 0.154.0 互動介面，Mac）：/status 由上到下是 Model、Model provider、Directory、Permissions、Agents.md、Account、Collaboration mode、Session，最下面是 5h limit 和 Weekly limit 兩行。預設設定下 Permissions 顯示「Workspace (Ask for approval)」；還沒有 AGENTS.md 時，Agents.md 那行是 <none>。講師自己的電腦改過設定，會顯示「Workspace (Approve for me)」，不要照講師的抄。Account 那行會露出 email，投影時注意。
-最後一下：動手前，先看 Directory 對不對。等一下的練習，第一件事就是做這個。`],
+最後一下：同一件事別開新 Session，Codex 才記得剛剛的對話；換一件事，再開新的。下一頁接著看：換了 Session，你交代過的規則要怎麼留下來。`],
+  [ModelSize, `75:30–78:30。
+回到啟動畫面，model 那一行寫的是模型名稱。模型之間第一個差別是大小，用「參數量」來算。參數是模型在訓練時一點一點調出來的數字，學到的東西就存在這些數字裡。單位 B 是 Billion，也就是 10 億，1B 就是 10 億個參數。同一系列的模型，參數越多，通常能記住、能分辨的東西越多。
+先看刻度：往右一格，大 10 倍，所以 1B 到 1T 差了 1000 倍。
+畫面上先出來四個可以下載到自己電腦跑的模型：Llama 3.2 有 1B，Qwen3 有 4B 和 32B，Llama 3.3 是 70B。附錄第 ${pageOf(LocalLadder)} 頁有實測：1B 只印出指令、不會動手；4B 很慢，還把大綱寫成紅樓夢人物。
+按一下：更大的。GPT-3 是 175B，這是 OpenAI 2020 年論文寫的數字。Llama 3.1 最大的版本 405B，DeepSeek-V3 671B，Kimi K2 1T，也就是 1000B。DeepSeek-V3 和 Kimi K2 是「混合專家」架構，每次回答只用到一部分：DeepSeek-V3 每次用 37B，Kimi K2 每次用 32B。
+按一下：GPT-3.5、GPT-4 以後，OpenAI 都沒有公布參數量。網路上常看到「GPT-3.5 是 175B」「GPT-4 有一兆多」，那些是推測，不是官方數字。Codex 背後的模型也沒有公布。
+按一下：那自己的電腦跑得動多大？以 RTX 4090 為例，這張顯示卡的記憶體是 24 GB，英文叫 VRAM。模型跑的時候要整個放進這塊記憶體，像行李要整個裝進行李箱。綠色界線左邊是跑得動的範圍，大約 30B 以內；70B 以上放不下。
+最後一下：粗估方法。原始的存法每個參數佔 16 個位元，也就是 2 個 byte，所以 1B 約 2 GB；「量化」是把每個參數存得更省，壓到大約 4 位元，1B 約 0.6 GB，品質會損失一點。對照 Ollama 上的檔案大小：Qwen3 8B 原始版 16 GB，放得下；Qwen3 32B 原始版 66 GB 放不下，量化後 20 GB 放得下，但只剩約 4 GB 給對話；Llama 3.3 70B 量化後 43 GB、原始版 141 GB，都放不下。對話越長也越佔記憶體：附錄第 ${pageOf(OllamaRoute)} 頁的 gemma4:e2b 下載只有 4.6 GB，對話長度開到 32k 時吃到約 7 GB。
+所以同一系列裡，參數越多通常越強，也越吃記憶體。不同系列、不同年份不能只比大小，新的小模型可能比舊的大模型強。幾百 B、1T 的模型要好幾張資料中心等級的顯示卡才跑得動，所以 ChatGPT 和 Codex 的模型是在雲端跑，不是在你的電腦裡。
+Mac 的顯示卡和一般記憶體共用（統一記憶體），粗估時看總記憶體，系統自己還會用掉一部分。
+來源：Llama 3.2／3.1／3.3 模型卡（Meta）；Qwen3 模型卡（Qwen）；Brown et al. 2020, Language Models are Few-Shot Learners, arXiv:2005.14165；DeepSeek-V3 Technical Report, arXiv:2412.19437；Kimi K2 模型卡（Moonshot AI，總參數 1T、每次啟用 32B）；ollama.com/library/qwen3、ollama.com/library/llama3.3 各版本檔案大小（2026-10-30 查詢）；NVIDIA GeForce RTX 4090 規格（24 GB GDDR6X）。`],
+  [StatusPage, `69:30–72:30（練習 3 分鐘）。
+練習 2-1，大家一起打。Codex 應該還開著，停在剛才信任的 Codex_練習。在 › 後面打 /status，按 Enter。畫面上的欄位很多，今天只看 Directory 這一行：Codex 在哪個資料夾工作，讀檔、存檔都從這裡開始，資料夾錯了，後面讀到的檔案就不對。
+其他欄位先知道就好：Model 是用哪個模型；Permissions 是能不能改你的檔案，Workspace 代表 Codex 能直接改這個資料夾裡的檔案，要動到資料夾外面才會先問你（依 Codex 文件）；Session 是這次工作階段的編號，後面再講。最下面兩行是額度，下一頁講。
+按一下：Directory 結尾是 Codex_練習，就對了。
+按一下：結尾是 aw-01-lab，代表 cd 時拖成外面那層，Codex 開在 aw-01-lab。打 /quit 離開，打 cd Codex_練習 進去一層，再打 codex，然後再打一次 /status。
+如果 Codex 已經關掉、或終端機關了：像第 ${pageOf(CdFolder)} 頁那樣，打 cd 和空格，把 Codex_練習 拖進來，按 Enter，再打 codex，再打 /status。
+最後一下：Directory 對了，Codex 就開著別關。接下來這章都是講解，第五章的練習直接在這個視窗做。
+2026-10-24 實測（Codex 0.154.0 互動介面，Mac）：/status 由上到下是 Model、Model provider、Directory、Permissions、Agents.md、Account、Collaboration mode、Session，最下面是 5h limit 和 Weekly limit 兩行。預設設定下 Permissions 顯示「Workspace (Ask for approval)」；還沒有 AGENTS.md 時，Agents.md 那行是 <none>。講師自己的電腦改過設定，會顯示「Workspace (Approve for me)」，不要照講師的抄。Account 那行會露出 email，投影時注意。`],
   [UsageToken, `72:30–75:30。
-兩個容易混的詞，像手機方案：月租額度，和你用掉的流量。
+兩個容易混的詞，用手機方案來比：Usage 像月租額度，Token 像你用掉的流量。
 Usage 是帳號這段時間還能用多少，就是 /status 最下面那兩行：5 小時額度、每週額度。用完要等額度重置。
 按一下：Token 是 AI 讀寫文字的單位，前面接龍那頁講過。你的提示詞、Codex 讀到的檔案、前面的對話，是模型讀進去的部分；模型思考和寫回答也要用 Token。兩邊加起來，才是這次用掉的 Token。
 最後一下：讀的檔越多，Token 越多，額度用得越快。所以交代時把範圍講清楚，例如「只讀 原文/」，就比較不浪費。`],
-  [MemoryLayers, `78:00–81:00。
-Memory 是 Codex 能延續的上下文，分兩層。像口頭交代，和貼在牆上的公告。
+  [MemoryLayers, `85:00–88:00。
+Memory 是 Codex 能延續的上下文，分兩層：一層像口頭交代，一層像貼在牆上的公告。
 第一層，Session 內的記憶：在 Session 1 說「只根據 原文/ 回答」，Codex 通常會照做；但打 /new 開新 Session，這條規則就不見了。
 按一下：第二層，專案裡的記憶：把規則寫進資料夾裡的 AGENTS.md，Codex 每次開 Session 都會先讀，所以新的 Session 也照做。/status 裡 Agents.md 那一行，說的就是這個檔。
-最後一下：聊天只在這個 Session 有效；AGENTS.md 每次開都會讀。範圍要講清楚：聊天裡說的，只留在這個 Session；AGENTS.md 寫在這個資料夾裡，在這個資料夾開 Codex 每次都會讀；換到別的專案就讀不到。在同一個專案的子資料夾裡開，上層的 AGENTS.md 通常也會沿用，子資料夾可以再放一份補充規則。Codex 不會永久記住你們聊過什麼，重要的規則請寫進檔案。`],
-  [AgentsFile, `81:00–84:00。
+最後一下：規則要寫進 AGENTS.md，開新 Session 才還在。範圍要講清楚：聊天裡說的，只留在這個 Session；AGENTS.md 寫在這個資料夾裡，在這個資料夾開 Codex 每次都會讀；換到別的專案就讀不到。在同一個專案的子資料夾裡開，上層的 AGENTS.md 通常也會沿用，子資料夾可以再放一份補充規則。Codex 不會永久記住你們聊過什麼，重要的規則請寫進檔案。`],
+  [AgentsFile, `88:00–91:00。
 AGENTS.md 長什麼樣子？AGENTS.md 放在練習資料夾最上層，內容是幾條規則。畫面上的內容是示意，等一下練習 2-2，你會自己用文字編輯器建一個。
 按一下：之後每開一個 Session，Codex 都會先讀這個檔，照著做。
 最後一下：AGENTS.md 是普通文字檔，用文字編輯器就能改，例如 Mac 的「文字編輯」、Windows 的「記事本」。`],
-  [Section5, `84:00–84:30。
-第五章：用 Codex 寫大綱。今天的作品就在這一章完成。`],
-  [OpenLab, `84:30–87:30（練習 3 分鐘）。
-練習 2-1，回到練習資料夾。第三章已經 cd 進去過；如果終端機關掉了，就像第三章那樣，打 cd 和一個空格，把 Codex_練習 資料夾拖進視窗，按 Enter。
-按一下：打 ls，按 Enter。Mac 和 Windows 的 PowerShell 都能用；Windows 的命令提示字元請打 dir。要看到 原文、回目.md 兩個。
-按一下：右邊兩種結果。ls 看得到原文，就可以打 codex。ls 看到的是 Codex_練習、ChatGPT_練習，代表還在外面那層 aw-01-lab：打 cd Codex_練習 進去，再 ls 一次。
-按一下：確認好了，再打 codex。第三章已經信任過這個資料夾，不會再問；如果還是跳出來，確認 You are in 結尾是 Codex_練習，再選 Yes, continue。進去後輸入 /status，看 Directory 那一行（畫面為示意，路徑依電腦而定）。
-按一下：Directory 結尾是 Codex_練習，就可以開始了。開了 Codex 才發現不對，打 /quit 離開，再重新 cd。`],
-  [AgentsByHand, `87:30–92:30（練習 5 分鐘）。
-練習 2-2 第 1 步：自己建 AGENTS.md。上一章說過，AGENTS.md 是普通文字檔，所以用電腦內建的文字編輯器就能寫。Codex 先開著沒關係。
+  [Section5, `91:00–91:30。
+第五章：用 Codex 寫大綱。今天的作品就在這一章完成。
+先確認一件事：Codex 還開著，停在練習 2-1 確認過的 Codex_練習。關掉了的話，打 cd 和空格，把 Codex_練習 拖進終端機，按 Enter，再打 codex，打 /status 看 Directory 結尾是 Codex_練習。`],
+  [AgentsByHand, `96:30–101:30（練習 5 分鐘）。
+練習 2-2 第 1 步：自己建 AGENTS.md。上一章說過，AGENTS.md 是普通文字檔，所以用電腦內建的文字編輯器就能寫。Codex 繼續開著別關，下一步直接回到它裡面問問題。
+三步：建立新檔案、編輯純文字、檔名叫做 AGENTS.md。下面是 Mac 和 Windows 各自怎麼按。
 規則從 prompts.md 的「練習 2-2」複製，三行：回答問題時，只根據 原文/ 資料夾裡的文字；找不到就說「原文/ 裡找不到」；每次回答的最後一行寫「出處：原文/第00N回.md」。
 Mac 用「文字編輯」：按 command＋空白鍵，打 textedit 打開，按「新增文件」。先到選單「格式 → 製作純文字」，這步很重要，不然存出來是 rtf，Codex 讀不懂。貼上規則，按 command＋S，檔名打 AGENTS.md，位置選 Codex_練習。跳出「要使用 .md 還是 .txt」，選「使用 .md」。
 Windows 用「記事本」：按 Windows 鍵打「記事本」打開，貼上規則，選「檔案 → 另存新檔」，位置選 Codex_練習，存檔類型改成「所有檔案」，檔名打 AGENTS.md，編碼用 UTF-8，按存檔。存檔類型沒改的話，會存成 AGENTS.md.txt。
 按一下：檔名要剛好是 AGENTS.md，大寫，副檔名是 .md。存成 AGENTS.md.txt 或 AGENTS.rtf，Codex 都不會讀。Windows 預設會把副檔名藏起來，看不出來的話，用終端機打 ls 確認（Codex 開著時，先開另一個終端機視窗再 cd 進去）。`],
-  [RulePractice, `92:30–96:30（練習 4 分鐘）。
+  [RulePractice, `101:30–105:30（練習 4 分鐘）。
 練習 2-2 第 2 步。這頁延續第 ${pageOf(MemoryLayers)} 頁的比喻：AGENTS.md 是貼在牆上的公告，/new 是換一張新桌子。我們來驗證：開新 Session 後，Codex 還會不會照 AGENTS.md 的規則回答。
 規則最後那句「最後一行寫出處」是故意加的：Codex 憑記憶答題通常不會寫這行，所以看得出新的 Session 有沒有讀到規則。
 按一下：回到 Codex，輸入 /new，換一張新桌子，再問「劉備第一次出場在第幾回？」。最後一行是「出處：原文/第001回.md」這種格式，就代表新的 Session 讀了規則。
-按一下：對照題，問「諸葛亮第一次出場在第幾回？」。前 21 回他還沒出場，只有第 9 回一首詩提到「諸葛隆中臥」。照規則，Codex 要說原文/ 裡找不到，不能憑記憶報回數。右下角那行是對照：同一個資料夾拿掉 AGENTS.md 再問，Codex 直接答「第三十七回」，那是模型憑記憶說的，原文/ 裡沒有。
-最後一下：開新 Session，Codex 仍照 AGENTS.md 的規則回答。重要的規則寫進 AGENTS.md，不要只在聊天裡講。
+按一下：對照題，問「諸葛亮第一次出場在第幾回？」。前 21 回他還沒出場，只有第 9 回一首詩提到「諸葛隆中臥」。照規則，Codex 要說原文/ 裡找不到，不能憑記憶報回數。講師試過：同一個資料夾拿掉 AGENTS.md 再問，Codex 直接答「第三十七回」，那是模型憑記憶說的，原文/ 裡沒有。
+最後一下：沒照規則怎麼辦。沒寫出處那行、或直接報「第 37 回」這種回數，打 /quit 離開，再打 codex 重開，再問一次。還是不行，回去檢查檔名是不是剛好 AGENTS.md、有沒有存在 Codex_練習 裡。重要的規則寫進 AGENTS.md，開新 Session 也照樣讀得到。
 2026-10-24 實測（Codex 0.154.0 互動介面，Mac，gpt-5.6-luna）：當時是請 Codex 寫 AGENTS.md，內容和這三行一樣。輸入 /new 後問劉備，答「劉備第一次出場在第一回，文中以「姓劉，名備，字玄德」介紹。」，最後一行「出處：原文/第001回.md」；再問諸葛亮，答「原文／裡找不到諸葛亮正式出場；只在第九回詩句中提到「諸葛隆中臥」。」，最後一行「出處：原文/第009回.md」。找不到也照樣附出處，是規則寫了「每次回答」的關係。自己用文字編輯器建的檔案，Codex 讀法一樣；這個版本講師還沒在課堂流程實跑過。
-另外用 codex exec 試過（同一天）：同一個資料夾拿掉 AGENTS.md 再問諸葛亮，它直接答「第三十七回」。
-如果沒生效：先打 /quit 關掉，再打 codex 重開一次；還是不行，回去檢查檔名是不是剛好 AGENTS.md、有沒有存在 Codex_練習 裡。`],
-  [OutlinePrompt, `96:30–101:30（練習 5 分鐘，Codex 跑約 1 分半）。
+另外用 codex exec 試過（同一天）：同一個資料夾拿掉 AGENTS.md 再問諸葛亮，它直接答「第三十七回」。`],
+  [OutlinePrompt, `105:30–110:30（練習 5 分鐘，Codex 跑約 1 分半）。
 練習 2-3，今天最主要的練習。從 prompts.md 複製完整提示詞：
 【定位】
 請讀 原文/ 資料夾裡第 1 回到第 21 回的文字。
@@ -3781,43 +4016,44 @@ Windows 用「記事本」：按 Windows 鍵打「記事本」打開，貼上規
 只能用原文裡的內容，原文沒寫的事情不要加。
 寫入檔案前，先給我看內容，等我說可以再寫。
 
-上面三個標籤的顏色對回下面的圖：棕色的「定位」是左邊那疊棕色原文檔，綠色的「期望輸出」是最後存好的綠色檔案。
-流程：Codex 先讀完 21 個檔。
-按一下：Codex 會先把草稿給你看。
-按一下：你回「可以，存檔」，Codex 就直接寫進資料夾，不會再跳確認畫面。資料夾裡會多一個三國演義大綱.md。
+第 1 步，左邊這一整段就是要貼的提示詞，三個標籤分三塊：【定位】讀哪些原文、【期望輸出】寫成什麼樣的檔案、【限制】原文沒寫的不加，存檔前先給你看。在剛才的 Codex 裡貼上整段，按 Enter。
+按一下：第 2 步，Codex 一回一回讀完 21 個檔，先把 21 段草稿貼在畫面上，最後問你可不可以。這時資料夾裡還沒有檔案。
+按一下：第 3 步，看完草稿，回「可以」。Codex 就直接寫進資料夾，畫面出現 Added 三國演義大綱.md，不會再跳確認畫面。
 2026-10-24 實測（Codex 0.154.0 互動介面，Mac，gpt-5.6-luna）：它讀完 21 回，先把 21 段草稿貼在畫面上，最後一句是「如果內容可以，請回覆「可以」，我再建立 三國演義大綱.md。」，這時資料夾裡還沒有檔案。回「可以」之後，畫面出現「Added 三國演義大綱.md (+125 -0)」，沒有跳確認畫面；檔案 21 段，標題沒有連結。這次草稿裡的人名沒加 [[ ]]，存進檔案時才加上，所以看草稿時不用急著糾正，存好後打開檔案看就好。
-按一下：完成的樣子：資料夾裡出現三國演義大綱.md，打開看每段最後都有出處。
-按一下：最低完成：時間不夠的話，先把提示詞裡的「第 1 回到第 21 回」改成「第 1 回到第 2 回」，做出兩段並附出處；做完再請它擴到 21 回。
+按一下：跑不出來、或時間不夠，先把提示詞裡的「第 1 回到第 21 回」改成「第 1 回到第 2 回」再跑一次，做出兩段並附出處。
+完成的樣子在下一頁：資料夾裡出現三國演義大綱.md，打開看每段最後都有出處。
 講師實測大約 1 分 38 秒寫完，這只是讓大家知道要等多久，快慢和寫得好不好無關。等的時候可以看 Codex 讀了哪些檔。
 人名一律用本名寫連結：玄德是劉備、雲長是關羽、翼德是張飛、孟德是曹操。
 跑壞了、或時間到還沒跑完：先用講師的範例成果，第二堂一樣能用：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-01-sample-output/三國演義大綱.md （prompts.md 練習 2-3 下面也有這個連結）。
 Windows：Codex 在 Windows 讀這些中文檔會不會變亂碼，講師沒有實測（檔案是 UTF-8）。如果它說讀到亂碼，跟它說「請用 UTF-8 讀取 原文/ 的檔案」。`],
-  [OutlineResult, `101:30–103:30。
+  [OutlineResult, `110:30–112:30。
 這是講師電腦上用 Codex 0.154 實跑的結果，21 段。速度不代表品質，寫得好不好要看下一頁的核對。
-按一下：人名都變成 [[連結]]，第二堂放進 Obsidian 就能連到人物卡。
+按一下：人名都變成 [[連結]]，第二堂放進 Obsidian 就能連到人物卡。一律用本名：原文寫「玄德」，連結要寫 [[劉備]]；雲長是關羽、翼德是張飛、孟德是曹操。
 按一下：每段最後都附了出處，21 段、21 個出處。
-按一下：有個小毛病：Codex 把回目標題裡的人名也改了，「張翼德怒鞭督郵」變成「[[張飛]]怒鞭督郵」，「何國舅」變成「[[何進]]」，回目就不是原文了。講師實測時用的是舊版提示詞；補上「標題裡的人名不用加連結」之後重跑（2026-10-17），21 段的標題都沒有連結了。你如果還是遇到，就跟它說：「標題照回目原文，不要加連結」。`],
-  [CheckSource, `103:30–107:30（練習 4 分鐘）。
+按一下：標題照回目原文，沒有加連結。第 2 回內文寫 [[張飛]]，標題還是「張翼德怒鞭督郵　何國舅謀誅宦豎」，和 回目.md 一字不差；這是提示詞那句「標題裡的人名不用加連結」的效果。等一下練習 2-4 最後一步，就是拿標題和 回目.md 對一對。如果你的標題被改成 [[張飛]]，跟它說：「標題照回目原文，不要加連結」。`],
+  [CheckSource, `112:30–116:30（練習 4 分鐘）。
 練習 2-4：核對大綱。先請 Codex 指出根據，貼上 prompts.md 的「練習 2-4」：三國演義大綱.md 第 N 回那段的第二句，根據原文哪一句？引用原句。N 換成你想查的回數。這裡用講師範例的第 21 回當例子，第二句是「劉備奉命出兵截擊袁術後脫離曹操，關羽又設計斬殺徐州刺史車冑，重新占據徐州」。
 按一下：Codex 引用了原句，例如「我有一計，可殺車冑：乘夜扮作曹軍到徐州，引車冑出迎，襲而殺之。」並寫出處。這是講師實測（2026-10-24，codex exec 對範例大綱），Codex 還多引了一句「術若投紹，必從徐州過……」。
 按一下：自己查。打開 原文/第021回.md：Mac 按右鍵，選「打開方式」再選「文字編輯」；Windows 按右鍵，選「開啟檔案」再選「記事本」。按 Cmd+F 或 Ctrl+F，貼上引用句裡的四、五個字，例如「可殺車冑」。畫面上左右兩邊用綠框框起來的三行，是同一句話：左邊是 Codex 引的，右邊是原文裡搜到的。找得到，這句就有根據；找不到，回 Codex 說「原文/第021回.md 裡找不到這句，請重新確認」。
 按一下：再看標題。把大綱那段的標題，和 回目.md 第 21 回比一比。講師舊版的大綱就是在這裡出錯：「張翼德」被改成 [[張飛]]。
-最後一下：搜得到原句，還要確認原句支持摘要的每件事。搜得到，只證明這句原文真的存在。第二句講了四件事：截擊袁術、脫離曹操、斬殺車冑、占據徐州。這句引文只講到關羽獻計，車冑有沒有真的被殺，要往下讀原文才確認得了。人物、因果、先後都對，標題也和回目一字不差，這段才算核對過。抽查兩段對了，只代表這兩段；整份還是要分段核對，例如每次五回。回到自己的資料核對，是 RAG 的最後一步。
+最後一下：原文搜不到這句，就回 Codex 說「原文/第021回.md 裡找不到這句，請重新確認」，再查一次。
+另外提醒：找到原句後，還要看它有沒有寫到摘要裡的每件事。搜得到，只證明這句原文真的存在。第二句講了四件事：截擊袁術、脫離曹操、斬殺車冑、占據徐州。這句引文只講到關羽獻計，車冑有沒有真的被殺，要往下讀原文才確認得了。人物、因果、先後都對，標題也和回目一字不差，這段才算核對過。抽查兩段對了，只代表這兩段；整份還是要分段核對，例如每次五回。回到自己的資料核對，是 RAG 的最後一步。
 時間不夠就先做一段，有時間再做第二段。`],
-  [PracticeVideo, `107:30–112:30（影片約 5 分鐘）。
-練習講完，放一次講師的實作影片，從頭到尾看一遍整個流程。按影片的播放鍵開始；右邊的時間可以直接跳段，時間不夠就從 2:08 寫大綱那段開始看。影片沒有聲音，邊放邊講。
-先講一句：影片裡用的是 OpenCode 加免費的 DeepSeek 模型，不是 Codex。主要步驟一樣：cd 進 Codex_練習、打開工具、貼提示詞。沒有 ChatGPT 方案的人，附錄有 OpenCode 的裝法。
+  [PracticeVideo, `91:30–96:30（影片約 5 分鐘）。
+開始練習前，先看講師做一次，再自己做。這段影片從頭到尾跑一遍等一下的流程：看規則、問兩個問題、寫大綱、存檔。按影片的播放鍵開始；右邊的時間可以直接跳段。影片沒有聲音，邊放邊講。
+先講一句：影片裡用的是 OpenCode 加免費的 DeepSeek 模型，不是 Codex。主要步驟一樣：cd 進 Codex_練習、打開工具、貼提示詞。你們就用剛才開著的 Codex 做。沒有 ChatGPT 方案的人，附錄有 OpenCode 的裝法。
+影片裡的 AGENTS.md 是事先寫好的，除了今天的三行規則，還多一行「最後要給我一個笑臉」；等一下練習 2-2，你們自己建一個只有三行的版本。
 0:00 先 cd 進 Codex_練習，打 ls 看到 原文 和 回目.md，再用 cat 看 AGENTS.md 裡的三條規則。
 0:22 打開 OpenCode，打 free 篩出免費模型，選 DeepSeek。
 0:56 問「劉備第一次出場在第幾回？」它讀原文，回答第 1 回，最後一行附出處，還照規則給了笑臉。
 1:32 問「諸葛亮第一次出場在第幾回？」這題是陷阱：前 21 回諸葛亮還沒登場。OpenCode 搜了原文，回答找不到，只在第 9 回的詩裡提到「諸葛」。這和 AGENTS.md 那條「找不到就說找不到」一致。
 2:08 貼上練習 2-3 的提示詞。它一回一回讀完 21 個檔，大約一分半寫出草稿。
 3:48 它問「要我直接寫入 三國演義大綱.md 嗎？」回「寫入」，它就存進資料夾。最後回到終端機打 ls，多了 三國演義大綱.md。
-時間緊就只放 2:08 之後那段，省下的時間留給補做和提問。`],
-  [Recap, `112:30–115:30。
+時間緊就只放 0:56–2:08 問兩題那段，寫大綱的部分等一下自己跑就看得到。看完，回到自己的 Codex，從練習 2-2 開始。`],
+  [Recap, `116:30–119:30。
 回顧五章。一、GPT 在猜下一個字，會猜錯也會說得很肯定。二、ChatGPT 在對話框回答，Codex 在資料夾裡讀寫檔案。三、用官方獨立安裝程式裝好 Codex，並用 codex --version 確認。四、Codex 裡先看 /status 的 Directory，重要的規則寫進 AGENTS.md。五、用 Codex 照原文寫出大綱，每段附出處。
 最後一下：AI 寫的內容，要回原文核對。`],
-  [NextLesson, `115:30–120:00。
+  [NextLesson, `119:30–124:00。
 下一堂把今天的大綱放進 Obsidian。
 左邊是今天的三國演義大綱.md，人名都是 [[連結]]。
 按一下：放進筆記庫後，[[劉備]]、[[關羽]]、[[張飛]]、[[曹操]]、[[孫權]] 會連到講師準備的人物卡，大綱和人物卡就互相連結。
@@ -3859,7 +4095,7 @@ Web Search、RAG、Agent：
 按一下：備案 A，opencode 加免費雲端模型。opencode 是另一套和 Codex 很像的工具，不用登入、不用信用卡，講師實測用它跑大綱提示詞，內容正確。這是首選。
 按一下：備案 B，Codex 加 OpenRouter。操作和今天教的 Codex 一樣，但要註冊 OpenRouter 帳號、建立 API Key，免費帳號每天只有 50 次請求。
 按一下：備案 C，用 Ollama 在自己電腦跑模型。好處是資料不出電腦，但講師測過、學生電腦跑得動的小模型會亂寫，所以只拿來示範，不當真正的備案。
-最後一下：先走 A，不行再試 B；C 只拿來示範。
+最後一下：建議先用 A，A 用不了再改用 B。C 只適合示範。
 講師電腦實測：opencode-ai 1.19.3、codex-cli 0.154.0、Ollama 0.40.3。`],
   [OpencodeSteps, `附錄（備用）。備案 A：opencode 加免費模型。
 四步，都在終端機打：
@@ -3896,7 +4132,7 @@ qwen3:1.7b：在 opencode 裡 3 次有 2 次建好檔案，但在 Codex 裡只�
 5. ollama launch opencode --model gemma4:e2b，不用寫設定檔就能用 opencode 開它。也可以接 Codex：在 ~/.codex/config.toml 寫 model_provider = "ollama"、model = "gemma4:e2b"，再打 codex（不要用 codex --oss，0.154 在沒登入的電腦上還是會先跳登入畫面，而且會自動下載約 14 GB 的 gpt-oss:20b）。
 6. ollama ps 看 CONTEXT 那一欄要是 32768；ollama list 看裝了哪些模型；ollama rm 模型名稱 可以刪掉。
 用 Codex 接 Ollama 時，每次都會出現「Model metadata … not found」和「failed to refresh available models」兩行訊息，不影響使用。
-最後一下：16 GB 的電腦才示範，8 GB 不要跑。
+最後一下：電腦記憶體要 16 GB 以上，才適合拿來示範；8 GB 的電腦不建議跑。
 來源：https://docs.ollama.com/integrations/codex 、https://docs.ollama.com/context-length`],
   [OpenRouterRoute, `附錄（備用）。備案 B：Codex 加 OpenRouter，操作和今天的 Codex 一樣。
 1. 到 https://openrouter.ai 註冊，Keys → 建立一把 Key。
@@ -3973,7 +4209,6 @@ export const notes: (string | undefined)[] = [
   n(CourseMap),
   n(Agenda),
   n(Section1),
-  n(Evolution),
   n(NextWordGame),
   n(ProbTable),
   n(OneByOne),
@@ -3993,11 +4228,12 @@ export const notes: (string | undefined)[] = [
   n(RagG),
   n(OpenBookPage),
   n(RagMiniPractice),
+  n(Evolution),
+  n(ChatGPTSelf),
   n(Section2),
   n(AgentPage),
   n(ChatVsCodex),
   n(SameTaskTwoWays),
-  n(ChatGPTSelf),
   n(Section3),
   n(OpenTerminal),
   n(TerminalAnatomy),
@@ -4010,17 +4246,19 @@ export const notes: (string | undefined)[] = [
   n(StartScreen),
   n(StatusPage),
   n(UsageToken),
+  n(ModelSize),
+  n(EffortLevels),
+  n(EffortCost),
   n(SessionDesk),
   n(MemoryLayers),
   n(AgentsFile),
   n(Section5),
-  n(OpenLab),
+  n(PracticeVideo),
   n(AgentsByHand),
   n(RulePractice),
   n(OutlinePrompt),
   n(OutlineResult),
   n(CheckSource),
-  n(PracticeVideo),
   n(Recap),
   n(NextLesson),
   n(ReferencesModel),

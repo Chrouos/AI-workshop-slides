@@ -1,4 +1,4 @@
-# 第二堂：Obsidian 與 RAG
+# 第二堂：Obsidian 與 AI Agent
 
 整包下載：[aw-02-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip)。解壓縮後是 `aw-02-lab` 資料夾：
 
@@ -10,7 +10,7 @@ aw-02-lab/
 
 這份 README 只放在 GitHub 上，不打包進 ZIP。
 
-第 1–21 回原文和大綱，用第一堂自己的 `aw-01-lab/Codex_練習/`（練習 2 搬進筆記庫）。練習 3 第 1 輪全班核對的回答，和附錄進階討論用的範例結果，放在線上：[aw-02-sample-output/](../aw-02-sample-output/README.md)。提示詞和核對用的檔案都不放在筆記庫裡，Codex 在筆記庫裡工作時才不會讀到它們。第三、四堂都接著用這一個筆記庫。
+第 1–21 回原文和大綱，用第一堂自己的 `aw-01-lab/Codex_練習/`（練習 2 搬進筆記庫）。附錄進階討論用的範例結果放在線上：[aw-02-sample-output/](../aw-02-sample-output/README.md)。提示詞和範例結果都不放在筆記庫裡，Codex 在筆記庫裡工作時才不會讀到它們。第三、四堂都接著用這一個筆記庫。
 
 ## 筆記庫裡有什麼
 

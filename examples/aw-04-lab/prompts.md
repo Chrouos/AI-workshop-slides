@@ -41,9 +41,9 @@
 
 看結果：回 Forestry 儀表板看 Publish history，最上面那一筆從 Building 變成 Published（大約半分鐘），再打開你的網址，首頁變成〈三國演義〉就成功了。
 
-出現 Failed：點右邊箭頭展開看錯誤訊息。看到 DuplicatePermalink，就是第 5 步的 Simple note URLs 沒關：關掉後再發布一次。第一次發布常常就是這樣失敗，關掉後就會成功。
+出現 Failed：點右邊箭頭展開看錯誤訊息。看到 DuplicatePermalink，多半是第 5 步的 Simple note URLs 沒關：關掉後再發布一次。其他錯誤訊息，拍照給助教看。
 
-Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛設定，不貼進筆記、截圖或群組；不小心外流，到 Forestry 儀表板按 Regenerate Garden Key 換一把新的。
+Garden Key 像密碼：有了它就能發布到你的網站。只貼在外掛設定，不貼進筆記、截圖或群組；不小心外流，到 Forestry 儀表板按 Regenerate Garden Key 換一把新的。
 
 ## 小練習：改一句，再發布一次（也是休息時間）
 
@@ -63,7 +63,7 @@ Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛
 3. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish，等 Publish history 變成 Published。
 4. 打開你的網址，後面接 `/整理/時間軸/`。
 
-看結果：看到橫向時間軸就過關。網站的內文欄比較窄，一開始只看得到前三件，用觸控板往右滑，或拖動時間軸下方的捲軸，就看得到其他事件。出現 404，就是那張還沒勾，或勾了還沒發布。
+看結果：看到橫向時間軸就過關。網站的內文欄比較窄，一開始只看得到前面幾件，用觸控板往右滑，或拖動時間軸下方的捲軸，就看得到其他事件。出現 404，就是那張還沒勾，或勾了還沒發布。
 
 ## 練習 3-2（導覽頁）：讓讀者點得到每張卡
 
@@ -92,16 +92,16 @@ Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛
 
 點了出現 404，就是那張還沒勾、或勾了還沒發布。時間軸裡的事件名稱是純文字、點不了，這是對的；時間軸裡出現 `[[ ]]`，或點了會 404 的來源卡連結，回第三堂的 SKILL.md 補規則，再產生一次。
 
-## 練習 4（驗收）：同學從首頁找到新卡
+## 練習 4（檢查）：從首頁點到新卡
 
-定位：一張新卡｜期望輸出：同學點得到新卡｜限制：只從首頁點
+定位：一張新卡｜期望輸出：首頁點得到新卡｜限制：只從首頁點
 
-1. 公開〈三英戰呂布〉：打開它，執行 Digital Garden: Add publish flag；在導覽頁的事件那段加上 `[[三英戰呂布]]`；再執行 Publish All Notes Marked for Publish，等 Publish history 變成 Published。
-2. 傳網址：Forestry 儀表板最上面 Your garden is live 下面那行，按 Copy address 複製，用 LINE 傳給同組同學，或寫在紙上。
-3. 同學從首頁點：在自己的電腦打開你的網址，只從首頁開始點：首頁 → 知識庫導覽 → 三英戰呂布，不直接打卡片的網址。
-4. 回報結果：找到新卡就過關；找不到，說哪一頁打不開、看到什麼（404、連結不見）。你回去查那一頁的 dg-publish 和連結，修好再發布，請同學再點一次。做完交換角色。
+1. 公開〈三英戰呂布〉：打開它，執行 Digital Garden: Add publish flag；在導覽頁的事件那段加上 `[[三英戰呂布]]`；再執行 Publish All Notes Marked for Publish。
+2. 等到 Published：Forestry 儀表板的 Publish history，最上面那一筆變成 Published 再往下。
+3. 開無痕視窗，打開自己的網址（Forestry 儀表板最上面 Your garden is live 下面那行）。
+4. 只從首頁開始點：首頁 → 知識庫導覽 → 三英戰呂布，不直接打卡片的網址。
 
-看結果：找不到常見兩種：〈三英戰呂布〉沒勾 dg-publish，點了是 404；導覽頁改了沒重新發布，連結不在。
+看結果：點到新卡就完成。打不開常見兩種：〈三英戰呂布〉沒勾 dg-publish，點了是 404；導覽頁改了沒重新發布，連結不在。照簡報上「部署疑難排解：四個檢查」一步一步查：有沒有按發布 → Publish history 有沒有新的一筆 → 狀態是 Building、Published 還是 Failed → Ctrl／Cmd + Shift + R 強制重新整理。
 
 ## 網址
 

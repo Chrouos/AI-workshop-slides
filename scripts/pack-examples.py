@@ -20,7 +20,8 @@ PACKS = [
     # Students write their own AGENTS.md and outline in Codex_練習; instructor test runs and videos stay out.
     ('aw-01-lab.zip', 'aw-01-lab', 'aw-01-lab', {'AGENTS.md', '三國演義大綱.md', '*.mov', '*.mp4'}),
     # aw-02: README.md stays on GitHub only; students need just the vault and prompts.md.
-    ('aw-02-lab.zip', 'aw-02-lab', 'aw-02-lab', {'.obsidian', 'README.md'}),
+    # 整理/ ships empty: students drop in the outline they wrote in lesson 1.
+    ('aw-02-lab.zip', 'aw-02-lab', 'aw-02-lab', {'.obsidian', 'README.md', '三國演義大綱.md'}),
     # Students only need the prompts and the skeleton; the README is for browsing on GitHub.
     ('aw-03-lab.zip', 'aw-03-lab', 'aw-03-lab', {'README.md'}),
     # The README is the GitHub landing page; students only download prompts.md.
