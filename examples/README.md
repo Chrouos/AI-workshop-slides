@@ -36,9 +36,9 @@
 
 - 簡報：[aw-04](https://chrouos.github.io/AI-workshop-slides/s/aw-04/)
 - 下載：[aw-04-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-04-lab.zip)，只有一份 prompts.md：
-  - `prompts.md`：[線上看](aw-04-lab/prompts.md)，最上面是課前作業（註冊 Forestry.md、種一座花園），第四堂上課前要先做完
+  - `prompts.md`：步驟手冊，[線上看](aw-04-lab/prompts.md)，最上面是課前作業（註冊 Forestry.md、種一座花園），第四堂上課前要先做完
 - 練習 3-2 導覽頁的範例：[aw-04-sample-output/](aw-04-sample-output/README.md)
-- 範例網站：https://glowing-clearing.forestry.md/
+- 範例網站：https://glowing-clearing.forestry.md/ ，它的筆記庫在 [final/](final/README.md)（參考用，不是下載包）
 
 ## 維護教材：改了之後
 

@@ -1,6 +1,6 @@
 # 第四堂：發布成網站
 
-這頁在筆電打開，網址和提示詞整段複製，不用照投影片打字。簡報網址：https://chrouos.github.io/AI-workshop-slides
+這是第四堂的步驟手冊：課前作業和每個練習的步驟、網址都在這裡，練習 3-2 另有兩段要貼給 Codex 的提示詞。上課時在筆電打開、整堂開著，整段複製，不用照投影片打字。簡報網址：https://chrouos.github.io/AI-workshop-slides
 這堂只用這份 prompts.md，筆記庫就是你前三堂一路做下來的「三國人物知識庫」。
 
 框上面那行「定位｜期望輸出｜限制」是簡報上的三格重點，不用貼。
@@ -34,13 +34,14 @@
 
 1. 在三國人物知識庫裡裝外掛：設定 →「第三方外掛程式」→ 按「離開受限模式」→ 社群外掛程式按「瀏覽」→ 搜尋 Digital Garden，作者是 oleeskild → 安裝 → 啟用。
 2. 設定 → 左下的 Digital Garden → Publish to 選 **Forestry.md**。
-3. 到 Forestry 儀表板右邊的 Garden Key，按 Reveal Garden Key，複製那串字；回 Obsidian 貼進 Garden Key 欄位，按 Connect。看到 Connected to 你的花園名稱，就連上了。連上後外掛會請你選首頁，選〈三國演義〉。
-4. **把 Simple note URLs 關掉**：在同一頁往下捲到 Publishing，找到 Simple note URLs，把開關關掉。我們的卡名都是中文，這個開關開著，每張卡的網址會變成一樣，網站會建置失敗。
-5. 試發布：按 Ctrl／Cmd + P，搜尋 garden publish，選 Publish All Notes Marked for Publish。
+3. 到 Forestry 儀表板右邊的 Garden Key，按 Reveal Garden Key，複製那串字；回 Obsidian 貼進 Garden Key 欄位，按 Connect。看到 Connected to 你的花園名稱，就連上了。
+4. **選首頁**：連上後外掛會請你選網站首頁，選〈三國演義〉（它開頭已經有 `dg-home: true`）。沒選也發布得出去，但打開網址只會看到一串筆記清單。
+5. **把 Simple note URLs 關掉**：在同一頁往下捲到 Publishing，找到 Simple note URLs，把開關關掉。我們的卡名都是中文，這個開關開著，每張卡的網址會變成一樣，網站會建置失敗。
+6. 試發布：按 Ctrl／Cmd + P，搜尋 garden publish，選 Publish All Notes Marked for Publish。
 
 看結果：回 Forestry 儀表板看 Publish history，最上面那一筆從 Building 變成 Published（大約半分鐘），再打開你的網址，首頁變成〈三國演義〉就成功了。
 
-出現 Failed：點右邊箭頭展開看錯誤訊息。看到 DuplicatePermalink，就是第 4 步的 Simple note URLs 沒關：關掉後再發布一次。第一次發布常常就是這樣失敗，關掉後就會成功。
+出現 Failed：點右邊箭頭展開看錯誤訊息。看到 DuplicatePermalink，就是第 5 步的 Simple note URLs 沒關：關掉後再發布一次。第一次發布常常就是這樣失敗，關掉後就會成功。
 
 Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛設定，不貼進筆記、截圖或群組；不小心外流，到 Forestry 儀表板按 Regenerate Garden Key 換一把新的。
 
@@ -93,12 +94,12 @@ Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛
 
 ## 練習 4（驗收）：同學從首頁找到新卡
 
-定位：一張新卡｜期望輸出：同學點得到新卡｜限制：無痕視窗、從首頁
+定位：一張新卡｜期望輸出：同學點得到新卡｜限制：只從首頁點
 
-1. 公開〈三英戰呂布〉：打開它，執行 Digital Garden: Add publish flag；在導覽頁的事件那段加上 `[[三英戰呂布]]`；再執行 Publish All Notes Marked for Publish。
-2. 傳你的網址：Forestry 儀表板最上面 Your garden is live 下面那行，按 Copy address 複製。傳之前，自己先開無痕視窗（Chrome、Edge：Ctrl＋Shift＋N；Mac：Cmd＋Shift＋N）貼上，從首頁點到〈三英戰呂布〉。再把網址傳給同學，用 LINE 或寫在紙上都可以。
-3. 同學開無痕視窗：在自己的電腦開無痕視窗，貼上你的網址，只能從首頁開始點：首頁 → 知識庫導覽 → 三英戰呂布，不能直接打卡片的網址。
-4. 回報結果：找到新卡就打勾；找不到，說哪一頁打不開、看到什麼（404、連結不見）。你回去查那一頁的 dg-publish 和連結，修好再發布，請同學再點一次。做完交換角色。
+1. 公開〈三英戰呂布〉：打開它，執行 Digital Garden: Add publish flag；在導覽頁的事件那段加上 `[[三英戰呂布]]`；再執行 Publish All Notes Marked for Publish，等 Publish history 變成 Published。
+2. 傳網址：Forestry 儀表板最上面 Your garden is live 下面那行，按 Copy address 複製，用 LINE 傳給同組同學，或寫在紙上。
+3. 同學從首頁點：在自己的電腦打開你的網址，只從首頁開始點：首頁 → 知識庫導覽 → 三英戰呂布，不直接打卡片的網址。
+4. 回報結果：找到新卡就過關；找不到，說哪一頁打不開、看到什麼（404、連結不見）。你回去查那一頁的 dg-publish 和連結，修好再發布，請同學再點一次。做完交換角色。
 
 看結果：找不到常見兩種：〈三英戰呂布〉沒勾 dg-publish，點了是 404；導覽頁改了沒重新發布，連結不在。
 

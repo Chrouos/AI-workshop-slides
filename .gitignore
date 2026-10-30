@@ -12,3 +12,6 @@ examples/aw-01-lab/Codex_練習/三國演義大綱.md
 # Obsidian plugins installed while testing the sample vault (may hold publish keys)
 examples/**/.obsidian/plugins/
 examples/**/.obsidian/community-plugins.json
+
+# Instructor showcase vault: Obsidian rewrites this on every open
+examples/final/**/.obsidian/workspace.json
