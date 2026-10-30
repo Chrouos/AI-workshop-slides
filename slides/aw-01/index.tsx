@@ -238,8 +238,7 @@ const Shell = ({ children, top = 112, chapter, enterChapter = false, source }: {
 // The page's main picture: fills the space between the heading and the footer.
 const Fit = ({ z = 1, children }: { z?: number; children: ReactNode }) => (
   <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: 24 }}>
-    <div style={{ zoom: z }}>
-      {/* @slide-comment id="c-fa004a8e" ts="2026-10-20T13:18:00.665Z" text="eyJub3RlIjoi6YCZ5LiA5aGK55qE5ouG5q2l6amfIOWPr-S7peWcqOaLhueahOe0sOS4gOm7nuiuk-S6uuimuuW-l-S7luecn-eahOacieWcqOaLhiJ9" */}{children}</div>
+    <div style={{ zoom: z }}>{children}</div>
   </div>
 );
 
@@ -447,8 +446,7 @@ const Figure = ({ w = 1632, h, label, children }: { w?: number; h: number; label
 );
 
 const Stage = ({ w = 1632, h, children }: { w?: number; h: number; children: ReactNode }) => (
-  <div style={{ position: 'relative', width: w, height: h }}>
-    {/* @slide-comment id="c-9bc3d71e" ts="2026-10-20T13:17:28.317Z" text="eyJub3RlIjoi6YCZ5LiA5q6155qEIGFuaW1hdGlvbiDlhKrljJblj6_ku6XkuIDlsaTkuIDlsaTnmoTmhJ_oproifQ" */}{children}</div>
+  <div style={{ position: 'relative', width: w, height: h }}>{children}</div>
 );
 
 const Layer = ({ w = 1632, h, label, children }: { w?: number; h: number; label?: string; children: ReactNode }) => (
