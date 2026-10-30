@@ -4,9 +4,13 @@
 這堂的檔案都在 [aw-03-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-03-lab.zip) 裡：這份 prompts.md 和 `sanguo-timeline/`（練習 4 的時間軸 Skill 骨架）。Codex 一樣開在你自己的「三國人物知識庫」。
 終端機：Mac 用「終端機」，Windows 用 PowerShell。
 
-## 練習 1-1：先確認有 Node.js 和 git
+## 練習 1-1：先確認有 git 和 Node.js
 
-上課一開始就做。第二章要用 `npx skills add` 安裝 Skill，沒有 Node.js 或 git 的人，邊聽第一章邊裝。`npx` 是 Node.js 附的工具，skills 從 GitHub 下載 Skill 時要用 git。打開終端機，一次貼一行：
+上課一開始就做。第二章要用 `npx skills add` 安裝 Skill：skills 從 GitHub 下載 Skill 時要用 git，`npx` 是 Node.js 附的工具。沒有的人邊聽第一章邊裝，先裝 git，再裝 Node.js。打開終端機，一次貼一行：
+
+```text
+git --version
+```
 
 ```text
 node -v
@@ -16,22 +20,12 @@ node -v
 npx -v
 ```
 
-```text
-git --version
-```
-
 看結果：
 
-- `node -v` 看到 `v22.20` 以上的版本號（例如 `v24.12.0`），`npx -v` 看到一串數字（例如 `11.6.2`），`git --version` 看到 `git version 2.xx`：三個都有，就先放著，第二章再接著做練習 1-2。
+- `git --version` 看到 `git version 2.xx`，`node -v` 看到 `v22.20` 以上的版本號（例如 `v24.12.0`），`npx -v` 看到一串數字（例如 `11.6.2`）：三個都有，就先放著，第二章再接著做練習 1-2。
 - 版本號不同沒關係。`node -v` 開頭的數字比 22 小，要照下面重裝新版。
 
-沒有 Node.js（出現 `command not found`，或 Windows 寫「無法辨識」）：
-
-1. 打開 https://nodejs.org/en/download ，下載標著 LTS（長期支援版）的安裝檔。Mac 是 .pkg，Windows 是 .msi。
-2. 雙擊安裝檔，選項都用預設，一路按「繼續」或 Next。Mac 最後會要你輸入電腦的登入密碼。
-3. 把終端機整個關掉再打開，新的視窗才找得到 node。再打一次 `node -v` 和 `npx -v`。
-
-沒有 git：
+第 1 步，沒有 git：
 
 - Mac：照 git 官網（https://git-scm.com/install/mac ）建議，先裝 Homebrew 再裝 git。
   1. 打開 https://brew.sh ，複製首頁那一行，或直接複製下面這行，貼進終端機按 Enter。問密碼就打電腦的登入密碼，打字時畫面不會顯示。它會順便裝好 Apple 的命令列工具，要等幾分鐘。
@@ -43,6 +37,12 @@ git --version
   2. 裝完畫面最後有「Next steps」，照它列的指令一行一行貼上，終端機才找得到 `brew`。
   3. 貼上 `brew install git`，裝完再打一次 `git --version`。
 - Windows 顯示「無法辨識」：打開 https://git-scm.com/install/windows ，按 Click here to download，下載 x64 的安裝檔，雙擊安裝，選項都用預設值。裝完把 PowerShell 關掉重開，再打一次 `git --version`。
+
+第 2 步，沒有 Node.js（出現 `command not found`，或 Windows 寫「無法辨識」）：
+
+1. 打開 https://nodejs.org/en/download ，下載標著 LTS（長期支援版）的安裝檔。Mac 是 .pkg，Windows 是 .msi。
+2. 雙擊安裝檔，選項都用預設，一路按「繼續」或 Next。Mac 最後會要你輸入電腦的登入密碼。
+3. 把終端機整個關掉再打開，新的視窗才找得到 node。再打一次 `node -v` 和 `npx -v`。
 
 第二章開始前還裝不起來，先跳到最後的「備用做法」，用下載 ZIP 的方式裝。
 

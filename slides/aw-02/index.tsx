@@ -3298,7 +3298,7 @@ R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係�
   [NextSkills, `111:00–120:00（含問答）。下一堂講 Skill。Skill 就是一份寫好的做事說明，像食譜：照著做，每次的做法都一樣。
 第一步，把 Skill 裝進 Codex。按一下：第二步，用 Skill 做事：畫關係圖、把卡片改寫成好讀的版本。按一下：第三步，自己寫一個 Skill，把三國的事件排成時間軸。
 按一下：同一座筆記庫，下一堂會多出圖和時間軸，今天的筆記庫和你寫的卡請留著。
-最後一下：課前作業。下一堂用 npx skills add 安裝 Skill，要先有 Node.js 和 git。請到 https://nodejs.org/en/download 下載標著 LTS 的安裝檔（Mac 是 .pkg，Windows 是 .msi），選項都用預設。裝完把終端機（Windows 是 PowerShell）關掉重開，輸入 node -v，看到 v22 以上的版本號就可以了。接著輸入 git --version，看到 git version 2 開頭的版本號就可以了。沒有 git 的話，照 git 官網 https://git-scm.com/install 的建議：Mac 先到 https://brew.sh 裝 Homebrew，再輸入 brew install git；Windows 打開 https://git-scm.com/install/windows 按 Click here to download，選項都用預設，裝完把 PowerShell 關掉重開再試一次。詳細步驟在第三堂 prompts.md 練習 1-1。
+最後一下：課前作業。下一堂用 npx skills add 安裝 Skill，要先有 git 和 Node.js，先裝 git。打開終端機（Windows 是 PowerShell），輸入 git --version，看到 git version 2 開頭就有了；沒有的話，照 git 官網 https://git-scm.com/install 的建議：Mac 先到 https://brew.sh 裝 Homebrew，再輸入 brew install git；Windows 打開 https://git-scm.com/install/windows 按 Click here to download，選項都用預設。接著到 https://nodejs.org/en/download 下載標著 LTS 的安裝檔（Mac 是 .pkg，Windows 是 .msi），選項都用預設。裝完把終端機關掉重開，輸入 node -v，看到 v22 以上的版本號就可以了。詳細步驟在第三堂 prompts.md 練習 1-1。
 剩下的時間開放問答。`],
   [ReferencesRag, `（課後自讀，上課不講。）
 第 3 章用到的論文。arXiv 編號可以直接打 arxiv.org/abs/編號 打開。

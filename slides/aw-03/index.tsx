@@ -1366,29 +1366,29 @@ const ToolNote = ({ name, children }: { name: string; children: ReactNode }) => 
 );
 
 const ToolCheck: Page = () => (
-  <Shell source={'Node.js 下載 nodejs.org/en/download；Git 安裝 git-scm.com/install/mac、git-scm.com/install/windows'}>
+  <Shell source={'Git 安裝 git-scm.com/install/mac、git-scm.com/install/windows；Node.js 下載 nodejs.org/en/download'}>
     <PracticeEyebrow time="開場 2 分鐘">練習 1｜第 1 步</PracticeEyebrow>
-    <Heading>練習（安裝）：先確認有 Node.js 和 git</Heading>
+    <Heading>練習（安裝）：先確認有 git 和 Node.js</Heading>
     <PromptsCopy step="1-1" />
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '880px 1fr', gap: 56, alignItems: 'center' }}>
         <TermBox title="終端機｜講師 Mac 實際輸出" size={32}>
           <Steps>
-            <TL><Typed>$</Typed> node -v</TL>
+            <TL><Typed>$</Typed> git --version</TL>
+            <Step duration={STEP_MS}><div>
+              <TL hot>git version 2.54.0 (Apple Git-157)</TL>
+              <TL><Typed>$</Typed> node -v</TL>
+            </div></Step>
             <Step duration={STEP_MS}><div>
               <TL hot>v24.12.0</TL>
               <TL><Typed>$</Typed> npx -v</TL>
               <TL hot>11.6.2</TL>
             </div></Step>
-            <Step duration={STEP_MS}><div>
-              <TL><Typed>$</Typed> git --version</TL>
-              <TL hot>git version 2.54.0 (Apple Git-157)</TL>
-            </div></Step>
           </Steps>
         </TermBox>
         <div style={{ display: 'grid', gap: 22 }}>
-          <In i={0}><ToolNote name="node、npx">跑 npx skills add 用<br />node 要 v22.20 以上</ToolNote></In>
-          <In i={1}><ToolNote name="git">從 GitHub 下載 Skill 用</ToolNote></In>
+          <In i={0}><ToolNote name="git">從 GitHub 下載 Skill 用</ToolNote></In>
+          <In i={1}><ToolNote name="node、npx">跑 npx skills add 用<br />node 要 v22.20 以上</ToolNote></In>
         </div>
       </div>
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={44}>沒有版本號的，照下一頁現在開始裝</Takeaway></Step></Steps>
@@ -1397,33 +1397,47 @@ const ToolCheck: Page = () => (
 );
 
 // One stop of a left-to-right how-to flow, drawn as an icon in a circle.
-const HowStop = ({ x, n, kind, label, sub, hot = false }: { x: number; n: number; kind: IconKind; label: string; sub: string; hot?: boolean }) => (
+const HowStop = ({ x, n, kind, label, sub, hot = false, href }: { x: number; n: number; kind: IconKind; label: string; sub: string; hot?: boolean; href?: string }) => {
+  const body = (
   <g>
     <circle cx={x} cy="96" r="80" fill={hot ? amberSoft : '#FFFFFF'} stroke={hot ? amber : rule} strokeWidth="3" />
     <SvgIcon kind={kind} x={x} y={96} size={72} color={hot ? amber : muted} />
     <circle cx={x - 62} cy="34" r="24" fill={amber} />
     <text x={x - 62} y="43" textAnchor="middle" fontSize="26" fontWeight="600" fill="#FFFFFF">{n}</text>
-    <text x={x} y="232" textAnchor="middle" fontSize="32" fontWeight="600" fill={ink}>{label}</text>
+    <text x={x} y="232" textAnchor="middle" fontSize="32" fontWeight="600" fill={href ? amber : ink} style={href ? { textDecoration: 'underline' } : undefined}>{label}</text>
     <text x={x} y="282" textAnchor="middle" fontSize="28" fill={muted}>{sub}</text>
   </g>
+  );
+  return href ? <a href={href} target="_blank" rel="noreferrer">{body}</a> : body;
+};
+
+// A link students click on their own laptop (the projector shows it underlined).
+const WebLink = ({ href, children, size = 30 }: { href: string; children: ReactNode; size?: number }) => (
+  <a href={href} target="_blank" rel="noreferrer" style={{ fontFamily: mono, fontSize: size, color: amber, textDecoration: 'underline', textUnderlineOffset: 4 }}>{children}</a>
 );
 
 const InstallNode: Page = () => (
-  <Shell source={'Node.js 下載 nodejs.org/en/download；Git 安裝 git-scm.com/install/mac、git-scm.com/install/windows'}>
-    <Eyebrow>沒有 Node.js 或 git｜邊聽邊裝</Eyebrow>
-    <Heading>到官網下載 Node.js 的 LTS 版</Heading>
+  <Shell source={'Git 安裝 git-scm.com/install/mac、git-scm.com/install/windows；Node.js 下載 nodejs.org/en/download'}>
+    <Eyebrow>沒有 git 或 Node.js｜邊聽邊裝</Eyebrow>
+    <Heading>先裝 git，再裝 Node.js</Heading>
     <PromptsCopy step="1-1" />
-    <Fit>
-      <Figure h={300} label="裝 Node.js 四步：打開 nodejs.org、下載 LTS 安裝檔、雙擊安裝一路按繼續、終端機關掉重開再打 node -v">
-        <InG i={0}><HowStop x={200} n={1} kind="globe" label="打開 nodejs.org" sub="按 Download" /></InG>
-        <InG i={1}><MapArrow x1={300} x2={510} y={96} /><HowStop x={610} n={2} kind="down" label="下載 LTS 版" sub="Mac .pkg／Windows .msi" /></InG>
-        <InG i={2}><MapArrow x1={710} x2={920} y={96} /><HowStop x={1020} n={3} kind="ok" label="雙擊安裝" sub="一路按「繼續」或 Next" /></InG>
-        <InG i={3}><MapArrow x1={1120} x2={1330} y={96} /><HowStop x={1432} n={4} kind="terminal" label="終端機關掉重開" sub="再打 node -v" hot /></InG>
-      </Figure>
+    <Fit z={0.9}>
+      <In i={0}><SmallLabel>第 1 步｜git</SmallLabel></In>
+      <In i={1} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36, marginTop: 12 }}>
+        <OsFix os="MAC">先到 <WebLink href="https://brew.sh">brew.sh</WebLink> 裝 Homebrew<br />再打 <Path size={30}>brew install git</Path></OsFix>
+        <OsFix os="WINDOWS"><WebLink href="https://git-scm.com/install/windows">git-scm.com/install/windows</WebLink><br />按 Click here to download，選項用預設</OsFix>
+      </In>
       <Steps>
-        <Step duration={STEP_MS}><div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36, marginTop: 44 }}>
-          <OsFix os="MAC 沒有 GIT">先到 <Path size={30}>brew.sh</Path> 裝 Homebrew<br />再打 <Path size={30}>brew install git</Path></OsFix>
-          <OsFix os="WINDOWS 沒有 GIT"><Path size={30}>git-scm.com/install/windows</Path><br />按 Click here to download，選項用預設</OsFix>
+        <Step duration={STEP_MS}><div style={{ marginTop: 36 }}>
+          <SmallLabel>第 2 步｜Node.js（npx 跟著一起裝好）</SmallLabel>
+          <div style={{ marginTop: 16 }}>
+            <Figure h={300} label="裝 Node.js 四步：打開 nodejs.org、下載 LTS 安裝檔、雙擊安裝一路按繼續、終端機關掉重開再打 node -v">
+              <HowStop x={200} n={1} kind="globe" label="打開 nodejs.org" sub="按 Download" href="https://nodejs.org/en/download" />
+              <MapArrow x1={300} x2={510} y={96} /><HowStop x={610} n={2} kind="down" label="下載 LTS 版" sub="Mac .pkg／Windows .msi" />
+              <MapArrow x1={710} x2={920} y={96} /><HowStop x={1020} n={3} kind="ok" label="雙擊安裝" sub="一路按「繼續」或 Next" />
+              <MapArrow x1={1120} x2={1330} y={96} /><HowStop x={1432} n={4} kind="terminal" label="終端機關掉重開" sub="再打 node -v" hot />
+            </Figure>
+          </div>
         </div></Step>
       </Steps>
     </Fit>
@@ -2872,13 +2886,14 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
 下面換你。diagram-design 的網址是 https://github.com/cathrynlavery/diagram-design，指令要怎麼打？請大家先想 10 秒。
 按一下：答案是 npx skills add cathrynlavery/diagram-design。中間的斜線要留著，前面的 https://github.com/ 不用打。
 最後一下：github.com/ 後面兩段就是名稱。網址後面如果還接著 /tree/main 這類字，只取前兩段。`],
-  [ToolCheck, `08:00–10:00。開始講之前，先做練習 1 的第一步：確認電腦有這三個工具。第二章裝 Skill 要用到；Node.js 從下載到裝好要幾分鐘，所以現在先檢查，沒有的人等一下邊聽第一章邊裝。打開終端機（Mac 是「終端機」，Windows 是 PowerShell），一次打一行，指令在 prompts.md 練習 1-1。第一行 node -v，問 Node.js 的版本。
-按一下：看到 v 開頭的數字就有了，講師的是 v24.12.0。skills 這個程式要 Node.js v22.20 以上，比這個舊的（例如 v20 或 v22.12），要到官網重裝 LTS 版。接著 npx -v，看到數字就好；npx 是跟著 Node.js 一起裝的。
-按一下：最後 git --version。skills 從 GitHub 下載 Skill 要用 git，看到 git version 2 開頭就有了。
-最後一下：三個都有版本號，就先放著，第二章再回來用。出現 command not found 或「無法辨識」，就是沒裝，照下一頁現在開始裝。課前通知已經請大家先裝 Node.js 和 git；還沒裝的同學，邊聽第一章邊裝，第二章開始前裝好就跟得上。`],
-  [InstallNode, `10:00–11:00。這頁給還沒裝的同學：現在開始裝，裝的時候一邊聽第一章。Node.js 照四步裝。一，打開 nodejs.org，按 Download。二，下載標著 LTS 的版本，LTS 是長期支援版，比較穩定；Mac 下載 .pkg，Windows 下載 .msi。三，雙擊安裝檔，選項都用預設，一路按「繼續」或 Next；Mac 最後會要你輸入電腦的登入密碼。四，把終端機整個關掉再打開，新的視窗才找得到 node，再打 node -v 和 npx -v 確認。
-按一下：git 的裝法，照 git 官網 git-scm.com/install 的建議。Mac 先裝 Homebrew：打開 brew.sh，複製首頁那一行貼進終端機，按 Enter；問密碼就打電腦的登入密碼，打字時畫面不會顯示。它會順便裝好 Apple 的命令列工具，要等幾分鐘。裝完畫面最後有「Next steps」，照它列的指令貼上，終端機才找得到 brew。接著打 brew install git，裝完打 git --version。官網也列了 xcode-select --install，但這個方法常常跳出「目前無法從軟體更新伺服器取得」而裝不起來，所以我們用 Homebrew。Windows 打開 git-scm.com/install/windows，按 Click here to download，下載 x64 的安裝檔，選項都用預設，裝完把 PowerShell 關掉重開，再打 git --version。Windows 這兩段講師沒有實測。
-裝好後重開終端機，再打一次 node -v、npx -v、git --version。第二章開始前還沒裝好的，舉手讓助教幫忙；真的裝不好，改用附錄第 ${pageOf(ZipFallback)} 頁下載 ZIP 自己放的做法，不用 Node.js（prompts.md 最後的「備用做法」）。`],
+  [ToolCheck, `08:00–10:00。開始講之前，先做練習 1 的第一步：確認電腦有這三個工具。第二章裝 Skill 要用到，git 和 Node.js 從下載到裝好都要幾分鐘，所以現在先檢查，沒有的人等一下邊聽第一章邊裝。打開終端機（Mac 是「終端機」，Windows 是 PowerShell），一次打一行，指令在 prompts.md 練習 1-1。第一行 git --version。
+按一下：看到 git version 2 開頭就有了。skills 從 GitHub 下載 Skill 要用 git。接著 node -v，問 Node.js 的版本。
+按一下：看到 v 開頭的數字就有了，講師的是 v24.12.0。skills 這個程式要 Node.js v22.20 以上，比這個舊的（例如 v20 或 v22.12），要到官網重裝 LTS 版。最後 npx -v，看到數字就好；npx 是跟著 Node.js 一起裝的。
+最後一下：三個都有版本號，就先放著，第二章再回來用。出現 command not found 或「無法辨識」，就是沒裝，照下一頁現在開始裝，先裝 git，再裝 Node.js。課前通知已經請大家先裝好；還沒裝的同學，邊聽第一章邊裝，第二章開始前裝好就跟得上。`],
+  [InstallNode, `10:00–11:00。這頁給還沒裝的同學：現在開始裝，裝的時候一邊聽第一章。先裝 git，再裝 Node.js。畫面上的網址都可以點，請在自己的筆電打開這份簡報點連結，或從 prompts.md 練習 1-1 點。
+第 1 步 git，照 git 官網 git-scm.com/install 的建議。Mac 先裝 Homebrew：點 brew.sh，複製首頁那一行貼進終端機，按 Enter；問密碼就打電腦的登入密碼，打字時畫面不會顯示。它會順便裝好 Apple 的命令列工具，要等幾分鐘。裝完畫面最後有「Next steps」，照它列的指令貼上，終端機才找得到 brew。接著打 brew install git，裝完打 git --version。官網也列了 xcode-select --install，但這個方法常常跳出「目前無法從軟體更新伺服器取得」而裝不起來，所以我們用 Homebrew。Windows 點 git-scm.com/install/windows，按 Click here to download，下載 x64 的安裝檔，選項都用預設，裝完把 PowerShell 關掉重開，再打 git --version。
+按一下：第 2 步 Node.js，照四步裝，npx 會跟著一起裝好。一，點 nodejs.org，按 Download。二，下載標著 LTS 的版本，LTS 是長期支援版，比較穩定；Mac 下載 .pkg，Windows 下載 .msi。三，雙擊安裝檔，選項都用預設，一路按「繼續」或 Next；Mac 最後會要你輸入電腦的登入密碼。四，把終端機整個關掉再打開，新的視窗才找得到 node，再打 node -v 和 npx -v 確認。Windows 這兩段講師沒有實測。
+裝好後重開終端機，再打一次 git --version、node -v、npx -v。第二章開始前還沒裝好的，舉手讓助教幫忙；真的裝不好，改用附錄第 ${pageOf(ZipFallback)} 頁下載 ZIP 自己放的做法，不用 Node.js（prompts.md 最後的「備用做法」）。`],
   [CdVault, `30:30–32:00。第二步，讓終端機走進筆記庫。等一下 npx skills add 會問要裝在哪裡，我們選 Project，意思是裝進終端機現在所在的資料夾。所以要先 cd 到三國人物知識庫，Skill 才會裝進筆記庫。
 打 cd 和一個空格，把「三國人物知識庫」資料夾從 Finder（Windows 是檔案總管）拖進終端機，路徑會自動填好，按 Enter。再打 ls，要看得到 人物、關係、原文、模板。只看到另一個「三國人物知識庫」，是解壓縮多包了一層，Windows 很常見，再打 cd 三國人物知識庫 進去一層。
 按一下：Skill 會裝在筆記庫裡的 .agents/skills/。.agents 前面有一個點，是隱藏資料夾，Finder 和 Obsidian 平常看不到，Codex 開在筆記庫時會讀它。練習 4 自己寫的 Skill 也放這裡。
