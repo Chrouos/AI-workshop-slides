@@ -1366,7 +1366,7 @@ const ToolNote = ({ name, children }: { name: string; children: ReactNode }) => 
 );
 
 const ToolCheck: Page = () => (
-  <Shell source={'Node.js 下載 nodejs.org/en/download；Git 下載 git-scm.com/downloads'}>
+  <Shell source={'Node.js 下載 nodejs.org/en/download；Git 安裝 git-scm.com/install/mac、git-scm.com/install/windows'}>
     <PracticeEyebrow time="開場 2 分鐘">練習 1｜第 1 步</PracticeEyebrow>
     <Heading>練習（安裝）：先確認有 Node.js 和 git</Heading>
     <PromptsCopy step="1-1" />
@@ -1409,7 +1409,7 @@ const HowStop = ({ x, n, kind, label, sub, hot = false }: { x: number; n: number
 );
 
 const InstallNode: Page = () => (
-  <Shell source={'Node.js 下載 nodejs.org/en/download；Git 下載 git-scm.com/downloads'}>
+  <Shell source={'Node.js 下載 nodejs.org/en/download；Git 安裝 git-scm.com/install/mac、git-scm.com/install/windows'}>
     <Eyebrow>沒有 Node.js 或 git｜邊聽邊裝</Eyebrow>
     <Heading>到官網下載 Node.js 的 LTS 版</Heading>
     <PromptsCopy step="1-1" />
@@ -1422,8 +1422,8 @@ const InstallNode: Page = () => (
       </Figure>
       <Steps>
         <Step duration={STEP_MS}><div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36, marginTop: 44 }}>
-          <OsFix os="MAC 沒有 GIT">打 <Path size={30}>xcode-select --install</Path><br />跳出視窗就按「安裝」</OsFix>
-          <OsFix os="WINDOWS 沒有 GIT">到 <Path size={30}>git-scm.com</Path> 下載<br />選項用預設，裝完重開 PowerShell</OsFix>
+          <OsFix os="MAC 沒有 GIT">先到 <Path size={30}>brew.sh</Path> 裝 Homebrew<br />再打 <Path size={30}>brew install git</Path></OsFix>
+          <OsFix os="WINDOWS 沒有 GIT"><Path size={30}>git-scm.com/install/windows</Path><br />按 Click here to download，選項用預設</OsFix>
         </div></Step>
       </Steps>
     </Fit>
@@ -1591,7 +1591,7 @@ const InstallErrors: Page = () => (
     <Fit>
       <div style={{ borderTop: `1px solid ${rule}` }}>
         <ErrRow os="MAC" msg="zsh: command not found: npx" cause="沒裝 Node.js" fix={<>照第 {pageOf(InstallNode)} 頁裝 Node.js，終端機關掉重開</>} />
-        <ErrRow os="MAC／WINDOWS" msg="Failed to clone … spawn git ENOENT" cause="沒有 git" fix={<>Mac 打 <Path size={28}>xcode-select --install</Path>；Windows 到 git-scm.com</>} />
+        <ErrRow os="MAC／WINDOWS" msg="Failed to clone … spawn git ENOENT" cause="沒有 git" fix={<>Mac 裝 Homebrew 後 <Path size={28}>brew install git</Path>；Windows 到 git-scm.com/install/windows</>} />
         <ErrRow os="WINDOWS（示意）" msg="… npx.ps1 … 已停用指令碼執行" cause="PowerShell 擋住 npx" fix={<>改打 <Path size={28}>npx.cmd skills add …</Path></>} />
       </div>
     </Fit>
@@ -2877,7 +2877,7 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
 按一下：最後 git --version。skills 從 GitHub 下載 Skill 要用 git，看到 git version 2 開頭就有了。
 最後一下：三個都有版本號，就先放著，第二章再回來用。出現 command not found 或「無法辨識」，就是沒裝，照下一頁現在開始裝。課前通知已經請大家先裝 Node.js 和 git；還沒裝的同學，邊聽第一章邊裝，第二章開始前裝好就跟得上。`],
   [InstallNode, `10:00–11:00。這頁給還沒裝的同學：現在開始裝，裝的時候一邊聽第一章。Node.js 照四步裝。一，打開 nodejs.org，按 Download。二，下載標著 LTS 的版本，LTS 是長期支援版，比較穩定；Mac 下載 .pkg，Windows 下載 .msi。三，雙擊安裝檔，選項都用預設，一路按「繼續」或 Next；Mac 最後會要你輸入電腦的登入密碼。四，把終端機整個關掉再打開，新的視窗才找得到 node，再打 node -v 和 npx -v 確認。
-按一下：git 的裝法。Mac 打 xcode-select --install，跳出視窗就按「安裝」，要下載幾分鐘。Windows 到 git-scm.com 下載安裝，選項都用預設，裝完把 PowerShell 關掉重開，再打 git --version。Windows 這兩段講師沒有實測。
+按一下：git 的裝法，照 git 官網 git-scm.com/install 的建議。Mac 先裝 Homebrew：打開 brew.sh，複製首頁那一行貼進終端機，按 Enter；問密碼就打電腦的登入密碼，打字時畫面不會顯示。它會順便裝好 Apple 的命令列工具，要等幾分鐘。裝完畫面最後有「Next steps」，照它列的指令貼上，終端機才找得到 brew。接著打 brew install git，裝完打 git --version。官網也列了 xcode-select --install，但這個方法常常跳出「目前無法從軟體更新伺服器取得」而裝不起來，所以我們用 Homebrew。Windows 打開 git-scm.com/install/windows，按 Click here to download，下載 x64 的安裝檔，選項都用預設，裝完把 PowerShell 關掉重開，再打 git --version。Windows 這兩段講師沒有實測。
 裝好後重開終端機，再打一次 node -v、npx -v、git --version。第二章開始前還沒裝好的，舉手讓助教幫忙；真的裝不好，改用附錄第 ${pageOf(ZipFallback)} 頁下載 ZIP 自己放的做法，不用 Node.js（prompts.md 最後的「備用做法」）。`],
   [CdVault, `30:30–32:00。第二步，讓終端機走進筆記庫。等一下 npx skills add 會問要裝在哪裡，我們選 Project，意思是裝進終端機現在所在的資料夾。所以要先 cd 到三國人物知識庫，Skill 才會裝進筆記庫。
 打 cd 和一個空格，把「三國人物知識庫」資料夾從 Finder（Windows 是檔案總管）拖進終端機，路徑會自動填好，按 Enter。再打 ls，要看得到 人物、關係、原文、模板。只看到另一個「三國人物知識庫」，是解壓縮多包了一層，Windows 很常見，再打 cd 三國人物知識庫 進去一層。

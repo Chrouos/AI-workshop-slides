@@ -33,8 +33,16 @@ git --version
 
 沒有 git：
 
-- Mac 跳出「要安裝命令列開發者工具嗎？」或顯示 command not found：按「安裝」，或打 `xcode-select --install`，等它裝完，再打一次 `git --version`。
-- Windows 顯示「無法辨識」：到 https://git-scm.com/download/win 下載安裝，選項都用預設值。裝完把 PowerShell 關掉重開，再打一次 `git --version`。
+- Mac：照 git 官網（https://git-scm.com/install/mac ）建議，先裝 Homebrew 再裝 git。
+  1. 打開 https://brew.sh ，複製首頁那一行，或直接複製下面這行，貼進終端機按 Enter。問密碼就打電腦的登入密碼，打字時畫面不會顯示。它會順便裝好 Apple 的命令列工具，要等幾分鐘。
+
+     ```text
+     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+     ```
+
+  2. 裝完畫面最後有「Next steps」，照它列的指令一行一行貼上，終端機才找得到 `brew`。
+  3. 貼上 `brew install git`，裝完再打一次 `git --version`。
+- Windows 顯示「無法辨識」：打開 https://git-scm.com/install/windows ，按 Click here to download，下載 x64 的安裝檔，雙擊安裝，選項都用預設值。裝完把 PowerShell 關掉重開，再打一次 `git --version`。
 
 第二章開始前還裝不起來，先跳到最後的「備用做法」，用下載 ZIP 的方式裝。
 
