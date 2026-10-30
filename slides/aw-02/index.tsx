@@ -794,11 +794,11 @@ const TodayGoal: Page = () => (
           </Layer>
           <Step duration={STEP_MS}><Layer h={380} label="第 2 站：連得過去，卡片連回大綱，練習 2">
             <g className="aw2-build" style={buildDelay(0)}><MapArrow x1={320} x2={496} y={130} hot /></g>
-            <g className="aw2-build" style={buildDelay(1)}><GoalStop x={612} n={2} kind="link" label="連得過去" sub="卡片連回大綱｜練習 2" /></g>
+            <g className="aw2-build" style={buildDelay(1)}><GoalStop x={612} n={2} kind="link" label="加上連結" sub="卡片連回大綱｜練習 2" /></g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={380} label="第 3 站：AI 找得到，Codex 回答時引用你寫的關係卡，練習 3">
             <g className="aw2-build" style={buildDelay(0)}><MapArrow x1={728} x2={904} y={130} hot /></g>
-            <g className="aw2-build" style={buildDelay(1)}><GoalStop x={1020} n={3} kind="search" label="AI 找得到" sub="引用你寫的卡｜練習 3" /></g>
+            <g className="aw2-build" style={buildDelay(1)}><GoalStop x={1020} n={3} kind="search" label="Codex 找到它" sub="引用你寫的卡｜練習 3" /></g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={380} label="第 4 站：畫成關係圖，Codex 把你寫的關係卡畫進去，練習 4">
             <g className="aw2-build" style={buildDelay(0)}><MapArrow x1={1136} x2={1312} y={130} hot /></g>
@@ -922,9 +922,9 @@ const QuietFolder = ({ x, label }: { x: number; label: string }) => (
 
 const VaultFolder: Page = () => (
   <Shell chapter={1} source={'Obsidian 說明：資料怎麼儲存 obsidian.md/help/data-storage'}>
-    <Eyebrow>剛才打開的資料夾（Obsidian 介面叫「儲存庫」）</Eyebrow>
+    <Eyebrow>剛才打開的筆記庫，Obsidian 介面叫「儲存庫」</Eyebrow>
     <Heading>儲存庫（Vault）</Heading>
-    <Lead>一個資料夾；一張卡就是一個 .md 檔</Lead>
+    <Lead>一個資料夾，每張卡是 Markdown 純文字檔</Lead>
     <Fit>
       <Stage h={490}>
         <Steps>
@@ -1042,7 +1042,7 @@ const BacklinkRow = ({ y, name, n }: { y: number; name: string; n: string }) => 
 
 const Backlinks: Page = () => (
   <Shell chapter={1} source={'Obsidian 說明：反向連結 obsidian.md/help/plugins/backlinks'}>
-    <Eyebrow>剛才在右邊看到的清單</Eyebrow>
+    <Eyebrow>剛才右邊的清單｜連結＋反向連結＝雙向連結</Eyebrow>
     <Heading>反向連結（Backlinks）</Heading>
     <Lead>像書末索引：列出提到這個名字的頁</Lead>
     <Fit>
@@ -1246,7 +1246,7 @@ const LinkWalk: Page = () => (
             </Layer></Step>
             <Step duration={STEP_MS}><Layer h={340} label="第三站：關羽人物卡">
               <g fill="none" stroke={amber} strokeWidth="12" strokeLinecap="round"><StepPath d="M996 150 H1334" /></g>
-              <g className="aw2-build" style={buildDelay(3)}><Station x={1372} kind="人物/" name="關羽" line={amber} why="打開右邊的反向連結" /></g>
+              <g className="aw2-build" style={buildDelay(3)}><Station x={1372} kind="人物/" name="關羽" line={amber} why="看右邊「反向連結」：誰連到關羽" /></g>
             </Layer></Step>
             <Step duration={STEP_MS}><Layer h={430} label="走回來：按返回回到上一張，或在關羽卡的反向連結看到桃園結義">
               {/* A dashed line can't use the dash-offset draw itself, so a solid copy draws inside a mask. */}
@@ -1649,7 +1649,7 @@ const Practice2Card: Page = () => (
     <PillRow>
       <Pill tag="定位">第 5／16／20 回</Pill>
       <Pill tag="期望輸出">照模板寫</Pill>
-      <Pill tag="限制">原文沒寫不寫</Pill>
+      <Pill tag="限制">原文沒寫的不寫</Pill>
     </PillRow>
     <Fit>
       <div style={{ position: 'relative', width: 1632, height: 520 }}>
@@ -1695,7 +1695,7 @@ const Practice2Card: Page = () => (
           <Step duration={STEP_MS}>
             <div style={{ position: 'absolute', inset: 0 }}>
               <div style={{ position: 'absolute', left: PC_RIGHT, top: 362 }}>
-                <CardStep n={3} text="填回目，最後一行寫出處" h={60}>
+                <CardStep n={3} text="填回目（第幾回），最後一行寫出處" h={60}>
                   <rect x="0" y="4" width="440" height="50" fill={surface} stroke={rule} strokeWidth="2" />
                   <text x="18" y="38" fontSize="25" fontFamily={mono} fill={ink}>出處：原文/第005回.md</text>
                 </CardStep>
@@ -1735,7 +1735,7 @@ const Practice2Pick: Page = () => (
         <EventPick ch="第 16 回" name="轅門射戟" links={['劉備', '關羽', '張飛']} plain="呂布寫純文字，也列進參與人物" />
         <EventPick ch="第 20 回" name="許田打圍" links={['曹操', '劉備', '關羽']} />
       </In>
-      <In i={1} style={{ marginTop: 20, fontSize: 27, color: muted, textAlign: 'center' }}>「參與人物：」那一行照這樣列｜三英戰呂布、白門樓先不寫</In>
+      <In i={1} style={{ marginTop: 20, fontSize: 27, color: muted, textAlign: 'center' }}>「參與人物：」那一行照這樣列｜三英戰呂布、白門樓第三堂會發</In>
       <Steps>
         <Step duration={STEP_MS}><div style={{ display: 'flex', justifyContent: 'center', marginTop: 34 }}><StatusLine ok size={32}>看結果：打開〈關羽〉，反向連結裡有你寫的卡</StatusLine></div></Step>
         <Step duration={STEP_MS}><FixBox label="沒有出現" marginTop={16}>回這張卡看「關羽」：淡紫或黑字，就改成 [[關羽]] 再看一次</FixBox></Step>
@@ -1910,7 +1910,7 @@ const RagIdea: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>模型不變，變的是輸入多了筆記</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={28}>模型沒有重新學，是問題後面多附了筆記</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1940,7 +1940,7 @@ const OpenInCodex: Page = () => (
             </Step>
             <Step duration={STEP_MS}>
               <div style={{ background: 'rgba(233,182,80,0.18)', outline: '3px solid #E9B650', margin: '6px -12px 0', padding: '0 12px' }}>{'人物  勢力  原文  整理  模板  關係'}</div>
-              <Pin style={{ ...CODEX_CALLOUT, top: 280 }}><Callout n={4} title="六個資料夾都在" detail="只看到外層：/quit，再 cd 進去" /></Pin>
+              <Pin style={{ ...CODEX_CALLOUT, top: 280 }}><Callout n={4} title="六個資料夾都在" detail="只列出一個資料夾：/quit 再 cd" /></Pin>
             </Step>
           </Steps>
         </Terminal>
@@ -1968,8 +1968,8 @@ const AskWithFiles: Page = () => (
           <div style={{ marginTop: 10 }}>
             <Steps>
               <PromptPart text="關羽參與了哪些事件？" tag="問題" />
-              <Step duration={STEP_MS}><PromptPart text="只根據 關係/ 資料夾裡的卡回答，" tag="範圍" /></Step>
-              <Step duration={STEP_MS}><PromptPart text="每個事件附上檔名和一句卡片原句；" tag="出處" /></Step>
+              <Step duration={STEP_MS}><PromptPart text="只根據 關係/ 資料夾裡的卡回答，" tag="定位" /></Step>
+              <Step duration={STEP_MS}><PromptPart text="每個事件附上檔名和一句卡片原句；" tag="期望輸出" /></Step>
               <Step duration={STEP_MS}><PromptPart text="卡片沒寫的就說找不到，不要自己補。" tag="限制" /></Step>
             </Steps>
           </div>
@@ -2026,18 +2026,18 @@ const FourthEvent: Page = () => (
               <text x="790" y="440" textAnchor="middle" fontSize="26" fill={warn}>關羽卡沒連到它</text>
             </InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={450} label="Codex 自己搜 關係/ 的每一張卡，許田打圍裡寫了 [[關羽]]，所以 4 張都找得到">
+          <Step duration={STEP_MS}><Layer h={450} label="Codex 自己搜 關係/ 的每一張卡，許田打圍裡寫了關羽，所以 4 張都找得到">
             <g className="aw2-build" style={buildDelay(0)}>
               <rect x="1312" y="78" width="10" height="360" fill={okGreen} />
               <text x="1340" y="160" fontSize="30" fontWeight="600" fill={okGreen}>Codex 搜 關係/</text>
               <text x="1340" y="204" fontSize="30" fontWeight="600" fill={okGreen}>找到 4 張</text>
               <text x="1340" y="256" fontSize="25" fill={muted}>許田打圍裡</text>
-              <text x="1340" y="292" fontSize="25" fill={muted}>寫了 [[關羽]]</text>
+              <text x="1340" y="292" fontSize="25" fill={muted}>寫了「關羽」</text>
             </g>
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>4 件事都列出來，原句也都對得回卡片，回答才算正確</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>4 件事都列出、原句都搜得到，才算答對</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2121,7 +2121,7 @@ const AskCheck: Page = () => (
       <In i={1} style={{ position: 'relative' }}>
         <div style={{ display: 'grid', gridTemplateColumns: CK_COLS, height: CK_HEAD - 14, marginBottom: 14 }}>
           <CkSide title="Codex 回答的" sub="事件和它引用的原句" color={amber} />
-          <div style={{ alignSelf: 'end', textAlign: 'center', fontSize: 24, lineHeight: 1.35, color: muted }}><span style={{ fontFamily: mono }}>Cmd/Ctrl+F</span><br />人名開頭：跳過再搜</div>
+          <div style={{ alignSelf: 'end', textAlign: 'center', fontSize: 24, lineHeight: 1.35, color: muted }}><span style={{ fontFamily: mono }}>Cmd/Ctrl+F</span><br />開頭是人名就跳過</div>
           <CkSide title="卡片裡寫的" sub="關羽卡列的 3 張＋你寫的卡（例：許田打圍）" color={okGreen} />
         </div>
         <div style={{ display: 'grid', gap: CK_GAP }}>
@@ -2138,7 +2138,7 @@ const AskCheck: Page = () => (
         </Steps>
       </In>
       <Steps>
-        <Step duration={STEP_MS}><FixBox label="你寫的卡沒出現" labelWidth={200} marginTop={14}>檢查卡在不在 關係/ 資料夾、卡裡有沒有 [[關羽]]</FixBox></Step>
+        <Step duration={STEP_MS}><FixBox label="你寫的卡沒出現" labelWidth={200} marginTop={14}>檢查卡在不在 關係/ 資料夾、卡裡有沒有寫到關羽</FixBox></Step>
         <Step duration={STEP_MS}><FixBox label="對不上才追問" labelWidth={200} marginTop={8}>你引用的「<u>　　　</u>」跟 <u>　　　</u>.md 寫的不一樣。請照卡片原句改正；找不到就說找不到。</FixBox></Step>
       </Steps>
     </Fit>
@@ -2804,7 +2804,7 @@ const lgY = (ny: number) => Math.round(ny * LG_S);
 
 const LocalGraph: Page = () => (
   <Shell chapter={4} source={'Obsidian 說明：關聯圖 obsidian.md/help/plugins/graph'}>
-    <Eyebrow>Obsidian 已經畫好的關係圖</Eyebrow>
+    <Eyebrow>關聯圖（Graph View），只看一張卡</Eyebrow>
     <Heading>局部關聯圖（Local Graph）</Heading>
     <Lead>打開劉備卡，Obsidian 畫出它連到的卡</Lead>
     <Fit>
@@ -2834,7 +2834,7 @@ const LocalGraph: Page = () => (
               </div>
             </Step>
             <Step duration={STEP_MS}><Takeaway marginTop={44}>劉備卡裡寫了 [[桃園結義]]，Obsidian 就畫這條線</Takeaway></Step>
-            <Step duration={STEP_MS}><div style={{ marginTop: 28, fontSize: 30, lineHeight: 1.5, color: muted, textAlign: 'center' }}>{''}</div></Step>
+            <Step duration={STEP_MS}><div style={{ marginTop: 28, fontSize: 30, lineHeight: 1.5, color: muted, textAlign: 'center' }}>關聯圖的線沒寫是什麼關係和出處；練習 4 請 Codex 寫上</div></Step>
           </Steps>
         </div>
       </div>
@@ -2907,7 +2907,7 @@ const Recap: Page = () => (
         <InG i={2}><RecapStop x={1020} n={3} verb="Codex 找到你寫的卡" /></InG>
         <InG i={3}><RecapStop x={1428} n={4} verb="你寫的卡畫進關係圖" /></InG>
       </Figure>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={64}>筆記庫在你的電腦裡，Codex 讀得到，就能幫你找、幫你畫</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={64}>Codex 讀你電腦裡的筆記庫，照卡片找事件、畫關係圖</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -3155,7 +3155,7 @@ ${VAULT_ZIP_URL}
   [Backlinks, `25:00–27:00。剛才在關羽卡右邊看到的清單，叫「反向連結」，英文 Backlinks：從一張卡回頭看，哪些卡連到了它。這頁用劉備當例子：三國演義、桃園結義、煮酒論英雄、赤壁之戰、曹操、蜀漢這幾張卡，內文都寫了 [[劉備]]。
 按一下：打開劉備卡，右邊的「反向連結」面板會自動列出這些卡：講師的筆記庫裡一共 11 張卡、17 處提到劉備。
 最後一下：Obsidian 自動列出所有連到〈劉備〉的卡，你不用回頭在劉備卡裡寫。等一下你寫的卡連到關羽，關羽卡的反向連結就會多一列，這就是檢查有沒有連成功的方法。官方說明：https://obsidian.md/help/plugins/backlinks`],
-  [VaultFolder, `27:00–29:00。最後說剛才打開的到底是什麼。Obsidian 的「儲存庫」，英文 Vault，就是你電腦裡的一個資料夾，一張卡就是一個 .md 檔，用記事本也打得開。
+  [VaultFolder, `27:00–29:00。最後說剛才打開的到底是什麼。Obsidian 的「儲存庫」，英文 Vault，就是你電腦裡的一個資料夾，一張卡就是一個 .md 檔，.md 是 Markdown：純文字加上 # 標題、[[ ]] 這類簡單符號，用記事本也打得開。
 按一下：Obsidian 打開這個資料夾來寫。這座筆記庫有 12 張卡：人物 5 張、勢力 3 張、關係 3 張，加入口卡〈三國演義〉。原文、整理、模板這幾個資料夾不算卡。
 按一下：Codex 讀的也是同一個資料夾，不用上傳。
 最後一下：檔案在你的電腦裡，Codex 也讀得到。這是第三章的前提。三種卡怎麼分、人物怎麼透過關係卡相連，放在附錄第 ${pageOf(CardTypes)}–${pageOf(StoryMap)} 頁。官方說明：https://obsidian.md/help/data-storage`],
@@ -3202,15 +3202,15 @@ ${VAULT_ZIP_URL}
 按一下：要看到人物、勢力、原文、整理、模板、關係，可能還有 .obsidian。只列出「三國人物知識庫」一個資料夾，就是 cd 到外層的 aw-02-lab 了：輸入 /quit，cd 進裡面那一層，再打 codex。
 實測（2026-10-24，Codex 0.154.0）：在多一層的資料夾，它回答「這個資料夾第一層只有一個資料夾：三國人物知識庫」。`],
   [AskWithFiles, `63:30–64:30。這是練習 3 用的提示詞，整章都問這一題，一次看一行。第一行是問題：關羽參與了哪些事件？
-按一下：範圍，只根據 關係/ 資料夾裡的卡。範圍定在關係卡，大家的答案才比得起來，你寫的卡也在這個資料夾裡。按一下：出處，每個事件附上檔名和一句卡片原句，等一下核對靠的就是這兩樣。按一下：限制，卡片沒寫的就說找不到，不要自己補。
+按一下：定位，只根據 關係/ 資料夾裡的卡。範圍定在關係卡，大家的答案才比得起來，你寫的卡也在這個資料夾裡。按一下：期望輸出，每個事件附上檔名和一句卡片原句，等一下核對靠的就是這兩樣。按一下：限制，卡片沒寫的就說找不到，不要自己補。
 最後一下：附上檔名和原句，回答才查得到根據。完整提示詞在 prompts.md 的〈練習 3〉。`],
   [RagIdea, `64:30–67:00。這一題 Codex 是怎麼回答的？方法叫 RAG，Retrieval-Augmented Generation，檢索增強生成。三步：
 R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係資料夾把寫到關羽的卡找出來：桃園結義、煮酒論英雄、赤壁之戰，還有講師在練習 2 寫的〈許田打圍〉。大家的筆記庫裡，這一張就是自己寫的那張卡。
 按一下，A 增強：把問題和找到的卡一起交給模型。
 按一下，G 生成：照卡片回答，並附上檔名。橘色的就是 R 找到的那幾張卡，從頭到尾同一個顏色。
-最後一下：模型不變，變的是輸入多了筆記。下一頁就看 R 這一步：關羽卡沒列出〈許田打圍〉，Codex 為什麼還找得到。Codex 真正下了什麼搜尋指令、讀了幾行，講師的實跑紀錄放在附錄第 ${pageOf(RStep)}–${pageOf(GStep)} 頁，上課不講。來源：https://arxiv.org/abs/2005.11401`],
+最後一下：模型沒有重新學過，只是這次問題後面多附了找到的筆記。下一頁就看 R 這一步：關羽卡沒列出〈許田打圍〉，Codex 為什麼還找得到。Codex 真正下了什麼搜尋指令、讀了幾行，講師的實跑紀錄放在附錄第 ${pageOf(RStep)}–${pageOf(GStep)} 頁，上課不講。來源：https://arxiv.org/abs/2005.11401`],
   [FourthEvent, `67:00–68:30。看影片之前，先講這一題怎麼算答對。左邊是 人物/關羽.md 的最後一行「關係與事件」，只連到三件事：桃園結義、煮酒論英雄、赤壁之戰。右邊是 關係/ 資料夾，裡面有四張卡，第四張〈許田打圍〉是講師在練習 2 寫的。關羽卡沒有連到它，虛線打叉就是這個意思。大家自己寫的卡也一樣，關羽卡最後一行不會有它。
-按一下：Codex 不是照關羽卡最後一行回答，它會自己搜 關係/ 裡的每一張卡。〈許田打圍〉的內文寫了 [[關羽]]，所以搜得到，回答會列出 4 件事。
+按一下：Codex 不是照關羽卡最後一行回答，它會自己搜 關係/ 裡的每一張卡。〈許田打圍〉的內文寫到關羽，所以搜得到，回答會列出 4 件事。
 最後一下：判斷標準有兩個。第一，4 件事都要列出來，少一件就是漏了。第二，每件事附的原句，回卡片搜得到、意思也沒寫錯，才算正確。下一頁的影片就是照這兩個標準檢查。`],
   [VideoRag, `68:30–70:30（影片約 2 分鐘）。看講師在自己的筆記庫問這一題。剛才說過，關羽卡最後一行沒有〈許田打圍〉，看 Codex 能不能自己找到它。看它先搜尋、再回答，回答附檔名和原句；再回 Obsidian 搜原句、對照關羽卡最後一行。
 影片裡四張都找到了（桃園結義、許田打圍、煮酒論英雄、赤壁之戰），原句也都對得上。搜到的原句在 Obsidian 會用框線標出來，影片另外加了橘框。
@@ -3220,7 +3220,7 @@ R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係�
 右邊的清單從哪來：人物/關羽.md 最後一行「關係與事件」列了桃園結義、煮酒論英雄、赤壁之戰，再加上你寫的卡。這四張，回答裡都要有；少一列就是漏了。
 按一下：桃園結義，搜「誓畢拜劉備」，搜得到，對得上。按一下：煮酒論英雄，搜「衝進後園」，對得上。按一下：赤壁之戰，搜「念及當年」，對得上。畫面上這三句是從卡片挑的例子，大家的回答可能引用別句，一樣搜搜看。
 按一下：第四列是你在練習 2 寫的卡，畫面用講師的〈許田打圍〉當例子，原句「提刀拍馬要斬曹操」是影片裡實跑的回答。關羽卡最後一行沒有這張卡，它出現在回答裡，就是 Codex 自己搜到的。這是今天主線的第三站。
-按一下：你寫的卡沒出現，通常是卡不在 關係/ 資料夾，或卡裡沒有 [[關羽]]，先檢查這兩個，改好再貼一次。
+按一下：你寫的卡沒出現，通常是卡不在 關係/ 資料夾，或卡裡沒寫到關羽，先檢查這兩個，改好再貼一次。
 最後一下：全部對得上就做完了，不用追問。只有原句跟卡片寫的不一樣，才貼這句請 Codex 改正，提示詞在 prompts.md〈練習 3〉。它改完的那句，回 Obsidian 再搜一次。
 講完核對，大家自己做到 85:30。有人問「意思對、只是字不一樣，算不算對」：今天的規則是原句要一字不差搜得到，判斷才不會因人而異；意思對但不是原句的情況，附錄的進階討論再聊。
 你寫的卡沒連到關羽的人：把提示詞裡的關羽換成你寫的卡裡連到的人物，右邊的清單改看那個人的人物卡最後一行。
@@ -3306,7 +3306,7 @@ R，檢索。上面這行是 Codex 實際執行的搜尋指令：rg 是一個搜
 按一下：實跑紀錄裡，它沒有另外打開整張卡，搜尋完就直接回答，用的只是這 77 行。
 最後一下：這次 Codex 只讀了搜尋命中的句子，沒讀整張卡。搜尋到不等於讀過，核對時要記得。`],
   [AStep, `（附錄，課堂不講；曹操題實跑第 2 頁。）A，增強。左邊橘色邊的是搜尋找到的句子，挑 77 行裡的 4 行：曹操卡第 11 行、赤壁之戰卡第 13 和 19 行、大綱第 44 行。
-按一下：這些句子和問題放進同一份輸入，送進模型；輸入框裡橘框的兩行只是舉例，77 行全都在裡面。這一輪輸入 44,156 個 token，裡面包含 Codex 自己的說明，不全是筆記。
+按一下：這些句子和問題放進同一份輸入，送進模型；輸入框裡橘框的兩行只是舉例，77 行全都在裡面。這一輪輸入 44,156 個 token（模型計算文字長度的單位，第一堂講過），裡面包含 Codex 自己的說明，不全是筆記。
 按一下：回答真正引用的，是綠框打勾的兩句：曹操卡第 11 行，和赤壁之戰卡第 19 行的「參與人物」。
 最後一下：模型拿到的是問題加上檢索到的筆記。`],
   [GStep, `（附錄，課堂不講；曹操題實跑第 3 頁。）G，生成。左邊是 Codex 的實際回答：「曹操參與的戰役是：赤壁之戰。」接著兩個檔名，各附一句原句。最後一句是「筆記中找不到曹操參與其他戰役的明確記載」。
