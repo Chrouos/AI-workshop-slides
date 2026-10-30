@@ -138,7 +138,7 @@ ls
 
 看結果：Codex 先給你看內容；你同意後才出現 `三國演義大綱.md`，裡面有 21 段。
 
-跑不出來、或時間不夠：先把「第 1 回到第 21 回」改成「第 1 回到第 2 回」再跑一次。還是不行，可以先用講師的範例成果，第二堂照樣接得上：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-01-sample-output/三國演義大綱.md
+跑不出來、或時間不夠：先把「第 1 回到第 21 回」改成「第 1 回到第 2 回」再跑一次。還是不行，可以先用範例成果，第二堂照樣接得上：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-01-sample-output/三國演義大綱.md
 
 ### 人名連結怎麼寫
 

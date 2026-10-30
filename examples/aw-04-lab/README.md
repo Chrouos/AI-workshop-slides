@@ -8,5 +8,5 @@ aw-04-lab/
 ```
 
 - [prompts.md](prompts.md)：最上面是**課前作業**（註冊 Forestry.md、種一座花園），第四堂上課前請先做完。後面是練習的步驟、提示詞和網址。請在筆電打開，整段複製，不用照投影片打字。
-- 練習 3-2 導覽頁的講師範例放在線上，想對照再看：[aw-04-sample-output/知識庫導覽.md](../aw-04-sample-output/知識庫導覽.md)。
-- 講師的範例網站：https://glowing-clearing.forestry.md/
+- 練習 3-2 導覽頁的範例放在線上，想對照再看：[aw-04-sample-output/知識庫導覽.md](../aw-04-sample-output/知識庫導覽.md)。
+- 範例網站：https://glowing-clearing.forestry.md/

@@ -12,11 +12,11 @@
 1. 打開 https://forestry.md ，按 Sign up 註冊。用 email 和密碼，或按 GitHub 用 GitHub 帳號登入，都可以。
 2. 登入後看到 Plant new garden：Garden name 會先幫你取一個名字（例如 green-elm），下面會顯示網址 `名字.forestry.md`。想換名字就改，再按 Plant。
 3. 等它種好，畫面出現 Your garden is live 和你的網址。點網址打開看看，把網址抄下來，上課要用。
-4. 用 Obsidian 打開三國人物知識庫，確認第三堂做的 `整理/時間軸.md` 和 `關係/三英戰呂布.md` 都在。少了的話不用急，上課練習 3-1 會告訴你從哪裡補上講師的版本。
+4. 用 Obsidian 打開三國人物知識庫，確認第三堂做的 `整理/時間軸.md` 和 `關係/三英戰呂布.md` 都在。少了的話不用急，上課練習 3-1 會告訴你從哪裡補上範例版本。
 
 做完的樣子：手上有一個 `名字.forestry.md` 網址，打得開。
 
-免費方案（2026-10-30 講師帳號顯示）：一個網站、每月 30 次發布、100 MB 空間，上課和平常寫卡都夠用。
+免費方案（2026-10-30）：一個網站、每月 30 次發布、100 MB 空間，上課和平常寫卡都夠用。
 
 卡住怎麼辦：停在哪一步、看到什麼畫面，截圖帶來上課。上課第一個練習就是驗收這份作業，沒做完的人現場補，註冊和 Plant 都在瀏覽器裡完成。
 
@@ -38,9 +38,9 @@
 4. **把 Simple note URLs 關掉**：在同一頁往下捲到 Publishing，找到 Simple note URLs，把開關關掉。我們的卡名都是中文，這個開關開著，每張卡的網址會變成一樣，網站會建置失敗。
 5. 試發布：按 Ctrl／Cmd + P，搜尋 garden publish，選 Publish All Notes Marked for Publish。
 
-看結果：回 Forestry 儀表板看 Publish history，最上面那一筆從 Building 變成 Published（講師實測約半分鐘），再打開你的網址，首頁變成〈三國演義〉就成功了。
+看結果：回 Forestry 儀表板看 Publish history，最上面那一筆從 Building 變成 Published（大約半分鐘），再打開你的網址，首頁變成〈三國演義〉就成功了。
 
-出現 Failed：點右邊箭頭展開看錯誤訊息。看到 DuplicatePermalink，就是第 4 步的 Simple note URLs 沒關：關掉後再發布一次。講師 2026-10-30 實跑，第一次就是這樣失敗兩次，關掉後才成功。
+出現 Failed：點右邊箭頭展開看錯誤訊息。看到 DuplicatePermalink，就是第 4 步的 Simple note URLs 沒關：關掉後再發布一次。第一次發布常常就是這樣失敗，關掉後就會成功。
 
 Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛設定，不貼進筆記、截圖或群組；不小心外流，到 Forestry 儀表板按 Regenerate Garden Key 換一把新的。
 
@@ -50,7 +50,7 @@ Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛
 
 1. 打開〈三國演義〉，在最後加一句你自己的話，例如「這是我的三國筆記」。
 2. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish。
-3. 回 Forestry 儀表板看 Publish history，等最上面那一筆變成 Published（講師實測約半分鐘）。
+3. 回 Forestry 儀表板看 Publish history，等最上面那一筆變成 Published（大約半分鐘）。
 4. 重新整理你的網址，看那句有沒有出現。沒變的話，先等半分鐘再整理。
 
 ## 練習 3-1（dg-publish）：讓時間軸卡上線
@@ -62,7 +62,7 @@ Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛
 3. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish，等 Publish history 變成 Published。
 4. 打開你的網址，後面接 `/整理/時間軸/`。
 
-筆記庫裡沒有 `整理/時間軸.md`，或沒有第三堂拖進來的三張卡（第三堂沒做完）：講師的成品在線上 [aw-03-sample-output/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output)，把 `練習3/時間軸.md` 放進筆記庫的 `整理/`；三張卡在 [aw-03-lab/關係/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-lab/%E9%97%9C%E4%BF%82)（也在 aw-03-lab.zip 裡），放進 `關係/`。拖檔案，不要拖整個資料夾。
+筆記庫裡沒有 `整理/時間軸.md`，或沒有第三堂拖進來的三張卡（第三堂沒做完）：範例成品在線上 [aw-03-sample-output/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output)，把 `練習3/時間軸.md` 放進筆記庫的 `整理/`；三張卡在 [aw-03-lab/關係/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-lab/%E9%97%9C%E4%BF%82)（也在 aw-03-lab.zip 裡），放進 `關係/`。拖檔案，不要拖整個資料夾。
 
 看結果：看到橫向時間軸就過關。網站的內文欄比較窄，一開始只看得到前三件，用觸控板往右滑，或拖動時間軸下方的捲軸，就看得到其他事件。出現 404，就是那張還沒勾，或勾了還沒發布。
 
@@ -76,7 +76,7 @@ Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛
 請在 整理/ 新增 知識庫導覽.md。分成時間、人物、事件三段：時間那段只放 [[時間軸]]；人物那段用 [[連結]] 列出 人物/ 裡的每張卡；事件那段用 [[連結]] 列出 關係/ 裡的每張卡，但先不要放〈三英戰呂布〉，練習 4 再加。只連到已有的卡，不要新增卡片，也不要改別的檔案。開頭加上 dg-publish: true。寫入前先給我看。
 ```
 
-   看過預覽：事件那段沒有三英戰呂布，也沒有筆記庫裡找不到的卡，再回「可以」。講師做的導覽頁放在線上，可以對照：[aw-04-sample-output/知識庫導覽.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-sample-output/%E7%9F%A5%E8%AD%98%E5%BA%AB%E5%B0%8E%E8%A6%BD.md)。
+   看過預覽：事件那段沒有三英戰呂布，也沒有筆記庫裡找不到的卡，再回「可以」。範例導覽頁放在線上，可以對照：[aw-04-sample-output/知識庫導覽.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-sample-output/%E7%9F%A5%E8%AD%98%E5%BA%AB%E5%B0%8E%E8%A6%BD.md)。
 
 2. 打開〈三國演義〉，在最後一行加 `[[知識庫導覽]]`。
 3. 找出還沒勾的卡。在同一個 Codex 貼上：
@@ -89,7 +89,7 @@ Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛
 
 4. Ctrl／Cmd + P，執行 Publish All Notes Marked for Publish，等 Publish history 變成 Published 再打開網址。
 
-看結果：從首頁點〈知識庫導覽〉，再點〈時間軸〉和每張卡，一路走得通；導覽頁上每個連結都點得開，包括你剛補勾的卡。講師實跑時，清單標出〈白門樓〉〈草船借箭〉沒有 dg-publish；你的清單可能不一樣，例如第二堂自己寫的卡。
+看結果：從首頁點〈知識庫導覽〉，再點〈時間軸〉和每張卡，一路走得通；導覽頁上每個連結都點得開，包括你剛補勾的卡。範例裡，清單標出〈白門樓〉〈草船借箭〉沒有 dg-publish；你的清單可能不一樣，例如第二堂自己寫的卡。
 
 點了出現 404，就是那張還沒勾、或勾了還沒發布。時間軸裡的事件名稱是純文字、點不了，這是對的；時間軸裡出現 `[[ ]]`，或點了會 404 的來源卡連結，回第三堂的 SKILL.md 補規則，再產生一次。
 
@@ -110,6 +110,6 @@ Garden Key 等同密碼：有了它就能發布到你的網站。只貼在外掛
 - 簡報：https://chrouos.github.io/AI-workshop-slides
 - Forestry.md（註冊、Plant 花園、Garden Key、Publish history）：https://forestry.md
 - Digital Garden 外掛：https://github.com/oleeskild/obsidian-digital-garden
-- 講師的範例網站（三國筆記庫）：https://glowing-clearing.forestry.md/
-- 練習 3-2 導覽頁的講師範例：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-sample-output/%E7%9F%A5%E8%AD%98%E5%BA%AB%E5%B0%8E%E8%A6%BD.md
+- 範例網站（三國筆記庫）：https://glowing-clearing.forestry.md/
+- 練習 3-2 導覽頁的範例：https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-04-sample-output/%E7%9F%A5%E8%AD%98%E5%BA%AB%E5%B0%8E%E8%A6%BD.md
 - 所有教材總表：https://github.com/Chrouos/AI-workshop-slides/tree/main/examples

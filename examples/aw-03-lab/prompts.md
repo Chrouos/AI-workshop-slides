@@ -134,7 +134,7 @@ ls .agents/skills
 
 - 人物在勢力的框裡，事件依回目由上到下排在中間，線上只寫兩三個字的關係。
 - 往下捲有一張來源表：每條線一列，寫出是哪張卡寫的。
-- 線的數量不一定一樣：講師 2026-10-30 實跑是 12 條。你第二堂自己寫了關係卡的話，會再多一些，這是正常的。
+- 線的數量不一定一樣，範例是 12 條。你第二堂自己寫了關係卡的話，會再多一些，這是正常的。
 
 ## 練習 2-2：線太亂，就請 Codex 重排
 
@@ -156,7 +156,7 @@ ls .agents/skills
 
 ## 練習 3-1：用 npx skills add 安裝時間軸 Skill 骨架
 
-先補資料：時間軸要有事件可以排，筆記庫只有第二堂的三張關係卡。aw-03-lab 的 `關係/` 裡有講師照原文寫好的三張：三英戰呂布（第 5 回）、白門樓（第 19 回）、草船借箭（第 46 回），回目、年份、出處都填好了。在 Finder（Windows 是檔案總管）打開 aw-03-lab 的 `關係/`，全選三個檔案，拖進 Obsidian 筆記庫的 `關係/`。拖檔案，不要拖整個資料夾。
+先補資料：時間軸要有事件可以排，筆記庫只有第二堂的三張關係卡。aw-03-lab 的 `關係/` 裡有照原文寫好的三張：三英戰呂布（第 5 回）、白門樓（第 19 回）、草船借箭（第 46 回），回目、年份、出處都填好了。在 Finder（Windows 是檔案總管）打開 aw-03-lab 的 `關係/`，全選三個檔案，拖進 Obsidian 筆記庫的 `關係/`。拖檔案，不要拖整個資料夾。
 
 接著裝骨架。骨架就是 aw-03-lab.zip 裡的 `sanguo-timeline/` 資料夾，裡面只有一個 SKILL.md。安裝方法跟練習 1-3 一樣，只是這次不從 GitHub 下載，名稱那一段換成這個資料夾在你電腦上的路徑。還沒解壓縮 aw-03-lab.zip 的話，先解壓縮。
 
@@ -178,7 +178,7 @@ Mac（終端機）：
 mkdir -p .agents/skills && open .agents/skills
 ```
 
-Windows（PowerShell，講師沒有實測）：
+Windows（PowerShell，未測試）：
 
 ```text
 mkdir -Force .agents\skills; explorer .agents\skills
@@ -208,7 +208,7 @@ mkdir -Force .agents\skills; explorer .agents\skills
 
 ## 練習 3-3：說明書沒寫清楚，就補一條規則
 
-1. 先看投影片上講師第一次跑的結果，找出兩個問題。
+1. 先看投影片上第一次跑的結果，找出兩個問題。
 2. 再看自己的 `整理/時間軸.md`：在 Obsidian 切到編輯模式（右上角的筆圖示；閱讀模式會把 HTML 畫成圖，搜不到 `<a href`），按 `Cmd+F`（Windows 是 `Ctrl+F`），分別搜 `未標註`、`未記載`、`—`、`<a href`、`[[`。
 3. 搜得到哪一個，就是 SKILL.md 沒寫清楚的地方，自己打開 SKILL.md 補規則。在 Codex 輸入 `/quit` 回到終端機（還在筆記庫裡），依作業系統貼一行，用文字編輯器打開它：
 
@@ -231,7 +231,7 @@ notepad .agents\skills\sanguo-timeline\SKILL.md
 - 來源卡只寫檔名純文字，不做連結，不用 <a href>，也不用 [[ ]]
 ```
 
-為什麼不請 Codex 改：Codex 為了安全，預設不讓自己改 `.agents/` 裡的檔案，會回你「.agents 設為唯讀」（講師 2026-10-30 用 Codex 0.165.0 實測）。說明書由你來改，Codex 照著做。
+為什麼不請 Codex 改：Codex 為了安全，預設不讓自己改 `.agents/` 裡的檔案，會回你「.agents 設為唯讀」（Codex 0.165.0）。說明書由你來改，Codex 照著做。
 
 4. 打 `codex` 重開，再貼一次：
 
@@ -264,7 +264,7 @@ notepad .agents\skills\sanguo-timeline\SKILL.md
 同一份 `整理/時間軸.md`，交給不同的 Skill 畫，畫出來的樣子都不一樣。挑一個你喜歡的：
 
 - diagram-design：練習 1-4 已經裝好，直接用。
-- archify（https://github.com/tt-a1i/archify ）：先在 Codex 輸入 `/quit` 離開，回到終端機（還在筆記庫裡），用練習 1-3 的方法裝，後面幾題的答法一樣。這行講師沒有實測，裝不起來就改用 diagram-design。
+- archify（https://github.com/tt-a1i/archify ）：先在 Codex 輸入 `/quit` 離開，回到終端機（還在筆記庫裡），用練習 1-3 的方法裝，後面幾題的答法一樣。這行未測試，裝不起來就改用 diagram-design。
 
 ```text
 npx skills add tt-a1i/archify
@@ -284,13 +284,13 @@ diagram-design 如果先問要用哪種樣式，回答：
 
 看結果：在 Finder（Windows 是檔案總管）雙擊 `圖/三國時間軸.html`，用瀏覽器打開。按住時間軸往左拉，要拉得到第 49 回赤壁之戰。只有桃園結義有年份（中平元年）；別的事件也出現年份，就是它自己補的，請它拿掉。
 
-講師 2026-10-30 實測（Codex 0.165.0），兩個 Skill 都畫出來了，也都沒有自己補年份。成品和講師自己做的一份放在線上的 [aw-03-sample-output/練習3/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output/%E7%B7%B4%E7%BF%923)，下載回去用瀏覽器打開比一比：
+兩個 Skill 都畫得出來，也都沒有自己補年份。範例成品和另一份自訂 HTML 放在線上的 [aw-03-sample-output/練習3/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output/%E7%B7%B4%E7%BF%923)，下載回去用瀏覽器打開比一比：
 
 - `三國時間軸-diagram-design.html`
 - `三國時間軸-archify.html`：archify 畫時間軸要每件事都有完整日期，三國卡片只有回目，所以 Codex 沒有硬套 archify 的格式，改寫一份自己的 HTML。
-- `三國時間軸-講師版.html`：把第 1 到第 120 回整條畫出來，可以切換「只看劉備」。
+- `三國時間軸-自訂.html`：不用畫圖 Skill，請 Codex 照需求另外寫的 HTML，把第 1 到第 120 回整條畫出來，可以切換「只看劉備」。
 
-想找別的畫圖 Skill：在終端機打下面這行，後面接英文關鍵字，會列出相關的 Skill 和安裝次數（講師 2026-10-30 搜過，archify 和 diagram-design 都在裡面）；也可以到 https://skills.sh 搜尋。找到喜歡的，用練習 1-3 的方法裝。裝之前先到它的 GitHub 打開 SKILL.md 看一眼。
+想找別的畫圖 Skill：在終端機打下面這行，後面接英文關鍵字，會列出相關的 Skill 和安裝次數（archify 和 diagram-design 都在裡面）；也可以到 https://skills.sh 搜尋。找到喜歡的，用練習 1-3 的方法裝。裝之前先到它的 GitHub 打開 SKILL.md 看一眼。
 
 ```text
 npx skills find timeline
@@ -320,7 +320,7 @@ Mac（終端機）：
 mkdir -p .agents/skills && open .agents/skills
 ```
 
-Windows（PowerShell，講師沒有實測）：
+Windows（PowerShell，未測試）：
 
 ```text
 mkdir -Force .agents\skills; explorer .agents\skills
@@ -332,11 +332,11 @@ mkdir -Force .agents\skills; explorer .agents\skills
 
 裝完一樣回練習 1-5，重開 Codex 確認清單裡有 eli5、diagram-design。
 
-diagram-design 還是裝不起來：練習 2-1 跟旁邊的同學一起看他的圖，或下載講師的成品 [aw-03-sample-output/練習2/三國關係圖.html](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output/%E7%B7%B4%E7%BF%922)，用瀏覽器打開。
+diagram-design 還是裝不起來：練習 2-1 跟旁邊的同學一起看他的圖，或下載範例成品 [aw-03-sample-output/練習2/三國關係圖.html](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output/%E7%B7%B4%E7%BF%922)，用瀏覽器打開。
 
 ### SKILL.md 沒改好
 
-講師每個練習的實跑成品都放在線上 [aw-03-sample-output/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output)，想對照自己的結果再打開。
+每個練習的範例成品都放在線上 [aw-03-sample-output/](https://github.com/Chrouos/AI-workshop-slides/tree/main/examples/aw-03-sample-output)，想對照自己的結果再打開。
 
 - 練習 3-3、3-4 的 SKILL.md 沒改好：照練習 3-3 第 3 步的方法打開 SKILL.md，全選刪掉，貼上下面這份加過兩條規則和第 4 步的版本，存檔：
 

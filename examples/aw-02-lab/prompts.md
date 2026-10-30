@@ -5,7 +5,7 @@
 
 這堂會用到的檔案都在 [aw-02-lab.zip](https://raw.githubusercontent.com/Chrouos/AI-workshop-slides/main/examples/aw-02-lab.zip) 裡，解壓縮後是 `aw-02-lab` 資料夾：
 
-- `三國人物知識庫/`：講師的三國筆記庫，Obsidian 和 Codex 都開這個資料夾
+- `三國人物知識庫/`：範例三國筆記庫，Obsidian 和 Codex 都開這個資料夾
 - `prompts.md`：就是這份提示詞
 
 另外要用第一堂的 `aw-01-lab/Codex_練習/`：裡面的 `原文/` 和你寫的 `三國演義大綱.md`。
@@ -104,7 +104,7 @@
 
 ### 第 1 輪：全班核對同一份回答
 
-1. 打開 [先核對這份回答.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-02-sample-output/%E5%85%88%E6%A0%B8%E5%B0%8D%E9%80%99%E4%BB%BD%E5%9B%9E%E7%AD%94.md)。這份是講師在第二堂的筆記庫實跑的回答（還沒有大家自己的卡）。
+1. 打開 [先核對這份回答.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-02-sample-output/%E5%85%88%E6%A0%B8%E5%B0%8D%E9%80%99%E4%BB%BD%E5%9B%9E%E7%AD%94.md)。這份是在第二堂的筆記庫（還沒有大家自己的卡）跑出來的回答。
 2. 每一列在自己的 Obsidian 查「有根據？」，打勾或打叉。
 3. 打開 人物/關羽.md，最後一行「關係與事件」列了三件事。回答都用到了嗎？漏了哪一件？
 
@@ -180,8 +180,8 @@
 
 這一題沒有一刀兩斷的答案，重點是說得出依據哪一句。
 
-1. 打開 [進階_曹操戰役回答.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-02-sample-output/%E9%80%B2%E9%9A%8E_%E6%9B%B9%E6%93%8D%E6%88%B0%E5%BD%B9%E5%9B%9E%E7%AD%94.md)：講師在自己的大綱上問「曹操在第 1 到 21 回參與了哪些戰役」，Codex 列了 7 項。
-2. 對照講師的 [三國演義大綱.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-01-sample-output/%E4%B8%89%E5%9C%8B%E6%BC%94%E7%BE%A9%E5%A4%A7%E7%B6%B1.md)。第 1 列（第 5 回）大綱只寫曹操發檄文，沒寫他上陣，這樣算不算「參與」？
+1. 打開 [進階_曹操戰役回答.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-02-sample-output/%E9%80%B2%E9%9A%8E_%E6%9B%B9%E6%93%8D%E6%88%B0%E5%BD%B9%E5%9B%9E%E7%AD%94.md)：在範例大綱上問「曹操在第 1 到 21 回參與了哪些戰役」，Codex 列了 7 項。
+2. 對照範例 [三國演義大綱.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-01-sample-output/%E4%B8%89%E5%9C%8B%E6%BC%94%E7%BE%A9%E5%A4%A7%E7%B6%B1.md)。第 1 列（第 5 回）大綱只寫曹操發檄文，沒寫他上陣，這樣算不算「參與」？
 3. 想追問 Codex，可以貼：
 
 ```text
@@ -198,7 +198,7 @@
 
 ### 進階討論 2：寬問法畫出的推論線
 
-1. 打開 [講師的ASCII關係圖.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-02-sample-output/%E8%AC%9B%E5%B8%AB%E7%9A%84ASCII%E9%97%9C%E4%BF%82%E5%9C%96.md)：講師讀〈桃園結義〉〈煮酒論英雄〉，不指定起點、不限定參與人物，Codex 畫了 10 條線。
+1. 打開 [ASCII關係圖範例.md](https://github.com/Chrouos/AI-workshop-slides/blob/main/examples/aw-02-sample-output/ASCII%E9%97%9C%E4%BF%82%E5%9C%96%E7%AF%84%E4%BE%8B.md)：讀〈桃園結義〉〈煮酒論英雄〉，不指定起點、不限定參與人物，Codex 畫了 10 條線。
 2. 第 10 條「孫權和劉備一起對抗曹操」靠的是〈煮酒論英雄〉「劉備已經站在孫權那一邊對抗曹操」。這句撐得住嗎？說說你的理由。
 3. 想追問 Codex，可以貼（下面接著貼上那條線，連同它上面那行的人物名）：
 

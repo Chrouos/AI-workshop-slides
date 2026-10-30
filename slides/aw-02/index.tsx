@@ -167,7 +167,7 @@ const SAMPLE_OUTLINE_URL = `${GH}/aw-01-sample-output/%E4%B8%89%E5%9C%8B%E6%BC%9
 const CHECK3_URL = `${GH}/aw-02-sample-output/%E5%85%88%E6%A0%B8%E5%B0%8D%E9%80%99%E4%BB%BD%E5%9B%9E%E7%AD%94.md`;
 // Appendix, optional discussion: the 曹操 seven-battle run and the wide ten-line graph.
 const ADV3_URL = `${GH}/aw-02-sample-output/%E9%80%B2%E9%9A%8E_%E6%9B%B9%E6%93%8D%E6%88%B0%E5%BD%B9%E5%9B%9E%E7%AD%94.md`;
-const CHECK4_URL = `${GH}/aw-02-sample-output/%E8%AC%9B%E5%B8%AB%E7%9A%84ASCII%E9%97%9C%E4%BF%82%E5%9C%96.md`;
+const CHECK4_URL = `${GH}/aw-02-sample-output/ASCII%E9%97%9C%E4%BF%82%E5%9C%96%E7%AF%84%E4%BE%8B.md`;
 
 // ---------- Demo videos ----------
 // The instructor never runs things live: each demo is a silent screen recording in ./assets/.
@@ -1460,7 +1460,7 @@ const ClickLiubei: Page = () => (
     <Heading>點大綱的劉備，跳到人物卡</Heading>
     <Fit>
       <In i={0}>
-        <Screenshot src={outlineCh1} aspect={1480 / 192} width={CL_W} caption="整理/三國演義大綱，第 1 回｜2026-10-24 擷取（Obsidian 1.14.5）" alt="大綱第 1 回裡的劉備是深紫色連結">
+        <Screenshot src={outlineCh1} aspect={1480 / 192} width={CL_W} caption="整理/三國演義大綱，第 1 回" alt="大綱第 1 回裡的劉備是深紫色連結">
           <RegionMark n={1} i={2} x={54.9} y={10} w={5.3} h={29} badge="above" drop={14} />
         </Screenshot>
       </In>
@@ -1506,7 +1506,7 @@ const BacklinksReal: Page = () => (
           <div style={{ width: 500, border: `1px solid ${rule}`, background: '#FFFFFF', boxShadow: '0 10px 30px rgba(28,25,23,0.08)' }}>
             <Crop src={backlinksPane} natW={600} natH={750} x={0} y={0} w={600} h={734} scale={500 / 600} alt="劉備卡的反向連結面板：已連結本筆記的檔案 36，三國演義 4，三國演義大綱 19" />
           </div>
-          <Caption>2026-10-24 擷取（Obsidian 1.14.5）</Caption>
+          <Caption>Obsidian 實際畫面</Caption>
         </In>
         <div>
           <div style={{ fontSize: 30, color: muted, marginBottom: 6 }}>劉備被提到幾處（不是卡片張數）</div>

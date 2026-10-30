@@ -821,7 +821,7 @@ const SkillFolder: Page = () => (
 
 
 const Eli5Skill: Page = () => (
-  <Shell chapter={1} source={'eli5 原始檔 github.com/dreambigou/eli5；Agent Skills 規格 agentskills.io/specification'}>
+  <Shell chapter={1} source={'eli5 原始檔 github.com/DreambigOu/ELI5；Agent Skills 規格 agentskills.io/specification'}>
     <Eyebrow>Skill 裡面｜eli5 真實檔案（節錄）</Eyebrow>
     <Heading>eli5 怎麼處理「5 歲小孩」</Heading>
     <Fit>
@@ -842,6 +842,7 @@ const Eli5Skill: Page = () => (
             <CL band={sage}>### Structure  1. "what"  2. analogy  3. details</CL>
             <CL band={sage}>### Language Calibration  No jargon. One idea per sentence.</CL>
           </CodeDoc>
+          <div style={{ marginTop: 14 }}><WebLink href="https://github.com/DreambigOu/ELI5/blob/main/skills/eli5/SKILL.md" size={24}>看完整原文：github.com/DreambigOu/ELI5/…/skills/eli5/SKILL.md</WebLink></div>
         </In>
         <div style={{ display: 'grid', gap: 36 }}>
           <Steps>
@@ -871,7 +872,7 @@ const ResultTrace: Page = () => (
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36 }}>
         <In i={0}><RewritePanel label="原卡" file="人物/劉備.md" tone="plain">黃巾起事，招兵<Hl k="skill">榜文</Hl>貼到涿縣，劉備看著榜文嘆氣，被身後的 <Hl k="task">[[張飛]]</Hl> 一聲喝住，兩人進酒店喝酒時，又遇上推著車子要進城<Hl k="skill">投軍</Hl>的 <Hl k="task">[[關羽]]</Hl></RewritePanel></In>
-        <In i={1}><RewritePanel label="eli5 改寫（實際產出）" file="整理/劉備-5歲版.md" tone="ok">有人貼出<Hl k="skill">告示</Hl>，要找人<Hl k="skill">當兵</Hl>。劉備看著告示，嘆了一口氣。這時，身後的 <Hl k="task">[[張飛]]</Hl> 大聲叫住他。兩人進店裡喝酒。他們又遇到了 <Hl k="task">[[關羽]]</Hl>。</RewritePanel></In>
+        <In i={1}><RewritePanel label="eli5 改寫後" file="整理/劉備-5歲版.md" tone="ok">有人貼出<Hl k="skill">告示</Hl>，要找人<Hl k="skill">當兵</Hl>。劉備看著告示，嘆了一口氣。這時，身後的 <Hl k="task">[[張飛]]</Hl> 大聲叫住他。兩人進店裡喝酒。他們又遇到了 <Hl k="task">[[關羽]]</Hl>。</RewritePanel></In>
       </div>
       <div style={{ display: 'grid', gap: 12, marginTop: 28 }}>
         <Steps>
@@ -1656,7 +1657,7 @@ const SkillsList: Page = () => (
       <ChipStep n={3}>問 Codex 有哪些 Skill</ChipStep>
     </In>
     <Fit z={0.96}>
-      <TermBox title="Codex 實際輸出（節錄，2026-10-30，Codex 0.165.0）" size={25}>
+      <TermBox title="Codex 實際輸出（節錄）" size={25}>
         <Steps>
           <TL tone="ask">› 列出你現在可以使用的 skills 名稱，每個一行，附一句用途。不要讀或修改任何檔案。</TL>
           <Step duration={STEP_MS}><div>
@@ -1784,7 +1785,7 @@ const DiagramRun: Page = () => (
       <Pill tag="限制">只畫卡片有寫的</Pill>
     </PillRow>
     <Fit>
-      <TermBox title="Codex 實際紀錄（2026-10-30，節錄）" size={27}>
+      <TermBox title="Codex 實際紀錄（節錄）" size={27}>
         <Steps>
           <TL tone="ask">› 請使用 diagram-design skill，讀 人物/、勢力/、關係/ 裡的卡片……</TL>
           <Step duration={STEP_MS}><div>
@@ -1813,7 +1814,7 @@ const DiagramResult: Page = () => (
       <div style={{ display: 'grid', gridTemplateColumns: '1080px 1fr', gap: 64, alignItems: 'center', position: 'relative' }}>
         <In i={0}>
           <Crop src={ddResult} alt="diagram-design 產生的三國關係圖：左邊蜀漢框裡是劉備、關羽、張飛，中間三個事件依回目由上到下，右邊是曹魏的曹操和東吳的孫權；十二條平滑曲線上只寫結義、守護、聯手這類關係" iw={2090} ih={1180} crop={[0, 0, 2090, 1180]} width={1080} />
-          <Caption>實際產出（節錄）｜在 Finder／檔案總管雙擊 圖/三國關係圖.html 打開</Caption>
+          <Caption>在 Finder／檔案總管雙擊 圖/三國關係圖.html 打開</Caption>
         </In>
         <div style={{ display: 'grid', gap: 40 }}>
           <Steps>
@@ -1859,7 +1860,7 @@ const Eli5Rewrite: Page = () => (
             三人<Mk>越談越投合</Mk>，<Mk ok>隔天</Mk>就在<Mk ok>張飛莊後的桃園</Mk><Mk>立誓</Mk>，留下著名的 <Mk ok>[[桃園結義]]</Mk>；誓畢拜劉備為兄，<Mk ok>從此他成了關、張的大哥</Mk>
           </RewritePanel>
           <Step duration={STEP_MS}>
-            <RewritePanel label="eli5 版（實際產出，2026-10-30）" file="整理/劉備-5歲版.md" tone="ok">
+            <RewritePanel label="eli5 改寫後" file="整理/劉備-5歲版.md" tone="ok">
               三個人<Mk>越聊越合得來</Mk>。<Mk ok>隔天</Mk>，他們就在<Mk ok>張飛家後面的桃園</Mk>裡，<Mk>一起許下約定，成為兄弟</Mk>。這就是 <Mk ok>[[桃園結義]]</Mk>。<Mk ok>劉備成了關羽和張飛的大哥</Mk>。
             </RewritePanel>
           </Step>
@@ -2576,7 +2577,7 @@ const deck: Page[] = [
   Cover, Review, Agenda, ToolCheck, InstallNode,
   Section1, TaskPrompt, PickSkill, Eli5Skill, ResultTrace, WhySkill, SkillFolder, CompareTable,
   Section2, SkillsAddCmd, RepoName, CdVault, AddEli5, AddEli5Scope, AddDiagram, SkillsList, InstallVideo,
-  Section3, DiagramRun, DiagramResult, Eli5Rewrite, UseVideo, BreakPage,
+  Section3, DiagramRun, DiagramResult, UseVideo, Eli5Rewrite, BreakPage,
   Section4, TimelineGoal, SkillSkeleton, SaveSkill, RunTimeline, TimelineResult, EditLoop, EditExample, TimelineVideo, PersonFilter, TimelineStyles,
   Recap, NextLesson, ReferencesSkills, ReferencesTools,
   AppendixIndex, InstallErrors, ZipFallback, CallByName, DescriptionTrigger, LoadOnUse, PromptAgentsSkill, McpPlug, SkillOrMcp, DgPublishCopied, HtmlLinkTest,
@@ -2632,7 +2633,7 @@ const NOTES = new Map<Page, string>([
 按一下：第二塊，Step 1 先認出聽眾。裡面有一張年齡對照表，「5 歲小孩」對得上 Age 5 那一列：用很簡單的詞、拿玩具和動物打比方、句子要短。這張表也有 10 歲、15 歲、國中生、大學生，換對象就對到另一列；沒寫對象的話，它預設就是 Age 5。
 按一下：第三塊，Step 3 照做法寫：Structure 規定先說是什麼、打比方、補細節；Language Calibration 說不要用艱深的詞、一句只講一件事。
 最後一下：name 和 description 每份 Skill 都要寫；下面的做法沒有固定格式，依任務寫。eli5 用 Step 1、2、3，第四章我們自己寫的時間軸 Skill 會用「步驟」和「輸出格式」兩段，這是這堂課用的簡化骨架。
-檔案位置：筆記庫裡的 .agents/skills/eli5/SKILL.md，第二章會裝。來源：https://github.com/dreambigou/eli5`],
+檔案位置：筆記庫裡的 .agents/skills/eli5/SKILL.md，第二章會裝。程式碼框下面的連結可以點，在筆電上打開就是 GitHub 上的完整原文：https://github.com/DreambigOu/ELI5/blob/main/skills/eli5/SKILL.md ，年齡、年級、職業那幾張對照表都在裡面。`],
   [ResultTrace, `18:00–21:00。看結果，再對回規則。左邊是原卡第二段，右邊是 eli5 改寫的實際產出（講師 2026-10-30 實跑，範例檔 aw-03-sample-output/練習2/劉備-5歲版.md）。橘底和藍底的顏色，跟任務那頁一樣：橘底對得上 eli5，藍底來自提示詞。
 按一下：榜文變成告示、投軍變成當兵；原卡一整句，改寫成好幾個短句。這些對得上 eli5 Age 5 那一列：簡單的詞、短句子。我們只能說「對得上」，看不到模型內部是不是因為這一條才這樣改。
 按一下：[[張飛]]、[[關羽]] 這兩個連結還在，檔案存成 整理/劉備-5歲版.md。這兩件事來自提示詞，eli5 本身沒有這條規則。提示詞沒寫的話，連結可能就不見了。
@@ -2743,16 +2744,17 @@ Codex 怎麼比對 description、裝很多 Skill 會不會塞滿上下文，放�
 按一下：中間是三個事件，依回目由上到下：第 1 回桃園結義、第 21 回煮酒論英雄、第 49 到 50 回赤壁之戰。
 按一下：線上只寫兩三個字的關係，例如結義、守護、放行。每條線是哪張卡寫的，列在圖下方的「逐線來源」表，往下捲就看得到。線的數量每次會不一樣，這次是 12 條；你第二堂自己寫過關係卡的話，還會再多，這是正常的。
 你的圖如果線疊在一起、看不出是誰的，在同一個 Session 接著貼 prompts.md 練習 2-2：「圖上的線太亂，看不出哪條是誰的。請改用平滑曲線，不要直角轉折；標籤不要互相蓋住。人物、事件、關係和來源表不變，存回同一個檔案。」講師實測過，直角線會改成平滑曲線。Codex 改完會說「確認標籤互不重疊」，還是要自己在瀏覽器重新整理，再看一次。`],
-  [Eli5Rewrite, `53:00–57:00。接著用 eli5，貼上 prompts.md 練習 2-3 的提示詞：
+  [UseVideo, `53:00–57:00。講師錄好的練習 2 完整過程：貼上練習 2-1，Codex 停下來問樣式，回答用預設，存好關係圖；再貼上練習 2-3，eli5 改寫劉備卡。課堂上不現場跑。
+影片約 4 分 14 秒（講師 2026-10-30 錄，Codex 0.165.0，diagram-design 2.6.136），等待的空檔剪掉了。0:42 Codex 停下來問「沿用預設配色，還是指定配色？」；0:52 回答用預設，畫圖實際花了快 2 分鐘；2:46 存好，回報 5 位人物、3 個事件、12 條曲線和來源表；3:00 重開 Codex，貼上練習 2-3，請 eli5 把劉備卡講給 5 歲小孩聽，不到一分鐘就存好 整理/劉備-5歲版.md，回報保留了所有連結、沒加 dg-publish、原卡沒改（這一段是講師換成 5 歲版後補錄的，Codex 讀的是講師家目錄那份 eli5，內容跟筆記庫裡的一樣）。
+影片中間有一行紅字 Used computer … Failed：講師電腦的 Codex 想開瀏覽器檢查圖，被安全設定擋下，不影響存檔；你們的 Codex 多半不會出現這行。
+同學自己的 Codex 在跑的時候，正好看影片對照下一步，或舉手提問。影片最後是 eli5 改寫劉備卡，下一頁直接看改寫前後的比對。`],
+  [Eli5Rewrite, `57:00–64:00。影片最後貼的就是 prompts.md 練習 2-3 的提示詞：
 請使用 eli5 skill，把 人物/劉備.md 用 5 歲小孩聽得懂的方式重新說一次，存成 整理/劉備-5歲版.md。只用卡片裡有的內容，不要加新的事實；保留 [[連結]]。不要修改原本的卡片。新檔不要加 dg-publish。
 最後一句是為第四堂準備的：原卡最上面有 dg-publish: true，eli5 改寫時可能照抄，5 歲版就會跟原卡一起公開。細節在附錄第 ${pageOf(DgPublishCopied)} 頁，第四堂發布前也會講。
 我們只看一段：桃園結義那段。綠底是保留下來的事實：隔天、張飛莊後的桃園、[[桃園結義]] 這個連結、劉備成了關、張的大哥。橘底是要換成白話的說法：越談越投合、立誓。
 按一下：右邊是 eli5 的實際產出（講師 2026-10-30，範例檔 aw-03-sample-output/練習2/劉備-5歲版.md 就是這一份）。綠底的事實都還在：隔天、張飛家後面的桃園、[[桃園結義]]、劉備成了關羽和張飛的大哥；橘底的換成 5 歲小孩聽得懂的話：越聊越合得來、一起許下約定，成為兄弟。
-最後一下：古文改成白話，事實和 [[連結]] 都留著，這就是 eli5 做的事。其他段落請大家打開兩張卡自己對照，例如販屨織蓆變成賣鞋子、編席子，匙箸變成湯匙和筷子。`],
-  [UseVideo, `57:00–64:00。講師錄好的練習 2 完整過程：貼上練習 2-1，Codex 停下來問樣式，回答用預設，存好關係圖；再貼上練習 2-3，eli5 改寫劉備卡。課堂上不現場跑。
-影片約 4 分 14 秒（講師 2026-10-30 錄，Codex 0.165.0，diagram-design 2.6.136），等待的空檔剪掉了。0:42 Codex 停下來問「沿用預設配色，還是指定配色？」；0:52 回答用預設，畫圖實際花了快 2 分鐘；2:46 存好，回報 5 位人物、3 個事件、12 條曲線和來源表；3:00 重開 Codex，貼上練習 2-3，請 eli5 把劉備卡講給 5 歲小孩聽，不到一分鐘就存好 整理/劉備-5歲版.md，回報保留了所有連結、沒加 dg-publish、原卡沒改（這一段是講師換成 5 歲版後補錄的，Codex 讀的是講師家目錄那份 eli5，內容跟筆記庫裡的一樣）。
-影片中間有一行紅字 Used computer … Failed：講師電腦的 Codex 想開瀏覽器檢查圖，被安全設定擋下，不影響存檔；你們的 Codex 多半不會出現這行。
-同學自己的 Codex 在跑的時候，正好看影片對照下一步，或舉手提問。看完影片到 64:00，把練習 2 的三步做完：畫圖、線太亂就重排、改寫劉備卡。`],
+最後一下：古文改成白話，事實和 [[連結]] 都留著，這就是 eli5 做的事。其他段落請大家打開兩張卡自己對照，例如販屨織蓆變成賣鞋子、編席子，匙箸變成湯匙和筷子。
+接下來到 64:00，把練習 2 的三步做完：畫圖、線太亂就重排、改寫劉備卡。`],
   [DgPublishCopied, `（附錄，第四堂發布前再看；第四堂也會講。講師早期用舊提示詞實測時遇到的，當時是改寫給國中生。）實測時發現一件事。原卡最上面有 dg-publish: true，這是第四堂發布用的開關。eli5 改寫時，把這一行也照抄過去了。
 按一下：第四堂發布時，兩張劉備卡都會公開，網站上會出現兩個劉備。
 按一下：不想公開5 歲版，就刪掉 dg-publish 那一行（改成 dg-publish: false，或在 Obsidian 的屬性欄取消勾選也可以）。下次請 Codex 改寫時，提示詞最後多加一句：「新檔不要加 dg-publish」，新檔就不會帶著公開設定。

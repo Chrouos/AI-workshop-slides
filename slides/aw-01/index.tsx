@@ -1273,7 +1273,7 @@ const Eq = ({ children }: { children: ReactNode }) => <span style={{ fontFamily:
 
 const CotPage: Page = () => (
   <Shell chapter={1} source={<span>{'Wei et al. 2022, arXiv:2201.11903；Gao et al. 2023, PAL, arXiv:2211.10435'}</span>}>
-    <Eyebrow><span>例子｜Codex 實際輸出 2026-10-18</span></Eyebrow>
+    <Eyebrow><span>例子｜Codex 實際輸出</span></Eyebrow>
     <Heading><span>CoT＋Tool Calling 實例</span></Heading>
     <QuestionCard right={<><LegendKey color={blue}><span>CoT</span></LegendKey><LegendKey color={amber}><span>Tool Calling</span></LegendKey></>}><span>籠子裡有 35 個頭、94 隻腳，雞和兔各幾隻？</span></QuestionCard>
     <Fit>
@@ -1347,7 +1347,7 @@ const ToolCalc: Page = () => (
         <div>
           <Steps>
             <Step duration={STEP_MS}>
-              <Terminal title={<span>{"Codex 實際輸出｜2026-10-18"}</span>} size={26}>
+              <Terminal title={<span>{"Codex 實際輸出"}</span>} size={26}>
                 <Dim><span>{'exec\n'}</span></Dim>
                 <AskLine><span>{"python3 -c 'print(sum([2,4,7,9,23,1,5,7,2,5,74,2,7953,34,356]))'\n"}</span></AskLine>
                 <Dim><span>{' succeeded in 2814ms:\n'}</span></Dim>
@@ -3313,7 +3313,7 @@ const ToolInstallCard = ({ name, doc, children }: { name: ReactNode; doc: ReactN
 
 const InstallCompare: Page = () => (
   <Shell source={<span>{'learn.chatgpt.com/docs/codex/cli、github.com/openai/codex、code.claude.com/docs/en/setup'}</span>}>
-    <Eyebrow><span>附錄｜安裝 1／4｜2026-10-27 依官方文件核對</span></Eyebrow>
+    <Eyebrow><span>附錄｜安裝 1／4｜依官方文件</span></Eyebrow>
     <Heading><span>Codex 與 Claude Code 安裝對照</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gap: 26 }}>
