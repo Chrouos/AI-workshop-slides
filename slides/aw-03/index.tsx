@@ -773,14 +773,14 @@ const RepeatPrompt: Page = () => (
 const SHELF_X = [290, 684, 1078, 1472];
 const SHELF_W = 320;
 
-const ShelfNode = ({ i, y, kind, title, sub, hot = false }: { i: number; y: number; kind: IconKind; title: string; sub: string; hot?: boolean }) => {
+const ShelfNode = ({ i, y, kind, title, sub, hot = false }: { i: number; y: number; kind: IconKind; title: string; sub?: string; hot?: boolean }) => {
   const x = SHELF_X[i];
   return (
     <g>
       <rect x={x - SHELF_W / 2} y={y} width={SHELF_W} height="210" fill={hot ? amberSoft : '#FFFFFF'} stroke={hot ? amber : rule} strokeWidth="2" />
-      <SvgIcon kind={kind} x={x} y={y + 62} size={64} color={hot ? amber : muted} />
-      <text x={x} y={y + 146} textAnchor="middle" fontSize="31" fontWeight="600" fill={ink}>{title}</text>
-      <text x={x} y={y + 186} textAnchor="middle" fontSize="25" fill={muted}>{sub}</text>
+      <SvgIcon kind={kind} x={x} y={y + (sub ? 62 : 76)} size={64} color={hot ? amber : muted} />
+      <text x={x} y={y + (sub ? 146 : 164)} textAnchor="middle" fontSize="31" fontWeight="600" fill={ink}>{title}</text>
+      {sub ? <text x={x} y={y + 186} textAnchor="middle" fontSize="25" fill={muted}>{sub}</text> : null}
     </g>
   );
 };
@@ -813,31 +813,31 @@ const SkillIsSop: Page = () => (
   <Shell chapter={1} source={'Agent Skills 說明 agentskills.io/what-are-skills；Codex Skills developers.openai.com/codex/skills'}>
     <Eyebrow>Skill＝存好的做事方法</Eyebrow>
     <Heading>Agent Skill（代理人技能）</Heading>
-    <Lead>像食譜架：想做哪道菜，就翻出那本食譜</Lead>
+    <Lead>像食譜架：選好菜，翻出存好的食譜</Lead>
     <Fit>
       <Stage h={500}>
         <Steps>
-          <Layer h={500} label="做菜：說想吃中式下飯菜，從食譜架自動翻出番茄炒蛋，照食譜做，下次想吃不用再講一次做法">
+          <Layer h={500} label="做菜：選好要做番茄炒蛋，從食譜架翻出存好的食譜，照著做，下次想吃不用再講一次做法">
             <text x="0" y="118" fontSize="30" fontWeight="600" fill={amber}>做菜</text>
-            <InG i={0}><ShelfNode i={0} y={10} kind="chat" title="想吃什麼" sub="中式、下飯的" /></InG>
-            <InG i={1}><ShelfPick y={10} items={['紅燒肉', '番茄炒蛋', '味噌湯']} pick={1} title="自動翻出食譜" sub="食譜架上先存好" /></InG>
-            <InG i={2}><ShelfNode i={2} y={10} kind="book" title="照著做" sub="打蛋、炒番茄、倒在一起" /></InG>
-            <InG i={3}><ShelfNode i={3} y={10} kind="ok" title="一盤番茄炒蛋" sub="下次想吃，不用再講" hot /></InG>
+            <InG i={0}><ShelfNode i={0} y={10} kind="chat" title="選好要做的菜" /></InG>
+            <InG i={1}><ShelfPick y={10} items={['紅燒肉', '番茄炒蛋', '味噌湯']} pick={1} title="翻出那本食譜" sub="食譜架上先存好" /></InG>
+            <InG i={2}><ShelfNode i={2} y={10} kind="book" title="照著做" /></InG>
+            <InG i={3}><ShelfNode i={3} y={10} kind="ok" title="一盤番茄炒蛋" sub="下次不用再講做法" hot /></InG>
             <InG i={1}><ShelfArrows y={10} /></InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={500} label="Codex：說要把劉備卡改成國中生版，Codex 從 Skill 裡自動挑出 eli5，讀 SKILL.md 照著做，存好國中生版">
+          <Step duration={STEP_MS}><Layer h={500} label="Codex：提示詞點名 eli5 改劉備卡，Codex 翻出 eli5，讀 SKILL.md 照著做，存好國中生版">
             <g className="aw3-build" style={buildDelay(0)}>
               <text x="0" y="398" fontSize="30" fontWeight="600" fill={blue}>Codex</text>
-              <ShelfNode i={0} y={290} kind="chat" title="說要做什麼" sub="劉備卡改成國中生版" />
+              <ShelfNode i={0} y={290} kind="chat" title="點名 Skill" sub="請使用 eli5，改劉備卡" />
             </g>
-            <g className="aw3-build" style={buildDelay(1)}><ShelfPick y={290} items={['diagram-design', 'eli5', '其他 Skill']} pick={1} title="自動挑出 Skill" sub="比對每個 description" /></g>
-            <g className="aw3-build" style={buildDelay(2)}><ShelfNode i={2} y={290} kind="doc" title="讀 SKILL.md" sub="照裡面的步驟做" /></g>
+            <g className="aw3-build" style={buildDelay(1)}><ShelfPick y={290} items={['diagram-design', 'eli5', '其他 Skill']} pick={1} title="翻出 eli5" sub="Skill 先裝好、存好" /></g>
+            <g className="aw3-build" style={buildDelay(2)}><ShelfNode i={2} y={290} kind="doc" title="讀 SKILL.md 照做" /></g>
             <g className="aw3-build" style={buildDelay(3)}><ShelfNode i={3} y={290} kind="ok" title="國中生版存好" sub="下次一句話就好" hot /></g>
             <g className="aw3-build" style={buildDelay(1)}><ShelfArrows y={290} /></g>
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>做法先存好，要用時自動翻出來</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>做法先存好，要用時翻出來照著做</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2851,9 +2851,10 @@ const NOTES = new Map<Page, string>([
 按一下：換關羽，同樣四行再打一次。
 按一下：張飛，又一次。哪一次漏打一行，結果就不一樣。
 最後一下：做法都一樣，只換了卡片。這種常常重複的做法，就可以寫成 Skill。`],
-  [SkillIsSop, `15:00–17:00。Skill 是什麼？拿食譜架來比。你想做菜，說「想吃中式、下飯的」；食譜架上早就存好幾本食譜，自動翻出〈番茄炒蛋〉那一本；照食譜做：打蛋、炒番茄、倒在一起；一盤番茄炒蛋就好了。重點在第二格：食譜是先存好的，下次想吃，不用再從頭講一次做法。
-按一下：Codex 也是這樣。你說「把劉備卡改成國中生版」；Codex 手上有好幾個存好的 Skill，看每個 Skill 的 description，自動挑出 eli5；接著讀 eli5 的 SKILL.md，照裡面的步驟做；國中生版就存好了。下次要改關羽卡，一句話就好，不用再交代四行要求。
-最後一下：做法先存好，要用時自動翻出來。這份存好的做法就是 SKILL.md；它裡面寫了哪幾塊，等一下打開來看。`],
+  [SkillIsSop, `15:00–17:00。Skill 是什麼？拿食譜架來比。你選好要做番茄炒蛋；食譜架上早就存好幾本食譜，翻出〈番茄炒蛋〉那一本；照食譜做；一盤番茄炒蛋就好了。重點在第二格：食譜是先存好的，下次想吃，不用再從頭講一次做法。
+按一下：Codex 也是這樣。提示詞點名要用哪個 Skill：「請使用 eli5，把劉備卡改成國中生版」；eli5 已經裝好、存在筆記庫裡，Codex 把它翻出來；讀 eli5 的 SKILL.md，照裡面的步驟做；國中生版就存好了。下次要改關羽卡，一句話就好，不用再交代上一頁那四行要求。
+今天的練習提示詞都會這樣點名。不點名的話，Codex 會看每個 Skill 的說明自己挑，可能挑錯，第 ${pageOf(CallByName)} 頁再講。
+最後一下：做法先存好，要用時翻出來照著做。這份存好的做法就是 SKILL.md；它裡面寫了哪幾塊，等一下打開來看。`],
   [SkillFolder, `17:00–18:30。Skill 在電腦裡就是一個資料夾。eli5 的資料夾裡只有一個 SKILL.md。
 按一下：diagram-design 比較大，除了 SKILL.md，還有 references、scripts、assets，放參考資料、小程式和圖檔。
 最後一下：每個 Skill 都有 SKILL.md，其他檔案是附件；Agent 讀 SKILL.md 時，會照裡面的指示再去翻附件。`],
