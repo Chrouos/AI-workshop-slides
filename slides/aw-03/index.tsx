@@ -618,15 +618,28 @@ const Cover: Page = () => (
   </Shell>
 );
 
-// One folder row of the vault, drawn inside an SVG picture.
-const VaultRow = ({ y, x = 60, name, count, root = false }: { y: number; x?: number; name: string; count?: string; root?: boolean }) => (
+// Tints that tie a folder on the left to its cards on the right: brown = 人物, green = 關係.
+const peopleTint = '#F7EFE7';
+const relTint = '#EDF3ED';
+
+// One folder row of the vault, drawn inside an SVG picture. A tinted row is a folder whose cards appear on the right.
+const VaultRow = ({ y, x = 60, name, count, root = false, fill = '#FFFFFF', stroke = faint, tint, tone = muted }: { y: number; x?: number; name: string; count?: string; root?: boolean; fill?: string; stroke?: string; tint?: string; tone?: string }) => (
   <g>
-    <Folder x={x} y={y - 30} w={56} h={42} fill={root ? amber : amberSoft} />
-    <text x={x + 76} y={y + 4} fontSize={root ? 36 : 33} fontWeight={root ? 600 : 400} fill={ink}>{name}</text>
-    {count ? <text x={x + 220} y={y + 4} fontSize="28" fill={muted}>{count}</text> : null}
+    {tint ? <rect x={x - 14} y={y - 40} width={470} height={60} rx="8" fill={tint} /> : null}
+    <Folder x={x} y={y - 30} w={56} h={42} fill={root ? muted : fill} stroke={root ? muted : stroke} />
+    <text x={x + 76} y={y + 4} fontSize={root ? 36 : 33} fontWeight={root ? 600 : tint ? 600 : 400} fill={ink}>{name}</text>
+    {count ? <text x={x + 220} y={y + 4} fontSize="28" fontWeight={tint ? 600 : 400} fill={tone}>{count}</text> : null}
   </g>
 );
 
+// A tinted column on the right, headed by the same folder icon as its row on the left.
+const FolderColumn = ({ x, w, name, fill, stroke, tint }: { x: number; w: number; name: string; fill: string; stroke: string; tint: string }) => (
+  <g>
+    <rect x={x - w / 2} y={6} width={w} height={434} rx="12" fill={tint} />
+    <Folder x={x - 62} y={22} w={40} h={30} fill={fill} stroke={stroke} />
+    <text x={x - 12} y={50} fontSize="28" fontWeight="600" fill={stroke}>{name}/</text>
+  </g>
+);
 
 const Review: Page = () => (
   <Shell>
@@ -635,45 +648,44 @@ const Review: Page = () => (
     <Fit>
       <Stage h={470}>
         <Steps>
-          <Layer h={470} label="筆記庫的資料夾：人物 5 張、勢力 3 張、關係 3 張、原文有第 1–21 回和第 37、38、46 回、整理裡有大綱、模板裡有關係卡模板；右邊是五位人物和三張關係卡">
-            <InG i={0}>
-              <VaultRow y={50} x={0} name="三國人物知識庫" root />
-              <VaultRow y={126} name="人物" count="5 張人物卡" />
-              <VaultRow y={188} name="勢力" count="3 張" />
-              <VaultRow y={250} name="關係" count="3 張關係卡" />
-              <VaultRow y={312} name="原文" count="第 1–21、37、38、46 回" />
-              <VaultRow y={374} name="整理" count="大綱" />
-              <VaultRow y={436} name="模板" count="關係卡模板" />
-            </InG>
-            <InG i={1}>
-              <Person x={880} y={100} name="劉備" />
-              <Person x={880} y={232} name="關羽" />
-              <Person x={880} y={372} name="張飛" />
-              <Person x={1520} y={162} name="曹操" />
-              <Person x={1520} y={342} name="孫權" />
-              <RelBox cx={1200} y={60} label="桃園結義" />
-              <RelBox cx={1200} y={200} label="煮酒論英雄" />
-              <RelBox cx={1200} y={340} label="赤壁之戰" />
-            </InG>
+          <Layer h={470} label="筆記庫的資料夾：人物 5 張、勢力 3 張、關係 3 張、原文有第 1–21 回和第 37、38、46 回、整理裡有大綱、模板裡有關係卡模板；人物資料夾是棕色，右邊棕色欄的圓圈就是那五張人物卡；關係資料夾是綠色，中間綠色欄的方框就是那三張關係卡">
+            <InG i={0}><VaultRow y={50} x={0} name="三國人物知識庫" root /></InG>
+            <InG i={1}><VaultRow y={126} name="人物" count="5 張人物卡" fill={amberSoft} stroke={amber} tint={peopleTint} tone={amber} /></InG>
+            <InG i={2}><VaultRow y={188} name="勢力" count="3 張" /></InG>
+            <InG i={3}><VaultRow y={250} name="關係" count="3 張關係卡" fill={sage} stroke={okGreen} tint={relTint} tone={okGreen} /></InG>
+            <InG i={4}><VaultRow y={312} name="原文" count="第 1–21、37、38、46 回" /></InG>
+            <InG i={5}><VaultRow y={374} name="整理" count="大綱" /></InG>
+            <InG i={6}><VaultRow y={436} name="模板" count="關係卡模板" /></InG>
+            <InG i={7}><FolderColumn x={880} w={170} name="人物" fill={amberSoft} stroke={amber} tint={peopleTint} /></InG>
+            <PopG i={8}><Person x={880} y={150} name="劉備" /></PopG>
+            <PopG i={8.6}><Person x={880} y={270} name="關羽" /></PopG>
+            <PopG i={9.2}><Person x={880} y={390} name="張飛" /></PopG>
+            <InG i={10}><FolderColumn x={1200} w={270} name="關係" fill={sage} stroke={okGreen} tint={relTint} /></InG>
+            <PopG i={11}><RelBox cx={1200} y={118} label="桃園結義" /></PopG>
+            <PopG i={11.6}><RelBox cx={1200} y={238} label="煮酒論英雄" /></PopG>
+            <PopG i={12.2}><RelBox cx={1200} y={358} label="赤壁之戰" /></PopG>
+            <InG i={13}><FolderColumn x={1520} w={170} name="人物" fill={amberSoft} stroke={amber} tint={peopleTint} /></InG>
+            <PopG i={14}><Person x={1520} y={210} name="曹操" /></PopG>
+            <PopG i={14.6}><Person x={1520} y={330} name="孫權" /></PopG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={470} label="十二條線把人物連到關係卡">
-            <g fill="none" stroke={okGreen} strokeWidth="3">
-              <StepPath d="M926 100 L1090 92" i={0} />
-              <StepPath d="M926 100 L1090 232" i={0} />
-              <StepPath d="M926 100 L1090 372" i={0} />
-              <StepPath d="M926 232 L1090 92" i={1} />
-              <StepPath d="M926 232 L1090 232" i={1} />
-              <StepPath d="M926 232 L1090 372" i={1} />
-              <StepPath d="M926 372 L1090 92" i={2} />
-              <StepPath d="M926 372 L1090 232" i={2} />
-              <StepPath d="M926 372 L1090 372" i={2} />
-              <StepPath d="M1474 162 L1310 232" i={3} />
-              <StepPath d="M1474 162 L1310 372" i={3} />
-              <StepPath d="M1474 342 L1310 372" i={4} />
+          <Step duration={STEP_MS}><Layer h={470} label="十二條線把人物連到關係卡：卡片的參與人物寫了誰，就連到誰">
+            <g fill="none" stroke={quiet} strokeWidth="3">
+              <StepPath d="M926 150 L1090 150" i={0} />
+              <StepPath d="M926 150 L1090 270" i={0} />
+              <StepPath d="M926 150 L1090 390" i={0} />
+              <StepPath d="M926 270 L1090 150" i={1} />
+              <StepPath d="M926 270 L1090 270" i={1} />
+              <StepPath d="M926 270 L1090 390" i={1} />
+              <StepPath d="M926 390 L1090 150" i={2} />
+              <StepPath d="M926 390 L1090 270" i={2} />
+              <StepPath d="M926 390 L1090 390" i={2} />
+              <StepPath d="M1474 210 L1310 270" i={3} />
+              <StepPath d="M1474 210 L1310 390" i={3} />
+              <StepPath d="M1474 330 L1310 390" i={4} />
             </g>
-            <g className="aw3-build" style={buildDelay(5)}><circle cx="880" cy="448" r="13" fill={amberSoft} stroke={amber} strokeWidth="2" /><text x="902" y="457" fontSize="26" fill={muted}>人物卡</text>
-              <rect x="1010" y="436" width="34" height="24" fill={sage} stroke={okGreen} strokeWidth="2" /><text x="1056" y="457" fontSize="26" fill={muted}>關係卡</text>
-              <line x1="1160" y1="448" x2="1210" y2="448" stroke={okGreen} strokeWidth="3" /><text x="1222" y="457" fontSize="26" fill={muted}>卡片寫了他參與（共 12 條）</text></g>
+            <g className="aw3-build" style={buildDelay(5)}>
+              <line x1="830" y1="462" x2="880" y2="462" stroke={quiet} strokeWidth="3" /><text x="894" y="471" fontSize="26" fill={muted}>關係卡寫了他參與，就連一條線（共 12 條）</text>
+            </g>
           </Layer></Step>
         </Steps>
       </Stage>
@@ -2611,7 +2623,7 @@ description: 把三國筆記庫的卡片依回目排成時間軸。使用者說�
 const NOTES = new Map<Page, string>([
   [Cover, `00:00–01:00。第三堂講 Skills。前兩堂用 Codex 寫了大綱，做出三國筆記庫；今天把常做的事寫成說明書，交給 Codex 照著做。先裝兩個別人寫好的 Skill 來用，最後自己寫一個「三國時間軸」。
 請大家先在自己的筆電打開這份簡報：${DECK_SITE}。今天的提示詞都在 prompts.md，練習頁右上角的連結點下去就是，整段複製貼上，不用照投影片打字。今天的教材整包在 aw-03-lab.zip：${LAB_ZIP_URL} ，裡面有 prompts.md、時間軸 Skill 骨架 sanguo-timeline，和第四章要用的三張關係卡。講師每個練習的實跑成品放在線上的 aw-03-sample-output/，想對照再看。Codex 一樣開在自己的「三國人物知識庫」，不是開在 aw-03-lab。所有教材的總表：https://github.com/Chrouos/AI-workshop-slides/tree/main/examples`],
-  [Review, `01:00–06:00。先回顧上一堂。左邊是筆記庫的資料夾：人物 5 張、勢力 3 張、關係 3 張；原文資料夾有第 1 到 21 回全文，和第 37、38、46 回的節選；整理資料夾裡放著第一堂寫的大綱；模板資料夾有關係卡模板。右邊是五位人物和三張關係卡。
+  [Review, `01:00–06:00。先回顧上一堂。左邊是筆記庫的資料夾：人物 5 張、勢力 3 張、關係 3 張；原文資料夾有第 1 到 21 回全文，和第 37、38、46 回的節選；整理資料夾裡放著第一堂寫的大綱；模板資料夾有關係卡模板。右邊用顏色對回左邊：棕色欄的圓圈是人物資料夾裡的五張人物卡，綠色欄的方框是關係資料夾裡的三張關係卡。
 按一下：這 12 條線（桃園結義 3 條、煮酒論英雄 4 條、赤壁之戰 5 條），都是關係卡最後一行「參與人物」寫出來的，上一堂我們請 Codex 照這個規則畫過 ASCII 關係圖。
 請大家打開上一堂的筆記庫，確認卡片都還在。今天全部接著用這一個筆記庫。
 最後一下：今天用 Skill 畫一張關係圖、改寫一張卡，最後自己寫 Skill 排出時間軸。`],
