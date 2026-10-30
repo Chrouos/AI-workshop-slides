@@ -1629,7 +1629,7 @@ const Practice32: Page = () => (
   </Shell>
 );
 
-// ---------- 05 檢查網站與延伸 ----------
+// ---------- 04 更新與檢查 ----------
 
 
 // One stop on the route a reader clicks in practice 4: white before the check, green once it opens.
@@ -1871,86 +1871,6 @@ const CourseRecap: Page = () => (
   </Shell>
 );
 
-// Without `i` (a row inside a <Step>), the row has no entrance of its own.
-const SKILL_ROW: CSSProperties = { display: 'grid', gridTemplateColumns: '130px 380px 1fr', alignItems: 'center', gap: 30, background: surface, borderLeft: `5px solid ${amber}`, padding: '36px 40px' };
-
-const SkillRow = ({ i, cmd, what, icon }: { i?: number; cmd: string; what: string; icon: ReactNode }) => {
-  const body = (
-    <>
-      <svg viewBox="0 0 110 80" style={{ width: 110, height: 80 }} aria-hidden="true">{icon}</svg>
-      <span style={{ fontFamily: mono, fontSize: 36, fontWeight: 600, color: amber }}>{cmd}</span>
-      <span style={{ fontSize: 34, lineHeight: 1.4 }}>{what}</span>
-    </>
-  );
-  return i === undefined ? <div style={SKILL_ROW}>{body}</div> : <In i={i} style={SKILL_ROW}>{body}</In>;
-};
-
-// One stop of the weekly loop after the course, tagged with the lesson it comes from.
-const LoopStop = ({ x, n, kind, label, tag }: { x: number; n: number; kind: IconKind; label: string; tag: string }) => (
-  <g>
-    <circle cx={x} cy="110" r="84" fill="#FFFFFF" stroke={amber} strokeWidth="3" />
-    <SvgIcon kind={kind} x={x} y={110} size={90} color={amber} />
-    <SvgNum x={x - 64} y={44} n={n} />
-    <text x={x} y="250" textAnchor="middle" fontSize="38" fontWeight="600" fill={ink}>{label}</text>
-    <SvgChip x={x - 150} y={272} w={300} h={46} label={tag} size={24} fill={surface} />
-  </g>
-);
-
-const Closing: Page = () => (
-  <Shell>
-    <Eyebrow>下課之後</Eyebrow>
-    <Heading>課後第一步：每週一張卡</Heading>
-    <Fit>
-      <Stage h={440}>
-        <Steps>
-          <Layer h={440} label="第一步：新增一張卡">
-            <InG i={0}><LoopStop x={204} n={1} kind="doc" label="新增一張卡" tag="第 1、3 堂：Codex、Skill" /></InG>
-          </Layer>
-          <Step duration={STEP_MS}><Layer h={440} label="第二步：核對出處">
-            <MapArrow x1={300} x2={516} y={110} hot draw />
-            <Build><LoopStop x={612} n={2} kind="search" label="核對出處" tag="第 2 堂：RAG" /></Build>
-          </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={440} label="第三步：勾選、發布">
-            <MapArrow x1={708} x2={924} y={110} hot draw />
-            <Build><LoopStop x={1020} n={3} kind="upload" label="勾選、發布" tag="第 4 堂：發布" /></Build>
-          </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={440} label="第四步：自己從首頁點一遍，然後下週再一輪">
-            <MapArrow x1={1116} x2={1332} y={110} hot draw />
-            <Build><LoopStop x={1428} n={4} kind="home" label="從首頁點一遍" tag="第 4 堂：檢查" /></Build>
-            <Build i={1}><g fill="none" stroke={amber} strokeWidth="4" strokeDasharray="10 8"><path d="M1428 326 C1428 420 204 420 204 336" /></g></Build>
-            <Build i={2}><polygon points="204,326 194,344 214,344" fill={amber} /><text x="816" y="436" textAnchor="middle" fontSize="27" fontWeight="600" fill={amber}>下週再一輪</text></Build>
-          </Layer></Step>
-        </Steps>
-      </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>每週做一輪，網站就多一張有出處的卡</Takeaway></Step></Steps>
-    </Fit>
-  </Shell>
-);
-
-const NextSteps: Page = () => (
-  <Shell source={'obsidian-wiki 文件 github.com/Ar9av/obsidian-wiki'}>
-    <Eyebrow>選修延伸｜課後</Eyebrow>
-    <Heading>發布前，用 obsidian-wiki 整理</Heading>
-    <Fit>
-      <div style={{ display: 'grid', gap: 28 }}>
-        <Steps>
-          <SkillRow i={0} cmd="$wiki-ingest" what="收新資料，整理成卡片" icon={<g>
-            <DocShape x={4} y={14} w={40} h={52} /><MapArrow x1={50} x2={74} y={40} hot /><Folder x={78} y={18} w={30} h={44} />
-          </g>} />
-          <Step duration={STEP_MS}><SkillRow cmd="$wiki-query" what="查答案，附出處" icon={<g>
-            <circle cx="44" cy="36" r="24" fill="none" stroke={okGreen} strokeWidth="5" /><path d="M62 54 l22 22" stroke={okGreen} strokeWidth="6" strokeLinecap="round" />
-          </g>} /></Step>
-          <Step duration={STEP_MS}><SkillRow cmd="$wiki-lint" what="健檢：斷連結、沒人連到的頁" icon={<g>
-            <rect x="6" y="28" width="38" height="24" rx="12" fill="none" stroke={faint} strokeWidth="5" /><rect x="66" y="28" width="38" height="24" rx="12" fill="none" stroke={faint} strokeWidth="5" />
-            <path d="M50 22 L60 58" stroke={warn} strokeWidth="5" strokeLinecap="round" />
-          </g>} /></Step>
-        </Steps>
-      </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={48}>整理、查證、健檢完，再按發布</Takeaway></Step></Steps>
-    </Fit>
-  </Shell>
-);
-
 // ---------- References ----------
 
 // One cited work: who and where on the first line, the title under it.
@@ -2083,7 +2003,7 @@ const deck: Page[] = [
   Section2, InstallPlugin, ConnectForestry, KeySafety, PublishFlag, HomeFlag, PublishCommand, PublishStatus, BuildStep, SlugFail, SlugFix, Practice2,
   Section3, FrontmatterCheck, AddFlag, Practice31, HtmlTest, NavPage, Practice32,
   Section4, EditAgain, Practice4, NotUpdated, FinalResult,
-  CourseRecap, Closing, NextSteps, ReferencesGarden, ReferencesDeploy,
+  CourseRecap, ReferencesGarden, ReferencesDeploy,
   AppendixIndex, HtmlLinks, WebsiteIs, CiCd,
 ];
 
@@ -2112,7 +2032,7 @@ const NOTES = new Map<Page, string>([
   [Agenda, `05:30–08:00
 四章、五個練習，中間還有一個小練習當休息。章節的順序，就是真的做一遍會遇到的順序：遇到什麼，就在那一步講什麼。
 右上角是今天的步驟手冊 prompts.md：課前作業和每個練習的步驟都在裡面，請現在在筆電打開，整堂課開著；後面只有練習 3-2 那頁會再放一次這個連結。網址：${PROMPTS_URL}
-第一章開一座花園：註冊 Forestry.md、種一座花園，練習 1 打開自己的網址。第二章連上 Obsidian：裝外掛、連上 Forestry，看〈三國演義〉開頭的發布設定，按發布，回 Forestry 看結果；第一次發布常會失敗，就在這一章修好再發布，練習 2 把整段自己做一遍。第三章挑卡發布：決定哪些卡公開，練習 3-1 讓時間軸上線，練習 3-2 做導覽頁。第四章更新與檢查：小練習改一句再發布，練習 4 從首頁點到新卡，點不開就照四個檢查查；最後看成果、回顧四堂課、課後怎麼繼續，留幾分鐘問答。
+第一章開一座花園：註冊 Forestry.md、種一座花園，練習 1 打開自己的網址。第二章連上 Obsidian：裝外掛、連上 Forestry，看〈三國演義〉開頭的發布設定，按發布，回 Forestry 看結果；第一次發布常會失敗，就在這一章修好再發布，練習 2 把整段自己做一遍。第三章挑卡發布：決定哪些卡公開，練習 3-1 讓時間軸上線，練習 3-2 做導覽頁。第四章更新與檢查：小練習改一句再發布，練習 4 從首頁點到新卡，點不開就照四個檢查查；最後看成果、回顧四堂課，剩下的時間問答。
 比較可能卡住的是第一、二章的帳號和連線。上週的課前作業是註冊 Forestry.md 帳號、種一座花園，等一下第 ${pageOf(ForestryAccount)} 頁會確認；沒註冊的人，現場用 email 或 GitHub 帳號註冊。`],
   [Section1, `08:00–08:30
 第一章：開一座花園。在 Forestry.md 種出自己的網址，先讓大家有一個打得開的網站。`],
@@ -2312,20 +2232,12 @@ dg-publish 是「要公開」的勾。左邊是你的知識庫，五張卡，三
 按一下：練習 3-2，知識庫導覽。
 按一下：練習 4，三英戰呂布。還沒打勾的，照第 ${pageOf(NotUpdated)} 頁的四個檢查一項一項查，課後再補也可以。
 最後一下：三項都打勾，今天的網站就完成了。範例多了幾張卡和〈劉備的故事線〉，課後想對照，網址在第 ${pageOf(FinalSite)} 頁的參考列。`],
-  [CourseRecap, `106:30–109:00
+  [CourseRecap, `106:30–109:00（109:00–120:00 問答）
 四堂課走一圈。上面是四個成果：大綱、知識庫、時間軸、網站。
 按一下：RAG 這條線。第一堂知道 Web Search 是一種 RAG；第二堂在自己的知識庫查資料、附出處；第三堂的時間軸只照卡片上寫的回目和年份排，沒寫的不補；今天，卡片上寫的出處會跟著卡片一起發布到網站上。
 按一下：Obsidian 這條線。第一堂只預告；第二堂安裝、連結、畫關係圖；第三堂用卡片上的回目排出時間軸；今天用 Digital Garden 發布。
 按一下：Skills 這條線。第一堂預告 AGENTS.md；第三堂安裝熱門 Skill、自己寫一個；今天把 Skill 的產出放上網站。
-最後一下：四堂課都在擴充同一個三國知識庫，每一堂都用上一堂的成果。`],
-  [NextSteps, `111:30–120:00
-最後是選修延伸，給想多做一點的人。obsidian-wiki 是一組整理知識庫的 Skill（GitHub 專案和 pip 套件都叫 obsidian-wiki），放在發布之前用：
-$wiki-ingest：收新資料，整理成卡片，對應循環的第一步。
-按一下：$wiki-query：查答案，附出處，做法像第二堂的 RAG，對應第二步。
-按一下：$wiki-lint：健檢，找斷掉的連結、沒有任何卡連到的頁、缺屬性的頁。它找到的斷連結，發布後在網站上多半也點不開。
-安裝（需要 Python 3）：pip install obsidian-wiki，再 obsidian-wiki setup --vault <知識庫完整路徑>，最後 obsidian-wiki doctor 檢查。裝好後在 Codex 打開知識庫，說「set up my wiki」。
-完整說明：https://github.com/Ar9av/obsidian-wiki/blob/main/docs/installation.md 、https://github.com/Ar9av/obsidian-wiki/blob/main/docs/skills.md
-最後一下：整理、查證、健檢完，再按發布。後面兩頁是參考資料，再後面是附錄，課後有興趣再看。114:00 之後的時間留給大家發問。謝謝大家這四堂課。`],
+最後一下：四堂課都在擴充同一個三國知識庫，每一堂都用上一堂的成果。後面兩頁是參考資料，再後面是附錄，課後有興趣再看。109:00 之後的時間留給大家發問。謝謝大家這四堂課。`],
   [AppendixIndex, `（課後自讀，上課不講。）
 附錄三頁，給想多懂一點的同學：時間軸要自己改 HTML 時，哪種連結寫法點得開；打一個網址，網頁從哪來；工程師說的自動部署是什麼。`],
   [ReferencesGarden, `（課後自讀，上課不講。）
@@ -2350,13 +2262,6 @@ Obsidian、Markdown：
 Digital Garden 外掛設定：
 - obsidian-digital-garden 2.103.0 設定 Simple note URLs：說明寫「note names use non-Latin characters 就關掉」。https://github.com/oleeskild/obsidian-digital-garden
 - 想自己架（GitHub＋Vercel，要申請 token）：Digital Garden 入門 https://docs.forestry.md/getting-started/01-getting-started/`],
-  [Closing, `109:00–111:30
-課程結束後，知識庫怎麼繼續擴充？給大家一個每週做一次的小循環，四步都是這四堂學過的。
-第一步：新增一張卡。用第一堂的 Codex，或第三堂的 Skill，照原文寫一張新的人物或事件卡。
-按一下：第二步：核對出處。第二堂的 RAG：每一句都要找得到原文，找不到就刪。
-按一下：第三步：勾 dg-publish、按發布，也把新卡加進導覽頁。這是今天第四堂做的事。
-按一下：第四步：自己從首頁點一遍，確認點得到這張新卡，就像今天的練習 4。然後下週再來一輪。
-最後一下：每週做一輪，網站就多一張有出處的卡。`],
 ]);
 
 export const notes: (string | undefined)[] = deck.map(page => NOTES.get(page));
