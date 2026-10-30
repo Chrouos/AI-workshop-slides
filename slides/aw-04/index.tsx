@@ -1319,10 +1319,10 @@ const FrontmatterCheck: Page = () => (
     <Fit>
       <Stage h={470}>
         <Steps>
-          <Layer h={470} label="人物/劉備.md 經過 eli5 改寫，產生 劉備-國中生版.md">
+          <Layer h={470} label="人物/劉備.md 經過 eli5 改寫，產生 劉備-5歲版.md">
             <InG i={0}><SourceDoc x={0} y={0} w={620} h={268} name="人物/劉備.md" lines={['---', 'dg-publish: true', '---', '劉備，字玄德，是中山靖王之後']} /></InG>
             <InG i={1}><MapArrow x1={640} x2={992} y={124} hot /><text x="816" y="104" textAnchor="middle" fontSize="28" fontWeight="600" fill={amber}>eli5 改寫</text></InG>
-            <InG i={2}><SourceDoc x={1012} y={0} w={620} h={268} name="劉備-國中生版.md" lines={['---', 'dg-publish: true', '---', '劉備，字玄德，是中山靖王的後代。']} highlight={1} /></InG>
+            <InG i={2}><SourceDoc x={1012} y={0} w={620} h={268} name="劉備-5歲版.md" lines={['---', 'dg-publish: true', '---', '劉備，字玄德，是中山靖王的後代。']} highlight={1} /></InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={470} label="改寫版連 dg-publish: true 也一起抄過去">
             <Build>
@@ -1335,7 +1335,7 @@ const FrontmatterCheck: Page = () => (
             <Build>
               <BrowserFrame x={830} y={306} w={802} h={160} url="….forestry.md" />
               <SvgChip x={860} y={378} w={180} h={56} label="劉備" size={27} />
-              <SvgChip x={1060} y={378} w={290} h={56} label="劉備-國中生版" size={27} fill={warnSoft} stroke={warn} />
+              <SvgChip x={1060} y={378} w={290} h={56} label="劉備-5歲版" size={27} fill={warnSoft} stroke={warn} />
               <text x="1374" y="415" fontSize="26" fontWeight="600" fill={warn}>多一張劉備</text>
             </Build>
           </Layer></Step>
@@ -1446,7 +1446,7 @@ const NavPage: Page = () => (
               <Step duration={STEP_MS}><><div style={{ marginBottom: 14 }}><StatusLine ok size={30}>導覽頁有 dg-publish: true</StatusLine></div><Spot box={[18, 90, 272, 40]} /></></Step>
               <Step duration={STEP_MS}><><div style={{ marginBottom: 14 }}><StatusLine ok size={30}>首頁連到 [[知識庫導覽]]</StatusLine></div><Spot box={[852, 56, 316, 66]} /></></Step>
               <Step duration={STEP_MS}><><div style={{ marginBottom: 14 }}><StatusLine ok size={30}>連到的卡都有 dg-publish</StatusLine></div><Spot box={[238, 144, 530, 254]} /></></Step>
-              <Step duration={STEP_MS}><div><StatusLine ok size={30}>國中生版沒公開（除非你要）</StatusLine></div></Step>
+              <Step duration={STEP_MS}><div><StatusLine ok size={30}>5 歲版沒公開（除非你要）</StatusLine></div></Step>
             </Steps>
           </div>
         </div>
@@ -2225,10 +2225,10 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
 最後一下：屬性面板打勾，等於原始檔寫 dg-publish: true。
 另一個方法：打開那張卡，Ctrl／Cmd + P，執行 Digital Garden: Add publish flag，它會幫你加上這行。`],
   [FrontmatterCheck, `60:00–62:30
-這是第三堂實測時發生的事。我們用 eli5 把 人物/劉備.md 改寫成國中生看得懂的版本，存成 劉備-國中生版.md。內容是對的。
+這是第三堂實測時發生的事。我們用 eli5 把 人物/劉備.md 改寫成 5 歲小孩聽得懂的版本，存成 劉備-5歲版.md。內容是對的。
 按一下：但它把開頭的 dg-publish: true 也一起抄了過去。
-按一下：結果是一發布，網站上會多一張〈劉備-國中生版〉，和原本的〈劉備〉並排，讀者會搞不清楚哪張才對。
-按一下：如果有 dg-publish、又不想公開，就刪掉那行，或在屬性取消勾選。第三堂的 eli5 提示詞現在最後一句是「新檔不要加 dg-publish。」，所以你的國中生版可能本來就沒有這行；講師實測那次是舊提示詞，才會抄過去。
+按一下：結果是一發布，網站上會多一張〈劉備-5歲版〉，和原本的〈劉備〉並排，讀者會搞不清楚哪張才對。
+按一下：如果有 dg-publish、又不想公開，就刪掉那行，或在屬性取消勾選。第三堂的 eli5 提示詞現在最後一句是「新檔不要加 dg-publish。」，所以你的5 歲版可能本來就沒有這行；講師實測那次是舊提示詞，才會抄過去。
 按一下：反過來的情況也有。第三堂時間軸 Skill 實跑產出的 時間軸.md，開頭完全沒有屬性，直接就是一段 HTML。它不會被發布；練習 3-1 會幫它加上。
 最後一下：新卡發布前，先看開頭三行。不想公開的卡刪掉 dg-publish，要公開的卡缺了就補上。`],
   [Practice31, `62:30–70:30
@@ -2252,7 +2252,7 @@ Garden Key 就像你網站的鑰匙。Forestry 自己的說明寫：有了這把
 按一下：導覽頁有 dg-publish: true。
 按一下：首頁最後一行連到 [[知識庫導覽]]。
 按一下：導覽頁連到的每張卡都要有 dg-publish。連到的卡不會自動一起發布，少勾一張，網站上那個連結就點不開。講師的 12 張範例卡本來就勾好了；沒勾的通常是第三堂新增的〈白門樓〉〈草船借箭〉、你第二堂自己寫的卡，時間軸在練習 3-1 已經勾好了。一張張打開太慢，練習 3-2 會請 Codex 只列清單，你再打開核對。不想公開的卡，就把它從導覽頁拿掉。
-按一下：〈劉備-國中生版〉沒有公開，除非你本來就想公開它。
+按一下：〈劉備-5歲版〉沒有公開，除非你本來就想公開它。
 最後一下：人物、事件的連結，都放在導覽頁。`],
   [PublishCommand, `32:00–33:30
 發布要用命令面板。按 Ctrl／Cmd + P，打 garden，就會列出 Digital Garden 的所有指令。這是講師的實際畫面，外掛 2.103.0。
