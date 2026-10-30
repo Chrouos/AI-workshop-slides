@@ -2,4 +2,4 @@ packages:
   - .
 
 patchedDependencies:
-  '@open-slide/core@2.0.1': patches/open-slide-core-2.0.1-text-edit.patch
+  '@open-slide/core@2.3.1': patches/open-slide-core-2.3.1-text-edit.patch
