@@ -360,12 +360,12 @@ const CueSpan = ({ n, delay = 0, children }: { n: 1 | 2 | 3 | 4; delay?: number;
 );
 
 // An outline that frames a piece of text; with n it appears with <Cue n>.
-const Ring = ({ n, children, inline = false }: { n: 1 | 2 | 3; children: ReactNode; inline?: boolean }) => {
+const Ring = ({ n, children, inline = false, color = amber }: { n: 1 | 2 | 3; children: ReactNode; inline?: boolean; color?: string }) => {
   const Tag = inline ? 'span' : 'div';
   return (
     <Tag style={{ position: 'relative', display: inline ? 'inline-block' : 'block' }}>
       {children}
-      <span className="aw1-cue" data-cue={n} style={{ position: 'absolute', inset: '-3px -8px', border: `3px solid ${amber}`, pointerEvents: 'none' }} />
+      <span className="aw1-cue" data-cue={n} style={{ position: 'absolute', inset: '-3px -8px', border: `3px solid ${color}`, pointerEvents: 'none' }} />
     </Tag>
   );
 };
@@ -379,9 +379,9 @@ const TRow = ({ cells, cols, head = false, tint, size = 30 }: { cells: ReactNode
 );
 
 // One line of a prompt squeezed to three labelled pills, ≤10 字 each.
-const Pill = ({ tag, children }: { tag: ReactNode; children: ReactNode }) => (
-  <span style={{ display: 'inline-flex', alignItems: 'stretch', border: `2px solid ${amber}`, borderRadius: 32, overflow: 'hidden', fontSize: 28, whiteSpace: 'nowrap' }}>
-    <span style={{ background: amber, color: '#FFFFFF', fontWeight: 600, padding: '8px 18px' }}>{tag}</span>
+const Pill = ({ tag, children, color = amber }: { tag: ReactNode; children: ReactNode; color?: string }) => (
+  <span style={{ display: 'inline-flex', alignItems: 'stretch', border: `2px solid ${color}`, borderRadius: 32, overflow: 'hidden', fontSize: 28, whiteSpace: 'nowrap' }}>
+    <span style={{ background: color, color: '#FFFFFF', fontWeight: 600, padding: '8px 18px' }}>{tag}</span>
     <span style={{ background: '#FFFFFF', padding: '8px 22px' }}>{children}</span>
   </span>
 );
@@ -618,17 +618,13 @@ const CourseMap: Page = () => (
   </Shell>
 );
 
-// A table-of-contents row: chapter, the thing you walk away with, time and page.
-const AGENDA_COLS = '90px 1fr 600px 180px';
+// A table-of-contents row: chapter, time and page.
+const AGENDA_COLS = '90px 1fr 220px';
 
-const AgendaRow = ({ i, n, numberLabel, name, kind, result, time, page }: { i: number; n: Chapter; numberLabel: ReactNode; name: ReactNode; kind: IconKind; result: ReactNode; time: ReactNode; page: Page }) => (
+const AgendaRow = ({ i, numberLabel, name, time, page }: { i: number; n: Chapter; numberLabel: ReactNode; name: ReactNode; time: ReactNode; page: Page }) => (
   <In i={i} style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, alignItems: 'center', minHeight: 104, borderBottom: `1px solid ${rule}` }}>
     <span style={{ fontFamily: display, fontSize: 40, color: amber }}>{numberLabel}</span>
     <span style={{ fontSize: 38, fontWeight: 600 }}>{name}</span>
-    <span style={{ display: 'flex', alignItems: 'center', gap: 22 }}>
-      <Icon kind={kind} size={52} color={amber} />
-      <span style={{ fontSize: 30 }}>{result}</span>
-    </span>
     <span style={{ textAlign: 'right' }}><span style={{ display: 'block', fontSize: 26, color: amber }}>{time}</span><span style={{ display: 'block', fontSize: 24, color: quiet, marginTop: 4 }}><span>第 </span>{pageOf(page)}<span> 頁</span></span></span>
   </In>
 );
@@ -639,13 +635,13 @@ const Agenda: Page = () => (
     <Heading><span>今天的五章</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, paddingBottom: 12, borderBottom: `1px solid ${rule}` }}>
-        <span /><SmallLabel><span>章節</span></SmallLabel><SmallLabel><span>結束時你會</span></SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel><span>時間｜頁</span></SmallLabel></span>
+        <span /><SmallLabel><span>章節</span></SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel><span>時間｜頁</span></SmallLabel></span>
       </div>
-      <AgendaRow i={0} n={1} numberLabel={<span>01</span>} name={<span>{"AI 怎麼走到今天"}</span>} kind="think" result={<span>{"知道 AI 為什麼會說錯"}</span>} time={<span>{"10–38 分"}</span>} page={Section1} />
-      <AgendaRow i={1} n={2} numberLabel={<span>02</span>} name={<span>{"ChatGPT 與 Codex"}</span>} kind="search" result={<span>{"分得清 ChatGPT 和 Codex"}</span>} time={<span>{"38–50 分"}</span>} page={Section2} />
-      <AgendaRow i={2} n={3} numberLabel={<span>03</span>} name={<span>{"安裝 Codex"}</span>} kind="down" result={<span>{"電腦裡有 Codex"}</span>} time={<span>{"50–67 分"}</span>} page={Section3} />
-      <AgendaRow i={3} n={4} numberLabel={<span>04</span>} name={<span>{"看懂 Codex"}</span>} kind="terminal" result={<span>{"會看 /status、寫規則"}</span>} time={<span>{"67–84 分"}</span>} page={Section4} />
-      <AgendaRow i={4} n={5} numberLabel={<span>05</span>} name={<span>{'使用 Codex'}<br />{''}</span>} kind="doc" result={<span>{'建立自己的知識庫'}</span>} time={<span>{"84–112 分"}</span>} page={Section5} />
+      <AgendaRow i={0} n={1} numberLabel={<span>01</span>} name={<span>{"AI 怎麼走到今天"}</span>} time={<span>{"10–38 分"}</span>} page={Section1} />
+      <AgendaRow i={1} n={2} numberLabel={<span>02</span>} name={<span>{"ChatGPT 與 Codex"}</span>} time={<span>{"38–50 分"}</span>} page={Section2} />
+      <AgendaRow i={2} n={3} numberLabel={<span>03</span>} name={<span>{"安裝 Codex"}</span>} time={<span>{"50–67 分"}</span>} page={Section3} />
+      <AgendaRow i={3} n={4} numberLabel={<span>04</span>} name={<span>{"看懂 Codex"}</span>} time={<span>{"67–84 分"}</span>} page={Section4} />
+      <AgendaRow i={4} n={5} numberLabel={<span>05</span>} name={<span>{'使用 Codex'}</span>} time={<span>{"84–112 分"}</span>} page={Section5} />
     </Fit>
   </Shell>
 );
@@ -761,7 +757,7 @@ const NextWordGame: Page = () => (
   <Shell chapter={1} source={<span>{'Radford et al. 2018, Improving Language Understanding by Generative Pre-Training（GPT-1, OpenAI）'}</span>}>
     <Eyebrow><span>GPT＝生成式預訓練模型</span></Eyebrow>
     <Heading><span>下一個 Token 預測（Next-Token Prediction）</span></Heading>
-    <Lead><span>看前面的字，接下一個最順的字</span></Lead>
+    <Lead><span>看前面的字，挑一個通順的字接上</span></Lead>
     <Fit z={1.1}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: 36 }}>
         <In i={0}>
@@ -952,15 +948,21 @@ const Randomness: Page = () => (
             </g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={520} label="溫度旋鈕：低就穩定，高就多變">
-            <text x="1220" y="60" textAnchor="middle" fontSize="32" fontWeight="600" fill={ink}>溫度（Temperature）</text>
-            <path d="M1020 330 A200 200 0 0 1 1220 130" fill="none" stroke={sage} strokeWidth="40" />
-            <path d="M1220 130 A200 200 0 0 1 1420 330" fill="none" stroke={amberSoft} strokeWidth="40" />
-            <g stroke={ink} strokeWidth="7" strokeLinecap="round" fill="none"><StepPath d="M1220 330 L1340 210" i={1} /></g>
-            <circle cx="1220" cy="330" r="16" fill={ink} />
-            <text x="1010" y="384" textAnchor="middle" fontSize="32" fontWeight="600" fill={okGreen}>低</text>
-            <text x="1430" y="384" textAnchor="middle" fontSize="32" fontWeight="600" fill={amber}>高</text>
-            <text x="1220" y="440" textAnchor="middle" fontSize="28" fill={ink}>低：常挑同一個字，比較穩</text>
-            <text x="1220" y="484" textAnchor="middle" fontSize="28" fill={ink}>高：常換說法，比較多變</text>
+            <g className="aw1-build" style={buildDelay(0)}><text x="1220" y="60" textAnchor="middle" fontSize="32" fontWeight="600" fill={ink}>溫度（Temperature）</text></g>
+            <g className="aw1-build" style={buildDelay(1)} fill="none">
+              <path d="M1020 330 A200 200 0 0 1 1420 330" stroke={rule} strokeWidth="44" />
+              <path d="M1020 330 A200 200 0 0 1 1420 330" stroke={raised} strokeWidth="38" />
+            </g>
+            <g stroke={ink} strokeWidth="7" strokeLinecap="round" fill="none"><StepPath d="M1220 330 L1340 210" i={2} /></g>
+            <circle className="aw1-steppop" style={buildDelay(2)} cx="1220" cy="330" r="16" fill={ink} />
+            <g className="aw1-build" style={buildDelay(3)}>
+              <text x="1010" y="384" textAnchor="middle" fontSize="32" fontWeight="600" fill={ink}>低</text>
+              <text x="1220" y="440" textAnchor="middle" fontSize="28" fill={ink}>低：常挑同一個字，比較穩</text>
+            </g>
+            <g className="aw1-build" style={buildDelay(4)}>
+              <text x="1430" y="384" textAnchor="middle" fontSize="32" fontWeight="600" fill={ink}>高</text>
+              <text x="1220" y="484" textAnchor="middle" fontSize="28" fill={ink}>高：常換說法，比較多變</text>
+            </g>
           </Layer></Step>
         </Steps>
       </Stage>
@@ -988,7 +990,7 @@ const WhatIsHallucination: Page = () => (
   <Shell chapter={1} source={<span>{'Ji et al. 2023, Survey of Hallucination in Natural Language Generation, arXiv:2202.03629'}</span>}>
     <Eyebrow><span>猜出來的字，可能是錯的</span></Eyebrow>
     <Heading><span>AI 幻覺（Hallucination）</span></Heading>
-    <Lead><span>像考試硬掰：寫得很順，其實沒讀過</span></Lead>
+    <Lead><span>像考試硬掰：沒把握，也寫得很順</span></Lead>
     <Fit>
       <In i={0} style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 56 }}>
         <Icon kind="chat" size={64} color={muted} />
@@ -1004,7 +1006,7 @@ const WhatIsHallucination: Page = () => (
           </Step>
         </Steps>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={64}><span>內容和事實對不上，語氣卻很肯定，就叫幻覺</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={64}><span>內容和事實對不上就叫幻覺，語氣常常很肯定</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -1104,7 +1106,7 @@ const WhyHallucinate: Page = () => (
           <Step duration={STEP_MS}><Layer h={440} label="中間少了查證這一步">
             <rect x="1010" y="110" width="240" height="140" fill="#FFFFFF" stroke={warn} strokeWidth="3" strokeDasharray="12 9" />
             <text x="1130" y="172" textAnchor="middle" fontSize="34" fontWeight="600" fill={warn}>查證</text>
-            <text x="1130" y="216" textAnchor="middle" fontSize="26" fill={warn}>跳過了</text>
+            <text x="1130" y="216" textAnchor="middle" fontSize="26" fill={warn}>沒有這步</text>
             <g className="aw1-build" style={buildDelay(1)}><NoDot x={1240} y={110} r={26} /></g>
           </Layer></Step>
         </Steps>
@@ -1120,12 +1122,6 @@ const QuestionCard = ({ children, right }: { children: ReactNode; right?: ReactN
     <span style={{ fontSize: 34 }}>{children}</span>
     {right ? <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 18 }}>{right}</span> : null}
   </In>
-);
-
-const LegendKey = ({ color, children }: { color: string; children: ReactNode }) => (
-  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 25, color, fontWeight: 600 }}>
-    <span style={{ width: 22, height: 22, background: color, display: 'inline-block' }} /><span>{children}</span>
-  </span>
 );
 
 const FlowBox = ({ x, y, w, label, tone = 'plain' }: { x: number; y: number; w: number; label: ReactNode; tone?: 'plain' | 'step' | 'ok' | 'bad' }) => {
@@ -1251,8 +1247,7 @@ const CotWhy: Page = () => (
         </Steps>
       </div>
       <Steps>
-        <Step duration={STEP_MS}><div style={{ marginTop: 28 }}><StatusLine ok={false} size={30}><span>步驟也是模型寫的：錯一步，後面跟著錯；算術還是心算</span></StatusLine></div></Step>
-        <Step duration={STEP_MS}><Takeaway marginTop={24}><span>寫下的步驟變成前文，下一步比較好預測</span></Takeaway></Step>
+        <Step duration={STEP_MS}><Takeaway marginTop={44}><span>寫下的步驟變成前文，下一步比較好預測</span></Takeaway></Step>
       </Steps>
     </Fit>
   </Shell>
@@ -1280,7 +1275,7 @@ const CotPage: Page = () => (
   <Shell chapter={1} source={<span>{'Wei et al. 2022, arXiv:2201.11903；Gao et al. 2023, PAL, arXiv:2211.10435'}</span>}>
     <Eyebrow><span>例子｜Codex 實際輸出</span></Eyebrow>
     <Heading><span>CoT＋Tool Calling 實例</span></Heading>
-    <QuestionCard right={<><LegendKey color={blue}><span>CoT</span></LegendKey><LegendKey color={amber}><span>Tool Calling</span></LegendKey></>}><span>籠子裡有 35 個頭、94 隻腳，雞和兔各幾隻？</span></QuestionCard>
+    <QuestionCard><span>籠子裡有 35 個頭、94 隻腳，雞和兔各幾隻？</span></QuestionCard>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '760px 1fr', gap: 28, alignItems: 'start' }}>
         <div style={{ display: 'grid', gap: 14 }}>
@@ -1326,8 +1321,7 @@ const ToolCalc: Page = () => (
   <Shell chapter={1} source={<span>{'Gao et al. 2023, PAL, arXiv:2211.10435；Schick et al. 2023, Toolformer, arXiv:2302.04761'}</span>}>
     <Eyebrow><span>CoT 會想，但算術還是心算 → 交給工具算</span></Eyebrow>
     <Heading><span>工具呼叫（Tool Calling）</span></Heading>
-    <Lead><span>像把算式輸入計算機，按下「＝」</span></Lead>
-    <In i={0} style={{ marginTop: 14, fontSize: 28 }}><strong style={{ color: amber }}>Tool Calling（工具呼叫）</strong><span>：模型寫一行程式或呼叫工具，讓工具算出結果</span></In>
+    <Lead><span>模型寫一行程式或呼叫工具，讓工具算出結果，像按計算機的「＝」</span></Lead>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '470px 1fr', gap: 40, alignItems: 'center' }}>
         <div>
@@ -1365,16 +1359,17 @@ const ToolCalc: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}><span>工具執行計算，同一題每次結果都一樣</span></Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={36}><span>工具執行計算，同一個算式重跑，結果相同</span></Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
 
 // One way to answer the long sum. The method shows first; its answer (and how much to trust it)
 // is its own click, so the room can guess before seeing the result.
-const WayCard = ({ kind, name, like, result, verdict, why, tone, shot }: { kind: IconKind; name: ReactNode; like: ReactNode; result: ReactNode; verdict: ReactNode; why?: string; tone: 'bad' | 'mid' | 'good'; shot?: ReactNode }) => {
-  const c = tone === 'bad' ? warn : tone === 'mid' ? blue : okGreen;
-  const soft = tone === 'bad' ? warnSoft : tone === 'mid' ? blueSoft : sage;
+const WayCard = ({ kind, name, like, result, verdict, why, tone, shot }: { kind: IconKind; name: ReactNode; like: ReactNode; result: ReactNode; verdict: ReactNode; why?: string; tone: 'bad' | 'mid' | 'tool'; shot?: ReactNode }) => {
+  // Card colour names the method (blue = CoT, amber = Tool Calling, as on the next page); ✓/✗/△ in the verdict says how it went.
+  const c = tone === 'bad' ? warn : tone === 'mid' ? blue : amber;
+  const soft = tone === 'bad' ? warnSoft : tone === 'mid' ? blueSoft : amberSoft;
   return (
     <div style={{ background: soft, borderTop: `6px solid ${c}`, padding: '26px 30px 30px', height: '100%', boxSizing: 'border-box', display: 'grid', justifyItems: 'center', alignContent: 'start', gap: 16, textAlign: 'center' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}><Icon kind={kind} size={60} color={c} /><span style={{ fontSize: 40, fontWeight: 600 }}>{name}</span></div>
@@ -1400,9 +1395,9 @@ const ToolCompare: Page = () => (
     <Heading><span>三種解法：直接答、CoT、工具</span></Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, alignItems: 'stretch' }}>
-        <In i={1}><WayCard kind="dice" name={<span>{"直接回答"}</span>} like={<span>{"猜"}</span>} result={<span>{"8460"}</span>} verdict={<span>{"✗ 錯，每次還不一樣"}</span>} why="ChatGPT 實際畫面｜不准它算" tone="bad" shot={<Crop src={guess8460} alt="ChatGPT 被要求不可以偷偷計算，回答：我不算，純猜：8460" iw={1794} ih={456} crop={[118, 268, 364, 78]} width={460} />} /></In>
-        <In i={2}><WayCard kind="think" name={<span>{"CoT（Thinking）"}</span>} like={<span>{"心算、列步驟"}</span>} result={<span>{"8484"}</span>} verdict={<span>{"可能錯，步驟要核對"}</span>} why="還是心算" tone="mid" /></In>
-        <In i={3}><WayCard kind="calc" name={<span>{"Tool Calling"}</span>} like={<span>{"按計算機"}</span>} result={<span>{"8484"}</span>} verdict={<span>{"✓ 每次都一樣"}</span>} why="可以重跑，也看得到算式" tone="good" /></In>
+        <In i={1}><WayCard kind="dice" name={<span>{"直接回答"}</span>} like={<span>{"猜"}</span>} result={<span>{"8460"}</span>} verdict={<span>{"✗ 錯，每次可能不同"}</span>} why="ChatGPT 實際畫面｜不准它算" tone="bad" shot={<Crop src={guess8460} alt="ChatGPT 被要求不可以偷偷計算，回答：我不算，純猜：8460" iw={1794} ih={456} crop={[118, 268, 364, 78]} width={460} />} /></In>
+        <In i={2}><WayCard kind="think" name={<span>{"CoT（Thinking）"}</span>} like={<span>{"心算、列步驟"}</span>} result={<span>{"8484"}</span>} verdict={<span>{"△ 可能錯，步驟要核對"}</span>} why="還是心算" tone="mid" /></In>
+        <In i={3}><WayCard kind="calc" name={<span>{"Tool Calling"}</span>} like={<span>{"按計算機"}</span>} result={<span>{"8484"}</span>} verdict={<span>{"✓ 同一算式，結果相同"}</span>} why="可以重跑，也看得到算式" tone="tool" /></In>
       </div>
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}><span>需要精確計算時，交給 Tool Calling</span></Takeaway></Step></Steps>
     </Fit>
@@ -1989,10 +1984,9 @@ const InstallCodex: Page = () => (
           </Terminal>
         </In>
         <In i={2}>
-          <div style={{ padding: '22px 28px', background: surface, borderLeft: `5px solid ${amber}`, fontSize: 32, lineHeight: 1.5 }}>
-            <div>裝好後，重開終端機或 PowerShell，輸入 <Path size={32}>codex --version</Path></div>
-            <div style={{ marginTop: 8, color: muted }}>看到版本號就成功，先不用打 <Path size={32}>codex</Path></div>
-            <div style={{ marginTop: 8, fontSize: 26, color: quiet }}><span>出現 command not found？看附錄第 </span>{pageOf(PathFixMac)}<span>–</span>{pageOf(InstallErrors)}<span> 頁</span></div>
+          <div style={{ padding: '18px 28px', background: surface, borderLeft: `5px solid ${amber}`, fontSize: 32, lineHeight: 1.5 }}>
+            <div>重開視窗，輸入 <Path size={32}>codex --version</Path><span style={{ color: muted }}>：看到版本號就成功，先不用打 </span><Path size={32}>codex</Path></div>
+            <div style={{ marginTop: 6, fontSize: 26, color: quiet }}><span>出現 command not found？看附錄第 </span>{pageOf(PathFixMac)}<span>–</span>{pageOf(InstallErrors)}<span> 頁</span></div>
           </div>
         </In>
       </div>
@@ -2093,7 +2087,7 @@ const CodexTrust: Page = () => (
           <Terminal title={<span>{"終端機"}</span>} size={28}>
             <span>{'> You are in '}</span><HotLine><span>{'…/aw-01-lab/Codex_練習'}</span></HotLine><span>{'\n\n'}</span>
             <span>{'  Do you trust the contents of\n  this directory?\n\n'}</span>
-            <span>{'› '}</span><Ring n={1} inline><span>{'1. Yes, continue'}</span></Ring><span>{'\n  '}</span><Ring n={2} inline><span>{'2. No, quit'}</span></Ring><span>{'\n\n'}</span>
+            <span>{'› '}</span><Ring n={1} inline color={okGreen}><span>{'1. Yes, continue'}</span></Ring><span>{'\n  '}</span><Ring n={2} inline><span>{'2. No, quit'}</span></Ring><span>{'\n\n'}</span>
             <Dim><span>{'  Press enter to continue'}</span></Dim>
           </Terminal>
         </In>
@@ -2230,7 +2224,7 @@ const UsageBar = ({ y, label, pct, i = 0 }: { y: number; label: ReactNode; pct: 
 };
 
 const TokTile = ({ x, w, label, tint }: { x: number; w: number; label: ReactNode; tint: string }) => (
-  <g><rect x={x} y={150} width={w} height="76" fill={tint} stroke="#FFFFFF" strokeWidth="3" /><text x={x + w / 2} y={202} textAnchor="middle" fontSize="38" fill={ink}>{label}</text></g>
+  <g><rect x={x} y={150} width={w} height="76" fill={tint} stroke={rule} strokeWidth="2" /><text x={x + w / 2} y={202} textAnchor="middle" fontSize="38" fill={ink}>{label}</text></g>
 );
 
 const UsageToken: Page = () => (
@@ -2255,11 +2249,11 @@ const UsageToken: Page = () => (
             <text x="900" y="50" fontSize="46" fontWeight="600" fill={ink}>Token</text>
             <text x="900" y="98" fontSize="29" fill={muted}>AI 讀寫文字的單位（切法示意）</text>
             <g className="aw1-build" style={buildDelay(0)}>
-              <TokTile x={900} w={150} label={<tspan>{"今天"}</tspan>} tint={amberSoft} />
-              <TokTile x={1050} w={150} label={<tspan>{"天氣"}</tspan>} tint={blueSoft} />
-              <TokTile x={1200} w={100} label={<tspan>{"很"}</tspan>} tint={sage} />
-              <TokTile x={1300} w={100} label={<tspan>{"好"}</tspan>} tint={amberSoft} />
-              <TokTile x={1400} w={100} label={<tspan>{"。"}</tspan>} tint={blueSoft} />
+              <TokTile x={900} w={150} label={<tspan>{"今天"}</tspan>} tint={raised} />
+              <TokTile x={1050} w={150} label={<tspan>{"天氣"}</tspan>} tint={surface} />
+              <TokTile x={1200} w={100} label={<tspan>{"很"}</tspan>} tint={raised} />
+              <TokTile x={1300} w={100} label={<tspan>{"好"}</tspan>} tint={surface} />
+              <TokTile x={1400} w={100} label={<tspan>{"。"}</tspan>} tint={raised} />
             </g>
             <g className="aw1-build" style={buildDelay(1)}>
               <SvgChip x={900} y={290} w={220} h={64} label={<tspan>{"你的提示詞"}</tspan>} size={28} />
@@ -2267,7 +2261,7 @@ const UsageToken: Page = () => (
               <SvgChip x={1160} y={290} w={220} h={64} label={<tspan>{"讀到的檔案"}</tspan>} size={28} fill={amberSoft} stroke={amber} />
               <text x="1400" y="334" textAnchor="middle" fontSize="36" fill={faint}>＋</text>
               <SvgChip x={1420} y={290} w={212} h={64} label={<tspan>{"前面的對話"}</tspan>} size={28} />
-              <text x="1266" y="430" textAnchor="middle" fontSize="30" fontWeight="600" fill={amber}>＋模型的思考和回答＝這次用掉的 Token</text>
+              <text x="1266" y="430" textAnchor="middle" fontSize="30" fontWeight="600" fill={ink}>＋模型的思考和回答＝這次用掉的 Token</text>
             </g>
           </Layer></Step>
         </Steps>
@@ -2605,8 +2599,8 @@ const OutlinePrompt: Page = () => (
     <Heading><span>練習（RAG）：照原文寫大綱</span></Heading>
     <PillRow>
       <Pill tag={<span>{"定位"}</span>}><span>原文第 1–21 回</span></Pill>
-      <Pill tag={<span>{"期望輸出"}</span>}><span>三國演義大綱.md</span></Pill>
-      <Pill tag={<span>{"限制"}</span>}><span>原文沒寫的不加</span></Pill>
+      <Pill tag={<span>{"期望輸出"}</span>} color={okGreen}><span>三國演義大綱.md</span></Pill>
+      <Pill tag={<span>{"限制"}</span>} color={muted}><span>原文沒寫的不加</span></Pill>
     </PillRow>
     <Fit>
       <Stage h={360}>
@@ -2614,9 +2608,9 @@ const OutlinePrompt: Page = () => (
           <Layer h={360} label="Codex 讀原文資料夾的 21 個檔">
             <InG i={1}>
               <FlowStation x={150} label={<tspan>{"原文/ 21 回"}</tspan>}>
-                <DocShape x={70} y={110} w={120} h={150} fill={surface} />
-                <DocShape x={100} y={125} w={120} h={150} fill={surface} />
-                <DocShape x={130} y={140} w={120} h={150} />
+                <DocShape x={70} y={110} w={120} h={150} fill={amberSoft} stroke={amber} />
+                <DocShape x={100} y={125} w={120} h={150} fill={amberSoft} stroke={amber} />
+                <DocShape x={130} y={140} w={120} h={150} fill={amberSoft} stroke={amber} />
               </FlowStation>
             </InG>
             <InG i={2}><MapArrow x1={264} x2={362} y={200} /></InG>
@@ -2628,28 +2622,35 @@ const OutlinePrompt: Page = () => (
             </InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={360} label="先給你看草稿">
-            <MapArrow x1={572} x2={670} y={200} />
-            <FlowStation x={790} label={<tspan>{"先給你看"}</tspan>}>
-              <Bubble x={690} y={110} w={200} h={150} />
-              <rect x="714" y="140" width="150" height="12" fill={rule} />
-              <rect x="714" y="170" width="120" height="12" fill={rule} />
-              <rect x="714" y="200" width="140" height="12" fill={linkSoft} />
-              <rect x="714" y="230" width="100" height="12" fill={sage} />
-            </FlowStation>
+            <g className="aw1-build" style={buildDelay(0)}><MapArrow x1={572} x2={670} y={200} /></g>
+            <g className="aw1-steppop" style={buildDelay(1)}>
+              <FlowStation x={790} label={<tspan>{"先給你看"}</tspan>}>
+                <Bubble x={690} y={110} w={200} h={150} />
+                <rect x="714" y="140" width="150" height="12" fill={rule} />
+                <rect x="714" y="170" width="120" height="12" fill={rule} />
+                <rect x="714" y="200" width="140" height="12" fill={linkSoft} />
+                <rect x="714" y="230" width="100" height="12" fill={sage} />
+              </FlowStation>
+            </g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={360} label="你說可以，Codex 直接存成三國演義大綱.md">
-            <MapArrow x1={904} x2={1002} y={200} hot />
-            <FlowStation x={1120} label={<tspan>{"你說「可以」"}</tspan>}>
-              <rect x="1016" y="120" width="208" height="64" rx="32" fill={amberSoft} />
+            <g className="aw1-build" style={buildDelay(0)}><MapArrow x1={904} x2={1002} y={200} /></g>
+            <g className="aw1-steppop" style={buildDelay(1)}>
+              <rect x="1016" y="120" width="208" height="64" rx="32" fill={raised} stroke={rule} strokeWidth="2" />
               <text x="1120" y="163" textAnchor="middle" fontSize="30" fill={ink}>可以，存檔</text>
+            </g>
+            <g className="aw1-build" style={buildDelay(1)}><text x="1120" y="330" textAnchor="middle" fontSize="31" fontWeight="600" fill={ink}>你說「可以」</text></g>
+            <g className="aw1-steppop" style={buildDelay(2)}>
               <rect x="1016" y="206" width="208" height="60" fill={sage} stroke={okGreen} strokeWidth="2" />
               <text x="1120" y="246" textAnchor="middle" fontSize="28" fontWeight="700" fill={ink}>直接存檔</text>
-            </FlowStation>
-            <MapArrow x1={1238} x2={1336} y={200} hot />
-            <FlowStation x={1470} label={<tspan>{"三國演義大綱.md"}</tspan>}>
-              <DocShape x={1390} y={110} w={160} h={180} fill={sage} stroke={okGreen} sw={3} />
-              <SvgIcon kind="save" x={1470} y={200} size={64} color={okGreen} />
-            </FlowStation>
+            </g>
+            <g className="aw1-build" style={buildDelay(3)}><MapArrow x1={1238} x2={1336} y={200} /></g>
+            <g className="aw1-steppop" style={buildDelay(4)}>
+              <FlowStation x={1470} label={<tspan>{"三國演義大綱.md"}</tspan>}>
+                <DocShape x={1390} y={110} w={160} h={180} fill={sage} stroke={okGreen} sw={3} />
+                <SvgIcon kind="save" x={1470} y={200} size={64} color={okGreen} />
+              </FlowStation>
+            </g>
           </Layer></Step>
         </Steps>
       </Stage>
@@ -2731,26 +2732,35 @@ const CheckSource: Page = () => (
             </g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={400} label="用文字編輯或記事本打開原文第 021 回，Cmd 或 Ctrl+F 搜尋可殺車冑，找到同一句">
-            <rect x="880" y="0" width="752" height="400" fill={surface} stroke={rule} strokeWidth="2" />
-            <text x="910" y="52" fontSize="26" fontFamily={mono} fontWeight="600" fill={muted}>原文/第021回.md</text>
-            <rect x="1300" y="18" width="310" height="50" fill="#FFFFFF" stroke={okGreen} strokeWidth="2" />
-            <SvgIcon kind="search" x={1330} y={43} size={30} color={okGreen} />
-            <text x="1356" y="53" fontSize="27" fontWeight="600" fill={ink}>可殺車冑</text>
-            <text x="1594" y="52" textAnchor="end" fontSize="24" fill={muted}>1/1</text>
-            <text x="910" y="132" fontSize="30" fill={muted}>雲長曰：「他伏甕城邊待我，</text>
-            <text x="910" y="182" fontSize="30" fill={muted}><tspan>去必有失。</tspan><tspan fill={ink}>我有一計，可殺車冑：</tspan></text>
-            <text x="910" y="232" fontSize="30" fill={ink}>乘夜扮作曹軍到徐州，</text>
-            <text x="910" y="282" fontSize="30" fill={ink}>引車冑出迎，襲而殺之。」</text>
-            <text x="910" y="332" fontSize="30" fill={muted}>飛然其言。</text>
+            <g className="aw1-build" style={buildDelay(0)}>
+              <rect x="880" y="0" width="752" height="400" fill={surface} stroke={rule} strokeWidth="2" />
+              <text x="910" y="52" fontSize="26" fontFamily={mono} fontWeight="600" fill={muted}>原文/第021回.md</text>
+            </g>
+            <g className="aw1-build" style={buildDelay(1)}>
+              <rect x="1300" y="18" width="310" height="50" fill="#FFFFFF" stroke={okGreen} strokeWidth="2" />
+              <SvgIcon kind="search" x={1330} y={43} size={30} color={okGreen} />
+              <text x="1356" y="53" fontSize="27" fontWeight="600" fill={ink}>可殺車冑</text>
+              <text x="1594" y="52" textAnchor="end" fontSize="24" fill={muted}>1/1</text>
+            </g>
+            <g className="aw1-build" style={buildDelay(2)}>
+              <text x="910" y="132" fontSize="30" fill={muted}>雲長曰：「他伏甕城邊待我，</text>
+              <text x="910" y="182" fontSize="30" fill={muted}><tspan>去必有失。</tspan><tspan fill={ink}>我有一計，可殺車冑：</tspan></text>
+              <text x="910" y="232" fontSize="30" fill={ink}>乘夜扮作曹軍到徐州，</text>
+              <text x="910" y="282" fontSize="30" fill={ink}>引車冑出迎，襲而殺之。」</text>
+              <text x="910" y="332" fontSize="30" fill={muted}>飛然其言。</text>
+            </g>
             <g fill="none" stroke={okGreen} strokeWidth="3">
-              <rect x="1062" y="148" width="334" height="48" rx="6" />
-              <rect x="900" y="198" width="352" height="48" rx="6" />
-              <rect x="900" y="248" width="384" height="48" rx="6" />
+              <rect className="aw1-steppop" style={buildDelay(3)} x="22" y="215" width="352" height="40" rx="6" />
+              <rect className="aw1-steppop" style={buildDelay(3)} x="1056" y="148" width="340" height="48" rx="6" />
+              <rect className="aw1-steppop" style={buildDelay(3.5)} x="22" y="259" width="322" height="40" rx="6" />
+              <rect className="aw1-steppop" style={buildDelay(3.5)} x="900" y="198" width="352" height="48" rx="6" />
+              <rect className="aw1-steppop" style={buildDelay(4)} x="22" y="303" width="382" height="40" rx="6" />
+              <rect className="aw1-steppop" style={buildDelay(4)} x="900" y="248" width="384" height="48" rx="6" />
             </g>
             <g fill="none" stroke={okGreen} strokeWidth="4">
-              <StepPath d="M760 290 C820 290 840 222 900 222" i={0} />
+              <StepPath d="M760 290 C820 290 840 222 900 222" i={5} />
             </g>
-            <g className="aw1-build" style={buildDelay(1)}><OkDot x={1316} y={272} r={20} /></g>
+            <g className="aw1-steppop" style={buildDelay(6)}><OkDot x={1316} y={272} r={20} /></g>
           </Layer></Step>
         </Steps>
       </Stage>
@@ -2825,7 +2835,7 @@ const PracticeVideo: Page = () => {
                 </button>
               </In>
             ))}
-            <Caption><span>點時間跳到那一段｜換成 Codex，步驟一樣</span></Caption>
+            <Caption><span>點時間跳到那一段｜換成 Codex，步驟大致一樣</span></Caption>
           </div>
         </div>
       </Fit>
@@ -2888,30 +2898,40 @@ const NextLesson: Page = () => (
             </InG>
           </Layer>
           <Step duration={STEP_MS}><Layer h={440} label="放進筆記庫，連到範例人物卡">
-            <MapArrow x1={420} x2={540} y={220} hot />
-            <rect x="560" y="10" width="1072" height="420" fill={surface} />
-            <text x="590" y="58" fontSize="28" fontWeight="600" fill={ink}>Obsidian 筆記庫</text>
-            <g stroke={link} strokeWidth="3">
-              <line x1="1060" y1="230" x2="840" y2="130" /><line x1="1060" y1="230" x2="820" y2="320" />
-              <line x1="1060" y1="230" x2="990" y2="370" /><line x1="1060" y1="230" x2="1290" y2="100" />
-              <line x1="1060" y1="230" x2="1250" y2="360" />
+            <g className="aw1-build" style={buildDelay(0)}>
+              <MapArrow x1={420} x2={540} y={220} hot />
+              <rect x="560" y="10" width="1072" height="420" fill={surface} />
+              <text x="590" y="58" fontSize="28" fontWeight="600" fill={ink}>Obsidian 筆記庫</text>
             </g>
-            <circle cx="1060" cy="230" r="52" fill={amberSoft} stroke={amber} strokeWidth="3" />
-            <text x="1060" y="240" textAnchor="middle" fontSize="28" fontWeight="600" fill={ink}>大綱</text>
-            <GraphNode x={840} y={130} name={<tspan>{"劉備"}</tspan>} />
-            <GraphNode x={820} y={320} name={<tspan>{"關羽"}</tspan>} />
-            <GraphNode x={990} y={370} name={<tspan>{"張飛"}</tspan>} />
-            <GraphNode x={1290} y={100} name={<tspan>{"曹操"}</tspan>} />
-            <GraphNode x={1250} y={360} name={<tspan>{"孫權"}</tspan>} />
-            <circle cx="606" cy="396" r="14" fill={linkSoft} stroke={link} strokeWidth="3" />
-            <text x="630" y="405" fontSize="25" fill={link}>深紫＝已經有人物卡</text>
+            <g fill="none" stroke={link} strokeWidth="3">
+              <StepPath d="M1060 230 L840 130" i={2} />
+              <StepPath d="M1060 230 L820 320" i={3} />
+              <StepPath d="M1060 230 L990 370" i={4} />
+              <StepPath d="M1060 230 L1290 100" i={5} />
+              <StepPath d="M1060 230 L1250 360" i={6} />
+            </g>
+            <g className="aw1-steppop" style={buildDelay(1)}>
+              <circle cx="1060" cy="230" r="52" fill={amberSoft} stroke={amber} strokeWidth="3" />
+              <text x="1060" y="240" textAnchor="middle" fontSize="28" fontWeight="600" fill={ink}>大綱</text>
+            </g>
+            <g className="aw1-steppop" style={buildDelay(2)}><GraphNode x={840} y={130} name={<tspan>{"劉備"}</tspan>} /></g>
+            <g className="aw1-steppop" style={buildDelay(3)}><GraphNode x={820} y={320} name={<tspan>{"關羽"}</tspan>} /></g>
+            <g className="aw1-steppop" style={buildDelay(4)}><GraphNode x={990} y={370} name={<tspan>{"張飛"}</tspan>} /></g>
+            <g className="aw1-steppop" style={buildDelay(5)}><GraphNode x={1290} y={100} name={<tspan>{"曹操"}</tspan>} /></g>
+            <g className="aw1-steppop" style={buildDelay(6)}><GraphNode x={1250} y={360} name={<tspan>{"孫權"}</tspan>} /></g>
+            <g className="aw1-build" style={buildDelay(7)}>
+              <circle cx="606" cy="396" r="14" fill={linkSoft} stroke={link} strokeWidth="3" />
+              <text x="630" y="405" fontSize="25" fill={link}>深紫＝已經有人物卡</text>
+            </g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={440} label="還沒有卡的人名，會是淡紫色連結">
-            <g stroke={linkPale} strokeWidth="3" strokeDasharray="8 7"><line x1="1060" y1="230" x2="1520" y2="170" /><line x1="1060" y1="230" x2="1520" y2="300" /></g>
-            <GraphNode x={1520} y={170} name={<tspan>{"董卓"}</tspan>} empty />
-            <GraphNode x={1520} y={300} name={<tspan>{"呂布"}</tspan>} empty />
-            <circle cx="1374" cy="396" r="14" fill="#FFFFFF" stroke={linkPale} strokeWidth="3" strokeDasharray="5 4" />
-            <text x="1398" y="405" fontSize="25" fill={linkPale}>淡紫＝還沒有卡</text>
+            <g className="aw1-build" style={buildDelay(0)}><g stroke={linkPale} strokeWidth="3" strokeDasharray="8 7"><line x1="1112" y1="223" x2="1520" y2="170" /><line x1="1112" y1="238" x2="1520" y2="300" /></g></g>
+            <g className="aw1-steppop" style={buildDelay(1)}><GraphNode x={1520} y={170} name={<tspan>{"董卓"}</tspan>} empty /></g>
+            <g className="aw1-steppop" style={buildDelay(2)}><GraphNode x={1520} y={300} name={<tspan>{"呂布"}</tspan>} empty /></g>
+            <g className="aw1-build" style={buildDelay(3)}>
+              <circle cx="1374" cy="396" r="14" fill="#FFFFFF" stroke={linkPale} strokeWidth="3" strokeDasharray="5 4" />
+              <text x="1398" y="405" fontSize="25" fill={linkPale}>淡紫＝還沒有卡</text>
+            </g>
           </Layer></Step>
         </Steps>
       </Stage>
@@ -3175,15 +3195,15 @@ const OpencodeRun: Page = () => (
 
 // One rung of the model-size ladder: a bar, a verdict mark, the model and what happened.
 const Rung = ({ x, h, size, name, l1, l2, verdict }: { x: number; h: number; size: ReactNode; name: ReactNode; l1: ReactNode; l2: ReactNode; verdict: 'no' | 'meh' | 'demo' | 'ok' }) => {
-  const fill = verdict === 'no' ? warnSoft : verdict === 'meh' ? amberSoft : verdict === 'demo' ? sage : blueSoft;
-  const stroke = verdict === 'no' ? warn : verdict === 'meh' ? amber : verdict === 'demo' ? okGreen : blue;
+  const fill = verdict === 'no' ? warnSoft : verdict === 'meh' ? amberSoft : verdict === 'demo' ? blueSoft : sage;
+  const stroke = verdict === 'no' ? warn : verdict === 'meh' ? amber : verdict === 'demo' ? blue : okGreen;
   const top = 300 - h;
   return (
     <g>
       <rect x={x - 110} y={top} width="220" height={h} fill={fill} stroke={stroke} strokeWidth="2" />
       <text x={x} y={288} textAnchor="middle" fontSize="30" fontWeight="600" fill={stroke}>{size}</text>
       {verdict === 'no' ? <NoDot x={x} y={top - 34} r={26} /> : verdict === 'meh' ? <AskMark x={x} y={top - 34} r={26} /> : <OkDot x={x} y={top - 34} r={26} />}
-      {verdict === 'demo' ? <text x={x + 36} y={top - 26} fontSize="25" fontWeight="600" fill={okGreen}>只能示範</text> : null}
+      {verdict === 'demo' ? <text x={x + 36} y={top - 26} fontSize="25" fontWeight="600" fill={blue}>只能示範</text> : null}
       <text x={x} y={348} textAnchor="middle" fontSize="27" fontFamily={mono} fontWeight="600" fill={ink}>{name}</text>
       <text x={x} y={392} textAnchor="middle" fontSize="26" fill={muted}>{l1}</text>
       <text x={x} y={428} textAnchor="middle" fontSize="26" fill={muted}>{l2}</text>
@@ -3501,7 +3521,7 @@ const NOTES = new Map<Page, string>([
 今天五章：第一章以 GPT 為例，說明 AI 怎麼生成文字、為什麼會錯，以及 CoT、工具和 RAG 怎麼補救；第二章比較 ChatGPT 和 Codex；第三章從打開終端機開始，安裝 Codex、下載練習資料夾，在資料夾裡登入 Codex；第四章看懂 Codex 的畫面、Session、/status 和 Memory；第五章是練習 2，用 Codex 寫大綱。練習 1 用 ChatGPT，課後自己練，第二章結尾會告訴你在哪裡。
 第五章大約 112 分結束，接著總結、預告下一堂，剩下的時間留給沒跑完的同學補做和提問。還沒裝好 Codex 的同學，現在就舉手，助教先過去協助安裝。`],
   [Section1, `10:00–10:30。
-第一章：AI 怎麼走到今天，以 GPT 為例。我們照因果順序講：每一種補救方法，都是為了解決上一步的問題。`],
+第一章：AI 怎麼走到今天，以 GPT 為例。我們先講模型的限制，再講幾種補救方法。`],
   [Evolution, `10:30–11:30。
 先看這一章的地圖，分上下兩層。
 上層是模型的限制：模型只會猜下一個字；猜，所以有隨機性；猜錯了也說得很肯定，這叫幻覺。
@@ -3511,7 +3531,7 @@ const NOTES = new Map<Page, string>([
   [NextWordGame, `11:30–12:30。
 GPT 是 Generative Pre-trained Transformer，生成式預訓練模型，名字不用背。這頁的專有名詞是「下一個 Token 預測」，GPT 做的事很像文字接龍。
 畫面上是「今天、天氣、很」，請大家喊一下，下一個字你會接什麼？
-按一下：大部分人會接「好」。GPT 也是這樣：看前面的字，接一個最順的字。
+按一下：大部分人會接「好」。GPT 也類似：看前面的字，接一個很順的字。
 最後一下：GPT 根據前面的內容，預測下一個 Token。不管 GPT 看起來多聰明，底下一直在做的就是這件事。
 畫面下方那行小字：這裡先用「字」講，比較好懂；模型實際切的單位叫 Token，可能是一個字、半個詞或幾個字母，第 ${pageOf(OneByOne)} 頁會再講。`],
   [ProbTable, `12:30–13:30。
@@ -3533,9 +3553,9 @@ GPT 怎麼決定接哪個字？先看「下一個 Token 的機率分布」。左
 按一下：轉盤的隨機程度有個旋鈕，叫溫度。調低比較穩，調高比較多變。網頁版的 ChatGPT 不能調，知道有這個詞就好。
 最後一下：隨機性會改變答案，有時會改成錯的。答案不同時，兩個都可能是對的；但抽到錯的字，答案就錯了，下一頁就講這件事。`],
   [WhatIsHallucination, `16:30–17:30。
-AI 幻覺，英文 Hallucination。像考試硬掰的學生：沒讀過，但寫得很順。
+AI 幻覺，英文 Hallucination。像考試硬掰的學生：沒把握，還是寫得很順。
 上面是講師實測的回答：在自己電腦用小模型 qwen3:1.7b（附錄備案 C 那頁）問「劉備字什麼」，模型很肯定地說「劉備，字孔明」。語氣這一條是滿的。先問大家：對嗎？
-按一下：和事實對不上。第 1 回原文寫「姓劉，名備，字玄德」；孔明是諸葛亮的字。模型把兩個人搞混了，還說得很順。
+按一下：和事實對不上。第 1 回原文寫「姓劉，名備，字玄德」；孔明是諸葛亮的字。答案拿了諸葛亮的字，還說得很順。
 最後一下：內容和事實對不上，語氣卻很肯定，就叫幻覺。注意：沒附來源、但內容是對的，不算幻覺；幻覺是指內容本身錯了。大模型比較少錯這種題目，但一樣會錯，下一頁看一個大模型的真實例子。`],
   [RealHallucination, `17:30–18:30。
 真實案例。左邊大字：題目是一長串加法，2+4+7……+7953+34+356。早期 GPT-3.5 很肯定地回答 8402。右邊小圖是當時的實際畫面。
@@ -3545,9 +3565,9 @@ AI 幻覺，英文 Hallucination。像考試硬掰的學生：沒讀過，但寫
 最後一下：GPT-3.5 沒有計算，只預測出一個像答案的數字。現在的模型算術已經進步很多，後面幾頁講它們怎麼改進的。
 圖片來源：IT 邦幫忙 https://ithelp.ithome.com.tw/articles/10315994`],
   [WhyHallucinate, `18:30–19:30。
-幻覺的原因不只一個，這裡講最常見的一個。回到模型產生答案的流程：模型讀過大量文字，整理成一張機率表。
+幻覺的原因不只一個，這裡先講其中一個。回到模型產生答案的流程：模型讀過大量文字，整理成一張機率表。
 按一下：然後挑最常見的說法，直接說出口。
-按一下：中間少了一步：查證。模型不會停下來確認這句話對不對，所以很順的句子也可能是錯的。
+按一下：中間少了一步：查證。只靠接字，模型不會停下來確認這句話對不對，所以很順的句子也可能是錯的。
 其他原因，提一句就好：訓練資料裡本來就沒有、或寫錯的內容；資料有截止日期，比較新的事模型不知道；題目問得太模糊，模型就自己補上內容。
 最後一下：補救方法：讓模型先寫步驟、用工具、查資料。接下來幾頁一個一個看。`],
   [CotWhat, `19:30–21:00。
@@ -3563,31 +3583,31 @@ AI 幻覺，英文 Hallucination。像考試硬掰的學生：沒讀過，但寫
 按一下：下面這排寫了步驟：模型先寫下「12×3＝36」，這行字就變成前文；接著寫「36－5＝」，下一步只要接出「31」。36 已經寫在紙上了，36 減 5 是很小、很好猜的一步。每一步都是一個好猜的小步。
 按一下：讓模型寫步驟有三種方法，一次出來：
 一、在提示詞加一句「請一步一步想」，叫 zero-shot CoT。來源：Kojima et al. 2022, Large Language Models are Zero-Shot Reasoners, https://arxiv.org/abs/2205.11916
-二、先給它一題有步驟的範例，它就會照樣寫步驟，叫 few-shot CoT。來源：Wei et al. 2022, Chain-of-Thought Prompting Elicits Reasoning in Large Language Models, https://arxiv.org/abs/2201.11903
+二、先給它一題有步驟的範例，它通常會照樣寫步驟，叫 few-shot CoT。來源：Wei et al. 2022, Chain-of-Thought Prompting Elicits Reasoning in Large Language Models, https://arxiv.org/abs/2201.11903
 三、Thinking、推理模型（像 ChatGPT 的 Thinking、OpenAI 的 o 系列）是產品功能：回答前會自動先做一次 CoT，你可能會看到「已思考 N 秒」。分清楚：CoT 是方法，Thinking 是幫你自動做這個方法的功能。
-按一下：限制：步驟也是模型自己寫的，寫錯一步，後面就跟著錯；算術還是在心算。
+口頭補一句限制（畫面不放，下一頁接著講）：步驟也是模型自己寫的，寫錯一步，後面就跟著錯；算術還是在心算。
 最後一下：寫下的步驟變成前文，下一步比較好預測。但算術還是心算，所以下一頁讓模型改用計算機。`],
   [CotPage, `26:00–28:00。
-例子：雞兔同籠，把剛剛兩個概念串起來。藍色是 CoT（想步驟），橘色是 Tool Calling（工具算），右上角是圖例。用 Codex 實際跑一次。2026-10-18 在講師電腦上，codex-cli 0.154.0、模型 gpt-5.6-luna。提示詞：「雞兔同籠：籠子裡有 35 個頭、94 隻腳。雞和兔各有幾隻？請一步一步寫出你的想法：先判斷這是什麼題型、列出算式，最後的計算請用程式算。」
+例子：雞兔同籠，把剛剛兩個概念串起來。藍色是 CoT（想步驟），橘色是 Tool Calling（工具算），每張卡右上角都標了是哪一種。用 Codex 實際跑一次。2026-10-18 在講師電腦上，codex-cli 0.154.0、模型 gpt-5.6-luna。提示詞：「雞兔同籠：籠子裡有 35 個頭、94 隻腳。雞和兔各有幾隻？請一步一步寫出你的想法：先判斷這是什麼題型、列出算式，最後的計算請用程式算。」
 先看題目。
 按一下：第 ① 步，判斷題型，這是 CoT。它說：「這是『雞兔同籠』題型，也就是用二元一次方程式解題。」
 按一下：第 ② 步，想公式。設雞 x 隻、每隻 2 隻腳，兔 y 隻、每隻 4 隻腳：x＋y＝35，2x＋4y＝94。
 按一下：第 ③ 步，套數字。第一式乘 2 得到 2x＋2y＝70，和第二式相減，2y＝24，所以兔 y＝12，雞 35－12＝23。
 按一下：第 ④ 步，按計算機，這就是 Tool Calling。Codex 真的執行了一行 Python，印出「23 12」。原始紀錄裡同一行指令還順便讀了講師電腦上一個無關的外掛說明檔，另有幾行 macOS 系統警告，畫面上都刪掉了，只留 Python 的部分。
 按一下：第 ⑤ 步，答案：雞 23 隻，兔 12 隻。自己驗算：23×2＋12×4＝46＋48＝94，對。
-最後一下：先想清楚步驟，這是 CoT；計算交給工具，這是 Tool Calling。兩個一起用，步驟看得懂，計算結果也正確。下一頁換另一種工具：搜尋。`],
+最後一下：先想清楚步驟，這是 CoT；計算交給工具，這是 Tool Calling。兩個一起用，步驟看得懂，這次計算結果也正確。下一頁換另一種工具：搜尋。`],
   [ToolCalc, `23:00–25:00。
-解法二：用工具，英文叫 Tool Calling，工具呼叫。CoT 會想，但算術還是在心算；所以現在的 AI 遇到計算，不在腦中硬算，而是寫一行程式、或呼叫一個工具，讓工具算出結果，就像把算式輸入計算機、按下等號。畫面上那行就是定義：模型寫一行程式或呼叫工具，讓工具算出結果。
+解法二：用工具，英文叫 Tool Calling，工具呼叫。CoT 會想，但算術還是在心算；所以現在的 AI 遇到計算，常會不硬算，改成寫一行程式、或呼叫一個工具，讓工具算出結果，就像把算式輸入計算機、按下等號。標題下那行就是定義：模型寫一行程式或呼叫工具，讓工具算出結果。
 先看題目，一長串加法。
 按一下：計算機。寫程式算，就是把數字輸進去、按「＝」。
 按一下：這是 Codex 的實際輸出，2026-10-18 在講師電腦上跑的，codex-cli 0.154.0、模型 gpt-5.6-luna。提示詞是：「2 + 4 + 7 + 9 + 23 + 1 + 5 + 7 + 2 + 5 + 74 + 2 + 7953 + 34 + 356 = ? 請用程式算出來，告訴我答案。」Codex 執行了一行 Python：print(sum([...]))，2.8 秒得到 8484，最後回答「用 Python 程式計算結果是：8484」。原始紀錄裡還有幾行 macOS xcodebuild 和沙盒的系統警告，和題目無關，畫面上刪掉了。
-ChatGPT 也會這樣做：ChatGPT 有寫程式的工具，畫面上出現「已分析」或一段程式碼，就代表它呼叫了計算工具。
-最後一下：工具執行計算，同一題每次結果都一樣。答案是計算出來的，不是預測出來的，所以沒有隨機性的問題。`],
+ChatGPT 也有寫程式的工具：畫面上出現「已分析」，點開看得到它跑的程式碼，就代表它用了這個工具。
+最後一下：工具執行計算，同一個算式重跑，結果相同。這一步是計算出來的，不是預測出來的；但算式是模型寫的，還是要看有沒有抄錯。`],
   [ToolCompare, `25:00–26:00。
 同一題長加法，三種做法排在一起：猜、心算、按計算機。先請大家猜：哪一種最可信？
 按一下：左邊是直接回答，等於用猜的。卡片上是 2026 年 9 月 ChatGPT 的真實畫面：我故意要求它「不可以偷偷計算」，ChatGPT 就回答「我不算，純猜：8460」。錯，而且每次問可能都不一樣。
 按一下：CoT，也就是 Thinking，等於心算、列步驟：這次得到 8484，但步驟是模型自己寫的，可能錯，所以還是要核對，不能當成一定對。
-按一下：Tool Calling 等於按計算機：8484，每次都一樣。為什麼比較可信？可以重跑一次看結果一不一樣，也看得到模型輸入了什麼算式，數字有沒有抄錯。
+按一下：Tool Calling 像按計算機：8484，同一個算式重跑，結果相同。為什麼比較可信？可以重跑一次看結果一不一樣，也看得到模型輸入了什麼算式，數字有沒有抄錯。
 最後一下：需要精確計算時，交給 Tool Calling。下一頁用一個例子，把 CoT 和 Tool Calling 串起來：雞兔同籠。`],
   [WebSearch, `28:00–29:30。
 解法三：搜尋也是一種工具，一樣是 Tool Calling：模型呼叫搜尋工具去查資料。這是 ChatGPT 的實際畫面：問「最近的台灣新聞」，ChatGPT 先顯示「正在搜尋 2 個網站」，標 1 的地方：中央社和路透社。
@@ -3715,10 +3735,10 @@ Codex 裝好了，先把等一下要用的練習資料夾下載下來，Codex �
 兩個容易混的詞，像手機方案：月租額度，和你用掉的流量。
 Usage 是帳號這段時間還能用多少，就是 /status 最下面那兩行：5 小時額度、每週額度。用完要等額度重置。
 按一下：Token 是 AI 讀寫文字的單位，前面接龍那頁講過。你的提示詞、Codex 讀到的檔案、前面的對話，是模型讀進去的部分；模型思考和寫回答也要用 Token。兩邊加起來，才是這次用掉的 Token。
-最後一下：讀的檔越多，Token 越多，額度用得越快。所以交代時把範圍講清楚，例如「只讀 原文/」，就不會浪費。`],
+最後一下：讀的檔越多，Token 越多，額度用得越快。所以交代時把範圍講清楚，例如「只讀 原文/」，就比較不浪費。`],
   [MemoryLayers, `78:00–81:00。
 Memory 是 Codex 能延續的上下文，分兩層。像口頭交代，和貼在牆上的公告。
-第一層，Session 內的記憶：在 Session 1 說「只根據 原文/ 回答」，Codex 會照做；但打 /new 開新 Session，這條規則就不見了。
+第一層，Session 內的記憶：在 Session 1 說「只根據 原文/ 回答」，Codex 通常會照做；但打 /new 開新 Session，這條規則就不見了。
 按一下：第二層，專案裡的記憶：把規則寫進資料夾裡的 AGENTS.md，Codex 每次開 Session 都會先讀，所以新的 Session 也照做。/status 裡 Agents.md 那一行，說的就是這個檔。
 最後一下：聊天只在這個 Session 有效；AGENTS.md 每次開都會讀。範圍要講清楚：聊天裡說的，只留在這個 Session；AGENTS.md 寫在這個資料夾裡，在這個資料夾開 Codex 每次都會讀；換到別的專案就讀不到。在同一個專案的子資料夾裡開，上層的 AGENTS.md 通常也會沿用，子資料夾可以再放一份補充規則。Codex 不會永久記住你們聊過什麼，重要的規則請寫進檔案。`],
   [AgentsFile, `81:00–84:00。
@@ -3741,7 +3761,7 @@ Windows 用「記事本」：按 Windows 鍵打「記事本」打開，貼上規
 按一下：檔名要剛好是 AGENTS.md，大寫，副檔名是 .md。存成 AGENTS.md.txt 或 AGENTS.rtf，Codex 都不會讀。Windows 預設會把副檔名藏起來，看不出來的話，用終端機打 ls 確認（Codex 開著時，先開另一個終端機視窗再 cd 進去）。`],
   [RulePractice, `92:30–96:30（練習 4 分鐘）。
 練習 2-2 第 2 步。這頁延續第 ${pageOf(MemoryLayers)} 頁的比喻：AGENTS.md 是貼在牆上的公告，/new 是換一張新桌子。我們來驗證：開新 Session 後，Codex 還會不會照 AGENTS.md 的規則回答。
-規則最後那句「最後一行寫出處」是故意加的：Codex 憑記憶答題不會寫這行，所以看得出新的 Session 有沒有讀到規則。
+規則最後那句「最後一行寫出處」是故意加的：Codex 憑記憶答題通常不會寫這行，所以看得出新的 Session 有沒有讀到規則。
 按一下：回到 Codex，輸入 /new，換一張新桌子，再問「劉備第一次出場在第幾回？」。最後一行是「出處：原文/第001回.md」這種格式，就代表新的 Session 讀了規則。
 按一下：對照題，問「諸葛亮第一次出場在第幾回？」。前 21 回他還沒出場，只有第 9 回一首詩提到「諸葛隆中臥」。照規則，Codex 要說原文/ 裡找不到，不能憑記憶報回數。右下角那行是對照：同一個資料夾拿掉 AGENTS.md 再問，Codex 直接答「第三十七回」，那是模型憑記憶說的，原文/ 裡沒有。
 最後一下：開新 Session，Codex 仍照 AGENTS.md 的規則回答。重要的規則寫進 AGENTS.md，不要只在聊天裡講。
@@ -3763,6 +3783,7 @@ Windows 用「記事本」：按 Windows 鍵打「記事本」打開，貼上規
 只能用原文裡的內容，原文沒寫的事情不要加。
 寫入檔案前，先給我看內容，等我說可以再寫。
 
+上面三個標籤的顏色對回下面的圖：棕色的「定位」是左邊那疊棕色原文檔，綠色的「期望輸出」是最後存好的綠色檔案。
 流程：Codex 先讀完 21 個檔。
 按一下：Codex 會先把草稿給你看。
 按一下：你回「可以，存檔」，Codex 就直接寫進資料夾，不會再跳確認畫面。資料夾裡會多一個三國演義大綱.md。
@@ -3781,17 +3802,17 @@ Windows：Codex 在 Windows 讀這些中文檔會不會變亂碼，講師沒有�
   [CheckSource, `103:30–107:30（練習 4 分鐘）。
 練習 2-4：核對大綱。先請 Codex 指出根據，貼上 prompts.md 的「練習 2-4」：三國演義大綱.md 第 N 回那段的第二句，根據原文哪一句？引用原句。N 換成你想查的回數。這裡用講師範例的第 21 回當例子，第二句是「劉備奉命出兵截擊袁術後脫離曹操，關羽又設計斬殺徐州刺史車冑，重新占據徐州」。
 按一下：Codex 引用了原句，例如「我有一計，可殺車冑：乘夜扮作曹軍到徐州，引車冑出迎，襲而殺之。」並寫出處。這是講師實測（2026-10-24，codex exec 對範例大綱），Codex 還多引了一句「術若投紹，必從徐州過……」。
-按一下：自己查。打開 原文/第021回.md：Mac 按右鍵，選「打開方式」再選「文字編輯」；Windows 按右鍵，選「開啟檔案」再選「記事本」。按 Cmd+F 或 Ctrl+F，貼上引用句裡的四、五個字，例如「可殺車冑」。找得到，這句就有根據；找不到，回 Codex 說「原文/第021回.md 裡找不到這句，請重新確認」。
+按一下：自己查。打開 原文/第021回.md：Mac 按右鍵，選「打開方式」再選「文字編輯」；Windows 按右鍵，選「開啟檔案」再選「記事本」。按 Cmd+F 或 Ctrl+F，貼上引用句裡的四、五個字，例如「可殺車冑」。畫面上左右兩邊用綠框框起來的三行，是同一句話：左邊是 Codex 引的，右邊是原文裡搜到的。找得到，這句就有根據；找不到，回 Codex 說「原文/第021回.md 裡找不到這句，請重新確認」。
 按一下：再看標題。把大綱那段的標題，和 回目.md 第 21 回比一比。講師舊版的大綱就是在這裡出錯：「張翼德」被改成 [[張飛]]。
 最後一下：搜得到原句，還要確認原句支持摘要的每件事。搜得到，只證明這句原文真的存在。第二句講了四件事：截擊袁術、脫離曹操、斬殺車冑、占據徐州。這句引文只講到關羽獻計，車冑有沒有真的被殺，要往下讀原文才確認得了。人物、因果、先後都對，標題也和回目一字不差，這段才算核對過。抽查兩段對了，只代表這兩段；整份還是要分段核對，例如每次五回。回到自己的資料核對，是 RAG 的最後一步。
 時間不夠就先做一段，有時間再做第二段。`],
   [PracticeVideo, `107:30–112:30（影片約 5 分鐘）。
 練習講完，放一次講師的實作影片，從頭到尾看一遍整個流程。按影片的播放鍵開始；右邊的時間可以直接跳段，時間不夠就從 2:08 寫大綱那段開始看。影片沒有聲音，邊放邊講。
-先講一句：影片裡用的是 OpenCode 加免費的 DeepSeek 模型，不是 Codex。步驟完全一樣：cd 進 Codex_練習、打開工具、貼提示詞。沒有 ChatGPT 方案的人，附錄有 OpenCode 的裝法。
+先講一句：影片裡用的是 OpenCode 加免費的 DeepSeek 模型，不是 Codex。主要步驟一樣：cd 進 Codex_練習、打開工具、貼提示詞。沒有 ChatGPT 方案的人，附錄有 OpenCode 的裝法。
 0:00 先 cd 進 Codex_練習，打 ls 看到 原文 和 回目.md，再用 cat 看 AGENTS.md 裡的三條規則。
 0:22 打開 OpenCode，打 free 篩出免費模型，選 DeepSeek。
 0:56 問「劉備第一次出場在第幾回？」它讀原文，回答第 1 回，最後一行附出處，還照規則給了笑臉。
-1:32 問「諸葛亮第一次出場在第幾回？」這題是陷阱：前 21 回諸葛亮還沒登場。OpenCode 搜了原文，回答找不到，只在第 9 回的詩裡提到「諸葛」。這是 AGENTS.md 那條「找不到就說找不到」的效果。
+1:32 問「諸葛亮第一次出場在第幾回？」這題是陷阱：前 21 回諸葛亮還沒登場。OpenCode 搜了原文，回答找不到，只在第 9 回的詩裡提到「諸葛」。這和 AGENTS.md 那條「找不到就說找不到」一致。
 2:08 貼上練習 2-3 的提示詞。它一回一回讀完 21 個檔，大約一分半寫出草稿。
 3:48 它問「要我直接寫入 三國演義大綱.md 嗎？」回「寫入」，它就存進資料夾。最後回到終端機打 ls，多了 三國演義大綱.md。
 時間緊就只放 2:08 之後那段，省下的時間留給補做和提問。`],
@@ -3839,7 +3860,7 @@ Web Search、RAG、Agent：
 沒有含 Codex 的 ChatGPT 方案，還是有三條路可以練習，照順序試。
 按一下：備案 A，opencode 加免費雲端模型。opencode 是另一套和 Codex 很像的工具，不用登入、不用信用卡，講師實測用它跑大綱提示詞，內容正確。這是首選。
 按一下：備案 B，Codex 加 OpenRouter。操作和今天教的 Codex 一樣，但要註冊 OpenRouter 帳號、建立 API Key，免費帳號每天只有 50 次請求。
-按一下：備案 C，用 Ollama 在自己電腦跑模型。好處是資料不出電腦，但學生電腦跑得動的小模型會亂寫，所以只拿來示範，不當真正的備案。
+按一下：備案 C，用 Ollama 在自己電腦跑模型。好處是資料不出電腦，但講師測過、學生電腦跑得動的小模型會亂寫，所以只拿來示範，不當真正的備案。
 最後一下：先走 A，不行再試 B；C 只拿來示範。
 講師電腦實測：opencode-ai 1.19.3、codex-cli 0.154.0、Ollama 0.40.3。`],
   [OpencodeSteps, `附錄（備用）。備案 A：opencode 加免費模型。

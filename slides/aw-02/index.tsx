@@ -806,17 +806,13 @@ const TodayGoal: Page = () => (
   </Shell>
 );
 
-// A table-of-contents row: chapter, the thing you walk away with, time and page.
-const AGENDA_COLS = '80px 400px 1fr 170px';
+// A table-of-contents row: chapter, time and page.
+const AGENDA_COLS = '80px 1fr 220px';
 
-const AgendaRow = ({ i, n, kind, result, time, page }: { i: number; n: Chapter; kind: IconKind; result: string; time: string; page: Page }) => (
+const AgendaRow = ({ i, n, time, page }: { i: number; n: Chapter; time: string; page: Page }) => (
   <In i={i} style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, alignItems: 'center', minHeight: 104, borderBottom: `1px solid ${rule}` }}>
     <span style={{ fontFamily: display, fontSize: 40, color: amber }}>{String(n).padStart(2, '0')}</span>
     <span style={{ fontSize: 38, fontWeight: 600 }}>{CHAPTERS[n - 1]}</span>
-    <span style={{ display: 'flex', alignItems: 'center', gap: 22 }}>
-      <Icon kind={kind} size={56} color={amber} />
-      <span style={{ fontSize: 30 }}>{result}</span>
-    </span>
     <span style={{ textAlign: 'right' }}><span style={{ display: 'block', fontSize: 26, color: amber }}>{time}</span><span style={{ display: 'block', fontSize: 24, color: quiet, marginTop: 4 }}>第 {pageOf(page)} 頁</span></span>
   </In>
 );
@@ -826,7 +822,6 @@ const BreakRow = ({ i, time, page }: { i: number; time: string; page: Page }) =>
   <In i={i} style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, alignItems: 'center', minHeight: 72, borderBottom: `1px solid ${rule}`, background: surface }}>
     <span />
     <span style={{ fontSize: 30, color: muted }}>休息 5 分鐘</span>
-    <span style={{ fontSize: 28, color: quiet }}>卡住的地方，休息時一起看</span>
     <span style={{ textAlign: 'right' }}><span style={{ display: 'block', fontSize: 26, color: amber }}>{time}</span><span style={{ display: 'block', fontSize: 24, color: quiet, marginTop: 4 }}>第 {pageOf(page)} 頁</span></span>
   </In>
 );
@@ -837,13 +832,13 @@ const Agenda: Page = () => (
     <Heading>課程大綱</Heading>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: AGENDA_COLS, paddingBottom: 12, borderBottom: `1px solid ${rule}` }}>
-        <span /><SmallLabel>章節</SmallLabel><SmallLabel>結束時你會</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
+        <span /><SmallLabel>章節</SmallLabel><span style={{ textAlign: 'right' }}><SmallLabel>時間｜頁</SmallLabel></span>
       </div>
-      <AgendaRow i={0} n={1} kind="folder" result="沿連結點一圈（練習 1）" time="10–29 分" page={Section1} />
-      <AgendaRow i={1} n={2} kind="link" result="寫一張卡，連回大綱（練習 2）" time="29–55 分" page={Section2} />
+      <AgendaRow i={0} n={1} time="10–29 分" page={Section1} />
+      <AgendaRow i={1} n={2} time="29–55 分" page={Section2} />
       <BreakRow i={2} time="55–60 分" page={BreakTime} />
-      <AgendaRow i={3} n={3} kind="search" result="Codex 找到你的卡，核對引用（練習 3）" time="60–90 分" page={Section3} />
-      <AgendaRow i={4} n={4} kind="graph" result="把你的卡畫進關係圖（練習 4）" time="90–107 分" page={Section4} />
+      <AgendaRow i={3} n={3} time="60–90 分" page={Section3} />
+      <AgendaRow i={4} n={4} time="90–107 分" page={Section4} />
     </Fit>
   </Shell>
 );
@@ -973,13 +968,13 @@ const VaultFolder: Page = () => (
               </VaultColumn>
             </g>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={490} label="Codex 讀同一個資料夾，不用上傳">
+          <Step duration={STEP_MS}><Layer h={490} label="Codex 讀同一個資料夾，不用手動上傳">
             <g className="aw2-build" style={buildDelay(1)}><BackArrow x1={1266} x2={1204} y={243} color={okGreen} /></g>
             <g className="aw2-build" style={buildDelay(0)}>
               <rect x="1272" y="148" width="360" height="190" fill={sage} stroke={okGreen} strokeWidth="2" />
               <text x="1300" y="198" fontSize="28" fontWeight="600" fill={okGreen}>Codex</text>
               <text x="1300" y="258" fontSize="44" fill={ink}>讀同一份</text>
-              <text x="1300" y="308" fontSize="25" fill={muted}>不用上傳</text>
+              <text x="1300" y="308" fontSize="25" fill={muted}>不用手動上傳</text>
             </g>
           </Layer></Step>
         </Steps>
@@ -1169,7 +1164,7 @@ const CardTypes: Page = () => (
 // Five people on top, three relation cards below. Each click adds one story.
 
 const StoryLinks = ({ story, paths }: { story: 0 | 1 | 2; paths: string[] }) => (
-  <g fill="none" stroke={okGreen} strokeWidth="6" strokeLinecap="round">
+  <g fill="none" stroke={quiet} strokeWidth="6" strokeLinecap="round">
     {paths.map((d, i) => <StepPath key={d} d={d} i={i} />)}
   </g>
 );
@@ -1185,7 +1180,7 @@ const StoryMap: Page = () => (
             <Layer h={440} label="上排五張人物卡：關羽、張飛、劉備、曹操、孫權">
               <text x="28" y="118" fontSize="24" fontWeight="600" fill={amber}>人物卡</text>
               <text x="28" y="342" fontSize="24" fontWeight="600" fill={okGreen}>關係卡</text>
-              <line x1="28" y1="420" x2="78" y2="420" stroke={okGreen} strokeWidth="6" strokeLinecap="round" /><text x="92" y="428" fontSize="24" fill={muted}>關係卡寫了他參與</text>
+              <line x1="28" y1="420" x2="78" y2="420" stroke={quiet} strokeWidth="6" strokeLinecap="round" /><text x="92" y="428" fontSize="24" fill={muted}>關係卡寫了他參與</text>
               <InG i={0}><Person x={260} y={110} name="關羽" /></InG>
               <InG i={1}><Person x={490} y={110} name="張飛" /></InG>
               <InG i={2}><Person x={790} y={110} name="劉備" hub /></InG>
@@ -1398,11 +1393,11 @@ const MergeOutline: Page = () => (
     <Fit>
       <Stage h={460}>
         <Steps>
-          <Layer h={460} label="第一堂的 Codex_練習 資料夾裡有 原文 資料夾和 三國演義大綱.md">
+          <Layer h={460} label="第一堂的 Codex_練習 資料夾裡有 原文 資料夾（藍框）和 三國演義大綱.md（橘框）">
             <InG i={0}>
               <Folder x={0} y={40} w={460} h={330} fill={surface} stroke={faint} sw={3} />
               <text x="26" y="100" fontSize="30" fontWeight="600" fill={ink}>Codex_練習/</text>
-              <rect x="24" y="126" width="200" height="50" fill={amberSoft} stroke={amber} strokeWidth="3" />
+              <rect x="24" y="126" width="200" height="50" fill={blueSoft} stroke={blue} strokeWidth="3" />
               <text x="40" y="161" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>原文/</text>
               <text x="208" y="160" textAnchor="end" fontSize="24" fill={muted}>21 個檔</text>
               <text x="40" y="206" fontSize="27" fontFamily={mono} fill={muted}>回目.md</text>
@@ -1411,28 +1406,37 @@ const MergeOutline: Page = () => (
               <text x="40" y="321" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>三國演義大綱.md</text>
             </InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={460} label="原文 裡的 21 個檔拖進筆記庫的 原文 資料夾，那裡已有第 37、38、46 回；大綱拖進 整理 資料夾">
-            <g fill="none" stroke={amber} strokeWidth="5"><StepPath d="M436 311 C540 311 540 176 630 176" /></g>
-            <g className="aw2-build" style={buildDelay(1)}>
-              <Folder x={600} y={0} w={1032} h={450} fill="#FBF7F2" stroke={amber} sw={3} />
+          <Step duration={STEP_MS}><Layer h={460} label="原文 裡的 21 個檔（藍）拖進筆記庫的 原文 資料夾，那裡已有第 37、38、46 回；大綱（橘）拖進 整理 資料夾；人物 資料夾的範例卡不用動">
+            {/* Each moved item keeps its colour on both sides and on its arrow: 原文 blue, 大綱 amber. Builds in story order. */}
+            <g className="aw2-build" style={buildDelay(0)}>
+              <Folder x={600} y={0} w={1032} h={450} fill={surface} stroke={faint} sw={3} />
               <text x="628" y="60" fontSize="30" fontWeight="600" fill={ink}>三國人物知識庫/</text>
-              <rect x="884" y="24" width="200" height="50" fill={sage} stroke={okGreen} strokeWidth="3" />
+            </g>
+            <g className="aw2-build" style={buildDelay(1)}>
+              <rect x="884" y="24" width="200" height="50" fill={blueSoft} stroke={blue} strokeWidth="3" />
               <text x="902" y="59" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>原文/</text>
               <text x="1104" y="58" fontSize="24" fill={muted}>已有第 37、38、46 回</text>
-              <polygon points="884,49 862,37 862,61" fill={amber} />
+            </g>
+            <g fill="none" stroke={blue} strokeWidth="5"><StepPath d="M224 151 C420 151 520 16 700 16 H820 C848 16 850 49 862 49" i={2} /></g>
+            <g className="aw2-build" style={buildDelay(5.5)}><polygon points="884,49 862,37 862,61" fill={blue} /></g>
+            <g className="aw2-build" style={buildDelay(3)}>
               <rect x="630" y="86" width="480" height="340" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
-              <text x="652" y="128" fontSize="28" fontFamily={mono} fontWeight="600" fill={amber}>整理/</text>
-              <rect x="652" y="148" width="436" height="56" fill={sage} stroke={okGreen} strokeWidth="3" />
+              <text x="652" y="128" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>整理/</text>
+            </g>
+            <g className="aw2-build" style={buildDelay(4)}>
+              <rect x="652" y="148" width="436" height="56" fill={amberSoft} stroke={amber} strokeWidth="3" />
               <text x="670" y="186" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>三國演義大綱.md</text>
+            </g>
+            <g fill="none" stroke={amber} strokeWidth="5"><StepPath d="M436 311 C540 311 540 176 630 176" i={5} /></g>
+            <g className="aw2-build" style={buildDelay(9)}><polygon points="650,176 628,164 628,188" fill={amber} /></g>
+            <g className="aw2-build" style={buildDelay(6)}>
               <rect x="1140" y="86" width="470" height="340" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
-              <text x="1162" y="128" fontSize="28" fontFamily={mono} fontWeight="600" fill={amber}>人物/</text>
-              <CardDoc x={1164} y={150} w={420} h={84} name="劉備.md" fill={amberSoft} stroke={amber} size={32} />
+              <text x="1162" y="128" fontSize="28" fontFamily={mono} fontWeight="600" fill={ink}>人物/</text>
+              <CardDoc x={1164} y={150} w={420} h={84} name="劉備.md" size={32} />
               <text x="1164" y="292" fontSize="26" fontFamily={mono} fill={muted}>關羽.md　張飛.md</text>
               <text x="1164" y="338" fontSize="26" fontFamily={mono} fill={muted}>曹操.md　孫權.md</text>
               <text x="1374" y="402" textAnchor="middle" fontSize="24" fill={quiet}>範例人物卡，不用動</text>
-              <polygon points="650,176 628,164 628,188" fill={amber} />
             </g>
-            <g fill="none" stroke={amber} strokeWidth="5"><StepPath d="M224 151 C420 151 520 16 700 16 H820 C848 16 850 49 862 49" /></g>
           </Layer></Step>
           <Step duration={STEP_MS}><Layer h={460} label="大綱第 1 回裡的 [[劉備]]，自己連到 人物/劉備.md">
             <g className="aw2-build" style={buildDelay(0)}>
@@ -1640,6 +1644,8 @@ const CardStep = ({ n, text, h, children }: { n: number; text: ReactNode; h: num
 
 // The example card is a stack of real crops (1352 × 627), drawn 990 px wide (s = 0.732).
 const PC_RIGHT = 1040;
+// A step number beside a mark on the card, outside the screenshot so it covers no text.
+const PcNum = ({ n, top }: { n: number; top: number }) => <span style={{ ...BADGE_STYLE, left: -60, top }}>{n}</span>;
 
 const Practice2Card: Page = () => (
   <Shell chapter={2} source={'維基文庫《三國演義》第 5 回 zh.wikisource.org/wiki/三國演義/第005回'}>
@@ -1651,7 +1657,7 @@ const Practice2Card: Page = () => (
       <Pill tag="限制">原文沒寫不寫</Pill>
     </PillRow>
     <Fit>
-      <div style={{ position: 'relative', width: 1632, height: 560 }}>
+      <div style={{ position: 'relative', width: 1632, height: 520 }}>
         <In i={1} style={{ position: 'absolute', left: 0, top: 0 }}>
           <Screenshot src={ownCard} aspect={1352 / 627} width={990} caption="範例：照模板寫的〈三英戰呂布〉，第 5 回" alt="照模板寫的三英戰呂布卡：屬性回目 5，句子裡張飛、關羽是連結，參與人物裡呂布是純文字，最後一行寫出處" />
         </In>
@@ -1683,8 +1689,9 @@ const Practice2Card: Page = () => (
                 </CardStep>
               </div>
               <PxMark x={16} y={285} w={60} h={38} color={link} />
+              <PcNum n={2} top={280} />
               <div style={{ position: 'absolute', left: 347, top: 366, width: 54, borderBottom: `5px dashed ${quiet}` }} />
-              <div style={{ position: 'absolute', left: 0, top: 506, display: 'flex', gap: 36, fontSize: 26 }}>
+              <div style={{ position: 'absolute', left: 500, top: 467, display: 'flex', gap: 36, fontSize: 26 }}>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><span style={{ width: 34, height: 24, border: `4px solid ${link}` }} />有卡：加 [[ ]]，變連結</span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><span style={{ width: 34, borderBottom: `5px dashed ${quiet}` }} />沒卡：寫純文字</span>
               </div>
@@ -1698,8 +1705,10 @@ const Practice2Card: Page = () => (
                   <text x="18" y="38" fontSize="25" fontFamily={mono} fill={ink}>出處：原文/第005回.md</text>
                 </CardStep>
               </div>
-              <PxMark x={16} y={92} w={272} h={40} color="#E9B650" />
-              <PxMark x={16} y={404} w={274} h={42} color="#E9B650" />
+              <PxMark x={16} y={92} w={272} h={40} color={amber} />
+              <PcNum n={3} top={88} />
+              <PxMark x={16} y={404} w={274} h={42} color={amber} />
+              <PcNum n={3} top={401} />
             </div>
           </Step>
         </Steps>
@@ -1861,9 +1870,9 @@ const RagIdea: Page = () => (
               <text x="1186" y="204" fontSize="24" fill={muted}>照筆記回答</text>
             </g>
             <g className="aw2-build" style={buildDelay(1)}>
-              <text x="1160" y="296" fontSize="24" fill={okGreen} fontWeight="600">檔名</text>
-              <SvgChip x={1222} y={268} w={170} label="桃園結義.md" fill="#FFFFFF" stroke={okGreen} />
-              <SvgChip x={1404} y={268} w={200} label="你的卡.md" fill="#FFFFFF" stroke={okGreen} />
+              <text x="1160" y="296" fontSize="24" fill={amber} fontWeight="600">檔名</text>
+              <SvgChip x={1222} y={268} w={170} label="桃園結義.md" fill={amberSoft} stroke={amber} />
+              <SvgChip x={1404} y={268} w={200} label="你的卡.md" fill={amberSoft} stroke={amber} />
               <text x="1382" y="378" textAnchor="middle" fontSize="26" fill={muted}>回答附上檔名</text>
             </g>
           </Layer></Step>
@@ -2007,7 +2016,7 @@ const CoverMark = ({ k, used }: { k: number; used: boolean }) => (
 );
 
 const CheckFixed: Page = () => (
-  <Shell chapter={3} source={'Gao et al. 2023（核對引文）, arXiv:2305.14627；Barnett et al. 2024（檢索遺漏）, arXiv:2401.05856'}>
+  <Shell chapter={3} source={'Gao et al. 2023（核對引文）, arXiv:2305.14627；Barnett et al. 2024（RAG 常見失誤）, arXiv:2401.05856'}>
     <PracticeEyebrow time="7 分鐘">練習 3｜第 1 輪：全班同一份</PracticeEyebrow>
     <Heading>核對引用：全班同一份回答</Heading>
     <PromptsCopy step="練習 3" />
@@ -2063,8 +2072,8 @@ const OwnRun: Page = () => (
     <PracticeEyebrow time="8 分半">練習 3｜第 2 輪：你的筆記庫</PracticeEyebrow>
     <Heading>RAG 實作：Codex 查你的卡</Heading>
     <PromptsCopy step="練習 3" />
-    <In i={0} style={{ marginTop: 24, maxWidth: 1300, background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `8px solid ${amber}`, padding: '14px 28px', fontSize: 29, lineHeight: 1.5 }}>
-      關羽參與了哪些事件？只根據 關係/ 資料夾裡的卡回答，每個事件附上檔名和一句卡片原句；卡片沒寫的就說找不到，不要自己補。
+    <In i={0} style={{ marginTop: 24, maxWidth: 1300, background: '#FFFFFF', border: `1px solid ${rule}`, borderLeft: `8px solid ${amber}`, padding: '12px 28px', fontSize: 29, lineHeight: 1.5 }}>
+      關羽參與了哪些事件？<span style={{ color: muted }}>只根據 關係/ 回答，附檔名和原句（全文在 prompts.md）</span>
     </In>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 44 }}>
@@ -2156,6 +2165,9 @@ const RStep: Page = () => (
                 <HitBar file="關係/赤壁之戰.md" n={5} hot order={3} />
                 <HitBar file="人物/曹操.md" n={5} hot order={4} />
                 <HitBar file="其他 9 個檔" n={28} order={5} />
+                <div className="aw2-build" style={{ ...buildDelay(6), display: 'flex', alignItems: 'center', gap: 12, marginTop: 6, fontSize: 25, color: muted }}>
+                  <span style={{ width: 40, height: 20, background: amber }} />橘＝回答引用的檔
+                </div>
               </div>
             </Step>
           </Steps>
@@ -2172,17 +2184,19 @@ const RStep: Page = () => (
           </Steps>
         </div>
       </div>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>Codex 讀的是搜尋命中的句子，不是整張卡</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>Codex 這次只讀搜尋命中的句子，沒讀整張卡</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
 
 // A matched line from the search, labelled with its file and line number.
+// Amber edge = a line the search found and sent along with the question.
 const Excerpt = ({ y, file, text }: { y: number; file: string; text: string }) => (
   <g>
     <rect x="0" y={y} width="860" height="84" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
-    <text x="20" y={y + 30} fontSize="24" fontFamily={mono} fill={quiet}>{file}</text>
-    <text x="20" y={y + 68} fontSize="26" fill={ink}>{text}</text>
+    <rect x="0" y={y} width="8" height="84" fill={amber} />
+    <text x="28" y={y + 30} fontSize="24" fontFamily={mono} fill={quiet}>{file}</text>
+    <text x="28" y={y + 68} fontSize="26" fill={ink}>{text}</text>
   </g>
 );
 
@@ -2198,8 +2212,8 @@ const AStep: Page = () => (
     <Fit>
       <Stage h={450}>
         <Steps>
-          <Layer h={450} label="搜尋找到的句子（節選）：曹操卡第 11 行、赤壁之戰卡第 13 和 19 行、大綱第 44 行">
-            <InG i={0}><text x="0" y="24" fontSize="25" fontWeight="600" fill={quiet}>搜到的句子（77 行中的 4 行）</text></InG>
+          <Layer h={450} label="搜尋找到的句子（節選，橘色邊）：曹操卡第 11 行、赤壁之戰卡第 13 和 19 行、大綱第 44 行">
+            <InG i={0}><rect x="0" y="4" width="8" height="26" fill={amber} /><text x="20" y="24" fontSize="25" fontWeight="600" fill={amber}>搜到的句子（77 行中的 4 行）</text></InG>
             <InG i={1}><Excerpt y={44} file="人物/曹操.md:11" text="曹操率大軍南下，在 [[赤壁之戰]] 被 [[孫權]] 麾下的周瑜火燒戰船" /></InG>
             <InG i={2}><Excerpt y={144} file="關係/赤壁之戰.md:13" text="第 49 回東南風起，周瑜下令火攻……曹操大敗" /></InG>
             <InG i={3}><Excerpt y={244} file="關係/赤壁之戰.md:19" text="參與人物：[[孫權]]、[[曹操]]、[[劉備]]、[[關羽]]、[[張飛]]" /></InG>
@@ -2229,7 +2243,7 @@ const AStep: Page = () => (
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>模型依據的是問題加上檢索到的筆記</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={20}>模型拿到的是問題加上檢索到的筆記</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2460,9 +2474,9 @@ const Added = ({ children }: { children: ReactNode }) => (
 
 const LimitMiss: Page = () => (
   <Shell source={'Barnett et al. 2024, arXiv:2401.05856；Liu et al. 2023, Lost in the Middle, arXiv:2307.03172'}>
-    <Eyebrow>附錄｜曹操題 5／5｜檢索遺漏</Eyebrow>
-    <Heading>檢索遺漏</Heading>
-    <Lead>資料一多，檢索也會漏掉相關內容</Lead>
+    <Eyebrow>附錄｜曹操題 5／5｜搜到卻沒用上</Eyebrow>
+    <Heading>搜到卻沒用上</Heading>
+    <Lead>搜到的內容，回答也可能漏掉沒用</Lead>
     <Fit>
       {/* First answer on arrival; click 1 shows what it missed; click 2 the narrower question and its answer. */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
@@ -2590,7 +2604,7 @@ const Practice3Ask: Page = () => (
         </Terminal>
       </In>
       <Steps>
-        <Step duration={STEP_MS}><Takeaway marginTop={32}>要求引用原句，就看得出哪項是模型自己補的</Takeaway></Step>
+        <Step duration={STEP_MS}><Takeaway marginTop={32}>要求引用原句，比較看得出哪項是模型自己補的</Takeaway></Step>
         <Step duration={STEP_MS}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 20, marginTop: 30 }}>
             <span style={{ fontSize: 28, color: muted }}>有時間，自己問一題：</span>
@@ -2633,26 +2647,36 @@ const KgKey = ({ y, title, sub, children }: { y: number; title: string; sub: str
   </g>
 );
 
+// A grey "?" for a guessed edge, so it doesn't borrow the amber of the person nodes.
+const GuessMark = ({ x, y, r = 22 }: { x: number; y: number; r?: number }) => (
+  <g><circle cx={x} cy={y} r={r} fill={muted} /><text x={x} y={y + Math.max(24, r * 1.3) * 0.35} textAnchor="middle" fontSize={Math.max(24, r * 1.3)} fontWeight="700" fill="#FFFFFF">?</text></g>
+);
+
 const PointsLines: Page = () => (
   <Shell chapter={4} source={'Hogan et al. 2021, Knowledge Graphs, ACM Computing Surveys, arXiv:2003.02320'}>
     <Eyebrow>節點與邊</Eyebrow>
     <Heading>知識圖譜（Knowledge Graph）</Heading>
-    <Lead>人物、事件是點，有根據的關係是線</Lead>
+    <Lead>人物、事件是點，之間的關係是線</Lead>
     <Fit>
       <Stage h={440}>
         <Steps>
           <Layer h={440} label="節點：劉備、關羽、張飛、曹操四個人物，桃園結義、煮酒論英雄兩個事件">
-            <rect x="1180" y="20" width="452" height="400" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
-            <InG i={0}><MapBox x={200} y={185} w={200} h={70} label="桃園結義" fill={sage} stroke={okGreen} size={30} /><MapBox x={730} y={185} w={220} h={70} label="煮酒論英雄" fill={sage} stroke={okGreen} size={30} /></InG>
-            <InG i={1}><MapPerson x={570} y={84} name="劉備" r={52} size={32} /><MapPerson x={110} y={80} name="關羽" r={52} size={32} /><MapPerson x={110} y={360} name="張飛" r={52} size={32} /><MapPerson x={1060} y={84} name="曹操" r={52} size={32} /></InG>
-            <InG i={2}>
+            {/* People first (劉備、關羽、張飛、曹操, as the notes read them), then the two events, then the legend. */}
+            <PopG i={0}><MapPerson x={570} y={84} name="劉備" r={52} size={32} /></PopG>
+            <PopG i={0.6}><MapPerson x={110} y={80} name="關羽" r={52} size={32} /></PopG>
+            <PopG i={1.2}><MapPerson x={110} y={360} name="張飛" r={52} size={32} /></PopG>
+            <PopG i={1.8}><MapPerson x={1060} y={84} name="曹操" r={52} size={32} /></PopG>
+            <InG i={2.8}><MapBox x={200} y={185} w={200} h={70} label="桃園結義" fill={sage} stroke={okGreen} size={30} /></InG>
+            <InG i={3.4}><MapBox x={730} y={185} w={220} h={70} label="煮酒論英雄" fill={sage} stroke={okGreen} size={30} /></InG>
+            <InG i={4.4}>
+              <rect x="1180" y="20" width="452" height="400" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
               <KgKey y={110} title="節點（Node）" sub="人物、事件">
                 <circle cx="1226" cy="104" r="20" fill={amberSoft} stroke={amber} strokeWidth="2" /><rect x="1252" y="90" width="36" height="28" fill={sage} stroke={okGreen} strokeWidth="2" />
               </KgKey>
             </InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={440} label="邊：劉關張連到桃園結義，劉備和曹操連到煮酒論英雄，都是綠線，卡片有原句">
-            <g fill="none" stroke={okGreen} strokeWidth="5" strokeLinecap="round">
+          <Step duration={STEP_MS}><Layer h={440} label="邊：劉關張連到桃園結義，劉備和曹操連到煮酒論英雄，都是灰色實線，卡片有原句">
+            <g fill="none" stroke={quiet} strokeWidth="5" strokeLinecap="round">
               <StepPath d="M146 118 L232 185" i={0} />
               <StepPath d="M146 322 L232 255" i={1} />
               <StepPath d="M530 118 L380 185" i={2} />
@@ -2661,20 +2685,20 @@ const PointsLines: Page = () => (
             </g>
             <g className="aw2-build" style={buildDelay(4)}>
               <KgKey y={210} title="邊（Edge）" sub="卡片裡有原句">
-                <path d="M1206 204 H1290" stroke={okGreen} strokeWidth="6" />
+                <path d="M1206 204 H1290" stroke={quiet} strokeWidth="6" />
               </KgKey>
             </g>
           </Layer></Step>
-          <Step duration={STEP_MS}><Layer h={440} label="曹操到桃園結義是橘色虛線打問號：卡片沒寫曹操參加結義">
+          <Step duration={STEP_MS}><Layer h={440} label="曹操到桃園結義是淡灰虛線打問號：卡片沒寫曹操參加結義">
             {/* A dashed line can't use the dash-offset draw itself, so a solid copy draws inside a mask. */}
             <mask id="aw2-kg-guess" maskUnits="userSpaceOnUse" x="0" y="0" width="1180" height="440">
               <g fill="none" stroke="#FFFFFF" strokeWidth="12"><StepPath d="M1060 136 C1080 430 340 440 300 255" /></g>
             </mask>
-            <path d="M1060 136 C1080 430 340 440 300 255" fill="none" stroke={amber} strokeWidth="5" strokeDasharray="12 9" mask="url(#aw2-kg-guess)" />
-            <g className="aw2-build" style={buildDelay(4)}><AskMark x={690} y={366} r={24} /></g>
+            <path d="M1060 136 C1080 430 340 440 300 255" fill="none" stroke={faint} strokeWidth="5" strokeDasharray="12 9" mask="url(#aw2-kg-guess)" />
+            <g className="aw2-build" style={buildDelay(4)}><GuessMark x={690} y={366} r={24} /></g>
             <g className="aw2-build" style={buildDelay(5)}>
               <KgKey y={316} title="找不到原句" sub="先別畫，回卡片查">
-                <path d="M1206 310 H1248" stroke={amber} strokeWidth="6" strokeDasharray="10 7" /><AskMark x={1272} y={310} r={16} />
+                <path d="M1206 310 H1248" stroke={faint} strokeWidth="6" strokeDasharray="10 7" /><GuessMark x={1272} y={310} r={16} />
               </KgKey>
             </g>
           </Layer></Step>
@@ -2719,7 +2743,7 @@ const GraphView: Page = () => (
   <Shell source={'Obsidian 說明：關聯圖 obsidian.md/help/plugins/graph'}>
     <Eyebrow>附錄｜整座筆記庫的關聯圖</Eyebrow>
     <Heading>關聯圖（Graph View）</Heading>
-    <Lead>一張卡一個點，一個連結一條線</Lead>
+    <Lead>一個名字一個點，有連結就連一條線</Lead>
     <Fit>
       <div style={{ display: 'grid', gridTemplateColumns: `${GV_W}px 1fr`, gap: 56 }}>
         <In i={0}>
@@ -2782,11 +2806,11 @@ const LocalGraph: Page = () => (
                 <SmallLabel>人物/劉備.md 裡的這一句</SmallLabel>
                 <div style={{ marginTop: 12, position: 'relative', width: 1180 }}>
                   <Screenshot src={taoyuanLine} aspect={1410 / 52} width={1180} alt="劉備卡：三人越談越投合，隔天就在張飛莊後的桃園立誓，留下著名的桃園結義" />
-                  <div style={{ position: 'absolute', left: '62.4%', top: '-6%', width: '10.4%', height: '112%', border: '4px solid #E9B650' }} />
+                  <div style={{ position: 'absolute', left: '62.4%', top: '-6%', width: '10.4%', height: '112%', border: `4px solid ${amber}` }} />
                 </div>
               </div>
             </Step>
-            <Step duration={STEP_MS}><Takeaway marginTop={44}>每條線，都來自卡片裡的一個 [[連結]]</Takeaway></Step>
+            <Step duration={STEP_MS}><Takeaway marginTop={44}>每條線，都來自筆記裡的一個 [[連結]]</Takeaway></Step>
           </Steps>
         </div>
       </div>
@@ -2834,6 +2858,19 @@ const LineMark = ({ k, ok, label }: { k: number; ok: boolean; label: string }) =
 
 const Hl = ({ children }: { children: ReactNode }) => <span style={{ background: '#F6D78B', padding: '0 4px' }}>{children}</span>;
 
+// A name marked inside the terminal: yellow = on the card's 參與人物 line (same as Hl), warn = not on it.
+// Drawn with a side shadow instead of padding so the line keeps its exact width.
+const TermHl = ({ children, bad = false }: { children: ReactNode; bad?: boolean }) => {
+  const c = bad ? warn : '#F6D78B';
+  return <span style={{ background: c, color: bad ? '#FFFFFF' : ink, boxShadow: `-4px 0 0 ${c}, 4px 0 0 ${c}` }}>{children}</span>;
+};
+
+// A copy of terminal line k drawn exactly over the original (border 1 + padding 36 / title 52 + padding 24),
+// so a click can mark words in it. It doesn't rise with the step, so the two copies never drift apart.
+const TermLine = ({ k, children }: { k: number; children: ReactNode }) => (
+  <div style={{ position: 'absolute', left: 37, top: OL_TOP + 1 + k * OL_LINE, width: 1150, height: OL_LINE, background: term, color: '#F5F5F4', fontFamily: mono, fontSize: 28, lineHeight: 1.6, whiteSpace: 'pre', transform: 'none' }}>{children}</div>
+);
+
 const CheckOwnLines: Page = () => (
   <Shell chapter={4} source={'維基文庫《三國演義》第 5 回 zh.wikisource.org/wiki/三國演義/第005回'}>
     <PracticeEyebrow time="9 分鐘">練習 4｜逐線核對</PracticeEyebrow>
@@ -2847,8 +2884,15 @@ const CheckOwnLines: Page = () => (
           <div>└─ [4] 看不起 ── 袁術（來源：關係/溫酒斬華雄.md）</div>
         </Terminal>
         <Steps>
-          <Step duration={STEP_MS}><LineMark k={1} ok label="兩人都在" /></Step>
-          <Step duration={STEP_MS}><LineMark k={2} ok={false} label="袁術不在" /></Step>
+          <Step duration={STEP_MS}>
+            <TermLine k={0}><TermHl>關羽</TermHl></TermLine>
+            <TermLine k={1}>├─ [3] 溫酒斬華雄 ── <TermHl>曹操</TermHl>（來源：關係/溫酒斬華雄.md）</TermLine>
+            <LineMark k={1} ok label="兩人都在" />
+          </Step>
+          <Step duration={STEP_MS}>
+            <TermLine k={2}>└─ [4] 看不起 ── <TermHl bad>袁術</TermHl>（來源：關係/溫酒斬華雄.md）</TermLine>
+            <LineMark k={2} ok={false} label="袁術不在" />
+          </Step>
         </Steps>
       </In>
       <div style={{ display: 'grid', gridTemplateColumns: '700px 1fr', gap: 44, marginTop: 28, alignItems: 'start' }}>
@@ -2971,7 +3015,6 @@ const NextSkills: Page = () => (
   <Shell source={'Codex 文件：Skills developers.openai.com/codex/skills；agentskills.io'}>
     <Eyebrow>下一堂預告</Eyebrow>
     <Heading>用 Skill 畫圖、排時間軸</Heading>
-    <Lead>Skill＝寫好的做事說明，像一份食譜</Lead>
     <Fit>
       <Stage h={430}>
         <Steps>
@@ -2998,7 +3041,7 @@ const NextSkills: Page = () => (
       </Stage>
       <Steps><Step duration={STEP_MS}><Takeaway marginTop={24}>同一座筆記庫，下一堂會多出圖和時間軸</Takeaway></Step></Steps>
       <Steps><Step duration={STEP_MS}>
-        <div style={{ marginTop: 22, textAlign: 'center', fontSize: 30, color: muted }}>
+        <div style={{ marginTop: 32, textAlign: 'center', fontSize: 30, color: muted }}>
           <strong style={{ color: ink }}>課前：</strong>裝好 git 和 Node.js（LTS 版），終端機打<span style={{ fontFamily: mono, background: surface, border: `1px solid ${rule}`, padding: '2px 12px' }}>node -v</span>、<span style={{ fontFamily: mono, background: surface, border: `1px solid ${rule}`, padding: '2px 12px' }}>git --version</span>，都看到版本號就好
         </div>
       </Step></Steps>
@@ -3181,8 +3224,8 @@ ${VAULT_ZIP_URL}
   [FirstLaunch, `10:30–12:30（練習 2 分鐘）。安裝好就打開 Obsidian，第一次會看到這個畫面。標 1 的地方在最下面：語言選單選「繁體中文」，畫面當下就換成中文，不用重開。
 按一下：標 2，三個選項裡今天用第二個「開啟資料夾為儲存庫」。先不要按「建立新的儲存庫」。官方說明：https://obsidian.md/help/User+interface/Language+settings
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：第一次打開是英文畫面，選繁體中文後當下切換。`],
-  [GetVault, `12:30–15:00（練習 2 分半）。1：找到剛才下載的 aw-02-lab.zip。按一下，2：解壓縮。Windows 一定要在 ZIP 上按右鍵選「全部解壓縮」，直接雙擊只是預覽，Obsidian 打不開；Mac 雙擊就會解開。解出來是 aw-02-lab 資料夾，筆記庫是裡面的「三國人物知識庫」。
-按一下，3：回到 Obsidian，按「開啟資料夾為儲存庫」，選 aw-02-lab 裡面的「三國人物知識庫」這一層，不要選外層的 aw-02-lab。提示詞放在筆記庫外面，Codex 在筆記庫工作時才不會讀到。
+  [GetVault, `12:30–15:00（練習 2 分半）。1：找到剛才下載的 aw-02-lab.zip。按一下，2：解壓縮。Windows 請在 ZIP 上按右鍵選「全部解壓縮」，直接雙擊只是打開來看，還沒真的解開；Mac 雙擊就會解開。解出來是 aw-02-lab 資料夾，筆記庫是裡面的「三國人物知識庫」。
+按一下，3：回到 Obsidian，按「開啟資料夾為儲存庫」，選 aw-02-lab 裡面的「三國人物知識庫」這一層，不要選外層的 aw-02-lab。提示詞放在筆記庫外面，Codex 在筆記庫搜尋時才不會搜到它。
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：打開時不會跳「信任作者」的視窗，直接進到空白的「新分頁」。Obsidian 會自己在裡面建一個 .obsidian 資料夾，不用管它。Windows 未實測。
 步驟也寫在 prompts.md 的〈練習 1〉：${PROMPTS_URL}`],
   [VaultCheck, `15:00–16:30（練習 1 分半）。這是講師電腦上的實際畫面。左邊：打開對的資料夾，左側有六個資料夾：人物、勢力、原文、整理、模板、關係，最下面是入口卡〈三國演義〉。原文/ 現在只有第 37、38、46 回的節選，練習 2 會把第一堂的 21 回搬進去。
@@ -3207,7 +3250,7 @@ ${VAULT_ZIP_URL}
 最後一下：檔案在你的電腦裡，Codex 也讀得到。這是第三章 RAG 的前提。三種卡怎麼分、人物怎麼透過關係卡相連，放在附錄第 ${pageOf(CardTypes)}–${pageOf(StoryMap)} 頁。官方說明：https://obsidian.md/help/data-storage`],
   [Section2, `29:00–29:30。第二章：寫自己的關係卡。三件事：把第一堂的大綱搬進筆記庫、寫一張關係卡、把它連回大綱。這一整章都是練習 2，做完剛好休息。`],
   [MergeOutline, `29:30–33:00（練習 3 分半）。左邊是第一堂的練習資料夾 aw-01-lab/Codex_練習，要搬兩樣東西：原文 資料夾裡的 21 個檔，和大家寫好的 三國演義大綱.md。
-按一下：打開第一堂的 原文/，按 Cmd+A（Windows 是 Ctrl+A）全選 21 個檔，拖進筆記庫的 原文/；那裡已經有第 37、38、46 回，合起來 24 個檔。拖的是裡面的檔案，不是 原文 資料夾本身。不小心拖了整個資料夾：Mac 跳出「要取代嗎」就按「停止」，Windows 跳出「取代或略過檔案」就選「略過這些檔案」，第 37、38、46 回才不會被蓋掉；然後打開 原文 資料夾，全選裡面的檔再拖一次。Windows 的對話框講師沒有實測。大綱拖進「整理」資料夾。可以在檔案總管（Mac 是 Finder）裡拖，也可以直接拖到 Obsidian 左側。原文放進來，大綱每段最後的「出處：原文/第001回.md」就找得到。旁邊的「人物」資料夾是講師的卡，不用動。
+按一下：藍色是原文，橘色是大綱，搬過去還是同一個顏色。打開第一堂的 原文/，按 Cmd+A（Windows 是 Ctrl+A）全選 21 個檔，拖進筆記庫的 原文/；那裡已經有第 37、38、46 回，合起來 24 個檔。拖的是裡面的檔案，不是 原文 資料夾本身。不小心拖了整個資料夾：Mac 跳出「要取代嗎」就按「停止」，Windows 跳出「取代或略過檔案」就選「略過這些檔案」，第 37、38、46 回才不會被蓋掉；然後打開 原文 資料夾，全選裡面的檔再拖一次。Windows 的對話框講師沒有實測。大綱拖進「整理」資料夾。可以在檔案總管（Mac 是 Finder）裡拖，也可以直接拖到 Obsidian 左側。原文放進來，大綱每段最後的「出處：原文/第001回.md」就找得到。旁邊的「人物」資料夾是講師的卡，不用動。
 按一下：大綱第 1 回寫的是 [[劉備]]，人物資料夾裡剛好有 劉備.md，Obsidian 會依卡名自動對上這個連結，不用改任何字。
 最後一下：原文和大綱搬進來，Obsidian 依卡名自動對上連結。
 有人第一堂另外讓 Codex 寫了自己的 劉備.md，這次先不要放進來：同一個筆記庫裡有兩張都叫劉備的卡，[[劉備]] 只會連到其中一張。`],
@@ -3217,7 +3260,7 @@ ${VAULT_ZIP_URL}
 2026-10-24 實測（Obsidian 1.10.3、1.14.5，Mac）：大綱放進 整理/，不用重開 Obsidian，點第 1 回的劉備就打開 人物/劉備。`],
   [GrayReal, `35:00–37:30（練習 2 分半）。大綱裡的連結有深有淺。上面是講師大綱第 1 回的實際畫面，你的大綱用字會不同，請看自己的。先問大家：哪些名字已經有卡？
 按一下，標 1：劉備是深紫色，筆記庫裡有 劉備.md，點了會打開。關羽、張飛、曹操、〈桃園結義〉也一樣。
-按一下，標 2：董卓是淡紫色，筆記庫裡還沒有這張卡，這叫「未解析連結」（Unresolved Link）。點了 Obsidian 會在筆記庫最外層新增一張空白的 董卓.md，不想新增就先別點。淡色不代表打錯字，只是還沒寫卡。
+按一下，標 2：董卓是淡紫色，筆記庫裡還沒有這張卡，這叫「未解析連結」（Unresolved Link）。點了 Obsidian 會在筆記庫最外層新增一張空白的 董卓.md，不想新增就先別點。淡色不一定是打錯字，多半是還沒寫卡。
 投影或螢幕分不出深淺時，按 Cmd+O（Windows 是 Ctrl+O）搜名字，找不到這個檔，就是還沒有卡。
 淡色的名字要不要補卡、怎麼數它出現幾次，是選做，放在附錄第 ${pageOf(GrayDecide)} 頁；之後可以照原文補卡；第三堂會直接給大家講師照原文寫好的三張卡。`],
   [VideoCard, `37:30–41:00（影片約 3 分鐘）。下一步是今天最重要的動手：自己寫一張關係卡，再把它連回大綱。先看講師做一次，影片邊放邊講，右邊的時間可以跳段。
@@ -3226,8 +3269,8 @@ ${VAULT_ZIP_URL}
   [Practice2Card, `41:00–50:00（練習 9 分鐘）。練習 2 的重點：自己寫一張關係卡。條件在畫面上三個框：定位，從大綱挑一回；期望輸出，照模板寫；限制，原文沒寫的不寫。步驟和可以挑的事件都在 prompts.md 的〈練習 2〉：${PROMPTS_URL}
 左邊是講師照模板寫的〈三英戰呂布〉，取材第 5 回，是 Obsidian 實際畫面的節選。一張卡至少要有：最上面的「回目」、用完整句子寫的內容、「參與人物」、最後一行「出處」。
 按一下，1：在左側「關係」資料夾按右鍵，選「新增筆記」，取名就是事件名稱；從 prompts.md 練習 2-2 複製整段模板（從第一行 --- 開始），貼進去，回目、年份會變成屬性欄。不要從模板檔按 Cmd+A 全選複製，會漏掉屬性。
-按一下，2：用完整的句子寫兩三句就好，大綱那一回的段落可以拿來當底稿。有卡的人名前後加兩對中括號，例如 [[劉備]]；打完 [[ 和第一個字，Obsidian 會跳出選單。看範例：紫框的張飛加了 [[ ]]，變成連結；參與人物裡的呂布底下畫虛線，他還沒有卡，寫純文字。
-按一下，3：填上回目，例如 5；最後一行寫出處，例如「出處：原文/第005回.md」。
+按一下，2：用完整的句子寫兩三句就好，大綱那一回的段落可以拿來當底稿。有卡的人名前後加兩對中括號，例如 [[劉備]]；打完 [[ 和第一個字，Obsidian 會跳出選單。看範例：標 2 的紫框，張飛加了 [[ ]]，變成連結；參與人物裡的呂布底下畫虛線，他還沒有卡，寫純文字。
+按一下，3：填上回目，例如 5；最後一行寫出處，例如「出處：原文/第005回.md」。範例卡上標 3 的兩個橘框就是這兩處。
 請從這三個事件挑一個，三個都連得到關羽，第三章會用到：第 5 回〈溫酒斬華雄〉，連到關羽、曹操；第 16 回〈轅門射戟〉，連到劉備、關羽、張飛（原文「關、張隨往」，呂布寫純文字，也要列進參與人物）；第 20 回〈許田打圍〉，連到曹操、劉備、關羽。不要寫三英戰呂布和白門樓：第三堂會直接發這兩張寫好的卡，同名的卡會撞在一起。
 不確定細節就查原文：在 Obsidian 左邊打開 原文/，點那一回就看得到。
 寫完怎麼知道成功：打開〈關羽〉，右邊的反向連結裡出現你的新卡。
@@ -3239,11 +3282,11 @@ ${VAULT_ZIP_URL}
 2026-10-24 實測（Obsidian 1.10.3，Mac）：在大綱第 20 回那段最後加上「（[[許田打圍]]）」，〈許田打圍〉的反向連結就出現「三國演義大綱」。`],
   [BreakTime, `55:00–60:00（休息 5 分鐘）。休息 5 分鐘。回來前請大家對一下這三項：Obsidian 打開三國筆記庫；大綱在 整理/，點得到〈劉備〉；你的卡連到人物，也連回大綱。
 有一項沒過的，休息時舉手，講師下去看。下一章要用終端機開 Codex，休息時可以先把終端機打開。`],
-  [Section3, `60:00–60:30。第三章是今天的重點：在筆記庫裡做 RAG。第一堂講過，Web Search 是 RAG，資料從網路來；今天資料從你自己的筆記庫來，包括你剛寫的那張卡。`],
+  [Section3, `60:00–60:30。第三章是今天的重點：在筆記庫裡做 RAG。第一堂講過，Web Search 也是一種 RAG，資料從網路來；今天資料從你自己的筆記庫來，包括你剛寫的那張卡。`],
   [RagIdea, `60:30–63:00。RAG 是 Retrieval-Augmented Generation，檢索增強生成。三步：
 R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係資料夾把寫到關羽的卡找出來：桃園結義、煮酒論英雄、赤壁之戰，還有你寫的那張。
 按一下，A 增強：把問題和找到的卡一起交給模型。
-按一下，G 生成：照卡片回答，並附上檔名。
+按一下，G 生成：照卡片回答，並附上檔名。橘色的就是 R 找到的那幾張卡，從頭到尾同一個顏色。
 最後一下：模型不變，變的是輸入多了筆記。所以等一下最想看的是：它有沒有找到你的卡。Codex 真正下了什麼搜尋指令、讀了幾行，講師的實跑紀錄放在附錄第 ${pageOf(RStep)}–${pageOf(GStep)} 頁，上課不講。來源：https://arxiv.org/abs/2005.11401`],
   [OpenInCodex, `63:00–66:00（練習 3 分鐘）。大家一起做。打開終端機（Windows 是 PowerShell），打 cd 和一個空格，把「三國人物知識庫」資料夾拖進視窗，按 Enter。
 按一下：打 codex。第一次在這個資料夾開，會問信不信任這個資料夾，選 Yes, continue，跟第一堂一樣。
@@ -3264,9 +3307,9 @@ R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係�
 按一下，第 2 列打勾：開頭是「這時」加上人名，跳過人名，搜「聽說大哥被」，〈煮酒論英雄〉搜得到。
 按一下，第 3 列打勾：搜「第 50 回曹操」，〈赤壁之戰〉搜得到。畫面上的「……」是投影片為了排版省略的，回答裡是整句。
 按一下，右邊：桃園結義、煮酒論英雄、赤壁之戰三件都有。
-最後一下：兩欄要分開查，因為引用有根據，不代表答案完整；這一次兩欄都過，這份回答可以相信。核對不是為了硬找錯，是為了確認。下一輪換你自己的筆記庫，多了你寫的卡，就要看 Codex 有沒有找到它。
+最後一下：兩欄要分開查，因為引用有根據，不代表答案完整；這一次兩欄都過，這份回答通過核對。核對不是為了硬找錯，是為了確認。下一輪換你自己的筆記庫，多了你寫的卡，就要看 Codex 有沒有找到它。
 有人問「意思對、只是字不一樣，算不算對」：今天的規則是原句要一字不差搜得到，判斷才不會因人而異。意思對但不是原句的情況，附錄的進階討論再聊。`],
-  [OwnRun, `77:30–86:00（練習 8 分半，Codex 跑約 1 分鐘）。第 2 輪：在你自己的筆記庫問同一題。你的筆記庫多了你寫的卡，所以答案會跟講師的不一樣。從 prompts.md〈練習 3〉第 2 輪整段複製，貼進 Codex，按 Enter。提示詞就是畫面上這段。
+  [OwnRun, `77:30–86:00（練習 8 分半，Codex 跑約 1 分鐘）。第 2 輪：在你自己的筆記庫問同一題。你的筆記庫多了你寫的卡，所以答案可能跟講師的不一樣。從 prompts.md〈練習 3〉第 2 輪整段複製，貼進 Codex，按 Enter。畫面上只留問題和重點，全文：關羽參與了哪些事件？只根據 關係/ 資料夾裡的卡回答，每個事件附上檔名和一句卡片原句；卡片沒寫的就說找不到，不要自己補。
 等它跑的時候先講怎麼核對。按一下，左邊「有根據？」：每一列兩件事，在 Obsidian 左邊找得到這個檔、Cmd/Ctrl+F 搜引號開頭四五個字搜得到；開頭是人名就跳過人名再搜。按一下，右邊「完整嗎？」：寫到關羽的關係卡有四張：講師的桃園結義、煮酒論英雄、赤壁之戰，加上你的卡。四張都在回答裡嗎？
 最後一下：回答裡有你的卡，Codex 才算找到它。這就是主線的第三站。
 做完的標準：每一列都打了勾或叉，也確認了你的卡在不在。全部打勾也是正確結果，不用硬找錯。
@@ -3274,31 +3317,31 @@ R 檢索：問「關羽參與了哪些事件？只看 關係/」，先在關係�
   [FollowUp, `86:00–90:00（練習 4 分鐘）。打了叉的，不要只在心裡記，回頭追問 Codex。兩種情況，提示詞都在 prompts.md 的〈練習 3〉追問。
 第一種，有一張卡漏了，特別是你的卡：把底線換成那張卡的檔名，「關係/＿＿.md 也寫到關羽，你的回答沒有它。請讀這張卡，引用一句原句補上；不要改任何檔案。」
 第二種，有一句原句搜不到：「你引用的『＿＿』在 ＿＿.md 裡搜不到。請打開這個檔，照抄卡片上的原句；找不到就說找不到。」
-按一下：它補上的那句，回 Obsidian 再搜一次，搜得到才打勾。追問時指名檔案，它就會去讀那張卡，不靠搜尋碰運氣。
+按一下：它補上的那句，回 Obsidian 再搜一次，搜得到才打勾。追問時指名檔案，它通常會直接讀那張卡，不用靠搜尋碰運氣。
 都打勾的同學，可以試著把題目換成你卡裡的另一位人物，再跑一次。`],
   [Section4, `90:00–90:30。第四章：建立知識圖譜。聽起來很大，其實就是點和線，重點是每條線都說得出出處。今天把你的卡畫進去。`],
   [PointsLines, `90:30–92:00。知識圖譜（Knowledge Graph）就是點和線。點叫節點（Node）：人物是圓圈，劉備、關羽、張飛、曹操；事件是方框，桃園結義、煮酒論英雄。
-按一下：線叫邊（Edge）。關羽、張飛、劉備連到桃園結義；劉備、曹操連到煮酒論英雄。每一條綠線，都能在卡片裡找到一句原句。
-按一下：曹操連到桃園結義這條是橘色虛線加問號：卡片沒寫曹操參加結義，找不到原句，就先別畫。
+按一下：線叫邊（Edge）。關羽、張飛、劉備連到桃園結義；劉備、曹操連到煮酒論英雄。每一條灰色實線，都能在卡片裡找到一句原句。
+按一下：曹操連到桃園結義這條是淡灰色虛線加問號：卡片沒寫曹操參加結義，找不到原句，就先別畫。
 最後一下：每條邊都要有出處。`],
   [LocalGraph, `92:00–93:30。整座筆記庫的圖太密，只看一條線。左邊是劉備的局部關聯圖：打開劉備卡，在右上角「⋯」選單或命令選擇器（Ctrl/Cmd+P）找「局部關聯圖」。橘色那條是講師加的標示，劉備到〈桃園結義〉。
-先問：這條線是哪來的？按一下：劉備卡裡有一句「三人越談越投合，隔天就在張飛莊後的桃園立誓，留下著名的 [[桃園結義]]」，框起來的就是那個連結。
+先問：這條線是哪來的？按一下：劉備卡裡有一句「三人越談越投合，隔天就在張飛莊後的桃園立誓，留下著名的 [[桃園結義]]」，橘框框起來的就是那個連結，跟左邊那條橘線同一個顏色。
 最後一下：每條線，都來自卡片裡的一個 [[連結]]。打開你自己的卡看局部關聯圖，連到關羽、曹操的那幾條線，就是你剛才加的 [[ ]]。整座筆記庫的關聯圖放在附錄第 ${pageOf(GraphView)} 頁。`],
   [AsciiAsk, `93:30–98:00（練習 4 分半，Codex 跑約 1 分鐘）。練習 4：請 Codex 用純文字畫關係圖，ASCII 就是純文字畫的圖。畫面上是提示詞的重點，完整提示詞請從 prompts.md 的〈練習 4〉複製，把底線換成你的卡名：${PROMPTS_URL}
 三個重點：只讀〈桃園結義〉和你的卡，只畫兩張卡「參與人物」那一行的人；以關羽為起點，每條線編號、附來源檔名；找不到原句就不畫。兩張卡都有關羽，所以從關羽出發，你的卡會接在同一張圖上。
 大家貼上、按 Enter，讓它跑。
 按一下：會看到的樣子大概像這樣，這是格式示意，不是實跑：從關羽出發，前兩條來自〈桃園結義〉，最後幾條來自你的卡。用詞、分支怎麼排，每個人會不一樣。
 第三堂會用 Skill 把同樣的關係畫成 HTML 圖。`],
-  [CheckOwnLines, `98:00–107:00（練習 9 分鐘）。逐條核對你自己的圖。規則只有一條，而且一定判斷得出來：這條線的兩個人，都在它寫的那張來源卡「參與人物」那一行嗎？
+  [CheckOwnLines, `98:00–107:00（練習 9 分鐘）。逐條核對你自己的圖。規則只有一條，對照卡片就判斷得出來：這條線的兩個人，都在它寫的那張來源卡「參與人物」那一行嗎？
 用一位寫〈溫酒斬華雄〉的同學當例子，畫面是示意。下面是那張卡的最後一行：參與人物：關羽、曹操、華雄。
-按一下：第 3 條，關羽和曹操，兩人都在，打勾。
-按一下：第 4 條，關羽和袁術，來源寫〈溫酒斬華雄〉。袁術在卡片內文出現過（原文他大喝「量一弓手，安敢亂言」），可是不在最後一行的參與人物裡，打叉。只畫參與人物，是提示詞講好的範圍。
-按一下：打叉的線，請 Codex 刪掉，提示詞在 prompts.md 的〈練習 4〉：「第 N 條的＿＿不在 關係/＿＿.md 的參與人物裡，請刪掉這條，其他保留，重畫一次；不要改任何檔案。」它重畫之後，少了那一條，其他沒動，就完成了。它會照你說的刪，所以刪之前要先確定真的不在。
-提示詞已經把範圍收得很緊，大部分人會全部打勾，全部打勾也是正確結果。
+按一下：第 3 條，關羽和曹操，兩人都在，打勾。回覆裡的這兩個名字會標黃，跟卡片上那兩個黃底同一個意思：在參與人物裡。
+按一下：第 4 條，關羽和袁術，來源寫〈溫酒斬華雄〉。袁術在卡片內文出現過（原文他大喝「量一弓手，安敢亂言」），可是不在最後一行的參與人物裡，回覆裡的袁術標紅，打叉。只畫參與人物，是提示詞講好的範圍。
+按一下：打叉的線，請 Codex 刪掉，提示詞在 prompts.md 的〈練習 4〉：「第 N 條的＿＿不在 關係/＿＿.md 的參與人物裡，請刪掉這條，其他保留，重畫一次；不要改任何檔案。」它重畫之後，少了那一條，其他沒動，就完成了。它通常會照你說的刪，所以刪之前要先確定真的不在。
+提示詞已經把範圍收得很緊，很多人可能會全部打勾，全部打勾也是正確結果。
 做完的同學：線上的「關係」用詞，例如「結義兄弟」「溫酒斬華雄」，卡片原句撐不撐得住？這種判斷比較主觀，附錄第 ${pageOf(CheckLines)}–${pageOf(AskBack4)} 頁有講師用寬問法跑出來的例子，可以拿來討論。`],
   [Recap, `107:00–111:00。回顧四章。一，Obsidian：點連結往下讀，看反向連結找回來。二，寫一張自己的關係卡，連到人物，也從大綱連回來。三，RAG：Codex 先查筆記再回答，回答要附檔名和原句；你查兩件事，原句搜不搜得到、該有的卡有沒有漏。四，知識圖譜：每條線的兩個人，都要在來源卡的參與人物裡。
 最後一下：RAG 的回答查兩件事：有沒有根據、有沒有漏。第 1 輪那份回答兩欄都過；第 2 輪多了你的卡，有沒有漏，要對照關羽卡和你的卡才知道。引用都搜得到，不代表沒漏，所以兩件事要分開查。`],
-  [NextSkills, `111:00–120:00（含問答）。下一堂講 Skill。Skill 就是一份寫好的做事說明，像食譜：照著做，每次的做法都一樣。
+  [NextSkills, `111:00–120:00（含問答）。下一堂講 Skill。Skill 就是一份寫好的做事說明，像食譜：照著做，每次的做法比較一致。
 第一步，把 Skill 裝進 Codex。按一下：第二步，用 Skill 做事：畫關係圖、把卡片改寫成好讀的版本。按一下：第三步，自己寫一個 Skill，把三國的事件排成時間軸。
 按一下：同一座筆記庫，下一堂會多出圖和時間軸，今天的筆記庫和你寫的卡請留著。
 最後一下：課前作業。下一堂用 npx skills add 安裝 Skill，要先有 git 和 Node.js，先裝 git。打開終端機（Windows 是 PowerShell），輸入 git --version，看到 git version 2 開頭就有了；沒有的話，照 git 官網 https://git-scm.com/install 的建議：Mac 先到 https://brew.sh 裝 Homebrew，再輸入 brew install git；Windows 打開 https://git-scm.com/install/windows 按 Click here to download，選項都用預設。接著到 https://nodejs.org/en/download 下載標著 LTS 的安裝檔（Mac 是 .pkg，Windows 是 .msi），選項都用預設。裝完把終端機關掉重開，輸入 node -v，看到 v22 以上的版本號就可以了。詳細步驟在第三堂 prompts.md 練習 1-1。
@@ -3358,21 +3401,21 @@ Obsidian 官方說明：
 按一下，標 1：中間的大圓是三國演義大綱，連出去最多線。按一下，標 2：四周一圈淡色小點，是大綱裡還沒有卡的名字。按一下，標 3：右下一群深色點，是講師的人物、勢力、關係卡，彼此連得很密。`],
   [RStep, `（附錄，課堂不講；講師用「曹操參與哪場戰役」實跑的 RAG 紀錄，第 1 頁。）提示詞：「依這座筆記庫，曹操參與哪場戰役？只根據 .md 卡片回答，每個說法附上檔名和一句卡片原句；筆記沒寫的就說找不到，不要自己補。」（2026-10-18，Codex 0.154.0，唯讀模式。）
 R，檢索。上面這行是 Codex 實際執行的搜尋指令：rg 是一個搜尋工具，意思是在所有 .md 檔裡找「曹操、戰役、戰爭、之戰、大戰」這幾個詞。
-按一下：找到 14 個檔、77 行。最多的是大綱 26 行；練習提示詞 7 行，因為那時候筆記庫裡還放著練習提示詞，連它都被當成證據搜進來，所以提示詞後來整份搬出筆記庫。這份紀錄跑的是講師較早的大綱版本，行數會跟現在不同。
+按一下：找到 14 個檔、77 行。橘色的兩條，赤壁之戰卡和曹操卡，是最後回答引用的檔。最多的是大綱 26 行；練習提示詞 7 行，因為那時候筆記庫裡還放著練習提示詞，連它都被當成證據搜進來，所以提示詞後來整份搬出筆記庫。這份紀錄跑的是講師較早的大綱版本，行數會跟現在不同。
 按一下：實跑紀錄裡，它沒有另外打開整張卡，搜尋完就直接回答，用的只是這 77 行。
-最後一下：Codex 讀的是搜尋命中的句子，不是整張卡。搜尋到不等於讀過，核對時要記得。`],
-  [AStep, `（附錄，課堂不講；曹操題實跑第 2 頁。）A，增強。左邊是搜尋找到的句子，挑 77 行裡的 4 行：曹操卡第 11 行、赤壁之戰卡第 13 和 19 行、大綱第 44 行。
-按一下：這些句子和問題放進同一份輸入，送進模型。這一輪輸入 44,156 個 token，裡面包含 Codex 自己的說明，不全是筆記。
-按一下：回答真正引用的，是打勾的兩句：曹操卡第 11 行，和赤壁之戰卡第 19 行的「參與人物」。
-最後一下：模型依據的是問題加上檢索到的筆記。`],
+最後一下：這次 Codex 只讀了搜尋命中的句子，沒讀整張卡。搜尋到不等於讀過，核對時要記得。`],
+  [AStep, `（附錄，課堂不講；曹操題實跑第 2 頁。）A，增強。左邊橘色邊的是搜尋找到的句子，挑 77 行裡的 4 行：曹操卡第 11 行、赤壁之戰卡第 13 和 19 行、大綱第 44 行。
+按一下：這些句子和問題放進同一份輸入，送進模型；輸入框裡橘框的兩行只是舉例，77 行全都在裡面。這一輪輸入 44,156 個 token，裡面包含 Codex 自己的說明，不全是筆記。
+按一下：回答真正引用的，是綠框打勾的兩句：曹操卡第 11 行，和赤壁之戰卡第 19 行的「參與人物」。
+最後一下：模型拿到的是問題加上檢索到的筆記。`],
   [GStep, `（附錄，課堂不講；曹操題實跑第 3 頁。）G，生成。左邊是 Codex 的實際回答：「曹操參與的戰役是：赤壁之戰。」接著兩個檔名，各附一句原句。最後一句是「筆記中找不到曹操參與其他戰役的明確記載」。
 按一下：打開 人物/曹操.md，這一句就在第 4 段。按一下：打開 關係/赤壁之戰.md，最後一行就是參與人物。
 最後一下：有檔名和原句，就能回筆記核對。但請先記住：兩句引用都找得到，不代表答案完整，第 ${pageOf(WithWithout)}–${pageOf(LimitMiss)} 頁會看到它漏了什麼。`],
-  [WithWithout, `（附錄，課堂不講；曹操題實跑第 4 頁。）同一個問題，問兩次，都是實跑。左邊在一個空資料夾裡問「曹操參與哪場戰役？」；右邊在筆記庫裡問，多了三個要求：只看卡片、附檔名和原句、沒寫就說找不到。兩次問法不一樣，所以差別一半來自筆記，一半來自問法。
+  [WithWithout, `（附錄，課堂不講；曹操題實跑第 4 頁。）同一個問題，問兩次，都是實跑。左邊在一個空資料夾裡問「曹操參與哪場戰役？」；右邊在筆記庫裡問，多了三個要求：只看卡片、附檔名和原句、沒寫就說找不到。兩次問法不一樣，所以差別有的來自筆記，有的來自問法，分不開。
 按一下：左邊沒東西可查，只能憑記憶回答：官渡之戰、赤壁之戰、濮陽、下邳、潼關之戰等。沒有檔名，沒辦法回去查它根據什麼。
 按一下：右邊先搜尋筆記庫，引用曹操卡和赤壁之戰卡的兩句，回答「赤壁之戰」。兩句都找得到。
 最後一下：右邊引用有根據，但只答了一場。大綱裡明明寫了濮陽、下邳，它都沒算。這就是「有根據」和「完整」要分開查的原因，下一頁看縮小範圍再問的結果。`],
-  [LimitMiss, `（附錄，課堂不講；曹操題實跑第 5 頁。）檢索遺漏：資料一多，檢索也會漏掉相關內容。左邊是第一次回答：赤壁之戰，還說「筆記中找不到曹操參與其他戰役」。
+  [LimitMiss, `（附錄，課堂不講；曹操題實跑第 5 頁。）搜到卻沒用上：搜到了，回答也可能漏掉沒用。左邊是第一次回答：赤壁之戰，還說「筆記中找不到曹操參與其他戰役」。
 按一下：可是大綱裡搜到 26 行，寫了濮陽、下邳好幾場仗，它都沒算進去。
 按一下：縮小範圍再問：「再查 整理/三國演義大綱.md：曹操在第 1 到 21 回參與了哪些戰役？每一項附回目和檔名；筆記沒寫的不要補。」這次在講師的大綱上實跑（2026-10-24，Codex 0.154.0），列了 7 項。同一題跑三次，三次都是 7 項，但內容不一樣：有兩次把第 5 回排除，一次列了進去。這 7 項怎麼核對，是附錄第 ${pageOf(Practice3)} 頁的進階討論。
 最後一下：縮小檢索範圍：指定檔案和回目。`],
@@ -3388,8 +3431,8 @@ R，檢索。上面這行是 Codex 實際執行的搜尋指令：rg 是一個搜
 其他列講師的判斷：第 2 列滎陽（第 6 回「曹操獨自追擊，卻在滎陽被董卓軍擊敗」）、第 3 列徐州（第 10–12 回）、第 4 列濮陽（第 11 回「呂布在濮陽設計誘敵」）、第 5 列攻打呂布（第 13 回）、第 7 列下邳（第 18–19 回）都打勾。第 6 列「淯水」兩個字只在第 16 回的回目，內文沒有，回目算不算大綱寫的，也可以討論。`],
   [Practice3Ask, `（附錄，進階討論，選做。）對第 1 列有疑問，就追問 Codex：「大綱第 5 回哪一句寫了曹操在汜水關或虎牢關上陣打仗？只根據 整理/三國演義大綱.md，引用原句；沒寫就說沒寫。」
 按一下：講師 2026-10-24 實跑，它回「沒寫」，把第 5 回那句整段引出來。
-按一下：要求引用原句，就看得出哪一項是模型自己補的。但「沒寫上陣」是否等於「沒參與」，還是要自己判斷。
-最後一下：有時間自己問一題，提示詞範本在 prompts.md 的〈進階討論〉：「（你的問題）只根據 人物/ 勢力/ 關係/ 整理/ 裡的卡回答，每個說法附上檔名和一句原句；沒寫的就說找不到，不要自己補。」範圍不含 原文/，所以它引原文就算多寫。這兩題模型記得的比卡片多，正好看它有沒有多寫：「白門樓上，劉備對曹操說了什麼原話？」原話在 原文/第019回.md：「公不見丁建陽、董卓之事乎？」它直接說出這句卻沒引用檔案，就是憑記憶補的。「關羽在第 1 到 21 回斬了哪些人？」大綱沒寫第 1 回的程遠志，它照規則說找不到才對。`],
+按一下：要求引用原句，比較看得出哪一項是模型自己補的。但「沒寫上陣」是否等於「沒參與」，還是要自己判斷。
+最後一下：有時間自己問一題，提示詞範本在 prompts.md 的〈進階討論〉：「（你的問題）只根據 人物/ 勢力/ 關係/ 整理/ 裡的卡回答，每個說法附上檔名和一句原句；沒寫的就說找不到，不要自己補。」範圍不含 原文/，所以它引原文就算多寫。這兩題模型可能知道得比卡片多，正好看它有沒有多寫：「白門樓上，劉備對曹操說了什麼原話？」原話在 原文/第019回.md：「公不見丁建陽、董卓之事乎？」它直接說出這句卻沒引用檔案，就是範圍外補來的。「關羽在第 1 到 21 回斬了哪些人？」大綱沒寫第 1 回的程遠志，它照規則說找不到才對。`],
   [CheckLines, `（附錄，進階討論，選做。）講師故意把練習 4 的範圍放寬：讀〈桃園結義〉〈煮酒論英雄〉，不指定起點、不限定只畫參與人物，Codex 畫出 10 條線，全文在 ${CHECK4_URL}。同一句原句撐的線，合併成一列。
 按一下：第 1、2、5 條，劉關張結義，〈桃園結義〉「誓畢拜劉備為兄，關羽次之，張飛為弟」。按一下：關張守護劉備，「關、張……急忙衝進後園按劍守護」。按一下：第 3 條劉備和曹操，〈煮酒論英雄〉三句。按一下：第 4 條劉備和孫權同一邊，「劉備已經站在孫權那一邊對抗曹操」。按一下：第 6 到 9 條，曹操看不上袁術、袁紹、劉表、孫策。
 按一下：第 10 條，孫權和劉備一起對抗曹操。它靠的是同一句「劉備已經站在孫權那一邊對抗曹操」，句子的主詞是劉備，沒寫孫權做了什麼。這是模型推出來的：劉備站孫權那邊、劉備對抗曹操，所以孫權也對抗曹操。算不算有根據，請同學說理由。講師跑了 5 次寬問法，只有 1 次畫出這條。
