@@ -768,55 +768,76 @@ const RepeatPrompt: Page = () => (
   </Shell>
 );
 
-// The three parts of a recipe card, matched to the three parts of SKILL.md.
+// A recipe shelf: say what you want, the right recipe comes off the shelf, follow it.
+// The second row maps the same four moves onto Codex and a Skill.
+const SHELF_X = [290, 684, 1078, 1472];
+const SHELF_W = 320;
+
+const ShelfNode = ({ i, y, kind, title, sub, hot = false }: { i: number; y: number; kind: IconKind; title: string; sub: string; hot?: boolean }) => {
+  const x = SHELF_X[i];
+  return (
+    <g>
+      <rect x={x - SHELF_W / 2} y={y} width={SHELF_W} height="210" fill={hot ? amberSoft : '#FFFFFF'} stroke={hot ? amber : rule} strokeWidth="2" />
+      <SvgIcon kind={kind} x={x} y={y + 62} size={64} color={hot ? amber : muted} />
+      <text x={x} y={y + 146} textAnchor="middle" fontSize="31" fontWeight="600" fill={ink}>{title}</text>
+      <text x={x} y={y + 186} textAnchor="middle" fontSize="25" fill={muted}>{sub}</text>
+    </g>
+  );
+};
+
+// The shelf itself: three saved items, the matching one pulled out.
+const ShelfPick = ({ y, items, pick, title, sub }: { y: number; items: string[]; pick: number; title: string; sub: string }) => {
+  const x = SHELF_X[1];
+  return (
+    <g>
+      <rect x={x - SHELF_W / 2} y={y} width={SHELF_W} height="210" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
+      {items.map((name, k) => (
+        <g key={name}>
+          <rect x={x - 120 + (k === pick ? 18 : 0)} y={y + 12 + k * 38} width="240" height="32" fill={k === pick ? amberSoft : surface} stroke={k === pick ? amber : rule} strokeWidth={k === pick ? 3 : 1.5} />
+          <text x={x + (k === pick ? 18 : 0)} y={y + 36 + k * 38} textAnchor="middle" fontSize="24" fontWeight={k === pick ? 600 : 400} fill={k === pick ? amber : muted}>{name}</text>
+        </g>
+      ))}
+      <text x={x} y={y + 160} textAnchor="middle" fontSize="31" fontWeight="600" fill={ink}>{title}</text>
+      <text x={x} y={y + 196} textAnchor="middle" fontSize="25" fill={muted}>{sub}</text>
+    </g>
+  );
+};
+
+const ShelfArrows = ({ y }: { y: number }) => (
+  <>
+    {[0, 1, 2].map(k => <MapArrow key={k} x1={SHELF_X[k] + SHELF_W / 2 + 8} x2={SHELF_X[k + 1] - SHELF_W / 2 - 8} y={y + 105} />)}
+  </>
+);
+
 const SkillIsSop: Page = () => (
   <Shell chapter={1} source={'Agent Skills 說明 agentskills.io/what-are-skills；Codex Skills developers.openai.com/codex/skills'}>
-    <Eyebrow>Skill＝寫好的做事方法</Eyebrow>
+    <Eyebrow>Skill＝存好的做事方法</Eyebrow>
     <Heading>Agent Skill（代理人技能）</Heading>
-    <Lead>像食譜：菜名、做法、成品長怎樣</Lead>
+    <Lead>像食譜架：想做哪道菜，就翻出那本食譜</Lead>
     <Fit>
-      <Stage h={450}>
+      <Stage h={500}>
         <Steps>
-          <Layer h={450} label="一張食譜：番茄炒蛋，想吃下飯菜時；做法三步；成品一盤炒蛋">
-            <InG i={0}>
-              <rect x="60" y="0" width="560" height="440" fill="#FFFFFF" stroke={rule} strokeWidth="2" />
-              <text x="92" y="44" fontSize="24" fontWeight="600" fill={amber} letterSpacing="2">食譜</text>
-              <text x="92" y="98" fontSize="42" fontWeight="600" fill={ink}>番茄炒蛋</text>
-              <text x="92" y="138" fontSize="27" fill={muted}>想吃下飯菜的時候</text>
-              <line x1="60" y1="160" x2="620" y2="160" stroke={rule} strokeWidth="2" />
-              <text x="92" y="200" fontSize="24" fontWeight="600" fill={amber} letterSpacing="2">做法</text>
-              <SvgLines x={92} y={236} anchor="start" size={28} fill={ink} lines={['1　打蛋', '2　炒番茄', '3　倒在一起']} />
-              <line x1="60" y1="340" x2="620" y2="340" stroke={rule} strokeWidth="2" />
-              <text x="92" y="380" fontSize="24" fontWeight="600" fill={amber} letterSpacing="2">成品</text>
-              <text x="92" y="420" fontSize="30" fill={ink}>一盤炒蛋</text>
-              <ellipse cx="520" cy="392" rx="62" ry="30" fill={amberSoft} stroke={amber} strokeWidth="2" />
-            </InG>
+          <Layer h={500} label="做菜：說想吃中式下飯菜，從食譜架自動翻出番茄炒蛋，照食譜做，下次想吃不用再講一次做法">
+            <text x="0" y="118" fontSize="30" fontWeight="600" fill={amber}>做菜</text>
+            <InG i={0}><ShelfNode i={0} y={10} kind="chat" title="想吃什麼" sub="中式、下飯的" /></InG>
+            <InG i={1}><ShelfPick y={10} items={['紅燒肉', '番茄炒蛋', '味噌湯']} pick={1} title="自動翻出食譜" sub="食譜架上先存好" /></InG>
+            <InG i={2}><ShelfNode i={2} y={10} kind="book" title="照著做" sub="打蛋、炒番茄、倒在一起" /></InG>
+            <InG i={3}><ShelfNode i={3} y={10} kind="ok" title="一盤番茄炒蛋" sub="下次想吃，不用再講" hot /></InG>
+            <InG i={1}><ShelfArrows y={10} /></InG>
           </Layer>
-          <Step duration={STEP_MS}><Layer h={450} label="SKILL.md 也有三塊：name 和 description、步驟、輸出格式">
+          <Step duration={STEP_MS}><Layer h={500} label="Codex：說要把劉備卡改成國中生版，Codex 從 Skill 裡自動挑出 eli5，讀 SKILL.md 照著做，存好國中生版">
             <g className="aw3-build" style={buildDelay(0)}>
-              <MapArrow x1={640} x2={990} y={96} hot />
-              <text x="815" y="78" textAnchor="middle" fontSize="26" fill={muted}>叫什麼、何時用</text>
-              <MapArrow x1={640} x2={990} y={256} hot />
-              <text x="815" y="238" textAnchor="middle" fontSize="26" fill={muted}>怎麼做</text>
-              <MapArrow x1={640} x2={990} y={396} hot />
-              <text x="815" y="378" textAnchor="middle" fontSize="26" fill={muted}>做成什麼樣</text>
+              <text x="0" y="398" fontSize="30" fontWeight="600" fill={blue}>Codex</text>
+              <ShelfNode i={0} y={290} kind="chat" title="說要做什麼" sub="劉備卡改成國中生版" />
             </g>
-            <g className="aw3-build" style={buildDelay(1)}>
-              <DocShape x={1012} y={0} w={560} h={440} fill={amberSoft} stroke={amber} sw={3} />
-              <text x="1044" y="44" fontSize="24" fontWeight="600" fontFamily={mono} fill={amber}>SKILL.md</text>
-              <text x="1044" y="98" fontSize="34" fontFamily={mono} fill={ink}>name: eli5</text>
-              <text x="1044" y="138" fontSize="27" fontFamily={mono} fill={muted}>description: 何時用</text>
-              <line x1="1012" y1="160" x2="1572" y2="160" stroke={amber} strokeWidth="2" />
-              <text x="1044" y="200" fontSize="24" fontWeight="600" fill={amber} letterSpacing="2">步驟</text>
-              <SvgLines x={1044} y={236} anchor="start" size={28} fill={ink} lines={['1　讀資料', '2　照規則改寫', '3　存成新檔']} />
-              <line x1="1012" y1="340" x2="1572" y2="340" stroke={amber} strokeWidth="2" />
-              <text x="1044" y="380" fontSize="24" fontWeight="600" fill={amber} letterSpacing="2">輸出格式</text>
-              <text x="1044" y="420" fontSize="30" fill={ink}>存在哪、長怎樣</text>
-            </g>
+            <g className="aw3-build" style={buildDelay(1)}><ShelfPick y={290} items={['diagram-design', 'eli5', '其他 Skill']} pick={1} title="自動挑出 Skill" sub="比對每個 description" /></g>
+            <g className="aw3-build" style={buildDelay(2)}><ShelfNode i={2} y={290} kind="doc" title="讀 SKILL.md" sub="照裡面的步驟做" /></g>
+            <g className="aw3-build" style={buildDelay(3)}><ShelfNode i={3} y={290} kind="ok" title="國中生版存好" sub="下次一句話就好" hot /></g>
+            <g className="aw3-build" style={buildDelay(1)}><ShelfArrows y={290} /></g>
           </Layer></Step>
         </Steps>
       </Stage>
-      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>寫一次，Agent 每次照著做</Takeaway></Step></Steps>
+      <Steps><Step duration={STEP_MS}><Takeaway marginTop={32}>做法先存好，要用時自動翻出來</Takeaway></Step></Steps>
     </Fit>
   </Shell>
 );
@@ -2830,9 +2851,9 @@ const NOTES = new Map<Page, string>([
 按一下：換關羽，同樣四行再打一次。
 按一下：張飛，又一次。哪一次漏打一行，結果就不一樣。
 最後一下：做法都一樣，只換了卡片。這種常常重複的做法，就可以寫成 Skill。`],
-  [SkillIsSop, `15:00–17:00。Skill 是交給 Agent 的一份 SOP，標準作業程序。拿食譜來比：食譜有菜名和適合的時機，有做法步驟，還有成品照，讓你知道做完長怎樣。
-按一下：SKILL.md 也有這三塊：name 和 description 說它叫什麼、什麼時候用；步驟說怎麼做；輸出格式說做完長怎樣。
-最後一下：寫一次，之後 Agent 每次照著做，不用你每次重新交代。`],
+  [SkillIsSop, `15:00–17:00。Skill 是什麼？拿食譜架來比。你想做菜，說「想吃中式、下飯的」；食譜架上早就存好幾本食譜，自動翻出〈番茄炒蛋〉那一本；照食譜做：打蛋、炒番茄、倒在一起；一盤番茄炒蛋就好了。重點在第二格：食譜是先存好的，下次想吃，不用再從頭講一次做法。
+按一下：Codex 也是這樣。你說「把劉備卡改成國中生版」；Codex 手上有好幾個存好的 Skill，看每個 Skill 的 description，自動挑出 eli5；接著讀 eli5 的 SKILL.md，照裡面的步驟做；國中生版就存好了。下次要改關羽卡，一句話就好，不用再交代四行要求。
+最後一下：做法先存好，要用時自動翻出來。這份存好的做法就是 SKILL.md；它裡面寫了哪幾塊，等一下打開來看。`],
   [SkillFolder, `17:00–18:30。Skill 在電腦裡就是一個資料夾。eli5 的資料夾裡只有一個 SKILL.md。
 按一下：diagram-design 比較大，除了 SKILL.md，還有 references、scripts、assets，放參考資料、小程式和圖檔。
 最後一下：每個 Skill 都有 SKILL.md，其他檔案是附件；Agent 讀 SKILL.md 時，會照裡面的指示再去翻附件。`],
