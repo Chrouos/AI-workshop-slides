@@ -15,3 +15,6 @@ examples/**/.obsidian/community-plugins.json
 
 # Instructor showcase vault: Obsidian rewrites this on every open
 examples/final/**/.obsidian/workspace.json
+
+# Course write-ups: keep local only
+docs/
